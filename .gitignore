@@ -1,0 +1,7 @@
+*.pyc
+__pycache__
+data
+Consultas*
+.current_target
+.directory
+fragz

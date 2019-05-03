@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+cmd_nfo="Script para envio via email da saída do prompt..."
+
+import argparse
+import sys
+import os
+
+
+from subprocess import getoutput
+from py_sps_cli_base import *
+from smtplib import SMTP
+from string import whitespace, punctuation, digits
+from email.message import EmailMessage
+
+def send_email_op(msg, profissional):
+    smtpserver = SMTP(profissional['eml_server'], profissional['eml_port'])
+    smtpserver.ehlo()
+    smtpserver.starttls()
+    smtpserver.ehlo
+    smtpserver.login(profissional['eml'], getoutput("echo {} | base64 -d".format(profissional['eml_pwd'])))
+    smtpserver.send_message(msg)
+    smtpserver.close()
+    return "Mensagem enviada"
+
+parser = argparse.ArgumentParser(description=cmd_nfo)
+parser.add_argument("-d", help="define um ou mais destinatários para o email")
+parser.add_argument("-a", help="define o assunto do email")
+parser.add_argument("-m", help="define a mensagem (apenas primeira linha)")
+args = parser.parse_args()
+
+def main():
+    if args.d == None:
+        return "É necessário definir detintários com a opção '-d'."
+    elif args.a == None:
+        return "É necessário definir um assunto com a opção '-a'."
+    elif args.m == None:
+        return "É necessário definir uma mensagem com a opção '-m'."
+    else:
+        profissional = None
+        for p in db_profissionais:
+            if p['uid'] == getoutput('whoami'):
+                profissional = p
+                break
+        
+        if profissional != None:
+            msg = EmailMessage()
+            msg['To'] = args.d
+            msg['From'] = profissional['eml']
+            msg['Subject'] = args.a
+            msg['Mensagem'] = args.m
+
+            pipe_nfo = ""
+            while True:
+                line = sys.stdin.readline()
+                if not line:
+                    break
+                pipe_nfo += line
+
+            msg_template = msg['Mensagem'] + os.linesep*2 + pipe_nfo + os.linesep*2 + profissional['eml_assinatura']
+
+            msg.set_content(msg_template)
+            return send_email_op(msg, profissional)
+            
+
+if __name__ == '__main__':
+    print(main())

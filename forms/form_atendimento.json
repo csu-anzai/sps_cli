@@ -1,0 +1,70 @@
+{
+    "titulo": "Registro de atendimento",
+    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
+    "questoes": [
+        {
+            "id": "mat",
+            "tipo": "text",
+            "enunciado": "Matrícula"
+        },
+        {
+            "id": "atd_t",
+            "tipo": "checkbox",
+            "enunciado": "Tipo de atendimento",
+            "codicional_de_exec": [
+                "Encaminhamento de pedido de auxílio emergencial"
+            ],
+            "exec": "./set_target_nfo assunto \"#THIS#\"; ./novo proc -m \"$(./get_target_nfo mat)\" -a \"$(./get_target_nfo assunto)\"",
+            "alternativas": [
+                "Agendamento entrevista",
+                "Articula��o de demandas com a Coordena��o da Educa��o do Campo.",
+                "Articula��o de demandas com a Dire��o da FUP",
+                "Articula��o de demandas da DDS",
+                "Atendimento inicial para atualização de informação bancárias",
+                "Atendimento inicial para auxílio emergencial",
+                "Auxílio no preenchimento do estudo",
+                "Auxílio para Recuperação da senha BPME",
+                "Consulta ao andamento de emergencial",
+                "Consulta ao andamento de processo/encaminhamento remetido à DDS",
+                "Consulta ao resultado de estudo socioeconômico anterior",
+                "Consulta sobre situação da Bolsa Permanência ME",
+                "Consulta sobre situa��o frente ao PACreche (aux�lio n�o depositado)",
+                "Consulta sobre situa��o frente ao PASeUnB (aux�lio n�o depositado)",
+                "Consulta sobre situação frente ao PASeUnB (comunicado de desligamento)",
+                "Digitalização de documentos",
+                "Emissão de declaração PPAES",
+                "Emissão de declaração UnB idiomas",
+                "Emissão de declaração para criação de Conta Corrente",
+                "Encaminhamento de pedido de auxílio emergencial",
+                "Entrevista com fins à auxílio emergencial",
+                "Entrevista com fins à coleta de informações sobre fragilização/rompimento de vínculos",
+                "Fotocópia de documento",
+                "Fotoc�pia de termo do Programa Bolsa Alimenta��o",
+                "Identifica��o de demanda pendente (pagamento retroativo)",
+                "Identifica��o de refer�ncias para visita domiciliar",
+                "Impressão de declaração constante no anexo do edital",
+                "Informação presencial",
+                "Informação presencial (Bolsa Permanência ME)",
+                "Informação presencial (estudo socioeconômico)",
+                "Informação via telefone",
+                "Informa��o presencial (acesso ao RU)",
+                "Informa��o via telefone (WhatsApp ou similares...)",
+                "Orientação presencial em relação a estudo socioeconômico",
+                "Orientação presencial em relação ao Auxílio Emergencial com agendamento de entrevista",
+                "Orientação via IM em relação a estudo socioeconômico",
+                "Orientação via email em relação a estudo socioeconômico",
+                "Orientação via telefone em relação a estudo socioeconômico",
+                "Participação na reunião de organicidade da Educação do Campo",
+                "Preenchimento/assinatura de termo PACreche",
+                "Preenchimento/assinatura de termo PASeUnB",
+                "Preenchimento/assinatura de termo PME-G",
+                "Recebimento de pedido de prorrogação de prazo de permanencia nos programas",
+                "Reencaminhamento de processo",
+                "Solicitação de cópia de relatório de alunos da assistência",
+                "Solicitação de desligamento do Programa de Moradia Estudantil",
+                "Solicitação de verificação de vínculo com a assistencia estudantil.",
+                "Outro"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "titulo": "Registro de processos",
+    "descricao": "Intrumental para registro de processos gerados no âmbito do SPS/FUP",
+    "questoes": [
+        {
+            "id": "mat",
+            "tipo": "text",
+            "enunciado": "Matrícula"
+        },
+        {
+            "id": "numero_sei",
+            "tipo": "text",
+            "enunciado": "Número do processo no SEI",
+            "exec": "./set_target_nfo sei '#THIS#'"
+        }
+    ]
+}
