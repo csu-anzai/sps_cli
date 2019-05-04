@@ -1,0 +1,38 @@
+{
+    "titulo": "Formulário de entrada para estatística de estudos corrigidos",
+    "descricao": "Intrumental para registro de informações sobre correções e erros nos estudos no âmbito do SPS/FUP",
+    "questoes": [
+        {
+            "id": "mat",
+            "tipo": "text",
+            "enunciado": "Matrícula"
+        },
+        {
+            "id": "situacao",
+            "tipo": "checkbox",
+            "enunciado": "Tipo de situação",
+            "alternativas": [
+                "Documentação aparenta não ter sido atualizada",
+                "Documentação atendeu o solicitado",
+                "Documentação enviada atende parcialmente à solicitação",
+                "Documentação enviada não corresponde à solicitada",
+                "Informa��es apresentadas n�o foram suficientes para sanar as d�vidas",
+                "Novas informações apresentadas após a correção geraram a necessidade de outros documentos",
+                "Questionamentos encaminhados n�o foram respondidos",
+                "Seria necess�rio que o pai/padrasto do estudante fosse ao BACEN retirar o CCS pessoalmente.",
+                "Outro"
+            ]
+        },
+        {
+            "id": "encaminhamento",
+            "tipo": "checkbox",
+            "enunciado": "Encaminhamento",
+            "alternativas": [
+                "Estudo não pode ser fechado",
+                "Estudo fechado com estimativa de renda desfavorável ao estudante",
+                "Estudo concluído",
+                "Outro"
+            ]
+        }
+    ]
+}

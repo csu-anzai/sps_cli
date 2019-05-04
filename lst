@@ -15,17 +15,17 @@ args = parser.parse_args()
 
 def main():
     if args.action == 'atd':
-        return listar_dicionario(db_atendimentos, [col_width_atend_time, col_width_atend_ident, ('atd_t', 0)])
+        return listar_dicionario(dados_atendimentos, [col_width_atend_time, col_width_atend_ident, ('atd_t', 0)])
 
     elif args.action == 'est':
         if args.m != None:
             marcador = args.m
-            return listar_dicionario(db_estudantes, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [marcador])
+            return listar_dicionario(dados_estudantes, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [marcador])
         else:
-            return listar_dicionario(db_estudantes, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml])
+            return listar_dicionario(dados_estudantes, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml])
 
     elif args.action == 'prof':
-        return listar_dicionario(db_profissionais, [col_width_prof_uid, col_width_prof_nome, col_width_prof_eml])
+        return listar_dicionario(dados_profissionais, [col_width_prof_uid, col_width_prof_nome, col_width_prof_eml])
 
     elif args.action == 'esoc':
         pass
@@ -34,7 +34,7 @@ def main():
         pass
 
     elif args.action == 'mat':
-        return get_mat(db_estudantes)
+        return get_mat(dados_estudantes)
 
 
 if __name__ == '__main__':

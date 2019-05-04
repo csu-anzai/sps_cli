@@ -7,38 +7,37 @@ import argparse
 import getpass
 
 from subprocess import getoutput
-from os import system
-from py_sps_cli_base import *
+from py_sps_cli_base import save_target_info, get_mat, timestamp,\
+    form_novo_estudante, dados_estudantes, arquivo_estudantes,\
+    form_processos, dados_processos, arquivo_processos,\
+    form_atendiento, dados_atendimentos, arquivo_atendimentos,\
+    form_corrigidos, dados_corrigidos, arquivo_corrigidos
+    
 from py_console_tools_v0 import save_json, render_form_get_values, select_op
 
 parser = argparse.ArgumentParser(description=cmd_nfo)
-parser.add_argument("action", help="utilize uma: atd|est|prof|esoc|corr|proc")
+parser.add_argument("ação", help="utilize uma: atd|est|prof|esoc|corr|proc")
 parser.add_argument("-m", help="especifica uma matrícula alvo")
 parser.add_argument("-a", help="especifica um assunto, utilizado apenas com a ação 'proc'.")
 parser.add_argument("-M", help="defini um marcador")
 args = parser.parse_args()
 
-matriculas = get_mat(db_estudantes)
-
-def save_target_info(mat):
-    for e in db_estudantes:
-        if e['mat'] == mat:
-            save_json(e, './.current_target')
+matriculas = get_mat(dados_estudantes)
 
 def novo_estudante(mat):
     nfo = render_form_get_values(form_novo_estudante, ['mat'])
     nfo['timestamp'] = timestamp() 
     nfo['mat'] = mat
-    db_estudantes.append(nfo)
-    save_json(db_estudantes, './data/estudantes.json')
+    dados_estudantes.append(nfo)
+    save_json(dados_estudantes, arquivo_estudantes)
 
 def novo_processo(mat, assunto):
     nfo = render_form_get_values(form_processos, ['mat'])
     nfo['timestamp'] = timestamp() 
     nfo['mat'] = mat
     nfo['assunto'] = assunto
-    db_processos.append(nfo)
-    save_json(db_processos, './data/processos.json')
+    dados_processos.append(nfo)
+    save_json(dados_processos, arquivo_processos)
 
 
 def novo_atendimento(mat):
@@ -50,19 +49,57 @@ def novo_atendimento(mat):
     nfo = render_form_get_values(form_atendiento, ['mat'])
     nfo['timestamp'] = timestamp() 
     nfo['mat'] = mat
-    db_atendimentos.append(nfo)
+    dados_atendimentos.append(nfo)
     if save_target_action == True:
         save_target_info(mat)
-    save_json(db_atendimentos, './data/atendimentos.json')
+    save_json(dados_atendimentos, arquivo_atendimentos)
 
 def novo_marcador(mat, marcador):
-    for estudante in db_estudantes:
+    for estudante in dados_estudantes:
         if estudante['mat'] == mat:
             try:
                 estudante['marcador'].append(marcador)
             except KeyError:
                 estudante['marcador'] = [marcador]
-    save_json(db_estudantes, './data/estudantes.json')
+    save_json(dados_estudantes, arquivo_estudantes)
+
+def nova_correcao(mat):
+    nfo = render_form_get_values(form_corrigidos, ['mat'])
+    nfo['timestamp'] = timestamp() 
+    nfo['mat'] = mat
+    if not mat in matriculas:
+        novoe(mat)
+        matriculas.append(mat)    
+    dados_corrigidos.append(nfo)
+    save_json(dados_corrigidos, arquivo_corrigidos)
+
+def novo_profissional():
+    profissional = input('Definir a ID de login: ')
+    print('Selecione a especialidade do/a profissional: ')
+    especialidade = select_op(['Assistente Social', 'Administrador', 'Administradora', 'Assistente Administrativo', 'Estatístico', 'Estatística', 'Pedagogo', 'Pedagoga', 'Psicólogo', 'Psicóloga', 'Técnico em assuntos educacionais', 'Técnica em assuntos educacionais'], 1, sort_list=True) 
+    sigla_conselho = input('Qual a sigla do conselho profissional: ')
+    numero_no_concelho = input('Qual a matrícula frente ao conselho profissional: ')
+    matricula_instituicao = input('Qual a matrícula institucional: ')
+    getoutput('adduser {}'.format(profissional))
+    prof_nfo = {}
+    prof_nfo['uid'] = profissional
+    prof_nfo['eml'] = input('Endereço de email institucional: ')
+    prof_nfo['eml_server'] = "mail.unb.br"
+    prof_nfo['eml_port'] = "587"
+    while True:
+        prof_nfo['eml_pwd'] = getpass.getpass('Insira a senha de acesso ao email institucional: ')
+        verificar_senha = getpass.getpass('Insira, novamente, a senha do email institucional: ')
+        if prof_nfo['eml_pwd'] == verificar_senha:
+            prof_nfo['eml_pwd'] = getoutput('echo {} | base64'.format(prof_nfo['eml_pwd']))
+            break
+    prof_nfo['nome'] = getoutput("getent passwd | grep %s | awk -F: ' { print $5 } ' " % profissional).split(',')[0]
+    prof_nfo['cargo'] = especialidade
+    prof_nfo['matricula_conselho'] = numero_no_concelho
+    prof_nfo['matricula_institucional'] = matricula_instituicao
+    prof_nfo['eml_assinatura'] = "Atenciosamente,\n---\n{nome}\n{cargo}\n{conselho} {matricula_conselho}\nFUB {matricula_fub}".format(nome=prof_nfo['nome'], cargo=especialidade, conselho=sigla_conselho, matricula_conselho=numero_no_concelho, matricula_fub=matricula_instituicao)
+    dados_profissionais.append(prof_nfo)
+    save_json(dados_profissionais, arquivo_profissionais)    
+
 
 def main():
     if args.action == 'atd':
@@ -82,37 +119,13 @@ def main():
         if getoutput('whoami') != 'root':
             return "Apenas o usuário 'root' pode adcionar outros profissionais..."
         else:
-            profissional = input('Definir a ID de login: ')
-            print('Selecione a especialidade do/a profissional: ')
-            especialidade = select_op(['Assistente Social', 'Administrador', 'Administradora', 'Assistente Administrativo', 'Estatístico', 'Estatística', 'Pedagogo', 'Pedagoga', 'Psicólogo', 'Psicóloga', 'Técnico em assuntos educacionais', 'Técnica em assuntos educacionais'], 1, sort_list=True) 
-            sigla_conselho = input('Qual a sigla do conselho profissional: ')
-            numero_no_concelho = input('Qual a matrícula frente ao conselho profissional: ')
-            matricula_instituicao = input('Qual a matrícula institucional: ')
-            system('adduser {}'.format(profissional))
-            prof_nfo = {}
-            prof_nfo['uid'] = profissional
-            prof_nfo['eml'] = input('Endereço de email institucional: ')
-            prof_nfo['eml_server'] = "mail.unb.br"
-            prof_nfo['eml_port'] = "587"
-            while True:
-                prof_nfo['eml_pwd'] = getpass.getpass('Insira a senha de acesso ao email institucional: ')
-                verificar_senha = getpass.getpass('Insira, novamente, a senha do email institucional: ')
-                if prof_nfo['eml_pwd'] == verificar_senha:
-                    prof_nfo['eml_pwd'] = getoutput('echo {} | base64'.format(prof_nfo['eml_pwd']))
-                    break
-            prof_nfo['nome'] = getoutput("getent passwd | grep %s | awk -F: ' { print $5 } ' " % profissional).split(',')[0]
-            prof_nfo['cargo'] = especialidade
-            prof_nfo['matricula_conselho'] = numero_no_concelho
-            prof_nfo['matricula_institucional'] = matricula_instituicao
-            prof_nfo['eml_assinatura'] = "Atenciosamente,\n---\n{nome}\n{cargo}\n{conselho} {matricula_conselho}\nFUB {matricula_fub}".format(nome=prof_nfo['nome'], cargo=especialidade, conselho=sigla_conselho, matricula_conselho=numero_no_concelho, matricula_fub=matricula_instituicao)
-            db_profissionais.append(prof_nfo)
-            save_json(db_profissionais, './data/profissionais.json')
+            novo_profissional()
 
     elif args.action == 'esoc':
         pass
 
     elif args.action == 'corr':
-        pass
+        nova_correcao(args.m)
 
     elif args.action == 'proc':
         if args.m == None:
