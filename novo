@@ -3,6 +3,32 @@
 
 cmd_nfo="Adiniona novos registros no banco de dados"
 
+# O trecho de codigo abaixo é apenas um esboço...
+# A ideia é que os indices dos dados sejam reconstruídos após a insersão de novas informações...
+# O processo de escrita 'add_data_nfo' roda primeiro e chama o processo de reconstrução do indice 'data_idx_maker' que reconstroi o indice no background um tempo após a escrita dos dados...
+# Implementar este recurso dentro do script novo
+
+'''
+
+import os
+import time
+
+def data_idx_maker():
+    time.sleep(5)
+    print("Acabou data_idx_maker!")
+
+def add_data_nfo():
+    newpid = os.fork()
+    if newpid == 0:
+        data_idx_maker()
+    else:
+        time.sleep(1)
+        print("Acabou registro de nova informação!")
+
+add_data_nfo()
+
+'''
+
 import argparse
 import getpass
 
