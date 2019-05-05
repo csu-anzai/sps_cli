@@ -30,21 +30,11 @@ def timestamp():
 
 import asyncio
 
-async def test():
-    print("Acabou!")
-    return 1
+async def load_json_file(arquivo):
+    return load_json(arquivo)
 
-async def test2():
-    os.system("ls; sleep 5; ls")
-
-
-loop = asyncio.get_event_loop()
-loop.run_until_complete(asyncio.gather(
-    test2(),
-    test(),
-))
-
-
+async def get_col_width_nfo(field_name, data_set):
+    return get_col_width(field_name, data_set)
 
 #Quando os comandos estiverem disponíveis globalmente, utilizar caminhos absolutos.
 data_folder = "./data"
@@ -62,14 +52,23 @@ form_estudo_socioeconomico = os.sep.join([form_folder, "form_estudo_socioeconomi
 form_processos = os.sep.join([form_folder, "form_processos.json"])
 form_corrigidos = os.sep.join([form_folder, "form_corrigidos.json"])
 
-dados_atendimentos = load_json(arquivo_atendimentos)
-dados_estudantes = load_json(arquivo_estudantes)
-dados_profissionais = load_json(arquivo_profissionais)
-dados_processos = load_json(arquivo_processos)
-dados_corrigidos = load_json(arquivo_corrigidos)
+loop = asyncio.get_event_loop()
+dados = loop.run_until_complete(asyncio.gather(
+    load_json_file(arquivo_atendimentos),
+    load_json_file(arquivo_estudantes),
+    load_json_file(arquivo_profissionais),
+    load_json_file(arquivo_processos),
+    load_json_file(arquivo_corrigidos),
+))
+
+dados_atendimentos = dados[0]
+dados_estudantes = dados[1]
+dados_profissionais = dados[2]
+dados_processos = dados[3]
+dados_corrigidos = dados[4]
 
 
-#Larguras das colunas nas listas.
+#Larguras das colunas nas listas. Rodar método async aqui...
 col_width_etd_mat = get_col_width('mat', dados_estudantes)
 col_width_atend_ident = col_width_etd_mat
 col_width_etd_nome = get_col_width('nome', dados_estudantes)
