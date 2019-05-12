@@ -8,18 +8,26 @@
             "enunciado": "Matrícula"
         },
         {
+            "id": "forma_atv",
+            "tipo": "checkbox",
+            "enunciado": "Forma de atendimento",
+            "alternativas": [
+                "Atendimento presencial",
+                "Atendimento telefone",
+                "Conversa por e-mail",
+                "Conversa por WhatsUp",
+                "Outro"
+            ]
+        },
+        {
             "id": "atd_t",
             "tipo": "checkbox",
-            "enunciado": "Tipo de atendimento",
-            "codicional_de_exec": [
-                "Encaminhamento de pedido de auxílio emergencial"
-            ],
-            "exec": "./set_target_nfo assunto \"#THIS#\"; ./novo proc -m \"$(./get_target_nfo mat)\" -a \"$(./get_target_nfo assunto)\"",
+            "enunciado": "Demanda do atendimento",
             "alternativas": [
                 "Agendamento entrevista",
-                "Articula��o de demandas com a Coordena��o da Educa��o do Campo.",
-                "Articula��o de demandas com a Dire��o da FUP",
-                "Articula��o de demandas da DDS",
+                "Articulação de demandas com a Coordenaçãoo da Educação do Campo.",
+                "Articulação de demandas com a Direção da FUP",
+                "Articulação de demandas da DDS",
                 "Atendimento inicial para atualização de informação bancárias",
                 "Atendimento inicial para auxílio emergencial",
                 "Auxílio no preenchimento do estudo",
@@ -28,8 +36,8 @@
                 "Consulta ao andamento de processo/encaminhamento remetido à DDS",
                 "Consulta ao resultado de estudo socioeconômico anterior",
                 "Consulta sobre situação da Bolsa Permanência ME",
-                "Consulta sobre situa��o frente ao PACreche (aux�lio n�o depositado)",
-                "Consulta sobre situa��o frente ao PASeUnB (aux�lio n�o depositado)",
+                "Consulta sobre situação frente ao PACreche (auxílio não depositado)",
+                "Consulta sobre situação frente ao PASeUnB (auxílio não depositado)",
                 "Consulta sobre situação frente ao PASeUnB (comunicado de desligamento)",
                 "Digitalização de documentos",
                 "Emissão de declaração PPAES",
@@ -39,16 +47,21 @@
                 "Entrevista com fins à auxílio emergencial",
                 "Entrevista com fins à coleta de informações sobre fragilização/rompimento de vínculos",
                 "Fotocópia de documento",
-                "Fotoc�pia de termo do Programa Bolsa Alimenta��o",
-                "Identifica��o de demanda pendente (pagamento retroativo)",
-                "Identifica��o de refer�ncias para visita domiciliar",
+                "Fotocópia de termo do Programa Bolsa Alimentação",
+                "Identificação de demanda pendente (pagamento retroativo)",
+                "Solicitação de pagamento retroativo",
+                "Identificação de referências para visita domiciliar",
+                "Identificação de pontos de referências para visita domiciliar",
                 "Impressão de declaração constante no anexo do edital",
                 "Informação presencial",
+                "Informação em geral",
+                "Informação sobre Bolsa Permanência ME",
+                "Informação sobre andamento/situação da avaliação socioeconômica",
                 "Informação presencial (Bolsa Permanência ME)",
                 "Informação presencial (estudo socioeconômico)",
                 "Informação via telefone",
-                "Informa��o presencial (acesso ao RU)",
-                "Informa��o via telefone (WhatsApp ou similares...)",
+                "Informação presencial (acesso ao RU)",
+                "Informação via telefone (WhatsApp ou similares...)",
                 "Orientação presencial em relação a estudo socioeconômico",
                 "Orientação presencial em relação ao Auxílio Emergencial com agendamento de entrevista",
                 "Orientação via IM em relação a estudo socioeconômico",
@@ -59,10 +72,21 @@
                 "Preenchimento/assinatura de termo PASeUnB",
                 "Preenchimento/assinatura de termo PME-G",
                 "Recebimento de pedido de prorrogação de prazo de permanencia nos programas",
+                "Recebimento de ficha para alteração de informações bancárias",
                 "Reencaminhamento de processo",
-                "Solicitação de cópia de relatório de alunos da assistência",
+                "Solicitação de informações/relatórios do SPS",
                 "Solicitação de desligamento do Programa de Moradia Estudantil",
                 "Solicitação de verificação de vínculo com a assistencia estudantil.",
+                "Outro"
+            ]
+        },
+        {
+            "id": "resultado",
+            "tipo": "radio",
+            "enunciado": "Resultado do atendimento",
+            "alternativas": [
+                "Demanda atendida",
+                "Demanda não atendida",
                 "Outro"
             ]
         }

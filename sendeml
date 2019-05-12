@@ -39,7 +39,7 @@ def main():
         return "É necessário definir uma mensagem com a opção '-m'."
     else:
         profissional = None
-        for p in db_profissionais:
+        for p in dados_profissionais:
             if p['uid'] == getoutput('whoami'):
                 profissional = p
                 break

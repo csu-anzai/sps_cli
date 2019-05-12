@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+cmd_nfo="Apresenta informações sobre como usar os comandos do SPS/CLI"
+
+geral='''\
+Na linha do comando (shell), os programas ou scripts são executados quando escrevemos (chamamos) seu nome.
+Programas do shell podem podem exigir, ou não, argumentos.
+Por exemplo, essas informações aparecem toda vez que você digitar/chamar o comando 'ajuda'.
+Alguns comandos exigem argumentos e emitem uma mensagem orientação quando não são chamados adequadamente.
+O comando e os argumentos subsequentes são separados por espaços em branco.
+Um argumento que possua informações que contenha espaços em branco pode ser utilizado desde que entre aspas.
+
+Exemplos:
+  COMANDO ARGUMENTO1 ARGUMENTO2
+  COMANDO "ARGUMENTO1 COM ESPAÇOS" ARGUMENTO2 
+
+Além dos argumentos, comandos podem aceitar bandeiras (flags) ou opções.
+As bandeiras indicam que o argumento seguinte possui uma função ou valor específico.
+Em grande parte dos casos as bandeiras podem ser opcionais.
+As bandeiras são reconhecidas pelo uso do símbolo '-' antes de um único caractere.
+O caractere utilizado após o hífen faz distinção entre os modos maiúsculo ou minúsculo, assim '-a' é diferente de '-A'.
+Algumas bandeiras podem possuir nome extenso, neste caso são precedidos de '--' como em '--help'.
+
+Exemplos:
+  COMANDO ARGUMENTO1 -c VALOR_DE_c -B VALOR_DE_B
+
+O comando 'ajuda' aceita alguns argumentos, permitindo acesso a informações mais detalhadas.
+Os argumentos aceitos pelo comando ajuda são: 'comandos' ou 'pipe'.
+Assim, digite 'ajuda comandos' para ver uma lista de comandos úteis.
+Digite 'ajuda pipe' para uma explicação sobre como combinar comandos diferentes.'''
+
+comandos = '''\
+SPS/CLI constitui um conjunto de scripts concebidos para serem utilizados de forma integradas com shell do linux.
+No momento, os scripts escritos são:
+  'lst': lista informações armazenadas nos arquivos de dados.
+  'novo': insere informações nos arcuivos de dados.
+  'sendeml': envia mensagens via email.
+
+Por estar integrado ao shell do linux, comandos mais gerais do shell também podem ser utilizados de forma isolada ou combinada.
+Seguem alguns exemplos dos comandos mais corriqueiros.
+  'ls': lista as informações do diretório atual.
+  'cd': muda para um diretório.
+  'mkdir': cria um diretório ou pasta.
+  'rm': remove um arquivo ou diretório.
+  'grep': filtra uma saída de dados apresentando as linhas que contenham a chave utilizada.
+  'less': encapsula a saída de dados em uma tela que pode ser rolada para cima e para baixo.
+  'nano': abre um editor de texto.
+  'ssh': realiza uma conexão com servidor SSH remoto.
+  'exit': executa logout.
+
+Existem várias outras ferramentas que permitem grande poder de automação e processamento.
+Para mais informações sobre estes comandos, chame-os com a opção '--help'
+Para saber mais como utilizar todo o potencial do shell, pequise sobre "Tutorial BASH" ou "Shell Scripts" na internet.'''
+
+pipe = ""
+
+from sys import argv
+import argparse
+
+def main():
+    if len(argv) == 1:
+        return geral
+    else:
+        parser = argparse.ArgumentParser(description=cmd_nfo)
+        parser.add_argument("topico", help="utilize uma: comandos|pipe")
+        args = parser.parse_args()
+
+        if args.topico == 'comandos':
+            return comandos
+
+        elif args.topico == 'pipe':
+            return pipe
+
+        else:
+            return "Opção ou argumento desconhecido."
+        
+
+if __name__ == '__main__':
+    print(main())
+
+

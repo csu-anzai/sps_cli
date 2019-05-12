@@ -3,49 +3,28 @@
 
 cmd_nfo="Adiniona novos registros no banco de dados"
 
-# O trecho de codigo abaixo é apenas um esboço...
-# A ideia é que os indices dos dados sejam reconstruídos após a insersão de novas informações...
-# O processo de escrita 'add_data_nfo' roda primeiro e chama o processo de reconstrução do indice 'data_idx_maker' que reconstroi o indice no background um tempo após a escrita dos dados...
-# Implementar este recurso dentro do script novo
-
-'''
-
-import os
-import time
-
-def data_idx_maker():
-    time.sleep(5)
-    print("Acabou data_idx_maker!")
-
-def add_data_nfo():
-    newpid = os.fork()
-    if newpid == 0:
-        data_idx_maker()
-    else:
-        time.sleep(1)
-        print("Acabou registro de nova informação!")
-
-add_data_nfo()
-
-'''
-
 import argparse
 import getpass
+import os
 
 from subprocess import getoutput
-from py_sps_cli_base import save_target_info, get_mat, timestamp,\
+from py_sps_cli_base import save_target_info, get_mat, timestamp, data_folder, numero_sei_mascara,\
     form_novo_estudante, dados_estudantes, arquivo_estudantes,\
     form_processos, dados_processos, arquivo_processos,\
     form_atendiento, dados_atendimentos, arquivo_atendimentos,\
-    form_corrigidos, dados_corrigidos, arquivo_corrigidos
+    form_corrigidos, dados_corrigidos, arquivo_corrigidos,\
+    arquivo_index
     
-from py_console_tools_v0 import save_json, render_form_get_values, select_op
+from py_console_tools_v0 import save_json, render_form_get_values, select_op, select_ops, load_json
 
 parser = argparse.ArgumentParser(description=cmd_nfo)
-parser.add_argument("ação", help="utilize uma: atd|est|prof|esoc|corr|proc")
-parser.add_argument("-m", help="especifica uma matrícula alvo")
+parser.add_argument("action", help="utilize uma: atd|est|prof|esoc|corr|proc|db")
+parser.add_argument("-m", help="especifica uma matrícula alvo.")
 parser.add_argument("-a", help="especifica um assunto, utilizado apenas com a ação 'proc'.")
-parser.add_argument("-M", help="defini um marcador")
+parser.add_argument("-M", help="defini um marcador.")
+parser.add_argument("-C", help="adiciona uma coluna a um arquivo de dados.")
+parser.add_argument("-f", help="especifica o arquivo de dados alvo.")
+parser.add_argument("-o", help="especifica opções para serem selecionadas, separar por ';'.")
 args = parser.parse_args()
 
 matriculas = get_mat(dados_estudantes)
@@ -62,10 +41,17 @@ def novo_processo(mat, assunto):
     nfo['timestamp'] = timestamp() 
     nfo['mat'] = mat
     nfo['assunto'] = assunto
+    nfo['resultado'] = ''
+    nfo['numero_sei'] = numero_sei_mascara(nfo['numero_sei'])
     dados_processos.append(nfo)
     save_json(dados_processos, arquivo_processos)
+    return nfo['numero_sei']
 
-
+def novo_resultado_processo(processo_num):
+    for proc in dados_processos:
+        if proc['numero_sei'] == processo_num:
+            pass
+    
 def novo_atendimento(mat):
     if not mat in matriculas:
         novo_estudante(mat)
@@ -79,6 +65,7 @@ def novo_atendimento(mat):
     if save_target_action == True:
         save_target_info(mat)
     save_json(dados_atendimentos, arquivo_atendimentos)
+    return nfo['atd_t']
 
 def novo_marcador(mat, marcador):
     for estudante in dados_estudantes:
@@ -94,10 +81,29 @@ def nova_correcao(mat):
     nfo['timestamp'] = timestamp() 
     nfo['mat'] = mat
     if not mat in matriculas:
-        novoe(mat)
+        novo_estudante(mat)
         matriculas.append(mat)    
     dados_corrigidos.append(nfo)
     save_json(dados_corrigidos, arquivo_corrigidos)
+
+def nova_coluna(nome_col, json_file, options=None):
+    db_file = load_json(os.sep.join([data_folder, json_file]))
+    if options != None:
+        opz = options.split(';')
+    for i in db_file:
+        if i.get(nome_col) == None:
+            for col in i.keys():
+                print(col, ' -> ', i[col])
+            if options == None:
+                i[nome_col] = input(str(nome_col)+': ')
+            else:
+                nova_col_nfo = select_ops(opz, 1)
+                if len(nova_col_nfo) > 1:
+                    i[nome_col] = '; '.join(nova_col_nfo)
+                else:
+                    i[nome_col] = nova_col_nfo[0]
+            save_json(db_file, os.sep.join([data_folder, json_file]))
+
 
 def novo_profissional():
     profissional = input('Definir a ID de login: ')
@@ -133,7 +139,10 @@ def main():
             return "É necessário especificar um identificador com a opção '-m'."
         else:
             save_target_info(args.m)
-            novo_atendimento(args.m)
+            atd_t = novo_atendimento(args.m)
+            if atd_t == "Encaminhamento de pedido de auxílio emergencial":
+                numero_sei = novo_processo(args.m, atd_t)
+                os.system('echo "{numero_sei}" | sendeml -d "$(get_target_nfo eml)" -a "Assistência Estudantil - Processo de Auxílio Emergencial" -m "Segue o número do processo para acompanhamento do resultado. Com este número você pode consultar o resultado com qualquer pessoa do SPS que possua acesso ao SEI."'.format(numero_sei=numero_sei))
 
     elif args.action == 'est':
         if args.m == None:
@@ -149,6 +158,14 @@ def main():
 
     elif args.action == 'esoc':
         pass
+
+    elif args.action == 'db':
+        if args.C == None:
+            return "É necessário especificar o nome da nova coluna/campo com '-C'."
+        elif args.f == None:
+            return "É necessário o nome do arquivo de dados alvo com '-f'."
+        else:
+            nova_coluna(args.C, args.f, args.o)
 
     elif args.action == 'corr':
         nova_correcao(args.m)
@@ -168,7 +185,35 @@ def main():
         else:
             novo_marcador(args.m, args.M)
 
+
+import os
+
+def make_index_set(set_name, target_col, dados_brutos):
+    index_set = {}
+    index_set['set_de_dados'] = set_name
+    index_set['dados'] = {}
+    for linha in dados_brutos:
+        if index_set['dados'].get(linha[target_col]) == None:
+            index_set['dados'][linha[target_col]] = []
+        index_set['dados'][linha[target_col]].append(dados_brutos.index(linha))
+    return index_set
+
+
+
+def remake_index():
+    index_db = []
+    index_db.append(make_index_set('est', 'mat', dados_estudantes))
+    index_db.append(make_index_set('atd', 'mat', dados_atendimentos))
+    index_db.append(make_index_set('corr', 'mat', dados_corrigidos))
+    index_db.append(make_index_set('proc', 'mat', dados_processos))
+    index_db.append(make_index_set('proc_doc', 'numero_sei', dados_processos))
+    save_json(index_db, arquivo_index)
+
+
 if __name__ == '__main__':
-	print(main())
+    cmd = main()
+    newpid = os.fork()
+    if newpid == 0:
+        remake_index()
 
 

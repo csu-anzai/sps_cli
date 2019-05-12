@@ -4,15 +4,17 @@
 cmd_nfo="Lê informações do arquivo '.current_target'"
 
 import argparse
+import os
 
 from py_console_tools_v0 import load_json
+from py_sps_cli_base import user_home_folder
 
 parser = argparse.ArgumentParser(description=cmd_nfo)
 parser.add_argument("chave", help="indique a chave a ser recuperada...")
 args = parser.parse_args()
 
 def main():
-    current_target = load_json('./.current_target')
+    current_target = load_json(os.sep.join([user_home_folder, '.current_target']))
     return current_target.get(args.chave)
  
 

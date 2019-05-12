@@ -15,9 +15,11 @@ args = parser.parse_args()
 
 def main():
     if args.action == 'atd':
+        print("Listando atendimentos realizados:")
         return listar_dicionario(dados_atendimentos, [col_width_atend_time, col_width_atend_ident, ('atd_t', 0)])
 
     elif args.action == 'est':
+        print("Listando informações dos usuários:")
         if args.m != None:
             marcador = args.m
             return listar_dicionario(dados_estudantes, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [marcador])
@@ -25,17 +27,28 @@ def main():
             return listar_dicionario(dados_estudantes, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml])
 
     elif args.action == 'prof':
+        print("Listando profissionais cadastrados:")
         return listar_dicionario(dados_profissionais, [col_width_prof_uid, col_width_prof_nome, col_width_prof_eml])
 
     elif args.action == 'esoc':
+        print("Listando estudo socioeconômico:")
         pass
 
     elif args.action == 'corr':
+        print("Listando informações sobre correções dos estudo socioeconômico:")
         pass
+
+    elif args.action == 'proc':
+        print("Listando todos processos:")
+        return listar_dicionario(dados_processos, [col_width_etd_mat, col_width_proc_sei_n, col_width_proc_motivo, col_width_proc_assunto])
+
+    elif args.action == 'procp':
+        print("Listando processos pendentes:")
+        return listar_dicionario(dados_processos_pend, [col_width_etd_mat, col_width_proc_sei_n, col_width_proc_assunto])
 
     elif args.action == 'mat':
         return get_mat(dados_estudantes)
 
 
 if __name__ == '__main__':
-	print(main())
+	print(main(), os.linesep)

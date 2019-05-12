@@ -293,6 +293,7 @@ def render_form_get_values(form_file, skip_q=[]):
 	}	
 	'''
 	form = load_json(form_file)
+	exec_cmd = ""
 	rewrite_form = False
 	nfo = {}
 	for q in form['questoes']:
@@ -329,40 +330,6 @@ def render_form_get_values(form_file, skip_q=[]):
 				q['alternativas'].append('Outro')
 				rewrite_form = True
 				
-		if q.get('codicional_de_exec') != None:
-			print_response = True
-			if q['tipo'] == 'checkbox':
-				if nfo[q['id']].find('; ') != -1:
-					for selected_op in nfo[q['id']].split('; '):
-						if selected_op in q['codicional_de_exec']:
-							getoutput(q['exec'].replace('#THIS#', nfo[q['id']]))
-							#response = getoutput(q['exec'].replace('#THIS#', nfo[q['id']]))
-						else:
-							print_response = False
-				else:
-					if nfo[q['id']] in q['codicional_de_exec']:
-						getoutput(q['exec'].replace('#THIS#', nfo[q['id']]))
-						#response = getoutput(q['exec'].replace('#THIS#', nfo[q['id']]))
-					else:
-						print_response = False
-
-			elif q['tipo'] == 'radio':
-				if nfo[q['id']] in q['codicional_de_exec']:
-					getoutput(q['exec'].replace('#THIS#', nfo[q['id']]))
-					#response = getoutput(q['exec'].replace('#THIS#', nfo[q['id']]))
-				else:
-					print_response = False			
-			else:
-				print_response = False
-			
-
-		elif q.get('exec') and q['tipo'] == 'text':
-			response = getoutput(q['exec'].replace('#THIS#', nfo[q['id']]))
-
-		if print_response == True:
-			print(response)
-
-	
 	if rewrite_form == True:
 		save_json(form, form_file)
 
@@ -433,6 +400,9 @@ def create_lockfile(lockf):
 	f = open("/tmp/"+lockf,'w')
 	f.close()
 
+def remove_lockfile(lockf):
+	os.remove("/tmp/"+lockf)
+
 
 def lockfile_name(path_to_file):
 	lkf_name = path_to_file.split(os.sep)[-1]
@@ -444,22 +414,21 @@ def lockfile_name(path_to_file):
 
 def save_json(novos_dados, path_to_file):
 	lockf = lockfile_name(path_to_file)
-	
-	while True:
-		if os.path.isfile(lockf):
-			sleep(0.1)
-		else:
-			create_lockfile(lockf)
-			break
-
 	initfolder = os.getcwd()
 	nfo = path_to_file.split('/')
 	fname = nfo[-1]
 	path = path_to_file.replace(fname, '')
-	os.chdir(path.replace('/', os.sep))
 
+	while True:
+		if os.path.isfile(lockf):
+			time.sleep(0.1)
+		else:
+			create_lockfile(lockf)
+			break
+
+	os.chdir(path.replace('/', os.sep))
 	with open(path_to_file, 'w') as f:
 		f.write(json.dumps(novos_dados, ensure_ascii=False, indent=4))		
-		os.remove(lockf)
 
 	os.chdir(initfolder)
+	remove_lockfile(lockf)
