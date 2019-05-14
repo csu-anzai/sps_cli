@@ -7,3 +7,10 @@ Estas ferramentas foram concebidas para trabalharem de forma integrada com o Bas
 Para gestão dos profissionais, aproveitamos os recursos do próprio sistema operacional e do openssh que permite um ambiente multitarefa integrado. A ideia é que as ferramentas sejam instaladas em uma máquina virtual e que os acessos sejam efetuados por cada profissional a partir de sua própria estação de trabalho.
 
 Os dados, no momento, estão sendo estruturados em arquivos de texto no formato JSON.
+
+### Dependências ###
+
+- docopt
+- colored
+
+sudo pip3 install docopt colored

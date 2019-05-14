@@ -25,10 +25,21 @@
 
 import os
 import json #Remover depois
-#from colored import fg, bg, attr
+from colored import fg, bg, attr
 #from py_euristic_tools import check_item_list
 
 from subprocess import getoutput
+from random import randrange
+from string import digits
+
+def mk_randstr(num):
+	output = ''
+	while num != 0:
+		idx = randrange(len(digits))
+		output += digits[idx]
+		num -= 1
+	return output
+
 
 
 def vermelho(string):
@@ -276,7 +287,6 @@ def render_form_get_values(form_file, skip_q=[]):
 				"enunciado": "Matrícula",
 				"id": "mat",
 				"tipo": "text",
-				"exec": "lst est | grep 18/"
 			},
 			{
 				"enunciado": "Tipo de atendimento",

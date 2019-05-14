@@ -1,31 +1,76 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-cmd_nfo="Adiniona novos registros no banco de dados"
+"""
 
-import argparse
+Adiniona novos registros nos arquivos de dados.
+
+Usage:
+    novo ( usr | usuario ) <identificador>
+    novo ( tag | marcador ) <identificador> <etiqueta>
+    novo ( atd | atendimento ) 
+    novo ( sei | processo ) <identificador> <assunto>
+    novo ( est | estudo ) <identificador>
+    novo ( pro | profissional ) <uid>
+    novo ( dbc | campo-db ) <arquivo_db> <coluna> [<lista-ops>] 
+    novo ( dbi | inserir-form-info ) ( mesclado | aninhado ) <arquivo_db> <formulario> 
+    novo ( opt | inserir-op) <coluna> <opcao> <formulario>
+
+Options:
+    --version
+
+Observações:
+    A opção <lista-ops> pode ser separada por ';' para criar um campo de múltipla escolha.
+    O comando 'dbi' insere as respostas de um formulário¹ em um arquivo de dados JSON já criado.
+    O comando 'opt' insere uma alternativa ao campo de multipla escolha indicado de um formulário.
+
+¹Estrutura do arquivo de formulário:
+	{
+		"titulo": "Registro de atendimento",
+		"descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
+		"questoes":
+		[
+			{
+				"enunciado": "Matrícula",
+				"id": "mat",
+				"tipo": "text",
+			},
+			{
+				"enunciado": "Tipo de atendimento",
+				"id": "atd_t",
+				"tipo": "checkbox",
+				"alternativas" :
+				[
+					"Informação presencial",
+					"Informação via telefone",
+					"Outro"²
+				]            
+			}
+		]
+	}	
+
+²A inclusão da opção 'Outro' permite a insersão dinâmica de outros valores no formulário
+
+"""
+
+
 import getpass
 import os
 
+from docopt import docopt
 from subprocess import getoutput
-from py_sps_cli_base import save_target_info, get_mat, timestamp, data_folder, numero_sei_mascara,\
+from modulos.py_sps_cli_base import save_target_info, get_mat, timestamp, data_folder, numero_sei_mascara,\
     form_novo_estudante, dados_estudantes, arquivo_estudantes,\
     form_processos, dados_processos, arquivo_processos,\
     form_atendiento, dados_atendimentos, arquivo_atendimentos,\
     form_corrigidos, dados_corrigidos, arquivo_corrigidos,\
     arquivo_index
     
-from py_console_tools_v0 import save_json, render_form_get_values, select_op, select_ops, load_json
+from modulos.py_console_tools_v0 import save_json, render_form_get_values, select_op, select_ops, load_json
 
-parser = argparse.ArgumentParser(description=cmd_nfo)
-parser.add_argument("action", help="utilize uma: atd|est|prof|esoc|corr|proc|db")
-parser.add_argument("-m", help="especifica uma matrícula alvo.")
-parser.add_argument("-a", help="especifica um assunto, utilizado apenas com a ação 'proc'.")
-parser.add_argument("-M", help="defini um marcador.")
-parser.add_argument("-C", help="adiciona uma coluna a um arquivo de dados.")
-parser.add_argument("-f", help="especifica o arquivo de dados alvo.")
-parser.add_argument("-o", help="especifica opções para serem selecionadas, separar por ';'.")
-args = parser.parse_args()
+
+args = docopt(__doc__)
+
 
 matriculas = get_mat(dados_estudantes)
 
@@ -132,61 +177,22 @@ def novo_profissional():
     dados_profissionais.append(prof_nfo)
     save_json(dados_profissionais, arquivo_profissionais)    
 
+def insert_info(json_estudantes, print_fields, formulario_q_add, novo_nome_de_campo):
+    #insert_info('Consultas_OldSAE.json', ['mat','Nome','Periodo','Data de Nascimento'], 'form_estudo_socioeconomico.json', 'Estudo Social e Economico')
+    estudantes = load_json('./{}'.format(json_estudantes))
+    novas_questoes = load_json('./forms/{}'.format(formulario_q_add))
+    for e in estudantes:
+        print(e)
+        if e.get(novo_nome_de_campo) == None:
+            limpar_tela()
+            print_nfo = ""
+            for f in print_fields:
+                print_nfo += e[f] + os.linesep
+            print(print_nfo)
+            nfo = render_form_get_values(novas_questoes)
+            e[novo_nome_de_campo] = nfo
+            save_json(estudantes, './{}'.format(json_estudantes))
 
-def main():
-    if args.action == 'atd':
-        if args.m == None:
-            return "É necessário especificar um identificador com a opção '-m'."
-        else:
-            save_target_info(args.m)
-            atd_t = novo_atendimento(args.m)
-            if atd_t == "Encaminhamento de pedido de auxílio emergencial":
-                numero_sei = novo_processo(args.m, atd_t)
-                os.system('echo "{numero_sei}" | sendeml -d "$(get_target_nfo eml)" -a "Assistência Estudantil - Processo de Auxílio Emergencial" -m "Segue o número do processo para acompanhamento do resultado. Com este número você pode consultar o resultado com qualquer pessoa do SPS que possua acesso ao SEI."'.format(numero_sei=numero_sei))
-
-    elif args.action == 'est':
-        if args.m == None:
-            return "É necessário especificar um identificador com a opção '-m'."
-        else:
-            novo_estudante(args.m)
-
-    elif args.action == 'prof':
-        if getoutput('whoami') != 'root':
-            return "Apenas o usuário 'root' pode adcionar outros profissionais..."
-        else:
-            novo_profissional()
-
-    elif args.action == 'esoc':
-        pass
-
-    elif args.action == 'db':
-        if args.C == None:
-            return "É necessário especificar o nome da nova coluna/campo com '-C'."
-        elif args.f == None:
-            return "É necessário o nome do arquivo de dados alvo com '-f'."
-        else:
-            nova_coluna(args.C, args.f, args.o)
-
-    elif args.action == 'corr':
-        nova_correcao(args.m)
-
-    elif args.action == 'proc':
-        if args.m == None:
-            return "É necessário especificar um identificador com a opção '-m'."
-        elif args.a == None:
-            return "É necessário especificar um assunto com a opção '-a'."
-        else:
-            novo_processo(args.m, args.a)
-
-
-    elif args.action == 'tag':
-        if args.m == None or args.M == None:
-            return "É necessário especificar um identificador com a opção '-m' e um marcador com '-M'."
-        else:
-            novo_marcador(args.m, args.M)
-
-
-import os
 
 def make_index_set(set_name, target_col, dados_brutos):
     index_set = {}
@@ -199,7 +205,6 @@ def make_index_set(set_name, target_col, dados_brutos):
     return index_set
 
 
-
 def remake_index():
     index_db = []
     index_db.append(make_index_set('est', 'mat', dados_estudantes))
@@ -210,10 +215,47 @@ def remake_index():
     save_json(index_db, arquivo_index)
 
 
+def main():
+    if args['usr'] or args['usuario']:
+        pass
+
+    elif args['tag'] or args['marcador']:
+        pass
+
+    elif args['atd'] or args['atendimento']:
+        save_target_info(args['<identificador>'])
+        atd_t = novo_atendimento(args['<identificador>'])
+        if atd_t == "Encaminhamento de pedido de auxílio emergencial":
+            numero_sei = novo_processo(args['<identificador>'], atd_t)
+            os.system('echo "{numero_sei}" | sendeml "$(get_target_nfo eml)" "Assistência Estudantil - Processo de Auxílio Emergencial" "Segue o número do processo para acompanhamento do resultado. Com este número você pode consultar o resultado com qualquer pessoa do SPS que possua acesso ao SEI."'.format(numero_sei=numero_sei))
+
+    elif args['sei'] or args['processo']:
+        novo_processo(args['<identificador>'], args['<assunto>'])
+
+    elif args['est'] or args['estudo']:
+        pass
+
+    elif args['pro'] or args['profissional']:
+        if getoutput('whoami') != 'root':
+            print("Apenas o usuário 'root' pode adcionar outros profissionais...")
+        else:
+            novo_profissional()
+
+    elif args['dbc'] or args['campo-db']:
+        nova_coluna(args['<coluna>'], args['<arquivo_db>'], args['<lista-ops>'])
+
+    elif args['dbi'] or args['inserir-form-info']:
+        if args['mesclado']:
+            pass
+        elif args['aninhado']:
+            pass
+
+        nova_coluna(args['<coluna>'], args['<arquivo_db>'], args['<lista-ops>'])
+
+
+
 if __name__ == '__main__':
     cmd = main()
     newpid = os.fork()
     if newpid == 0:
         remake_index()
-
-

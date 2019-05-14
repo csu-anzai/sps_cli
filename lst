@@ -1,54 +1,57 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-cmd_nfo="Lista informações do banco de dados"
+"""
 
-import argparse
+Lista informações registradas nos arquivos de dados.
 
+Usage:
+    lst ( usr | estudantes ) [<marcador>]
+    lst ( atd | atendimentos ) 
+    lst ( sei | processos ) 
+    lst ( est | estudos ) 
+    lst ( pro | profissionais ) 
+
+Options:
+    --version
+
+"""
+
+
+from docopt import docopt
 from subprocess import check_output
-from py_sps_cli_base import *
+from modulos.py_sps_cli_base import *
 
-parser = argparse.ArgumentParser(description=cmd_nfo)
-parser.add_argument("action", help="utilize uma: atd|est|prof|esoc|corr|mat")
-parser.add_argument("-m", help="lista estudantes que possuam o marcador")
-args = parser.parse_args()
+
+args = docopt(__doc__)
+
 
 def main():
-    if args.action == 'atd':
-        print("Listando atendimentos realizados:")
-        return listar_dicionario(dados_atendimentos, [col_width_atend_time, col_width_atend_ident, ('atd_t', 0)])
+    if args['usr'] or args['estudantes']:
+        if args['<marcador>']:
+            if args['<marcador>'] == 'id':
+                print(set(get_mat(dados_estudantes)))
+            else:
+                print(listar_dicionario(dados_estudantes, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [args['<marcador>']]))
 
-    elif args.action == 'est':
-        print("Listando informações dos usuários:")
-        if args.m != None:
-            marcador = args.m
-            return listar_dicionario(dados_estudantes, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [marcador])
         else:
-            return listar_dicionario(dados_estudantes, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml])
+            print(listar_dicionario(dados_estudantes, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml]))
 
-    elif args.action == 'prof':
-        print("Listando profissionais cadastrados:")
-        return listar_dicionario(dados_profissionais, [col_width_prof_uid, col_width_prof_nome, col_width_prof_eml])
+    elif args['atd'] or args['atendimentos']:
+        print(listar_dicionario(dados_atendimentos, [col_width_atend_time, col_width_atend_ident, ('atd_t', 0)]))
 
-    elif args.action == 'esoc':
-        print("Listando estudo socioeconômico:")
+    elif args['sei'] or args['processos']:
+        print(listar_dicionario(dados_processos, [col_width_etd_mat, col_width_proc_sei_n, col_width_proc_motivo, col_width_proc_assunto]))
+
+    elif args['pnd'] or args['processos-pendentes']:
+        print(listar_dicionario(dados_processos_pend, [col_width_etd_mat, col_width_proc_sei_n, col_width_proc_assunto]))
+
+    elif args['est'] or args['estudos']:
         pass
 
-    elif args.action == 'corr':
-        print("Listando informações sobre correções dos estudo socioeconômico:")
-        pass
-
-    elif args.action == 'proc':
-        print("Listando todos processos:")
-        return listar_dicionario(dados_processos, [col_width_etd_mat, col_width_proc_sei_n, col_width_proc_motivo, col_width_proc_assunto])
-
-    elif args.action == 'procp':
-        print("Listando processos pendentes:")
-        return listar_dicionario(dados_processos_pend, [col_width_etd_mat, col_width_proc_sei_n, col_width_proc_assunto])
-
-    elif args.action == 'mat':
-        return get_mat(dados_estudantes)
+    elif args['pro'] or args['profissionais']:
+        print(listar_dicionario(dados_profissionais, [col_width_prof_uid, col_width_prof_nome, col_width_prof_eml]))
 
 
 if __name__ == '__main__':
-	print(main(), os.linesep)
+	main()

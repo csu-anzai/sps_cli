@@ -28,8 +28,8 @@ import csv
 import re
 
 
-from py_euristic_tools import check_item_list, merge_lists
-from py_console_tools_v0 import limpar_tela
+from .py_euristic_tools import check_item_list, merge_lists
+from .py_console_tools_v0 import limpar_tela
 from collections import OrderedDict
 from copy import copy
 from time import ctime, sleep

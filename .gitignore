@@ -1,6 +1,7 @@
 *.pyc
 __pycache__
 dados
+eml_template
 Consultas*
 .current_target
 .directory
