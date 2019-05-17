@@ -7,10 +7,13 @@ Envia emails a partir das informações da linha de comando ou redirecionando a 
 
 Usage:
     sendeml ( wrt | escrever ) <destinatario> <assunto> [<mensagem>]
-    sendeml ( get | get-from ) <destinatario> <assunto> <mensagem>
+    sendeml ( get | get-from ) <destinatario> <assunto> [<mensagem>]
 
 Options:
     --version
+
+Observações:
+    O comando 'get' deve ser utilizado no contexto de uma PIPE
 
 """
 
@@ -67,6 +70,8 @@ def main():
             msg['Mensagem'] = args['<mensagem>']
         else:
             msg['Mensagem'] = ""
+
+        pipe_nfo = ''
 
         while True:
             line = sys.stdin.readline()

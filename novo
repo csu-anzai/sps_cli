@@ -8,8 +8,10 @@ Adiniona novos registros nos arquivos de dados.
 Usage:
     novo ( usr | usuario ) <identificador>
     novo ( tag | marcador ) <identificador> <etiqueta>
-    novo ( atd | atendimento ) 
+    novo ( tgr | nfo-tag-replace ) <valor-antigo> <valor-novo>
+    novo ( atd | atendimento ) <identificador>
     novo ( sei | processo ) <identificador> <assunto>
+    novo ( res | resposta-de-processo )
     novo ( est | estudo ) <identificador>
     novo ( pro | profissional ) <uid>
     novo ( dbc | campo-db ) <arquivo_db> <coluna> [<lista-ops>] 
@@ -121,6 +123,15 @@ def novo_marcador(mat, marcador):
                 estudante['marcador'] = [marcador]
     save_json(dados_estudantes, arquivo_estudantes)
 
+def substituir_marcadores(antigo, novo):
+    for estudante in dados_estudantes:
+        if estudante.get('marcador'):
+            if antigo in estudante['marcador']:
+                estudante['marcador'].remove(antigo)
+                estudante['marcador'].append(novo)
+                estudante['marcador'].sort()
+    save_json(dados_estudantes, arquivo_estudantes)
+
 def nova_correcao(mat):
     nfo = render_form_get_values(form_corrigidos, ['mat'])
     nfo['timestamp'] = timestamp() 
@@ -133,21 +144,27 @@ def nova_correcao(mat):
 
 def nova_coluna(nome_col, json_file, options=None):
     db_file = load_json(os.sep.join([data_folder, json_file]))
-    if options != None:
+    if options != None and options.find(";") != -1:
         opz = options.split(';')
+        selection = True
+    else:
+        opz = options
+        selection = False
     for i in db_file:
-        if i.get(nome_col) == None:
+        if i.get(nome_col) == None and selection == True:
             for col in i.keys():
                 print(col, ' -> ', i[col])
+            nova_col_nfo = select_ops(opz, 1)
+            if len(nova_col_nfo) > 1:
+                i[nome_col] = '; '.join(nova_col_nfo)
+            else:
+                i[nome_col] = nova_col_nfo[0]
+        elif i.get(nome_col) == None and selection == False:
             if options == None:
                 i[nome_col] = input(str(nome_col)+': ')
             else:
-                nova_col_nfo = select_ops(opz, 1)
-                if len(nova_col_nfo) > 1:
-                    i[nome_col] = '; '.join(nova_col_nfo)
-                else:
-                    i[nome_col] = nova_col_nfo[0]
-            save_json(db_file, os.sep.join([data_folder, json_file]))
+                i[nome_col] = opz
+                save_json(db_file, os.sep.join([data_folder, json_file]))
 
 
 def novo_profissional():
@@ -221,6 +238,9 @@ def main():
 
     elif args['tag'] or args['marcador']:
         pass
+
+    elif args['tgr'] or args['nfo-tag-replace']:
+        substituir_marcadores(args["<valor-antigo>"], args["<valor-novo>"])
 
     elif args['atd'] or args['atendimento']:
         save_target_info(args['<identificador>'])

@@ -7,8 +7,10 @@ Lista informações registradas nos arquivos de dados.
 
 Usage:
     lst ( usr | estudantes ) [<marcador>]
-    lst ( atd | atendimentos ) 
+    lst ( atd | atendimentos )
+    lst ( tag | marcadores ) 
     lst ( sei | processos ) 
+    lst ( pnd | processos )
     lst ( est | estudos ) 
     lst ( pro | profissionais ) 
 
@@ -21,10 +23,9 @@ Options:
 from docopt import docopt
 from subprocess import check_output
 from modulos.py_sps_cli_base import *
-
+from modulos.py_console_tools_v0 import mk_randstr
 
 args = docopt(__doc__)
-
 
 def main():
     if args['usr'] or args['estudantes']:
@@ -39,6 +40,14 @@ def main():
 
     elif args['atd'] or args['atendimentos']:
         print(listar_dicionario(dados_atendimentos, [col_width_atend_time, col_width_atend_ident, ('atd_t', 0)]))
+
+    elif args['tag'] or args['marcadores']:
+        marcadores = get_tags(dados_estudantes)
+        #tmp_fname = mk_randstr(10)
+        for m in marcadores:
+            print(m) #os.system("echo '{}' >> /tmp/lstdump{}".format(m, tmp_fname))
+            print(getoutput("lst usr '{}'".format(m)))
+        #os.system("target set lstdump {}".format(tmp_fname))
 
     elif args['sei'] or args['processos']:
         print(listar_dicionario(dados_processos, [col_width_etd_mat, col_width_proc_sei_n, col_width_proc_motivo, col_width_proc_assunto]))

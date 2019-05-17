@@ -30,6 +30,16 @@ def get_procp(dados_processos):
     return dados_processos_pend
 
 
+def get_tags(dados_estudantes):
+    marcadores = []
+    for estudante in dados_estudantes:
+        if estudante.get("marcador"):
+            for m in estudante['marcador']:
+                if m not in marcadores:
+                    marcadores.append(m)
+    marcadores.sort()
+    return marcadores
+
 def save_target_info(mat):
     for e in dados_estudantes:
         if e['mat'] == mat:
