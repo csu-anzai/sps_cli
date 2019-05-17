@@ -1,28 +1,26 @@
 {
-    "titulo": "Registro de atendimento",
-    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
     "questoes": [
         {
             "id": "mat",
-            "tipo": "text",
-            "enunciado": "Matrícula"
+            "enunciado": "Matrícula",
+            "tipo": "text"
         },
         {
-            "id": "forma_atv",
+            "id": "forma_atd",
+            "enunciado": "Forma de atividade",
             "tipo": "checkbox",
-            "enunciado": "Forma de atendimento",
             "alternativas": [
                 "Atendimento presencial",
                 "Atendimento telefone",
-                "Conversa por e-mail",
-                "Conversa por WhatsUp",
+                "Atendimento via e-mail",
+                "Atendimento via WhatsUp",
                 "Outro"
             ]
         },
         {
             "id": "atd_t",
-            "tipo": "checkbox",
             "enunciado": "Demanda do atendimento",
+            "tipo": "checkbox",
             "alternativas": [
                 "Agendamento entrevista",
                 "Articulação de demandas com a Coordenaçãoo da Educação do Campo.",
@@ -45,11 +43,13 @@
                 "Emissão de declaração para criação de Conta Corrente",
                 "Encaminhamento de pedido de auxílio emergencial",
                 "Entrevista com fins à auxílio emergencial",
+                "Elaboração de relatório com parecer",
                 "Entrevista com fins à coleta de informações sobre fragilização/rompimento de vínculos",
                 "Fotocópia de documento",
                 "Fotocópia de termo do Programa Bolsa Alimentação",
                 "Identificação de demanda pendente (pagamento retroativo)",
                 "Solicitação de pagamento retroativo",
+                "Solicitação de acesso extraordinário ao RU",
                 "Identificação de referências para visita domiciliar",
                 "Identificação de pontos de referências para visita domiciliar",
                 "Impressão de declaração constante no anexo do edital",
@@ -73,6 +73,7 @@
                 "Preenchimento/assinatura de termo PME-G",
                 "Recebimento de pedido de prorrogação de prazo de permanencia nos programas",
                 "Recebimento de ficha para alteração de informações bancárias",
+                "Recebimento/digiralização de pedido de recurso ao resultado da avaliação socioeconômica",
                 "Reencaminhamento de processo",
                 "Solicitação de informações/relatórios do SPS",
                 "Solicitação de desligamento do Programa de Moradia Estudantil",
@@ -82,13 +83,16 @@
         },
         {
             "id": "resultado",
-            "tipo": "radio",
             "enunciado": "Resultado do atendimento",
+            "tipo": "radio",
             "alternativas": [
+                "Aguardando resposta",
                 "Demanda atendida",
                 "Demanda não atendida",
                 "Outro"
             ]
         }
-    ]
+    ],
+    "titulo": "Registro de atendimento",
+    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP"
 }

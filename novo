@@ -10,6 +10,7 @@ Usage:
     novo ( tag | marcador ) <identificador> <etiqueta>
     novo ( tgr | nfo-tag-replace ) <valor-antigo> <valor-novo>
     novo ( atd | atendimento ) <identificador>
+    novo ( nfo-atd ) <identificador> <forma_atd> <atd_t> <resultado>
     novo ( sei | processo ) <identificador> <assunto>
     novo ( res | resposta-de-processo )
     novo ( est | estudo ) <identificador>
@@ -25,6 +26,7 @@ Observações:
     A opção <lista-ops> pode ser separada por ';' para criar um campo de múltipla escolha.
     O comando 'dbi' insere as respostas de um formulário¹ em um arquivo de dados JSON já criado.
     O comando 'opt' insere uma alternativa ao campo de multipla escolha indicado de um formulário.
+    Apenas 'root' pode executar os comandos 'pro' e 'tgr'.
 
 ¹Estrutura do arquivo de formulário:
 	{
@@ -66,7 +68,7 @@ from modulos.py_sps_cli_base import save_target_info, get_mat, timestamp, data_f
     form_processos, dados_processos, arquivo_processos,\
     form_atendiento, dados_atendimentos, arquivo_atendimentos,\
     form_corrigidos, dados_corrigidos, arquivo_corrigidos,\
-    arquivo_index
+    arquivo_index, automail
     
 from modulos.py_console_tools_v0 import save_json, render_form_get_values, select_op, select_ops, load_json
 
@@ -108,11 +110,32 @@ def novo_atendimento(mat):
     nfo = render_form_get_values(form_atendiento, ['mat'])
     nfo['timestamp'] = timestamp() 
     nfo['mat'] = mat
+    nfo['prof_atd'] = getoutput("whoami")
     dados_atendimentos.append(nfo)
     if save_target_action == True:
         save_target_info(mat)
     save_json(dados_atendimentos, arquivo_atendimentos)
     return nfo['atd_t']
+
+def novo_atendimento_insert(mat, forma_atd, atd_t, resultado, prof_atd=getoutput("whoami")):
+    if not mat in matriculas:
+        novo_estudante(mat)
+        matriculas.append(mat)
+        save_target_action = True
+    save_target_action = False
+    nfo = {}
+    nfo['timestamp'] = timestamp() 
+    nfo['mat'] = mat
+    nfo['forma_atd'] = forma_atd
+    nfo['atd_t'] = atd_t
+    nfo['resultado'] = resultado
+    nfo['prof_atd'] = prof_atd
+    dados_atendimentos.append(nfo)
+    if save_target_action == True:
+        save_target_info(mat)
+    save_json(dados_atendimentos, arquivo_atendimentos)
+    return nfo['atd_t']
+
 
 def novo_marcador(mat, marcador):
     for estudante in dados_estudantes:
@@ -240,14 +263,34 @@ def main():
         pass
 
     elif args['tgr'] or args['nfo-tag-replace']:
-        substituir_marcadores(args["<valor-antigo>"], args["<valor-novo>"])
+        if getoutput("whoami") != 'root':
+            print("Este comando só pode ser executado pelo usuário 'root'...")
+        else:
+            substituir_marcadores(args["<valor-antigo>"], args["<valor-novo>"])
 
     elif args['atd'] or args['atendimento']:
         save_target_info(args['<identificador>'])
         atd_t = novo_atendimento(args['<identificador>'])
         if atd_t == "Encaminhamento de pedido de auxílio emergencial":
             numero_sei = novo_processo(args['<identificador>'], atd_t)
-            os.system('echo "{numero_sei}" | sendeml "$(get_target_nfo eml)" "Assistência Estudantil - Processo de Auxílio Emergencial" "Segue o número do processo para acompanhamento do resultado. Com este número você pode consultar o resultado com qualquer pessoa do SPS que possua acesso ao SEI."'.format(numero_sei=numero_sei))
+            if automail:
+                os.system("novo nfo-atd '{}' '{}' '{}' '{}'".format(args["<identificador>"], "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
+                os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Processo de Auxílio Emergencial" "Segue o número do processo para acompanhamento do resultado. Com este número você pode consultar o resultado com qualquer pessoa do SPS que possua acesso ao SEI."'.format(numero_sei=numero_sei))
+
+        elif atd_t == "Solicitação de acesso extraordinário ao RU":
+            numero_sei = novo_processo(args['<identificador>'], atd_t)
+            if automail:
+                os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Processo de Acesso ao RU" "Segue o número do processo para que você possa acompanhar do resultado. Com este número você pode consultar o resultado junto a qualquer pessoa do SPS que possua acesso ao SEI."'.format(numero_sei=numero_sei))
+                os.system("novo nfo-atd '{}' '{}' '{}' '{}'".format(args["<identificador>"], "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
+
+        elif atd_t == "Recebimento/digiralização de pedido de recurso ao resultado da avaliação socioeconômica":
+            numero_sei = novo_processo(args['<identificador>'], atd_t)
+            if automail:
+                os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Processo de Recurso à Avaliação Socioeconômica" "Segue o númro do processo de recurso. Se até a data prevista para o resultado você não obtiver resposta, vá ao SPS, forneça este número e informe a pendência."'.format(numero_sei=numero_sei))
+                os.system("novo nfo-atd '{}' '{}' '{}' '{}'".format(args["<identificador>"], "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
+
+    elif args['nfo-atd']:
+        novo_atendimento_insert(args["<identificador>"], args["<forma_atd>"], args["<atd_t>"], args["<resultado>"])
 
     elif args['sei'] or args['processo']:
         novo_processo(args['<identificador>'], args['<assunto>'])
@@ -257,7 +300,7 @@ def main():
 
     elif args['pro'] or args['profissional']:
         if getoutput('whoami') != 'root':
-            print("Apenas o usuário 'root' pode adcionar outros profissionais...")
+            print("Apenas o usuário 'root' pode adicionar outros profissionais...")
         else:
             novo_profissional()
 
@@ -265,13 +308,14 @@ def main():
         nova_coluna(args['<coluna>'], args['<arquivo_db>'], args['<lista-ops>'])
 
     elif args['dbi'] or args['inserir-form-info']:
-        if args['mesclado']:
-            pass
-        elif args['aninhado']:
-            pass
+        pass
+        
+        #if args['mesclado']:
+        #    pass
+        #elif args['aninhado']:
+        #    pass
 
-        nova_coluna(args['<coluna>'], args['<arquivo_db>'], args['<lista-ops>'])
-
+        #nova_coluna(args['<coluna>'], args['<arquivo_db>'], args['<lista-ops>'])
 
 
 if __name__ == '__main__':
