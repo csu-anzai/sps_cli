@@ -1,4 +1,6 @@
 {
+    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
+    "titulo": "Registro de atendimento",
     "questoes": [
         {
             "id": "mat",
@@ -8,19 +10,19 @@
         {
             "id": "forma_atd",
             "enunciado": "Forma de atividade",
-            "tipo": "checkbox",
             "alternativas": [
                 "Atendimento presencial",
                 "Atendimento telefone",
-                "Atendimento via e-mail",
                 "Atendimento via WhatsUp",
+                "Atendimento via e-mail",
+                "Processamento de demanda anterior",
                 "Outro"
-            ]
+            ],
+            "tipo": "checkbox"
         },
         {
             "id": "atd_t",
             "enunciado": "Demanda do atendimento",
-            "tipo": "checkbox",
             "alternativas": [
                 "Agendamento entrevista",
                 "Articulação de demandas com a Coordenaçãoo da Educação do Campo.",
@@ -30,6 +32,7 @@
                 "Atendimento inicial para auxílio emergencial",
                 "Auxílio no preenchimento do estudo",
                 "Auxílio para Recuperação da senha BPME",
+                "Colsulta sobre situação do Bolsa Alimentação",
                 "Consulta ao andamento de emergencial",
                 "Consulta ao andamento de processo/encaminhamento remetido à DDS",
                 "Consulta ao resultado de estudo socioeconômico anterior",
@@ -37,30 +40,30 @@
                 "Consulta sobre situação frente ao PACreche (auxílio não depositado)",
                 "Consulta sobre situação frente ao PASeUnB (auxílio não depositado)",
                 "Consulta sobre situação frente ao PASeUnB (comunicado de desligamento)",
+                "Dificuldade no recebimento do cartão referente ao Bolsa Permanência ME",
                 "Digitalização de documentos",
+                "Elaboração de relatório com parecer",
                 "Emissão de declaração PPAES",
                 "Emissão de declaração UnB idiomas",
                 "Emissão de declaração para criação de Conta Corrente",
                 "Encaminhamento de pedido de auxílio emergencial",
                 "Entrevista com fins à auxílio emergencial",
-                "Elaboração de relatório com parecer",
                 "Entrevista com fins à coleta de informações sobre fragilização/rompimento de vínculos",
                 "Fotocópia de documento",
                 "Fotocópia de termo do Programa Bolsa Alimentação",
                 "Identificação de demanda pendente (pagamento retroativo)",
-                "Solicitação de pagamento retroativo",
-                "Solicitação de acesso extraordinário ao RU",
-                "Identificação de referências para visita domiciliar",
                 "Identificação de pontos de referências para visita domiciliar",
+                "Identificação de referências para visita domiciliar",
                 "Impressão de declaração constante no anexo do edital",
-                "Informação presencial",
                 "Informação em geral",
+                "Informação em relação à abertura de processo",
+                "Informação presencial",
+                "Informação presencial (Bolsa Permanência ME)",
+                "Informação presencial (acesso ao RU)",
+                "Informação presencial (estudo socioeconômico)",
                 "Informação sobre Bolsa Permanência ME",
                 "Informação sobre andamento/situação da avaliação socioeconômica",
-                "Informação presencial (Bolsa Permanência ME)",
-                "Informação presencial (estudo socioeconômico)",
                 "Informação via telefone",
-                "Informação presencial (acesso ao RU)",
                 "Informação via telefone (WhatsApp ou similares...)",
                 "Orientação presencial em relação a estudo socioeconômico",
                 "Orientação presencial em relação ao Auxílio Emergencial com agendamento de entrevista",
@@ -71,28 +74,29 @@
                 "Preenchimento/assinatura de termo PACreche",
                 "Preenchimento/assinatura de termo PASeUnB",
                 "Preenchimento/assinatura de termo PME-G",
-                "Recebimento de pedido de prorrogação de prazo de permanencia nos programas",
                 "Recebimento de ficha para alteração de informações bancárias",
+                "Recebimento de pedido de prorrogação de prazo de permanencia nos programas",
                 "Recebimento/digiralização de pedido de recurso ao resultado da avaliação socioeconômica",
                 "Reencaminhamento de processo",
-                "Solicitação de informações/relatórios do SPS",
+                "Solicitação de acesso extraordinário ao RU",
                 "Solicitação de desligamento do Programa de Moradia Estudantil",
+                "Solicitação de informações/relatórios do SPS",
+                "Solicitação de pagamento retroativo",
                 "Solicitação de verificação de vínculo com a assistencia estudantil.",
                 "Outro"
-            ]
+            ],
+            "tipo": "checkbox"
         },
         {
             "id": "resultado",
             "enunciado": "Resultado do atendimento",
-            "tipo": "radio",
             "alternativas": [
                 "Aguardando resposta",
                 "Demanda atendida",
                 "Demanda não atendida",
                 "Outro"
-            ]
+            ],
+            "tipo": "radio"
         }
-    ],
-    "titulo": "Registro de atendimento",
-    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP"
+    ]
 }
