@@ -67,7 +67,7 @@ automail=True
 
 #Quando os comandos estiverem disponíveis globalmente, utilizar caminhos absolutos.
 user_home_folder = getoutput("echo $HOME")
-app_root_folder = "/home/bwb0de/Devel/sps_fup2" 
+app_root_folder = "/home/danielc/Documentos/Devel/GitHub/sps_fup2"
 
 data_folder = os.sep.join([app_root_folder, "dados"])
 index_db_folder = os.sep.join([data_folder, "indexados"])

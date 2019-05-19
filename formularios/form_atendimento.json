@@ -8,13 +8,15 @@
             "tipo": "text"
         },
         {
-            "id": "forma_atd",
+            "id": "procedimento",
             "enunciado": "Forma de atividade",
             "alternativas": [
+                "Articulação",
                 "Atendimento presencial",
                 "Atendimento telefone",
                 "Atendimento via WhatsUp",
                 "Atendimento via e-mail",
+                "Elaboração de relatório ou documento",
                 "Processamento de demanda anterior",
                 "Outro"
             ],

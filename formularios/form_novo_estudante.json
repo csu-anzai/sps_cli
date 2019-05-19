@@ -3,13 +3,24 @@
     "questoes": [
         {
             "id": "mat",
-            "enunciado": "Matrícula",
+            "enunciado": "Identificador",
             "tipo": "text"
         },
         {
             "id": "nome",
             "enunciado": "Nome",
             "tipo": "text"
+        },
+        {
+            "id": "publico_tipo",
+            "alternativas": [
+                "Estudante",
+                "Servidor",
+                "Comunidade externa",
+                "Outro"
+            ],
+            "enunciado": "Grupo de pertencimento do usuário",
+            "tipo": "radio"
         },
         {
             "id": "curso",
@@ -29,7 +40,7 @@
                 "Meio Ambiente e Desenvolvimento Rural - Mestrado",
                 "Outro"
             ],
-            "enunciado": "Curso",
+            "enunciado": "Curso/Setor",
             "tipo": "radio"
         },
         {

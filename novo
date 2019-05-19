@@ -117,7 +117,7 @@ def novo_atendimento(mat):
     save_json(dados_atendimentos, arquivo_atendimentos)
     return nfo['atd_t']
 
-def novo_atendimento_insert(mat, forma_atd, atd_t, resultado, prof_atd=getoutput("whoami")):
+def novo_atendimento_insert(mat, procedimento, atd_t, resultado, prof_atd=getoutput("whoami")):
     if not mat in matriculas:
         novo_estudante(mat)
         matriculas.append(mat)
@@ -126,7 +126,7 @@ def novo_atendimento_insert(mat, forma_atd, atd_t, resultado, prof_atd=getoutput
     nfo = {}
     nfo['timestamp'] = timestamp() 
     nfo['mat'] = mat
-    nfo['forma_atd'] = forma_atd
+    nfo['procedimento'] = procedimento
     nfo['atd_t'] = atd_t
     nfo['resultado'] = resultado
     nfo['prof_atd'] = prof_atd
@@ -187,7 +187,7 @@ def nova_coluna(nome_col, json_file, options=None):
                 i[nome_col] = input(str(nome_col)+': ')
             else:
                 i[nome_col] = opz
-                save_json(db_file, os.sep.join([data_folder, json_file]))
+        save_json(db_file, os.sep.join([data_folder, json_file]))
 
 
 def novo_profissional():
