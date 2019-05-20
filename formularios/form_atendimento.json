@@ -1,15 +1,14 @@
 {
-    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
-    "titulo": "Registro de atendimento",
     "questoes": [
         {
-            "id": "mat",
             "enunciado": "Matrícula",
-            "tipo": "text"
+            "tipo": "text",
+            "id": "mat"
         },
         {
-            "id": "procedimento",
             "enunciado": "Forma de atividade",
+            "tipo": "checkbox",
+            "id": "procedimento",
             "alternativas": [
                 "Articulação",
                 "Atendimento presencial",
@@ -19,12 +18,12 @@
                 "Elaboração de relatório ou documento",
                 "Processamento de demanda anterior",
                 "Outro"
-            ],
-            "tipo": "checkbox"
+            ]
         },
         {
-            "id": "atd_t",
             "enunciado": "Demanda do atendimento",
+            "tipo": "checkbox",
+            "id": "atd_t",
             "alternativas": [
                 "Agendamento entrevista",
                 "Articulação de demandas com a Coordenaçãoo da Educação do Campo.",
@@ -44,6 +43,7 @@
                 "Consulta sobre situação frente ao PASeUnB (comunicado de desligamento)",
                 "Dificuldade no recebimento do cartão referente ao Bolsa Permanência ME",
                 "Digitalização de documentos",
+                "Dúvida em relação a um estudo",
                 "Elaboração de relatório com parecer",
                 "Emissão de declaração PPAES",
                 "Emissão de declaração UnB idiomas",
@@ -57,6 +57,7 @@
                 "Identificação de pontos de referências para visita domiciliar",
                 "Identificação de referências para visita domiciliar",
                 "Impressão de declaração constante no anexo do edital",
+                "Impressão integral ou parcial de processo",
                 "Informação em geral",
                 "Informação em relação à abertura de processo",
                 "Informação presencial",
@@ -86,19 +87,20 @@
                 "Solicitação de pagamento retroativo",
                 "Solicitação de verificação de vínculo com a assistencia estudantil.",
                 "Outro"
-            ],
-            "tipo": "checkbox"
+            ]
         },
         {
-            "id": "resultado",
             "enunciado": "Resultado do atendimento",
+            "tipo": "radio",
+            "id": "resultado",
             "alternativas": [
                 "Aguardando resposta",
                 "Demanda atendida",
                 "Demanda não atendida",
                 "Outro"
-            ],
-            "tipo": "radio"
+            ]
         }
-    ]
+    ],
+    "titulo": "Registro de atendimento",
+    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP"
 }
