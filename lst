@@ -31,18 +31,18 @@ def main():
     if args['usr'] or args['estudantes']:
         if args['<marcador>']:
             if args['<marcador>'] == 'id':
-                print(set(get_mat(dados_estudantes)))
+                print(set(get_mat(dados_usuarios)))
             else:
-                print(listar_dicionario(dados_estudantes, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [args['<marcador>']]))
+                print(listar_dicionario(dados_usuarios, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [args['<marcador>']]))
 
         else:
-            print(listar_dicionario(dados_estudantes, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml]))
+            print(listar_dicionario(dados_usuarios, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml]))
 
     elif args['atd'] or args['atendimentos']:
         print(listar_dicionario(dados_atendimentos, [col_width_atend_time, col_width_atend_ident, ('atd_t', 0)]))
 
     elif args['tag'] or args['marcadores']:
-        marcadores = get_tags(dados_estudantes)
+        marcadores = get_tags(dados_usuarios)
         
         for m in marcadores:
             print(m) 

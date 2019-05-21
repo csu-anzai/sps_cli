@@ -26,17 +26,11 @@
 from string import whitespace, punctuation, digits
 
 
-
-def check_item_list(item, lista):
-	try:
-		lista.index(item)
-		return True
-	except:
-		return False
-		
-
-
 def get_indexes(item, lista):
+	'''
+	Retorna os índices de um elemento em uma lista. Usado em listas que possuam elementos repitidos.
+	'''
+
 	loops = lista.count(item)
 	r = []
 	idx = 0
@@ -56,7 +50,7 @@ def diff_lists(a, b):
 	'''Retorna os itens da lista "a" que não estão em "b".'''
 	o = []
 	for i in a:
-		if check_item_list(i,b) == False:
+		if i not in b:
 			o.append(i)
 	return o
 
@@ -64,7 +58,11 @@ def diff_lists(a, b):
 
 
 def compare_lists(a, b, historical_analisis=False, listA_NAME='First', listB_NAME='Second'):
-	'''Compara duas listas e retorna um dicionário que agrupa itens exclusivos e compartilhados. Se o terceiro argumento for "True", apresenta uma única lista mostrando o que mudou de [b] em relação a [a]. Os argumentos 4 e 5 definem os nomes das listas de entrada.'''
+	'''
+	Compara duas listas e retorna um dicionário que agrupa itens exclusivos e compartilhados.
+	Se historical_analisis=True, apresenta uma única lista mostrando o que mudou na lista [b] em relação a [a].
+	Os argumentos listA_NAME e listB_NAME permitem usar nomes específicos para as listas.
+	'''
 	o = {}
 	if historical_analisis == True:
 		#A segunda lista deve ser a mais nova para que os valores retornados sejam os mais atuais...
@@ -79,7 +77,10 @@ def compare_lists(a, b, historical_analisis=False, listA_NAME='First', listB_NAM
 
 
 def diff_dicts(a, b, historical_analisis=True):
-	'''Realiza a comparação entre dois dicionários retornando, por padrão, o que mudou do segundo [b] em relação ao primeiro[a]. Se o terceiro argumento for "False", retorna um dicionário agrupando itens exclusivos e compartilhados dessas listas.'''
+	'''
+	Realiza a comparação entre dois dicionários retornando o que mudou no segundo [b] em relação ao primeiro[a].
+	Se historical_analisis=False, retorna um dicionário agrupando itens exclusivos e compartilhados dessas listas.
+	'''
 	k = []
 	for i in a.keys():
 		k.append(i)
@@ -101,9 +102,7 @@ def merge_lists(a, b):
 	for i in b:
 		o.append(i)
 	for i in a:
-		if check_item_list(i,b) == True:
-			pass
-		else:
+		if i not in b:
 			o.append(i)
 	return o
 
@@ -115,13 +114,8 @@ def intersect_lists(a, b):
 	o = []
 	tl = merge_lists(a,b)
 	for i in tl:
-		if check_item_list(i, a) == check_item_list(i, b):
-			if check_item_list(i, a) == True:
-				o.append(i)
-			else:
-				pass
-		else:
-			pass
+		if (i in a) and (i in b):
+			o.append(i)
 	return o
 
 
@@ -140,16 +134,22 @@ def show_dict_data(d, ofname):
 
 
 
-def clean_digits(s):
+def strip_digits(s):
 	r = s
 	for i in digits:
 		r = r.replace(i,'')
 	return r
 
 
-def clean_string(s):
-	''' Retira todos os sinais de pontuação e espaços em branco de uma string.'''
+def strip_simbols(s):
 	r = s
-	for i in whitespace+punctuation+"/":
+	for i in punctuation+"/":
 		r = r.replace(i,"")
 	return r
+
+def strip_spaces(s):
+	r = s
+	for i in whitespace:
+		r = r.replace(i,"")
+	return r
+
