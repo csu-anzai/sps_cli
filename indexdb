@@ -41,11 +41,11 @@ def make_index_set(set_name, target_col, dados_brutos):
 
 def remake_index():
     index_db = []
-    index_db.append(make_index_set('est', 'mat', dados_usuarios))
+    index_db.append(make_index_set('est', 'identificador', dados_usuarios))
     index_db.append(make_index_set('est-eml', 'eml', dados_usuarios))
-    index_db.append(make_index_set('atd', 'mat', dados_atendimentos))
-    index_db.append(make_index_set('corr', 'mat', dados_corrigidos))
-    index_db.append(make_index_set('proc', 'mat', dados_processos))
+    index_db.append(make_index_set('atd', 'identificador', dados_atendimentos))
+    index_db.append(make_index_set('corr', 'identificador', dados_corrigidos))
+    index_db.append(make_index_set('proc', 'identificador', dados_processos))
     index_db.append(make_index_set('proc_doc', 'numero_sei', dados_processos))
     save_json(index_db, arquivo_index)
 

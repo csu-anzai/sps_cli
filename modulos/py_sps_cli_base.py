@@ -19,7 +19,7 @@ def get_col_width(field_name, dict_array):
 def get_mat(dados_usuarios):
     matriculas = []
     for estudantes in dados_usuarios:
-        matriculas.append(estudantes['mat'])
+        matriculas.append(estudantes['identificador'])
     return matriculas
 
 def get_procp(dados_processos):
@@ -41,9 +41,9 @@ def get_tags(dados_usuarios):
     marcadores.sort()
     return marcadores
 
-def save_target_info(mat):
+def save_target_info(identificador):
     for e in dados_usuarios:
-        if e['mat'] == mat:
+        if e['identificador'] == identificador:
             save_json(e, os.sep.join([user_home_folder, '.current_target']))
 
 def timestamp():
@@ -74,7 +74,7 @@ automail=True
 
 #Quando os comandos estiverem disponíveis globalmente, utilizar caminhos absolutos.
 user_home_folder = getoutput("echo $HOME")
-app_root_folder = "/home/danielc/Documentos/Devel/GitHub/sps_fup2"
+app_root_folder = "/home/bwb0de/Devel/sps_fup2"
 
 data_folder = os.sep.join([app_root_folder, "dados"])
 index_db_folder = os.sep.join([data_folder, "indexados"])
@@ -111,7 +111,7 @@ dados_corrigidos = dados[4]
 
 loop2 = asyncio.get_event_loop()
 col_width = loop2.run_until_complete(asyncio.gather(
-    get_col_width_nfo('mat', dados_usuarios),
+    get_col_width_nfo('identificador', dados_usuarios),
     get_col_width_nfo('nome', dados_usuarios),
     get_col_width_nfo('eml', dados_usuarios),
     get_col_width_nfo('uid', dados_profissionais),

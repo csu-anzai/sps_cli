@@ -3,7 +3,7 @@
     "descricao": "Intrumental para registro de informações sobre correções e erros nos estudos no âmbito do SPS/FUP",
     "questoes": [
         {
-            "id": "mat",
+            "id": "identificador",
             "tipo": "text",
             "enunciado": "Matrícula"
         },

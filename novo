@@ -36,7 +36,7 @@ Observações:
 		[
 			{
 				"enunciado": "Matrícula",
-				"id": "mat",
+				"id": "identificador",
 				"tipo": "text",
 			},
 			{
@@ -78,17 +78,17 @@ args = docopt(__doc__)
 
 matriculas = get_mat(dados_usuarios)
 
-def novo_estudante(mat):
-    nfo = render_form_get_values(form_novo_usuario, ['mat'])
+def novo_estudante(identificador):
+    nfo = render_form_get_values(form_novo_usuario, ['identificador'])
     nfo['timestamp'] = timestamp() 
-    nfo['mat'] = mat
+    nfo['identificador'] = identificador
     dados_usuarios.append(nfo)
     save_json(dados_usuarios, arquivo_usuarios)
 
-def novo_processo(mat, assunto):
-    nfo = render_form_get_values(form_processos, ['mat'])
+def novo_processo(identificador, assunto):
+    nfo = render_form_get_values(form_processos, ['identificador'])
     nfo['timestamp'] = timestamp() 
-    nfo['mat'] = mat
+    nfo['identificador'] = identificador
     nfo['assunto'] = assunto
     nfo['resultado'] = ''
     nfo['numero_sei'] = numero_sei_mascara(nfo['numero_sei'])
@@ -101,45 +101,45 @@ def novo_resultado_processo(processo_num):
         if proc['numero_sei'] == processo_num:
             pass
     
-def novo_atendimento(mat):
-    if not mat in matriculas:
-        novo_estudante(mat)
-        matriculas.append(mat)
+def novo_atendimento(identificador):
+    if not identificador in matriculas:
+        novo_estudante(identificador)
+        matriculas.append(identificador)
         save_target_action = True
     save_target_action = False
-    nfo = render_form_get_values(form_atendiento, ['mat'])
+    nfo = render_form_get_values(form_atendiento, ['identificador'])
     nfo['timestamp'] = timestamp() 
-    nfo['mat'] = mat
+    nfo['identificador'] = identificador
     nfo['prof_atd'] = getoutput("whoami")
     dados_atendimentos.append(nfo)
     if save_target_action == True:
-        save_target_info(mat)
+        save_target_info(identificador)
     save_json(dados_atendimentos, arquivo_atendimentos)
     return nfo['atd_t']
 
-def novo_atendimento_insert(mat, procedimento, atd_t, resultado, prof_atd=getoutput("whoami")):
-    if not mat in matriculas:
-        novo_estudante(mat)
-        matriculas.append(mat)
+def novo_atendimento_insert(identificador, procedimento, atd_t, resultado, prof_atd=getoutput("whoami")):
+    if not identificador in matriculas:
+        novo_estudante(identificador)
+        matriculas.append(identificador)
         save_target_action = True
     save_target_action = False
     nfo = {}
     nfo['timestamp'] = timestamp() 
-    nfo['mat'] = mat
+    nfo['identificador'] = identificador
     nfo['procedimento'] = procedimento
     nfo['atd_t'] = atd_t
     nfo['resultado'] = resultado
     nfo['prof_atd'] = prof_atd
     dados_atendimentos.append(nfo)
     if save_target_action == True:
-        save_target_info(mat)
+        save_target_info(identificador)
     save_json(dados_atendimentos, arquivo_atendimentos)
     return nfo['atd_t']
 
 
-def novo_marcador(mat, marcador):
+def novo_marcador(identificador, marcador):
     for estudante in dados_usuarios:
-        if estudante['mat'] == mat:
+        if estudante['identificador'] == identificador:
             try:
                 estudante['marcador'].append(marcador)
             except KeyError:
@@ -155,13 +155,13 @@ def substituir_marcadores(antigo, novo):
                 estudante['marcador'].sort()
     save_json(dados_usuarios, arquivo_usuarios)
 
-def nova_correcao(mat):
-    nfo = render_form_get_values(form_corrigidos, ['mat'])
+def nova_correcao(identificador):
+    nfo = render_form_get_values(form_corrigidos, ['identificador'])
     nfo['timestamp'] = timestamp() 
-    nfo['mat'] = mat
-    if not mat in matriculas:
-        novo_estudante(mat)
-        matriculas.append(mat)    
+    nfo['identificador'] = identificador
+    if not identificador in matriculas:
+        novo_estudante(identificador)
+        matriculas.append(identificador)    
     dados_corrigidos.append(nfo)
     save_json(dados_corrigidos, arquivo_corrigidos)
 
@@ -218,7 +218,7 @@ def novo_profissional():
     save_json(dados_profissionais, arquivo_profissionais)    
 
 def insert_info(json_estudantes, print_fields, formulario_q_add, novo_nome_de_campo):
-    #insert_info('Consultas_OldSAE.json', ['mat','Nome','Periodo','Data de Nascimento'], 'form_estudo_socioeconomico.json', 'Estudo Social e Economico')
+    #insert_info('Consultas_OldSAE.json', ['identificador','Nome','Periodo','Data de Nascimento'], 'form_estudo_socioeconomico.json', 'Estudo Social e Economico')
     estudantes = load_json('./{}'.format(json_estudantes))
     novas_questoes = load_json('./forms/{}'.format(formulario_q_add))
     for e in estudantes:

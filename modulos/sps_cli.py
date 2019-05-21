@@ -18,7 +18,7 @@ def csv2json(csv_file):
     save_json(csv_file_data, "./{}.json".format(csv_file_name))
 
 def insert_info(json_estudantes, print_fields, formulario_q_add, novo_nome_de_campo):
-    #insert_info('Consultas_OldSAE.json', ['mat','Nome','Periodo','Data de Nascimento'], 'form_estudo_socioeconomico.json', 'Estudo Social e Economico')
+    #insert_info('Consultas_OldSAE.json', ['identificador','Nome','Periodo','Data de Nascimento'], 'form_estudo_socioeconomico.json', 'Estudo Social e Economico')
     estudantes = load_json('./{}'.format(json_estudantes))
     novas_questoes = load_json('./forms/{}'.format(formulario_q_add))
     for e in estudantes:
