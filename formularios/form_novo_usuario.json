@@ -1,32 +1,33 @@
 {
+    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
     "questoes": [
         {
             "enunciado": "Identificador",
-            "tipo": "text",
-            "id": "identificador"
+            "id": "identificador",
+            "tipo": "text"
         },
         {
             "enunciado": "Nome",
-            "tipo": "text",
-            "id": "nome"
+            "id": "nome",
+            "tipo": "text"
         },
         {
             "enunciado": "Grupo de pertencimento do usuário",
-            "tipo": "radio",
             "id": "publico_tipo",
             "alternativas": [
                 "Estudante",
                 "Servidor",
                 "Comunidade externa",
                 "Outro"
-            ]
+            ],
+            "tipo": "radio"
         },
         {
             "enunciado": "Curso/Setor",
-            "tipo": "radio",
             "id": "curso",
             "alternativas": [
                 "Administração",
+                "COORD/LEDOC/FUP",
                 "Ciências Contábeis",
                 "Ciências Naturais",
                 "Ciências Sociais",
@@ -41,14 +42,14 @@
                 "Licenciatura em Educação do Campo",
                 "Meio Ambiente e Desenvolvimento Rural - Mestrado",
                 "Outro"
-            ]
+            ],
+            "tipo": "radio"
         },
         {
             "enunciado": "Contato (e-Mail, Zap...)",
-            "tipo": "text",
-            "id": "eml"
+            "id": "eml",
+            "tipo": "text"
         }
     ],
-    "titulo": "Formulário para cadastro de estudante",
-    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP"
+    "titulo": "Formulário para cadastro de estudante"
 }

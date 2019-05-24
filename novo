@@ -80,7 +80,6 @@ matriculas = get_mat(dados_usuarios)
 
 def novo_estudante(identificador):
     nfo = render_form_get_values(form_novo_usuario, ['identificador'])
-    nfo['timestamp'] = timestamp() 
     nfo['identificador'] = identificador
     dados_usuarios.append(nfo)
     save_json(dados_usuarios, arquivo_usuarios)
@@ -236,10 +235,11 @@ def insert_info(json_estudantes, print_fields, formulario_q_add, novo_nome_de_ca
 
 def main():
     if args['usr'] or args['usuario']:
-        pass
+        novo_estudante(args['<identificador>'])
+        matriculas.append(args['<identificador>'])
 
     elif args['tag'] or args['marcador']:
-        pass
+        novo_marcador(args["<identificador>"], args["<etiqueta>"])
 
     elif args['tgr'] or args['nfo-tag-replace']:
         if getoutput("whoami") != 'root':
@@ -295,6 +295,7 @@ def main():
         #    pass
 
         #nova_coluna(args['<coluna>'], args['<arquivo_db>'], args['<lista-ops>'])
+        #novo atd $(lst usr | grep Shirley | grep "" | grep "" | awk -F" " '{ print $1 }')
 
 
 if __name__ == '__main__':
