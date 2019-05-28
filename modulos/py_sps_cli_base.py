@@ -69,6 +69,12 @@ async def load_json_file(arquivo):
 async def get_col_width_nfo(field_name, data_set):
     return get_col_width(field_name, data_set)
 
+async def get_col_label(formulario):
+    id_and_label = {}
+    for i in formulario['questoes']:
+        id_and_label[i['id']] = i['enunciado']
+    return id_and_label
+
 
 automail=True
 periodo_corrente="1º/2019"
@@ -101,6 +107,7 @@ dados = loop.run_until_complete(asyncio.gather(
     load_json_file(arquivo_profissionais),
     load_json_file(arquivo_processos),
     load_json_file(arquivo_corrigidos),
+    load_json_file(arquivo_index),
 ))
 
 dados_atendimentos = dados[0]
@@ -109,6 +116,7 @@ dados_profissionais = dados[2]
 dados_processos = dados[3]
 dados_processos_pend = get_procp(dados_processos)
 dados_corrigidos = dados[4]
+dados_index = dados[5]
 
 loop2 = asyncio.get_event_loop()
 col_width = loop2.run_until_complete(asyncio.gather(
@@ -123,6 +131,18 @@ col_width = loop2.run_until_complete(asyncio.gather(
     get_col_width_nfo('motivo', dados_processos),
 ))
 
+loop3 = asyncio.get_event_loop()
+form_labels = loop3.run_until_complete(asyncio.gather(
+    get_col_width_nfo('identificador', dados_usuarios),
+    get_col_width_nfo('nome', dados_usuarios),
+    get_col_width_nfo('eml', dados_usuarios),
+    get_col_width_nfo('uid', dados_profissionais),
+    get_col_width_nfo('nome', dados_profissionais),
+    get_col_width_nfo('eml', dados_profissionais),
+    get_col_width_nfo('numero_sei', dados_processos),
+    get_col_width_nfo('assunto', dados_processos),
+    get_col_width_nfo('motivo', dados_processos),
+))
 
 #Larguras das colunas nas listas. Rodar método async aqui...
 col_width_etd_mat = col_width[0]

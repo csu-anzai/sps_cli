@@ -1,10 +1,9 @@
 {
-    "titulo": "Registro de atendimento",
     "questoes": [
         {
-            "enunciado": "Matrícula",
             "id": "identificador",
-            "tipo": "text"
+            "tipo": "text",
+            "enunciado": "Matrícula"
         },
         {
             "alternativas": [
@@ -17,9 +16,9 @@
                 "Processamento de demanda anterior",
                 "Outro"
             ],
-            "enunciado": "Forma de atividade",
             "id": "procedimento",
-            "tipo": "checkbox"
+            "tipo": "checkbox",
+            "enunciado": "Forma de atividade"
         },
         {
             "alternativas": [
@@ -34,6 +33,10 @@
                 "Consulta ao andamento de emergencial",
                 "Consulta ao andamento de processo/encaminhamento remetido à DDS",
                 "Consulta ao resultado de estudo socioeconômico anterior",
+                "Consulta ao resultado do estudo socioeconômico",
+                "Explicação sobre o procedimento de lista de espera",
+                "Orientação sobre a necessidade de manter o estudo atualizado",
+                "Contacto telefônico com a tesouraria para verificação de pagamento de auxílio",
                 "Consulta sobre situação da Bolsa Permanência ME",
                 "Consulta sobre situação frente ao PACreche (auxílio não depositado)",
                 "Consulta sobre situação frente ao PASeUnB (auxílio não depositado)",
@@ -48,19 +51,19 @@
                 "Entrevista com fins à coleta de informações sobre fragilização/rompimento de vínculos",
                 "Fotocópia de documento",
                 "Fotocópia de termo do Programa Bolsa Alimentação",
-                "Inclusão de despacho em processo remetido à DDS e comunicação ao responsável",
                 "Identificação de demanda pendente (pagamento retroativo)",
                 "Identificação de pontos de referências para visita domiciliar",
                 "Identificação de referências para visita domiciliar",
                 "Impressão de declaração constante no anexo do edital",
                 "Impressão de documentos para apresentação junto à direção da FUP",
-                "Notificação de recebimento de ameaças",
                 "Impressão integral ou parcial de processo",
+                "Inclusão de despacho em processo remetido à DDS e comunicação ao responsável",
                 "Informação em geral",
                 "Informação sobre Bolsa Permanência ME",
-                "Informação sobre acesso ao RU",
                 "Informação sobre a perda de acesso ao RU pela não conclusão da avaliação socieconômica",
+                "Informação sobre acesso ao RU",
                 "Informação sobre andamento/situação da avaliação socioeconômica",
+                "Notificação de recebimento de ameaças",
                 "Orientação presencial em relação a estudo socioeconômico",
                 "Orientação sobre Auxílio Emergencial",
                 "Orientação sobre a impossibilidade de assinatura do termo de moradia",
@@ -74,6 +77,7 @@
                 "Recebimento de ficha para alteração de informações bancárias",
                 "Recebimento de pedido de prorrogação de prazo de permanencia nos programas",
                 "Recebimento de recurso ao resultado da avaliação socioeconômica",
+                "Recebimento de solicitação de auxílio emergencial",
                 "Solicitação de acesso extraordinário ao RU",
                 "Solicitação de desligamento do Programa de Moradia Estudantil",
                 "Solicitação de documentação adicional para fundamentação de pedido de emergencial",
@@ -82,9 +86,9 @@
                 "Solicitação de verificação de vínculo com a assistencia estudantil.",
                 "Outro"
             ],
-            "enunciado": "Demanda do atendimento",
             "id": "atd_t",
-            "tipo": "checkbox"
+            "tipo": "checkbox",
+            "enunciado": "Demanda do atendimento"
         },
         {
             "alternativas": [
@@ -93,10 +97,11 @@
                 "Demanda não atendida",
                 "Outro"
             ],
-            "enunciado": "Resultado do atendimento",
             "id": "resultado",
-            "tipo": "radio"
+            "tipo": "radio",
+            "enunciado": "Resultado do atendimento"
         }
     ],
-    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP"
+    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
+    "titulo": "Registro de atendimento"
 }

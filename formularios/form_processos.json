@@ -1,5 +1,4 @@
 {
-    "titulo": "Registro de processos",
     "questoes": [
         {
             "id": "identificador",
@@ -14,7 +13,6 @@
         {
             "id": "motivo",
             "tipo": "checkbox",
-            "enunciado": "Motivação",
             "alternativas": [
                 "Alega custos com saúde de familiares, não apresentou comprovantes",
                 "Alega dificuldade para arcar com os custos de retorno à cumunidade",
@@ -25,6 +23,7 @@
                 "Alega que condições de moradia ou local de repouso interferem no rendimento acadêmico",
                 "Alega que contraiu dívidas e ficou em dificuldade em função do fechamento do RU",
                 "Alega que faz parte da excessão dos estudantes do DF",
+                "Alega ter sido furtada; Alega perda do cartão do DFTRANS; Alega não estar recebendo pagamento do programa de extensão",
                 "Argumenta que foi solicitada documentação não exigida no edital",
                 "Dificuldade de acessar o campus",
                 "Dificuldade em virtude da grande quantidade de correções",
@@ -46,8 +45,10 @@
                 "Solicita avaliação de excepcionalidade do caso",
                 "Solicita inclusão no pleito da alimentação",
                 "Outro"
-            ]
+            ],
+            "enunciado": "Motivação"
         }
     ],
+    "titulo": "Registro de processos",
     "descricao": "Intrumental para registro de processos gerados no âmbito do SPS/FUP"
 }
