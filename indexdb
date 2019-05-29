@@ -6,7 +6,8 @@
 Cria ou recria arquivo de índices do banco de dados.
 
 Usage:
-    indexdb 
+    indexdb
+    indexdb ( insert ) <identificador> <set_de_dados>
 
 Options:
     --version
@@ -28,25 +29,52 @@ from modulos.py_console_tools_v0 import save_json
 
 args = docopt(__doc__)
 
-def make_index_set(set_name, target_col, dados_brutos):
+def make_index_set(set_name, target_col, dados_brutos, pointer=None):
     index_set = {}
     index_set['set_de_dados'] = set_name
     index_set['dados'] = {}
     for linha in dados_brutos:
-        if index_set['dados'].get(linha[target_col]) == None:
-            index_set['dados'][linha[target_col]] = []
-        index_set['dados'][linha[target_col]].append(dados_brutos.index(linha))
+        if pointer != None:
+            if linha[target_col].find(',') != -1:
+                for sub_set in linha[target_col].split(','):
+                    if index_set['dados'].get(sub_set.strip()) == None:
+                        index_set['dados'][sub_set.strip()] = []
+                    index_set['dados'][sub_set.strip()].append(linha[pointer])
+            else:
+                if index_set['dados'].get(linha[target_col]) == None:
+                    index_set['dados'][linha[target_col]] = []
+                index_set['dados'][linha[target_col]].append(linha[pointer])
+        else:
+            if index_set['dados'].get(linha[target_col]) == None:
+                index_set['dados'][linha[target_col]] = []
+            index_set['dados'][linha[target_col]].append(dados_brutos.index(linha))
     return index_set
+
+def make_search_set(dados_brutos):
+    index_set = {}
+    index_set['set_de_dados'] = 'nome'
+    index_set['dados'] = {}
+    for linha in dados_brutos:
+        for palavra in linha['nome'].split(' '):
+            if index_set['dados'].get(palavra[0]) == None:
+                index_set['dados'][palavra[0]] = {}
+            if index_set['dados'][palavra[0]].get(palavra) == None:
+                index_set['dados'][palavra[0]][palavra] = []
+            index_set['dados'][palavra[0]][palavra].append(dados_brutos.index(linha))
+    return index_set
+
+            
 
 
 def remake_index():
     index_db = []
     index_db.append(make_index_set('est', 'identificador', dados_usuarios))
-    index_db.append(make_index_set('est-eml', 'eml', dados_usuarios))
+    index_db.append(make_index_set('est-eml', 'eml', dados_usuarios, 'identificador'))
     index_db.append(make_index_set('atd', 'identificador', dados_atendimentos))
     index_db.append(make_index_set('corr', 'identificador', dados_corrigidos))
     index_db.append(make_index_set('proc', 'identificador', dados_processos))
     index_db.append(make_index_set('proc_doc', 'numero_sei', dados_processos))
+    index_db.append(make_search_set(dados_usuarios))
     save_json(index_db, arquivo_index)
 
 

@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+
+Lista informações registradas nos arquivos de dados.
+
+Usage:
+    randnum ( <num_algarismos> )
+
+Options:
+    --version
+
+"""
+
+
+from docopt import docopt
+from modulos.py_console_tools_v0 import mk_randnum_seq
+
+args = docopt(__doc__)
+
+def main():
+    print(mk_randnum_seq(int(args["<num_algarismos>"])))
+
+
+if __name__ == '__main__':
+	main()

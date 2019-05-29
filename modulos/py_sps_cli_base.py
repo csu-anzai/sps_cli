@@ -83,6 +83,7 @@ periodo_corrente="1º/2019"
 user_home_folder = getoutput("echo $HOME")
 app_root_folder = "/home/danielc/Documentos/Devel/GitHub/sps_fup2"
 
+security_folder = os.sep.join([app_root_folder, "seguranca"])
 data_folder = os.sep.join([app_root_folder, "dados"])
 index_db_folder = os.sep.join([data_folder, "indexados"])
 form_folder = os.sep.join([app_root_folder, "formularios"])

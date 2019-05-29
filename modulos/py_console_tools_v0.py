@@ -32,7 +32,7 @@ from subprocess import getoutput
 from random import randrange
 from string import digits
 
-def mk_randstr(num):
+def mk_randnum_seq(num):
 	output = ''
 	while num != 0:
 		idx = randrange(len(digits))
