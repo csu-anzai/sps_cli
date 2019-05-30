@@ -23,7 +23,7 @@ import os
 from docopt import docopt
 from subprocess import getoutput
 from modulos.py_sps_cli_base import *
-from modulos.py_console_tools_v0 import mk_randstr
+from modulos.py_console_tools_v0 import mk_randnum_seq
 from smtplib import SMTP
 from string import whitespace, punctuation, digits
 from email.message import EmailMessage
@@ -59,7 +59,7 @@ def main():
         if args['<mensagem>']:
             msg['Mensagem'] = args['<mensagem>']
         else:
-            tmp_fname = mk_randstr(6)
+            tmp_fname = mk_randnum_seq(6)
             os.system('nano "/tmp/msg{}"'.format(tmp_fname))
             f = open("/tmp/msg{}".format(tmp_fname), 'r', encoding="utf-8")
             msg['Mensagem'] = f.read()

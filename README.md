@@ -10,7 +10,14 @@ Os dados, no momento, estão sendo estruturados em arquivos de texto no formato 
 
 ### Dependências ###
 
+## Python ##
+
 - docopt
 - colored
 
 sudo pip3 install docopt colored
+
+## Base do sistema ##
+
+- rclone
+

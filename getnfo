@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+
+Busca as informações registradas no índice do banco de dados para todos os arquivos de dados...
+
+Usage:
+    getnfo ( <identificador> ) 
+
+Options:
+    --version
+
+"""
+
+import os
+
+from docopt import docopt
+from subprocess import getoutput
+from modulos.py_sps_cli_base import get_mat,\
+    dados_usuarios,\
+    dados_processos,\
+    dados_atendimentos,\
+    dados_corrigidos,\
+    dados_index
+    
+from modulos.py_console_tools_v0 import save_json, verde, vermelho
+
+args = docopt(__doc__)
+
+def get_nfo(identificador, set_de_dados, index_de_dados=dados_index):
+    for s in index_de_dados:
+        if s['set_de_dados'] == set_de_dados:
+            return s['dados'].get(identificador)
+
+def show_nfo_frag(identificador, set_de_dados, db):
+    ret_nfo = get_nfo(identificador, set_de_dados)
+    if ret_nfo:
+        for i in ret_nfo:
+            print(db[i])
+
+matriculas = get_mat(dados_usuarios)
+
+def main():
+
+    if args["<identificador>"].find('@') != -1:
+        identificador_real = get_nfo(args["<identificador>"], 'est-eml', index_de_dados=dados_index)
+        if identificador_real == None:
+            print(vermelho("Identificador não encontrado..."))
+            exit()
+        elif len(identificador_real) > 1:
+            pass
+        else:
+            identificador_real = identificador_real[0]
+        
+    elif args["<identificador>"].find('/') != -1:
+        identificador_real = args["<identificador>"]
+        if not identificador_real in matriculas:
+            print(vermelho("Identificador não encontrado..."))
+            exit()
+
+    print(verde("Dados pessoais"))
+    show_nfo_frag(identificador_real, 'est', dados_usuarios)
+
+    print("")
+    print(verde("Dados de atendimentos"))
+    show_nfo_frag(identificador_real, 'atd', dados_atendimentos)
+    
+    print("")
+    print(verde("Dados de processos"))
+    show_nfo_frag(identificador_real, 'proc', dados_processos)
+
+
+if __name__ == '__main__':
+    main()

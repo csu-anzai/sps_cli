@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+
+Descriptografa o arquivo alvo.
+
+Usage:
+    sps-decrypt ( <arquivo> ) 
+
+"""
+
+from docopt import docopt
+from os import system
+from modulos.py_sps_cli_base import security_folder
+
+args = docopt(__doc__)
+
+def main():
+    system("ccdecrypt {} -k {}/ccrypt-key".format(args['<arquivo>'], security_folder))
+
+if __name__ == '__main__':
+    main()

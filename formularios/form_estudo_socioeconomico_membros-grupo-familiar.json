@@ -4,8 +4,63 @@
     "questoes":
     [
         {
+            "enunciado": "Data de nascimento do estudante",
+            "id": "dn",
+            "tipo": "text"
+        },
+        {
+            "enunciado": "Registrado por âmbos genitores",
+            "id" : "registro_genitores",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Sim",
+                "Apenas mãe",
+                "Apenas pai",
+                "Não"
+            ]
+        },                
+        {
+            "enunciado": "Pais falecidos",
+            "id" : "pais_falecidos",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Não",
+                "Apenas mãe",
+                "Apenas pai",
+                "Sim"                
+            ]
+        },
+        {
+            "enunciado": "Pais separados",
+            "id" : "pais_separados",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Não",
+                "Sim, foram formalmente casados e estão separados",
+                "Sim, foram formalmente casados e estão informalmente separados",
+                "Sim, nunca foram casados formalmente",
+                "Não se aplica"
+            ]
+        },               
+        {
+            "enunciado": "Nível do curso do estudante",
+            "id": "estudante_nivel",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Graduação",
+                "Especialização",
+                "Mestrado",
+                "Doutorado",
+                "Outro"
+            ]
+        },
+        {
             "enunciado": "Localidade onde cursou Ensino Médio",
-            "id": "Localidade onde cursou Ensino Médio",
+            "id": "localidade_EM",
             "tipo": "radio",
             "alternativas": 
             [
@@ -15,49 +70,36 @@
             ]
         },
         {
-            "enunciado": "Ano de conclusão do Ensino Médio (superior para POS)",
-            "id": "Ano de conclusão do Ensino Médio (superior para POS)",
+            "enunciado": "Ano de conclusão do Ensino Médio",
+            "id": "ano_EM",
             "tipo": "text"
         },
         {
             "enunciado": "Tipo escola/instituição do Ensino Médio",
-            "id": "Tipo escola/instituição do Ensino Médio",
+            "id": "tipo_EM",
             "tipo": "radio",
             "alternativas": 
             [
-                "Regular - Pública",
-                "Técnico-profissionalizante - Pública",
-                "Supletivo - Pública",
-                "Regular - Privada",
-                "Técnico-profissionalizante - Privada",
-                "Supletivo - Privada"
+                "Pública",
+                "Privada"
+            ]            
+        },        
+        {
+            "enunciado": "Situação de residência do estudante",
+            "id": "situacao_residencia",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Sozinho",
+                "Com grupo familiar",
+                "Em república estudantil",
+                "Com outros parentes",
+                "Com terceiros, sem vínculos cosanguíneos/familiares"
             ]            
         },        
         {
             "enunciado": "Localidade de residência do/a estudante",
-            "id" : "Localidade de residência do/a estudante",
-            "tipo": "radio",
-            "alternativas": 
-            [
-                "DF",
-                "RIDE",
-                "Outra UF",
-                "Sem residência"
-            ]
-        },
-        {
-            "enunciado": "Região onde localiza-se a residencia",
-            "id" : "Região onde localiza-se a residencia",
-            "tipo": "radio",
-            "alternativas": 
-            [
-                "Cidade",
-                "Campo"
-            ]
-        },
-        {
-            "enunciado": "Localidade de residência da familia do/a estudante",
-            "id" : "Localidade de residência da familia do/a estudante",
+            "id" : "moradia_localidade",
             "tipo": "radio",
             "alternativas": 
             [
@@ -69,7 +111,7 @@
         },
         {
             "enunciado": "Cidade de residência do estudante",
-            "id" : "Cidade de residência do estudante",
+            "id" : "moradia_cidade",
             "tipo": "radio",
             "alternativas": 
             [
@@ -112,95 +154,47 @@
                 "Vicente Pires",
                 "Jardins Mangueiral",
                 "Paranoá",
-                "Outra cidade na RIDE",
-                "Outra UF"
+                "Outro"
             ]
         },
         {
-            "enunciado": "Com quem o estudante reside",
-            "id" : "Com quem o estudante reside",
-            "tipo": "checkbox",
-            "alternativas": 
-            [
-                "Sozinho/a",
-                "Pai",
-                "Mãe",
-                "Filho(s)",
-                "Irmãos",
-                "Conjuge/companheiro",
-                "Amigos",                
-                "Outros familiares",
-                "Outra situação"
-            ]
-        },
-        {
-            "enunciado": "Composição familiar",
-            "id" : "Composição familiar",
+            "enunciado": "Região onde localiza-se a residencia",
+            "id" : "moradia_regiao",
             "tipo": "radio",
             "alternativas": 
             [
-                "Família nuclear",
-                "Família nuclear recomposta",
-                "Família estendida (+tio/a, avô/ó, primo/a...)",
-                "Recomposta e estendida (padrasto, madarasta...)",
-                "Sem vínculos cossanguíneos"
+                "Cidade",
+                "Campo"
             ]
         },
         {
-            "enunciado": "Registrado por âmbos genitores",
-            "id" : "Registrado por âmbos genitores",
+            "enunciado": "Condição da moradia do estudante",
+            "id" : "moradia_condicao",
             "tipo": "radio",
             "alternativas": 
             [
-                "Sim",
-                "Apenas mãe",
-                "Apenas pai",
-                "Não"
-            ]
-        },                
-        {
-            "enunciado": "Genitores falecidos",
-            "id" : "Genitores falecidos",
-            "tipo": "radio",
-            "alternativas": 
-            [
-                "Não",
-                "Apenas mãe",
-                "Apenas pai",
-                "Sim, âmbos"                
+                "Própria",
+                "Alugada",
+                "Financiada",
+                "Cedida por familiares",
+                "Cedido por terceiros",
+                "Imóvel funcional",
+                "De favor (estudante ou grupo familiar compartilham moradia com terceiros não considerados no estudo)",
+                "Outro"
             ]
         },
         {
-            "enunciado": "Genitores separados",
-            "id" : "Genitores separados",
-            "tipo": "radio",
-            "alternativas": 
-            [
-                "Não se aplica",
-                "Sim",
-                "Não"
-            ]
-        },               
-        {
-            "enunciado": "Diferença de idade entre ESTUDANTE e o PAI/PADRASTO",
-            "id" : "Diferença de idade entre ESTUDANTE e o PAI/PADRASTO",
-            "tipo": "text"
-        },
-        {
-            "enunciado": "Diferença de idade entre ESTUDANTE e a MÃE/MADRASTA",
-            "id" : "Diferença de idade entre ESTUDANTE e a MÃE/MADRASTA",
-            "tipo": "text"
-        },                
-        {
-            "enunciado": "Fontes de renda própria do estudante",
-            "id" : "Fontes de renda própria do estudante",
+            "enunciado": "Situação de renda do estudante",
+            "id" : "situacao_renda_estudante",
             "tipo": "checkbox",
             "alternativas": 
             [
                 "Sem renda",
+                "Recebe auxílio do grupo familiar",
                 "Trabalho formal, setor privado",
                 "Servidor público efetivo",
-                "Servidor público temporário/comissão",
+                "Servidor público temporário",
+                "Serviço público, cargo comissionado",
                 "INSS - Aposentadoria",
                 "INSS - Auxílio-doença, Auxílio-reclusão…",
                 "INSS - Seguro-desemprego",
@@ -215,65 +209,18 @@
                 "Bolsa da Assistência Estudantil (Auxílio Moradia, Auxílio Socioeconômico…)",
                 "Benefício Assistência Social (BPC, Bolsa Família, Renda cidadã…)",
                 "Trabalho autônomo ou informal",
-                "Poupança/Economias pessoais"
-                
+                "Poupança/Economias pessoais",
+                "Outro"
             ]
         },                
         {
             "enunciado": "Estudante contribui para a renda familiar?",
-            "id" : "Contribui para a renda familiar?",
+            "id" : "contribui_renda",
             "tipo": "radio",
             "alternativas": 
             [
                 "Não",
                 "Sim"
-            ]
-        },                
-
-        {
-            "enunciado": "Estudante possui filhos? Com quem residem?",
-            "id" : "Possui filhos? Com quem residem?",
-            "tipo": "radio",
-            "alternativas": 
-            [
-                "Não",
-                "Sim, residem com o próprio estudante",
-                "Sim, residem com o/a ex-companheiro",
-                "Sim, residem com outros familiares",
-                "Outra situação"
-            ]
-        },               
-        {
-            "enunciado": "Condição da moradia do grupo familiar",
-            "id" : "Moradia do grupo familiar",
-            "tipo": "radio",
-            "alternativas": 
-            [
-                "Própria",
-                "Alugada",
-                "Financiada",
-                "Cedida por familiares",
-                "Cedido por terceiros",
-                "Imóvel funcional",
-                "De favor (terceiros não considerados no estudo, compartilham moradia com estudante)",
-                "Outro"
-            ]
-        },
-        {
-            "enunciado": "Condição da moradia do estudante",
-            "id" : "Moradia do estudante",
-            "tipo": "radio",
-            "alternativas": 
-            [
-                "Mesma do grupo familiar...",
-                "Própria",
-                "Alugada",
-                "Financiada",
-                "Cedida por familiares",
-                "Cedido por terceiros",
-                "Imóvel funcional",
-                "De favor (estudante ou grupo familiar compartilham moradia com terceiros não considerados no estudo)",
-                "Outro"
             ]
         },
         {
@@ -467,6 +414,87 @@
             "enunciado": "Observações",
             "id": "Observações",
             "tipo": "text"
-        }
+        },
+        {
+            "enunciado": "Com quem o estudante reside",
+            "id" : "Com quem o estudante reside",
+            "tipo": "subform",
+            "alternativas": 
+            [
+                "Sozinho/a",
+                "Pai",
+                "Mãe",
+                "Filho(s)",
+                "Irmãos",
+                "Conjuge/companheiro",
+                "Amigos",                
+                "Outros familiares",
+                "Outra situação"
+            ]
+        },
+        {
+            "enunciado": "Composição familiar",
+            "id" : "Composição familiar",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Família nuclear",
+                "Família nuclear recomposta",
+                "Família estendida (+tio/a, avô/ó, primo/a...)",
+                "Recomposta e estendida (padrasto, madarasta...)",
+                "Sem vínculos cossanguíneos"
+            ]
+        },
+        {
+            "enunciado": "Diferença de idade entre ESTUDANTE e o PAI/PADRASTO",
+            "id" : "Diferença de idade entre ESTUDANTE e o PAI/PADRASTO",
+            "tipo": "text"
+        },
+        {
+            "enunciado": "Diferença de idade entre ESTUDANTE e a MÃE/MADRASTA",
+            "id" : "Diferença de idade entre ESTUDANTE e a MÃE/MADRASTA",
+            "tipo": "text"
+        },
+        {
+            "enunciado": "Estudante possui filhos? Com quem residem?",
+            "id" : "Possui filhos? Com quem residem?",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Não",
+                "Sim, residem com o próprio estudante",
+                "Sim, residem com o/a ex-companheiro",
+                "Sim, residem com outros familiares",
+                "Outra situação"
+            ]
+        },               
+        {
+            "enunciado": "Localidade de residência da familia do/a estudante",
+            "id" : "moradia_familia_localidade",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "DF",
+                "RIDE",
+                "Outra UF",
+                "Sem residência"
+            ]
+        },
+        {
+            "enunciado": "Condição da moradia do grupo familiar",
+            "id" : "moradia_condicao_familia",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Própria",
+                "Alugada",
+                "Financiada",
+                "Cedida por familiares",
+                "Cedido por terceiros",
+                "Imóvel funcional",
+                "De favor (terceiros não considerados no estudo, compartilham moradia com estudante)",
+                "Outro"
+            ]
+        },
     ]
 }
