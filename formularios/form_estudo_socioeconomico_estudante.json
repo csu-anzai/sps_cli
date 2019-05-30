@@ -4,6 +4,45 @@
     "questoes":
     [
         {
+            "enunciado": "Relação com a Assistencia Estudantil",
+            "id" : "relacao_aes",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Não possui vínculo com a assistencia, primeiro estudo socioeconômico",
+                "Já possui estudo socioeconômico válido",
+                "Está em processo de reintegração à assistencia",
+                "Está atualizando ou pleiteando acesso a outros programas",
+                "Outro"
+            ]
+        },
+        {
+            "enunciado": "Programas de interesse",
+            "id" : "motivos_estudo",
+            "tipo": "checkbox",
+            "alternativas": 
+            [
+                "Alimentação",
+                "Moradia estudantil",
+                "Auxílio transporte",
+                "Auxílio socioeconômico",
+                "Auxílio creche",
+                "Outro"
+            ]
+        },
+        {
+            "enunciado": "Campus de origem",
+            "id" : "campus",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Darcy Ribeiro",
+                "FCE",
+                "FGA",
+                "FUP"
+            ]
+        },                
+        {
             "enunciado": "Data de nascimento do estudante",
             "id": "dn",
             "tipo": "text"
@@ -21,7 +60,7 @@
             ]
         },                
         {
-            "enunciado": "Pais falecidos",
+            "enunciado": "Responsáveis legais são falecidos",
             "id" : "pais_falecidos",
             "tipo": "radio",
             "alternativas": 
@@ -33,7 +72,7 @@
             ]
         },
         {
-            "enunciado": "Pais separados",
+            "enunciado": "Responsáveis legais são separados",
             "id" : "pais_separados",
             "tipo": "radio",
             "alternativas": 
@@ -94,7 +133,8 @@
                 "Com grupo familiar",
                 "Em república estudantil",
                 "Com outros parentes",
-                "Com terceiros, sem vínculos cosanguíneos/familiares"
+                "Com terceiros, sem vínculos cosanguíneos/familiares",
+                "Outro"
             ]            
         },        
         {
@@ -158,7 +198,7 @@
             ]
         },
         {
-            "enunciado": "Região onde localiza-se a residencia",
+            "enunciado": "Região onde localiza-se a residencia do estudante",
             "id" : "moradia_regiao",
             "tipo": "radio",
             "alternativas": 
@@ -173,7 +213,7 @@
             "tipo": "radio",
             "alternativas": 
             [
-                "Própria",
+                "Própria ou da familia",
                 "Alugada",
                 "Financiada",
                 "Cedida por familiares",
@@ -184,15 +224,13 @@
             ]
         },
         {
-            "enunciado": "Localidade de residência da familia do/a estudante",
-            "id" : "moradia_familia_localidade",
+            "enunciado": "Estudante contribui para a renda familiar?",
+            "id" : "contribui_renda",
             "tipo": "radio",
             "alternativas": 
             [
-                "DF",
-                "RIDE",
-                "Outra UF",
-                "Sem residência"
+                "Não",
+                "Sim"
             ]
         },
         {
@@ -224,278 +262,11 @@
                 "Poupança/Economias pessoais",
                 "Outro"
             ]
-        },                
-        {
-            "enunciado": "Estudante contribui para a renda familiar?",
-            "id" : "contribui_renda",
-            "tipo": "radio",
-            "alternativas": 
-            [
-                "Não",
-                "Sim"
-            ]
         },
         {
-            "enunciado": "Condição da moradia do grupo familiar",
-            "id" : "moradia_condicao_familia",
-            "tipo": "radio",
-            "alternativas": 
-            [
-                "Própria",
-                "Alugada",
-                "Financiada",
-                "Cedida por familiares",
-                "Cedido por terceiros",
-                "Imóvel funcional",
-                "De favor (terceiros não considerados no estudo, compartilham moradia com estudante)",
-                "Outro"
-            ]
-        },
-        {
-            "enunciado": "Grau de parentesco com os mantenedores",
-            "id": "Grau de parentesco com os mantenedores",
-            "tipo": "checkbox",
-            "alternativas": 
-            [
-                "Não se aplica (estudante é o próprio mantenedor)",
-                "Genitores",
-                "Tios/as",
-                "Avôs/ós",
-                "Filhos/as",
-                "Irmãos/ãs",
-                "Primos/as",
-                "Companheiro/conjuge",
-                "Sem grau de parentesco",
-                "Outro"
-            ]
-        },
-        {
-            "enunciado": "Natureza da fonte de renda do pai/padrasto",
-            "id": "Natureza da fonte de renda do pai/padrasto",
-            "tipo": "checkbox",
-            "alternativas": 
-            [
-                "Não se aplica",
-                "Trabalho formal, setor privado",
-                "Servidor público efetivo",
-                "Servidor público temporário/comissão",
-                "INSS - Aposentadoria",
-                "INSS - Auxílio-doença, Auxílio-reclusão…",
-                "INSS - Seguro-desemprego",
-                "INSS - Pensão por morte, proveniente de pai/mãe",
-                "INSS - Pensão por morte, proveniente de cônjuge",
-                "Rendimentos: aluguel, participação em lucros",
-                "Microempreendedor",
-                "Pensão alimentícia formal",
-                "Pensão alimentícia informal",
-                "Estágio remunerado ou menor/jovem aprendiz",
-                "Bolsa Acadêmica (PIBIC, PIBID, PIBEX, Mestrado, Doutorado...)",
-                "Bolsa da Assistência Estudantil (Auxílio Moradia, Auxílio Socioeconômico…)",
-                "Benefício Assistência Social (BPC, Bolsa Família, Renda cidadã…)",
-                "Trabalho autônomo ou informal",
-                "Poupança/Economias pessoais",
-                "Sem renda"
-            ]
-        },
-        {
-            "enunciado": "Natureza fonte de renda da mãe/madrasta",
-            "id": "Natureza Renda da mãe/madrasta",
-            "tipo": "checkbox",
-            "alternativas": 
-            [
-                "Não se aplica",
-                "Trabalho formal, setor privado",
-                "Servidor público efetivo",
-                "Servidor público temporário/comissão",
-                "INSS - Aposentadoria",
-                "INSS - Auxílio-doença, Auxílio-reclusão…",
-                "INSS - Seguro-desemprego",
-                "INSS - Pensão por morte, proveniente de pai/mãe",
-                "INSS - Pensão por morte, proveniente de cônjuge",
-                "INSS - Pensão por morte",
-                "Rendimentos: aluguel, participação em lucros",
-                "Microempreendedor",
-                "Pensão alimentícia formal",
-                "Pensão alimentícia informal",
-                "Estágio remunerado ou menor/jovem aprendiz",
-                "Bolsa Acadêmica (PIBIC, PIBID, PIBEX, Mestrado, Doutorado...)",
-                "Bolsa da Assistência Estudantil (Auxílio Moradia, Auxílio Socioeconômico…)",
-                "Benefício Assistência Social (BPC, Bolsa Família, Renda cidadã…)",
-                "Trabalho autônomo ou informal",
-                "Poupança/Economias pessoais",
-                "Sem renda"
-            ]
-        },
-        {
-            "enunciado": "Natureza fonte de renda do/a companheiro",
-            "id": "Natureza Renda do companheiro/conjuge",
-            "tipo": "checkbox",
-            "alternativas": 
-            [
-                "Não se aplica",
-                "Trabalho formal, setor privado",
-                "Servidor público efetivo",
-                "Servidor público temporário/comissão",
-                "INSS - Aposentadoria",
-                "INSS - Auxílio-doença, Auxílio-reclusão…",
-                "INSS - Seguro-desemprego",
-                "INSS - Pensão por morte, proveniente de pai/mãe",
-                "INSS - Pensão por morte, proveniente de cônjuge",
-                "Rendimentos: aluguel, participação em lucros",
-                "Microempreendedor",
-                "Pensão alimentícia formal",
-                "Pensão alimentícia informal",
-                "Estágio remunerado ou menor/jovem aprendiz",
-                "Bolsa Acadêmica (PIBIC, PIBID, PIBEX, Mestrado, Doutorado...)",
-                "Bolsa da Assistência Estudantil (Auxílio Moradia, Auxílio Socioeconômico…)",
-                "Benefício Assistência Social (BPC, Bolsa Família, Renda cidadã…)",
-                "Trabalho autônomo ou informal",
-                "Poupança/Economias pessoais",
-                "Sem renda"
-            ]
-        },        
-        {
-            "enunciado": "Há indicativo/relato de fragilização de vínculos?",
-            "id": "Fragilização de vínculos",
-            "tipo": "radio",
-            "alternativas": 
-            [
-                "Não",
-                "Sim"
-            ]
-        },
-        {
-            "enunciado": "Há indicativo/relato de rompimento de vínculos?",
-            "id": "Rompimento de vínculos",
-            "tipo": "radio",
-            "alternativas": 
-            [
-                "Não",
-                "Sim"
-            ]
-        },        
-        {
-            "enunciado": "Total de pessoas no grupo familiar",
-            "id": "GRPF - #total",
+            "enunciado": "Valor da renda pessoal do estudante",
+            "id" : "valor_renda",
             "tipo": "text"
-        },
-        {
-            "enunciado": "Quantidade mulheres no GRP Familiar",
-            "id": "GRPF - #mulheres",
-            "tipo": "text"
-        },
-        {
-            "enunciado": "Quantidade homens no GRP Familiar",
-            "id": "GRPF - #homens",
-            "tipo": "text"
-        },
-        {
-            "enunciado": "Quantidade de pessoas com doença crônica [DC]",
-            "id": "GRPF - #dc",
-            "tipo": "text"
-        },
-        {
-            "enunciado": "Quantidade de pessoas com doença grave [DG]",
-            "id": "GRPF - #dg",
-            "tipo": "text"
-        },
-        {
-            "enunciado": "Quantidade de pessoas com problema de saúde e necessidade de cuidados",
-            "id": "GRPF - #pessoas_necessitam_cuidados",
-            "tipo": "text"
-        },
-        {
-            "enunciado": "Quem cuida da pessoa com problema de saúde e que demanda cuidados",
-            "id": "Cuidador",
-            "tipo": "checkbox",
-            "alternativas":
-            [
-                "Não se aplica",
-                "Familiares do sexo feminino",
-                "Familiares do sexo masculino",
-                "Cuidadores sem vínculo cossanguíneo",
-                "Serviço privado de saúde (homecare)",
-                "Serviço público de saúde (PSF ou NRAD)"
-            ]
-        },                
-        {
-            "enunciado": "Quantidade de crianças (<=12) no grupo familiar",
-            "id": "GRPF - #criancas",
-            "tipo": "text"
-        },
-        {
-            "enunciado": "Quantidade de idosos (>=60) no grupo familiar",
-            "id": "GRPF - #idosos",
-            "tipo": "text"
-        },
-        {
-            "enunciado": "Faixa de renda em função do salário mínimo [$/#pessoas/W]",
-            "id": "Faixa de renda",
-            "tipo": "text"
-        },
-        {
-            "enunciado": "Faixa de renda LIQUIDA em função do salário mínimo [$/#pessoas/W]",
-            "id": "Faixa de renda líquida (considerados antigos descontos)",
-            "tipo": "text"
-        },        
-        {
-            "enunciado": "Observações",
-            "id": "Observações",
-            "tipo": "text"
-        },
-        {
-            "enunciado": "Com quem o estudante reside",
-            "id" : "Com quem o estudante reside",
-            "tipo": "subform",
-            "alternativas": 
-            [
-                "Sozinho/a",
-                "Pai",
-                "Mãe",
-                "Filho(s)",
-                "Irmãos",
-                "Conjuge/companheiro",
-                "Amigos",                
-                "Outros familiares",
-                "Outra situação"
-            ]
-        },
-        {
-            "enunciado": "Composição familiar",
-            "id" : "Composição familiar",
-            "tipo": "radio",
-            "alternativas": 
-            [
-                "Família nuclear",
-                "Família nuclear recomposta",
-                "Família estendida (+tio/a, avô/ó, primo/a...)",
-                "Recomposta e estendida (padrasto, madarasta...)",
-                "Sem vínculos cossanguíneos"
-            ]
-        },
-        {
-            "enunciado": "Diferença de idade entre ESTUDANTE e o PAI/PADRASTO",
-            "id" : "Diferença de idade entre ESTUDANTE e o PAI/PADRASTO",
-            "tipo": "text"
-        },
-        {
-            "enunciado": "Diferença de idade entre ESTUDANTE e a MÃE/MADRASTA",
-            "id" : "Diferença de idade entre ESTUDANTE e a MÃE/MADRASTA",
-            "tipo": "text"
-        },
-        {
-            "enunciado": "Estudante possui filhos? Com quem residem?",
-            "id" : "Possui filhos? Com quem residem?",
-            "tipo": "radio",
-            "alternativas": 
-            [
-                "Não",
-                "Sim, residem com o próprio estudante",
-                "Sim, residem com o/a ex-companheiro",
-                "Sim, residem com outros familiares",
-                "Outra situação"
-            ]
-        },               
-
+        }
     ]
 }

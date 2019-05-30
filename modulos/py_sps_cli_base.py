@@ -46,8 +46,11 @@ def save_target_info(identificador):
         if e['identificador'] == identificador:
             save_json(e, os.sep.join([user_home_folder, '.current_target']))
 
-def timestamp():
-    return time.strftime("%Y-%m-%d %H:%M:%S %a", time.localtime())
+def timestamp(mode=None):
+    if mode == "mkid":
+        return time.strftime("{}%Y%m%d%H%M%S".format(getoutput('whoami')[0:3].upper()), time.localtime())
+    else:
+        return time.strftime("%Y-%m-%d %H:%M:%S %a", time.localtime())
 
 def numero_sei_mascara(num):
     m_num = num
@@ -81,11 +84,7 @@ periodo_corrente="1º/2019"
 
 #Quando os comandos estiverem disponíveis globalmente, utilizar caminhos absolutos.
 user_home_folder = getoutput("echo $HOME")
-<<<<<<< HEAD
-app_root_folder = "/home/danielc/sps_fup2"
-=======
 app_root_folder = "/home/danielc/Documentos/Devel/GitHub/sps_fup2"
->>>>>>> 18c8e01455666fef3fa48a160f18e2b402dd1d65
 
 security_folder = os.sep.join([app_root_folder, "seguranca"])
 data_folder = os.sep.join([app_root_folder, "dados"])
@@ -98,12 +97,17 @@ arquivo_profissionais = os.sep.join([data_folder, "profissionais.json"])
 arquivo_processos = os.sep.join([data_folder, "processos.json"])
 arquivo_corrigidos = os.sep.join([data_folder, "corrigidos.json"])
 arquivo_index = os.sep.join([index_db_folder, "index_db.json"])
+arquivo_estudo_estudante = os.sep.join([data_folder, "estudos_info-geral.json"])
+arquivo_estudo_familia = os.sep.join([data_folder, "estudos_info-familia.json"])
+arquivo_estudo_membros_familia = os.sep.join([data_folder, "estudos_info-membros.json"])
 
 form_atendiento = os.sep.join([form_folder, "form_atendimento.json"])
 form_novo_usuario = os.sep.join([form_folder, "form_novo_usuario.json"])
-form_estudo_socioeconomico = os.sep.join([form_folder, "form_estudo_socioeconomico.json"])
 form_processos = os.sep.join([form_folder, "form_processos.json"])
 form_corrigidos = os.sep.join([form_folder, "form_corrigidos.json"])
+form_estudo_info_estudante = os.sep.join([form_folder, "form_estudo_socioeconomico_estudante.json"])
+form_estudo_info_familia = os.sep.join([form_folder, "form_estudo_socioeconomico_grupo-familiar-info.json"])
+form_estudo_info_membros_familia = os.sep.join([form_folder, "form_estudo_socioeconomico_membros-grupo.json"])
 
 loop = asyncio.get_event_loop()
 dados = loop.run_until_complete(asyncio.gather(
@@ -113,6 +117,9 @@ dados = loop.run_until_complete(asyncio.gather(
     load_json_file(arquivo_processos),
     load_json_file(arquivo_corrigidos),
     load_json_file(arquivo_index),
+    load_json_file(arquivo_estudo_estudante),
+    load_json_file(arquivo_estudo_familia),
+    load_json_file(arquivo_estudo_membros_familia),    
 ))
 
 dados_atendimentos = dados[0]
@@ -122,6 +129,9 @@ dados_processos = dados[3]
 dados_processos_pend = get_procp(dados_processos)
 dados_corrigidos = dados[4]
 dados_index = dados[5]
+dados_estudo_estudante = dados[6]
+dados_estudo_familia = dados[7]
+dados_estudo_membros_familia = dados[8]
 
 loop2 = asyncio.get_event_loop()
 col_width = loop2.run_until_complete(asyncio.gather(
@@ -136,6 +146,7 @@ col_width = loop2.run_until_complete(asyncio.gather(
     get_col_width_nfo('motivo', dados_processos),
 ))
 
+'''
 loop3 = asyncio.get_event_loop()
 form_labels = loop3.run_until_complete(asyncio.gather(
     get_col_width_nfo('identificador', dados_usuarios),
@@ -148,6 +159,7 @@ form_labels = loop3.run_until_complete(asyncio.gather(
     get_col_width_nfo('assunto', dados_processos),
     get_col_width_nfo('motivo', dados_processos),
 ))
+'''
 
 #Larguras das colunas nas listas. Rodar método async aqui...
 col_width_etd_mat = col_width[0]

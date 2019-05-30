@@ -23,6 +23,7 @@ from modulos.py_sps_cli_base import data_folder,\
     dados_processos, arquivo_processos,\
     dados_atendimentos, arquivo_atendimentos,\
     dados_corrigidos, arquivo_corrigidos,\
+    dados_estudo_estudante, arquivo_estudo_estudante,\
     arquivo_index
     
 from modulos.py_console_tools_v0 import save_json
@@ -74,6 +75,7 @@ def remake_index():
     index_db.append(make_index_set('corr', 'identificador', dados_corrigidos))
     index_db.append(make_index_set('proc', 'identificador', dados_processos))
     index_db.append(make_index_set('proc_doc', 'numero_sei', dados_processos))
+    index_db.append(make_index_set('estudo', 'estudo_id', dados_estudo_estudante))
     index_db.append(make_search_set(dados_usuarios))
     save_json(index_db, arquivo_index)
 
