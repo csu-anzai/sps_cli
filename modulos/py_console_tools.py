@@ -30,6 +30,21 @@ from subprocess import getoutput
 from random import randrange
 from string import digits
 
+def create_lockfile(lockf):
+	f = open("/tmp/"+lockf,'w')
+	f.close()
+
+def remove_lockfile(lockf):
+	os.remove("/tmp/"+lockf)
+
+
+def lockfile_name(path_to_file):
+	lkf_name = path_to_file.split(os.sep)[-1]
+	if lkf_name.find(".") != -1 or lkf_name.find(".") != 0:
+		lkf_name = lkf_name.split(".")[0]
+	file_name = '~lock_'+str(lkf_name)
+	return file_name
+
 def mk_randnum_seq(num):
 	output = ''
 	while num != 0:
@@ -139,8 +154,8 @@ def saida_rosa(rotulo, valor, referencia='', escalonamento=[]):
 
 
 def limpar_tela(msg=None):
-	try: cmd = os.system("clear")
-	except: cmd = os.system("cls")
+	try: os.system("clear")
+	except: os.system("cls")
 	if msg != None:
 		print(msg)
 

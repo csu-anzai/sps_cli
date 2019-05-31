@@ -28,9 +28,8 @@ import csv
 import re
 
 
-from .py_euristic_tools import merge_lists
-from .py_console_tools import limpar_tela, select_ops
-from .py_data_tools import create_lockfile, remove_lockfile, lockfile_name, join_dictArray_intersection, join_dictArray_union, show_each_dictArray_block
+from .py_euristic_tools import merge_lists, join_dictArray_intersection, join_dictArray_union, show_each_dictArray_block
+from .py_console_tools import limpar_tela, select_ops, create_lockfile, remove_lockfile, lockfile_name
 from collections import OrderedDict
 from copy import copy
 from time import ctime, sleep

@@ -23,7 +23,103 @@
 #
 
 
+import os
 from string import whitespace, punctuation, digits
+from collections import OrderedDict
+from copy import copy
+from time import ctime, sleep
+
+
+def show_each_dictArray_block(dict_array, print_fields, index_pos):
+	'''
+	Apresenta bloco de informações de um 'dict_array'.
+	Apenas os campos definidos em 'print_fields' serão retornados.
+	A cada impressão o programa aquarda pelo comando para prosseguir.
+	Elementos iniciais da lista podem ser ignorados definindo-se o local de inicio 'index_pos'.
+	'''
+	for i in dict_array[index_pos:]:
+		limpar_tela()
+		print_nfo = ""
+		for f in print_fields:
+			print_nfo += i[f].replace('/','') + os.linesep
+		print(print_nfo)
+		input("Pressione enter para continuar...")
+
+
+
+def join_dictArray_intersection(dict_array1, dict_array2, joint_key):
+	'''
+	Realiza a junção de dois dicionários distintos que compartilhem uma mesma chave/col.
+	Retorna as linhas em que os valores da chave selecionada correspondem nos dois dicionários.
+	'''
+	output = []
+	tmpdict = {}
+	for row in dict_array1:
+		tmpdict[row[joint_key]] = row
+	dict_array2_cols = dict_array2[0].keys()
+	for other_row in dict_array2:
+		if other_row[joint_key] in tmpdict: #tmpdict.has_key(other_row[col]):
+			joined_row = tmpdict[other_row[joint_key]]
+			for colz in dict_array2_cols:
+				if colz != joint_key:
+					joined_row[colz] = other_row[colz]
+			output.append(joined_row)
+	return output
+
+
+
+def join_dictArray_union(dict_array1, dict_array2, joint_key):
+	'''
+	Realiza a junção de dois dicionários distintos que compartilhem uma mesma chave/col.
+	Retorna as linhas em que os valores da chave selecionada correspondem nos dois dicionários.'''
+	output = []
+	tmpdict = {}
+	dict_array1_cols = dict_array1[0].keys()
+	dict_array2_cols = dict_array2[0].keys()
+	for row in dict_array1:
+		tmpdict[row[joint_key]] = row
+	new_row_col = merge_lists(dict_array1_cols,dict_array2_cols)
+	new_row_skell = OrderedDict()
+	for col_name in new_row_col:
+		new_row_skell[col_name]=""
+	
+	key_2_skip = []
+	for other_row in dict_array2:
+		if other_row[joint_key] in tmpdict:
+			key_2_skip.append(other_row[joint_key])
+			joined_row = tmpdict[other_row[joint_key]]
+			for colz in dict_array2_cols:
+				if colz != joint_key:
+					joined_row[colz] = other_row[colz]
+			output.append(joined_row)
+		
+	linhas_n_comuns = len(dict_array1) + len(dict_array1) - len(key_2_skip)
+	tabela_linhas_n_comuns = []
+	while linhas_n_comuns != 0:
+		linha_inteira = copy(new_row_skell)
+		tabela_linhas_n_comuns.append(linha_inteira)
+		linhas_n_comuns -= 1
+	
+	tabela_linhas_n_comuns=[]
+	
+	for linha in dict_array1:
+		linha_inteira = copy(new_row_skell)
+		if not linha[joint_key] in key_2_skip:
+			for colz in dict_array1_cols:
+				try: linha_inteira[colz] = linha[colz]
+				except: pass
+			tabela_linhas_n_comuns.append(linha_inteira)
+
+	for linha in dict_array2:
+		linha_inteira = copy(new_row_skell)
+		if not linha[joint_key] in key_2_skip:
+			for colz in dict_array2_cols:
+					linha_inteira[colz] = linha[colz]
+			tabela_linhas_n_comuns.append(linha_inteira)
+		
+	final_output = merge_lists(tabela_linhas_n_comuns, output)
+	return final_output
+
 
 
 def get_indexes(item, lista):
