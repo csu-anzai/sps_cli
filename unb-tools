@@ -7,6 +7,9 @@ Adiniona novos registros nos arquivos de dados.
 
 Usage:
     unb-tools ( join-alu-rel ) <target-folder> <output-txt-fname>
+    unb-tools ( rename-old-sae-etd ) [<target-folder>]
+    unb-tools ( move-old-sae-etd ) [<target-folder>]
+    unb-tools ( old_sae_extract_list )
     unb-tools ( fix-csv-alu-rel ) <csv-file> [ <csv-delimiter> ]
     unb-tools ( curric-process ) <target-curric-txt-file>
     unb-tools ( multi-curric-process ) <target-curric-folder>
@@ -43,7 +46,16 @@ args = docopt(__doc__)
 def main():
     if args['join-alu-rel']:
         join_alurel(args['<target-folder>'], args['<output-txt-fname>'])
-        
+
+    elif args['rename-old-sae-etd']:
+        old_sae_etd_reorg_files()
+
+    elif args['move-old-sae-etd']:
+        old_sae_etd_movefiles_to_folder()
+
+    elif args['old_sae_extract_list']: 
+        old_sae_extract_list()
+
     elif args['fix-csv-alu-rel']:
         fix_joined_alurel(args['<csv-file>'], args['<csv-delimiter>'])
  
@@ -80,7 +92,4 @@ def main():
 
 
 if __name__ == '__main__':
-    cmd = main()
-    newpid = os.fork()
-    if newpid == 0:
-        os.system("indexdb")
+    main()

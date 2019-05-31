@@ -25,6 +25,7 @@
 
 import zipfile
 import os
+import shutil
 
 from string import whitespace, punctuation, digits
 from .py_euristic_tools import strip_simbols, get_indexes, strip_digits
@@ -35,6 +36,52 @@ from math import fsum as soma
 
 curric_folder = '/home/danielc/Documentos/SPS/Currículos/FUP'
 curric_metadados_folder = '/home/danielc/Documentos/SPS/Dados_AES/Consultas'
+old_etd_folder = '/home/bwb0de/Devel/sps_fup2/working_folder/SPS-UnB-Data_pesquisa/SPS/DadosAES/OldSAE_ESTUDOS/'
+old_sae_processos_list = "/home/bwb0de/Devel/sps_fup2/working_folder/SPS-UnB-Data_pesquisa/SPS/DadosAES/Informações_antigas_SAE-candidatos_processos_seletivos.csv"
+
+def old_sae_etd_rename_files(target_folder=old_etd_folder):
+	files = os.listdir(target_folder)
+	init_folder = os.getcwd()
+	os.chdir(target_folder)
+	for f in files:
+		if f.find('.txt') != -1:
+			print(f)
+			file_sae_etd = open(f, encoding="cp1252")
+			file_sae_etd_data = file_sae_etd.readlines()
+			file_sae_etd.close()
+			for line in file_sae_etd_data:
+				if line.find("Período") != -1:
+					periodo = line.split(";")[1]
+					periodo = periodo.replace('/','-')
+					os.rename(f, f.replace('.txt', '_{}.txt'.format(periodo)))
+					break
+	os.chdir(init_folder)
+
+def old_sae_etd_movefiles_to_folder(target_folder=old_etd_folder):
+	files = os.listdir(target_folder)
+	init_folder = os.getcwd()
+	os.chdir(target_folder)
+	new_folders = []
+	for f in files:
+		fname = f.split('_')[1].split('.')[0]
+		if not fname in new_folders:
+			os.mkdir(fname)
+			new_folders.append(fname)
+		shutil.move(f, "{}/{}/{}".format(target_folder, fname, f))
+
+def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=389):
+	processos = read_csv(target_csv_lista_processos, '\t')
+	for p in processos[init_idx:]:
+		periodo = p['Semestre/Ano'].replace('/','-')
+		matricula = p['Matrícula'].replace('/','')
+		fname = matricula+"_"+periodo+'.txt'
+		if not os.path.isfile('{}/{}/{}'.format(target_folder, periodo, fname)):
+			limpar_tela()
+			print(p['Nome'])
+			print(matricula)
+			print(periodo)
+			input("Pressione para o próximo elemento da lista...")
+			#Cintia Silva Soares; 1-2011
 
 
 
