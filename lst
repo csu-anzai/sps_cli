@@ -23,7 +23,7 @@ Options:
 from docopt import docopt
 from subprocess import check_output
 from modulos.py_sps_cli_base import *
-from modulos.py_console_tools_v0 import mk_randnum_seq
+from modulos.py_console_tools import mk_randnum_seq
 
 args = docopt(__doc__)
 

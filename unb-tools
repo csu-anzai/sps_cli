@@ -7,14 +7,15 @@ Adiniona novos registros nos arquivos de dados.
 
 Usage:
     unb-tools ( join-alu-rel ) <target-folder> <output-txt-fname>
+    unb-tools ( fix-csv-alu-rel ) <csv-file> [ <csv-delimiter> ]
     unb-tools ( curric-process ) <target-curric-txt-file>
     unb-tools ( multi-curric-process ) <target-curric-folder>
     unb-tools ( sigra-hist-process ) <target-sigra-hist-txt-file>
     unb-tools ( multi-sigra-hist-process ) <target-multi-hist-zipfile>
-    unb-tools ( join-csv-union ) <csv-file1> <csv-file2> <joint-col> <output-csv-fname)
-    unb-tools ( join-csv-intersection ) <csv-file1> <csv-file2> <joint-col> <output-csv-fname)
-    unb-tools ( cross-values ) <csv-file>
-    unb-tools ( fill-csv-gaps) <csv-file> <ref-cols>
+    unb-tools ( join-union ) ( csv | json ) <file1> <file2> <joint-col>
+    unb-tools ( join-intersection )  ( csv | json ) <file1> <file2> <joint-col>
+    unb-tools ( cross-values ) ( csv | json ) <file>
+    unb-tools ( fill-gaps) ( csv | json ) <file> <ref-cols>
     unb-tools ( remove-lines-from-csv ) 
 
 
@@ -31,73 +32,51 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from modulos.py_data_tools import make_complete_stat_from_csv
+from modulos.py_data_tools import render_form_get_values
 from modulos.py_unb_tools import *
-from modulos.py_console_tools_v0 import save_json, render_form_get_values, select_op, select_ops, load_json
+from modulos.py_console_tools import select_op, select_ops
+from modulos.py_json_handlers import save_json, load_json
+from modulos.py_csv_app import make_complete_stat_from_csv, join_csv_intersection, join_csv_union
 
 args = docopt(__doc__)
 
 def main():
-    if args['usr'] or args['usuario']:
-        pass
-
-    elif args['tag'] or args['marcador']:
-        pass
-
-    elif args['tgr'] or args['nfo-tag-replace']:
-        if getoutput("whoami") != 'root':
-            print("Este comando só pode ser executado pelo usuário 'root'...")
-        else:
-            substituir_marcadores(args["<valor-antigo>"], args["<valor-novo>"])
-
-    elif args['atd'] or args['atendimento']:
-        save_target_info(args['<identificador>'])
-        atd_t = novo_atendimento(args['<identificador>'])
-        if atd_t == "Encaminhamento de pedido de auxílio emergencial":
-            numero_sei = novo_processo(args['<identificador>'], atd_t)
-            if automail:
-                os.system("novo nfo-atd '{}' '{}' '{}' '{}'".format(args["<identificador>"], "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
-                os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Processo de Auxílio Emergencial" "Segue o número do processo para acompanhamento do resultado. Com este número você pode consultar o resultado com qualquer pessoa do SPS que possua acesso ao SEI."'.format(numero_sei=numero_sei))
-
-        elif atd_t == "Solicitação de acesso extraordinário ao RU":
-            numero_sei = novo_processo(args['<identificador>'], atd_t)
-            if automail:
-                os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Processo de Acesso ao RU" "Segue o número do processo para que você possa acompanhar do resultado. Com este número você pode consultar o resultado junto a qualquer pessoa do SPS que possua acesso ao SEI."'.format(numero_sei=numero_sei))
-                os.system("novo nfo-atd '{}' '{}' '{}' '{}'".format(args["<identificador>"], "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
-
-        elif atd_t == "Recebimento/digiralização de pedido de recurso ao resultado da avaliação socioeconômica":
-            numero_sei = novo_processo(args['<identificador>'], atd_t)
-            if automail:
-                os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Processo de Recurso à Avaliação Socioeconômica" "Segue o númro do processo de recurso. Se até a data prevista para o resultado você não obtiver resposta, vá ao SPS, forneça este número e informe a pendência."'.format(numero_sei=numero_sei))
-                os.system("novo nfo-atd '{}' '{}' '{}' '{}'".format(args["<identificador>"], "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
-
-    elif args['nfo-atd']:
-        novo_atendimento_insert(args["<identificador>"], args["<forma_atd>"], args["<atd_t>"], args["<resultado>"])
-
-    elif args['sei'] or args['processo']:
-        novo_processo(args['<identificador>'], args['<assunto>'])
-
-    elif args['est'] or args['estudo']:
-        pass
-
-    elif args['pro'] or args['profissional']:
-        if getoutput('whoami') != 'root':
-            print("Apenas o usuário 'root' pode adicionar outros profissionais...")
-        else:
-            novo_profissional()
-
-    elif args['dbc'] or args['campo-db']:
-        nova_coluna(args['<coluna>'], args['<arquivo_db>'], args['<lista-ops>'])
-
-    elif args['dbi'] or args['inserir-form-info']:
-        pass
+    if args['join-alu-rel']:
+        join_alurel(args['<target-folder>'], args['<output-txt-fname>'])
         
-        #if args['mesclado']:
-        #    pass
-        #elif args['aninhado']:
-        #    pass
+    elif args['fix-csv-alu-rel']:
+        fix_joined_alurel(args['<csv-file>'], args['<csv-delimiter>'])
+ 
+    elif args['curric-process']:
+        process_curric(args['<target-curric-txt-file>'])
+ 
+    elif args['multi-curric-process']:
+        multi_process_curric(args['<target-curric-folder>'])
+ 
+    elif args['sigra-hist-process']:
+        process_sigra_hist(args['<target-sigra-hist-txt-file>'])
+ 
+    elif args['multi-sigra-hist-process']:
+        multi_process_sigra_academic_history(args['<target-multi-hist-zipfile>'])
+ 
+    elif args['join-union']:
+        if args['csv']:
+            join_csv_union(args['<file1>'], args['<file2>'], args['<joint-col>'])
+        elif args['json']:
+            pass
 
-        #nova_coluna(args['<coluna>'], args['<arquivo_db>'], args['<lista-ops>'])
+    elif args['join-intersection']:
+        if args['csv']:
+            join_csv_intersection(args['<file1>'], args['<file2>'], args['<joint-col>'])
+        elif args['json']:
+            pass
+ 
+    elif args['cross-values']:
+        if args['csv']:
+            cruzar_variaveis(args["<file>"])
+        elif args['json']:
+            pass
+ 
 
 
 if __name__ == '__main__':

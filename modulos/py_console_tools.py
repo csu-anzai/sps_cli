@@ -24,13 +24,26 @@
 
 
 import os
-import json #Remover depois
-from colored import fg, bg, attr
-#from py_euristic_tools import check_item_list
 
+from colored import fg, bg, attr
 from subprocess import getoutput
 from random import randrange
 from string import digits
+
+def create_lockfile(lockf):
+	f = open("/tmp/"+lockf,'w')
+	f.close()
+
+def remove_lockfile(lockf):
+	os.remove("/tmp/"+lockf)
+
+
+def lockfile_name(path_to_file):
+	lkf_name = path_to_file.split(os.sep)[-1]
+	if lkf_name.find(".") != -1 or lkf_name.find(".") != 0:
+		lkf_name = lkf_name.split(".")[0]
+	file_name = '~lock_'+str(lkf_name)
+	return file_name
 
 def mk_randnum_seq(num):
 	output = ''
@@ -141,8 +154,8 @@ def saida_rosa(rotulo, valor, referencia='', escalonamento=[]):
 
 
 def limpar_tela(msg=None):
-	try: cmd = os.system("clear")
-	except: cmd = os.system("cls")
+	try: os.system("clear")
+	except: os.system("cls")
 	if msg != None:
 		print(msg)
 
@@ -269,176 +282,3 @@ def select_ops(lista_de_selecao, col_num, sort_list=False):
 			print('Opção inválida...')
 	return selecao
 
-##As funções abaixo devarão ser realocadas...
-
-def render_form_get_values(form_file, skip_q=[]):
-	'''
-	Renderiza as questões de um formulário JSON conforme a estrutura abaixo.
-	Retorna um dicionário com as respostas.
-	As chaves são definidas conforme o atributo 'id'.
-	Os valores são resultado do input dos usuários.
-
-	{
-		"titulo": "Registro de atendimento",
-		"descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
-		"questoes":
-		[
-			{
-				"enunciado": "Matrícula",
-				"id": "identificador",
-				"tipo": "text",
-			},
-			{
-				"enunciado": "Tipo de atendimento",
-				"id": "atd_t",
-				"tipo": "radio",
-				"alternativas" :
-				[
-					"Informação presencial",
-					"Informação via telefone",
-					...
-				]            
-			}
-		]
-	}	
-	'''
-	form = load_json(form_file)
-	exec_cmd = ""
-	rewrite_form = False
-	nfo = {}
-	for q in form['questoes']:
-		print_response = False
-
-		if q['id'] in skip_q:
-			pass
-
-		elif q['tipo'] == 'text':
-			nfo[q['id']] = input("{}: ".format(q['enunciado']))
-
-		elif q['tipo'] == 'radio':
-			print(q['enunciado'])
-			nfo[q['id']] = select_op(q['alternativas'], 1)
-			if nfo[q['id']].find('Outro') != -1:
-				outro_detalhes = input('Especifique: ')
-				nfo[q['id']] = nfo[q['id']].replace('Outro', outro_detalhes)
-				q['alternativas'].remove('Outro')
-				q['alternativas'].append(outro_detalhes)
-				q['alternativas'].sort()
-				q['alternativas'].append('Outro')
-				rewrite_form = True
-
-				
-		elif q['tipo'] == 'checkbox':
-			print(q['enunciado'])
-			nfo[q['id']] = "; ".join(select_ops(q['alternativas'], 1))
-			if nfo[q['id']].find('Outro') != -1:
-				outro_detalhes = input('Especifique: ')
-				nfo[q['id']] = nfo[q['id']].replace('Outro', outro_detalhes)
-				q['alternativas'].remove('Outro')
-				q['alternativas'].append(outro_detalhes)
-				q['alternativas'].sort()
-				q['alternativas'].append('Outro')
-				rewrite_form = True
-				
-	if rewrite_form == True:
-		save_json(form, form_file)
-
-	return nfo
-
-
-def listar_dicionario(dicionario, cols, marcadores=[]):
-	'''
-	Lista o conteúdo de um dicionário retornando uma tabela/string com colunas solicitadas.
-	O parametro 'cols' é uma lista de tuplas (t) em que t[0] é o 'id' e t[1] um número.
-	O número de t[1] representa a largura a ser definida para coluna id ou t[0].
-	Exibe ao final o total de elementos no dicionário.
-	'''
-	visual_nfo = ""
-	visual_count = 0
-	for linha in dicionario:
-		select_this = True
-		if marcadores != []:
-			select_this = False
-			try:
-				for m in marcadores:
-					if m in linha['marcador']:
-						select_this = True
-						visual_count += 1
-			except KeyError:
-				pass
-		else:
-			visual_count += 1
-		if select_this == True:
-			w = 0
-			li = ""
-			linha_sem_quebra = True
-			for col in cols:
-				li += linha[col[0]].ljust(col[1])
-				if linha[col[0]].find(';') == -1:
-					w += col[1]
-				else:
-					linha_sem_quebra = False
-					lii = li.split(';')
-					if len(lii) > 1:
-						pri = True
-						for i in lii:
-							if pri == True:
-								visual_nfo += i + os.linesep
-								pri = False
-							else:
-								visual_nfo += "".ljust(w-1) + i + os.linesep
-			
-			if linha_sem_quebra == True:
-				visual_nfo += li + os.linesep
-
-	visual_nfo += "Total: {}".format(visual_count)
-	return visual_nfo
-
-def load_json(path_to_file):
-    initfolder = os.getcwd()
-    nfo = path_to_file.split('/')
-    fname = nfo[-1]
-    path = path_to_file.replace(fname, '')
-    os.chdir(path.replace('/', os.sep))
-    f = open(fname)
-    data = f.read()
-    f.close()
-    os.chdir(initfolder)
-    return json.loads(data)
-
-def create_lockfile(lockf):
-	f = open("/tmp/"+lockf,'w')
-	f.close()
-
-def remove_lockfile(lockf):
-	os.remove("/tmp/"+lockf)
-
-
-def lockfile_name(path_to_file):
-	lkf_name = path_to_file.split(os.sep)[-1]
-	if lkf_name.find(".") != -1 or lkf_name.find(".") != 0:
-		lkf_name = lkf_name.split(".")[0]
-	file_name = '~lock_'+str(lkf_name)
-	return file_name	
-
-
-def save_json(novos_dados, path_to_file):
-	lockf = lockfile_name(path_to_file)
-	initfolder = os.getcwd()
-	nfo = path_to_file.split('/')
-	fname = nfo[-1]
-	path = path_to_file.replace(fname, '')
-
-	while True:
-		if os.path.isfile(lockf):
-			time.sleep(0.1)
-		else:
-			create_lockfile(lockf)
-			break
-
-	os.chdir(path.replace('/', os.sep))
-	with open(path_to_file, 'w') as f:
-		f.write(json.dumps(novos_dados, ensure_ascii=False, indent=4))		
-
-	os.chdir(initfolder)
-	remove_lockfile(lockf)

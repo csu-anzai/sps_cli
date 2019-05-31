@@ -18,7 +18,7 @@ import os
 from docopt import docopt
 from subprocess import getoutput
 from modulos.py_sps_cli_base import data_folder
-from modulos.py_console_tools_v0 import save_json, load_json, limpar_tela
+from modulos.py_console_tools import save_json, load_json, limpar_tela
 
 args = docopt(__doc__)
 

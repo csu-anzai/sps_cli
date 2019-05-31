@@ -28,16 +28,22 @@ import csv
 import re
 
 
-from .py_euristic_tools import merge_lists
-from .py_console_tools_v0 import limpar_tela, select_ops
+from .py_euristic_tools import merge_lists, join_dictArray_intersection, join_dictArray_union, show_each_dictArray_block
+from .py_console_tools import limpar_tela, select_ops, create_lockfile, remove_lockfile, lockfile_name
 from collections import OrderedDict
 from copy import copy
 from time import ctime, sleep
 
 
+def show_each_csv_line(csv_file, print_fields, index_pos):
+	info_file = read_csv('./{}'.format(csv_file))
+	show_each_dictArray_block(info_file, print_fields, index_pos)
+
 
 def read_csv(csv_file, delimiter=',', lineterminator='\n'):
-	'''Acessa o conteúdo do arquivo CSV e o armazena na memória.'''
+	'''
+	Acessa o conteúdo do arquivo CSV e o armazena na memória como um dict_array.
+	'''
 	o = []
 	fields = read_csv_head(csv_file, delimiter=delimiter, lineterminator=lineterminator)
 	try:
@@ -83,96 +89,35 @@ def read_csv_col(col, csv_file, delimiter=',', lineterminator='\n', sort_r=False
 
 
 
-def join_csv_intersection(csvfile1, csvfile2, col, output_file):
-	'''Realiza a junção de dois dicionários distintos que compartilhem uma mesma chave/col. Retorna as linhas em que os valores da chave selecionada correspondem nos dois dicionários.'''
-	output = []
-	tmpdict = {}
+def join_csv_intersection(csvfile1, csvfile2, col, output_file=True):
+	'''
+	Realiza a junção de dois dicionários distintos que compartilhem uma mesma chave/col.
+	Retorna as linhas em que os valores da chave selecionada correspondem nos dois dicionários.
+	'''
 	csvdata1 = read_csv(csvfile1)
 	csvdata2 = read_csv(csvfile2)
-	for row in csvdata1:
-		tmpdict[row[col]] = row
-	csvdata2_cols = csvdata2[0].keys()
-	for other_row in csvdata2:
-		if other_row[col] in tmpdict: #tmpdict.has_key(other_row[col]):
-			joined_row = tmpdict[other_row[col]]
-			for colz in csvdata2_cols:
-				if colz != col:
-					joined_row[colz] = other_row[colz]
-			output.append(joined_row)
-	write_csv(output, output_file)
-	return output
+	output = join_dictArray_intersection(csvdata1, csvdata2, col)
+	if output_file == True:
+		fname = input("Qual o nome do arquivo de saída?")
+		write_csv(output, fname)
+	else:
+		return output
 
 
 
-
-def join_csv_union(csvfile1, csvfile2, col, output_file):
-	'''Realiza a junção de dois dicionários distintos que compartilhem uma mesma chave/col. Retorna as linhas em que os valores da chave selecionada correspondem nos dois dicionários.'''
-	output = []
-	tmpdict = {}
+def join_csv_union(csvfile1, csvfile2, col, output_file=True):
+	'''
+	Realiza a junção de dois dicionários distintos que compartilhem uma mesma chave/col.
+	Retorna as linhas em que os valores da chave selecionada correspondem nos dois dicionários.
+	'''
 	csvdata1 = read_csv(csvfile1)
 	csvdata2 = read_csv(csvfile2)
-	csvdata1_cols = csvdata1[0].keys()
-	csvdata2_cols = csvdata2[0].keys()
-	for row in csvdata1:
-		tmpdict[row[col]] = row
-	new_row_col = merge_lists(csvdata1_cols,csvdata2_cols)
-	new_row_skell = OrderedDict()
-	for col_name in new_row_col:
-		new_row_skell[col_name]=""
-	
-	key_2_skip = []
-	for other_row in csvdata2:
-		if other_row[col] in tmpdict:
-			key_2_skip.append(other_row[col])
-			joined_row = tmpdict[other_row[col]]
-			for colz in csvdata2_cols:
-				if colz != col:
-					joined_row[colz] = other_row[colz]
-			output.append(joined_row)
-		
-	linhas_n_comuns = len(csvdata1) + len(csvdata1) - len(key_2_skip)
-	tabela_linhas_n_comuns = []
-	while linhas_n_comuns != 0:
-		linha_inteira = copy(new_row_skell)
-		tabela_linhas_n_comuns.append(linha_inteira)
-		linhas_n_comuns -= 1
-	
-	tabela_linhas_n_comuns=[]
-	
-	for linha in csvdata1:
-		linha_inteira = copy(new_row_skell)
-		if not linha[col] in key_2_skip:
-			for colz in csvdata1_cols:
-				try: linha_inteira[colz] = linha[colz]
-				except: pass
-			tabela_linhas_n_comuns.append(linha_inteira)
-
-	for linha in csvdata2:
-		linha_inteira = copy(new_row_skell)
-		if not linha[col] in key_2_skip:
-			for colz in csvdata2_cols:
-					linha_inteira[colz] = linha[colz]
-			tabela_linhas_n_comuns.append(linha_inteira)
-		
-	final_output = merge_lists(tabela_linhas_n_comuns, output)
-		
-	write_csv(final_output, output_file)
-	return output
-
-
-
-
-def join_csv_overwrite(csvfile1, csvfile2, col, output_file):
-	'''Gera um arquivo de saída com base no arquivo 2 em que as informações do arquivo 1 serão sobrescritas nas colunas de mesmo nome, no arquivo 2, onde os valores da célula referente à "col" coincidam'''
-	output = None
-	return output
-
-
-
-
-def compare_csv_col(csv_file1, csv_file2):
-	""" """
-	pass
+	output = join_dictArray_union(csvdata1, csvdata2, col)
+	if output_file == True:
+		fname = input("Qual o nome do arquivo de saída?")
+		write_csv(output, fname)
+	else:
+		return output
 
 
 
@@ -207,8 +152,6 @@ def obter_frq_abs_e_rel(csv_file, col=False):
 	for cols in r.keys():
 		o[cols] = (r[cols], float((r[cols]/n)*100))
 	return o
-
-
 
 
 
@@ -407,17 +350,6 @@ def add_line(csv_file, refcols=[]):
 	if v == "s" or v == "S":
 		add_line(csv_file)
 
-
-
-def create_lockfile(lockf):
-	f = open(lockf,'w')
-	f.close()
-
-
-
-def lockfile_name(csv_file):
-	file_name = '~lock_'+str(csv_file).replace('.csv','')
-	return file_name	
 
 
 def convert_csv_type(csv_file, old_delimiter, new_delimiter, old_lineterminator=os.linesep, new_lineterminator=os.linesep):

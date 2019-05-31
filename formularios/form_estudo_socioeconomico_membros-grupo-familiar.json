@@ -1,0 +1,126 @@
+{
+    "titulo": "Questões para avaliação socioeconômica",
+    "descricao": "Intrumental destinado à coleta de informações para avaliação de vulnerabilidade socioeconômica.",
+    "questoes":
+    [
+        {
+            "enunciado": "Nome do/a membro do grupo familiar",
+            "id": "nome",
+            "tipo": "text"
+        },
+        {
+            "enunciado": "Data de nascimento",
+            "id": "dn",
+            "tipo": "text"
+        },
+        {
+            "enunciado": "CPF",
+            "id": "cpf",
+            "tipo": "text"
+        },
+        {
+            "enunciado": "Sexo",
+            "id": "sexo",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Masculino",
+                "Feminino"
+            ]
+
+        },
+        {
+            "enunciado": "Relação do membro em questão com o estudante",
+            "id" : "relacao_com_estudante",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Avó",
+                "Avô",
+                "Pai",
+                "Mãe",
+                "Padrasto",
+                "Madrasta",
+                "Irmã", 
+                "Irmão", 
+                "Meio-irmã", 
+                "Meio-irmão", 
+                "Filha", 
+                "Filho", 
+                "Enteada",
+                "Enteado", 
+                "Prima", 
+                "Primo", 
+                "Tia", 
+                "Tio",
+                "Outro"
+            ]
+        },                
+        {
+            "enunciado": "Escolaridade",
+            "id" : "escolaridade",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Não alfabetizado",
+                "Fundamental incompleto",
+                "Fundamental completo",
+                "Educação básica incompleta",
+                "Educação básica completa",
+                "Educação superior incompleta",
+                "Educação superior completa",
+                "Pós-graduação incompleta",
+                "Pós-graduação completa"
+            ]
+        },
+        {
+            "enunciado": "Natureza da fonte de renda",
+            "id" : "situacao_renda",
+            "tipo": "checkbox",
+            "alternativas": 
+            [
+                "Sem renda",
+                "Recebe auxílio do grupo familiar",
+                "Trabalho formal, setor privado",
+                "Servidor público efetivo",
+                "Servidor público temporário",
+                "Serviço público, cargo comissionado",
+                "INSS - Aposentadoria",
+                "INSS - Auxílio-doença, Auxílio-reclusão…",
+                "INSS - Seguro-desemprego",
+                "INSS - Pensão por morte, proveniente de pai/mãe",
+                "INSS - Pensão por morte, proveniente de cônjuge",
+                "Rendimentos: aluguel, participação em lucros",
+                "Microempreendedor",
+                "Pensão alimentícia formal",
+                "Pensão alimentícia informal",
+                "Estágio remunerado ou menor/jovem aprendiz",
+                "Bolsa Acadêmica (PIBIC, PIBID, PIBEX, Mestrado, Doutorado...)",
+                "Bolsa da Assistência Estudantil (Auxílio Moradia, Auxílio Socioeconômico…)",
+                "Benefício Assistência Social (BPC, Bolsa Família, Renda cidadã…)",
+                "Trabalho autônomo ou informal",
+                "Poupança/Economias pessoais",
+                "Outro"
+            ]
+        },
+        {
+            "enunciado": "Valor da renda pessoal do membro em questão",
+            "id" : "valor_renda",
+            "tipo": "text"
+        },
+        {
+            "enunciado": "Situação de saúde",
+            "id" : "situacao_saude",
+            "tipo": "checkbox",
+            "alternativas": 
+            [
+                "Sem agravos de saúde",
+                "Doença crônica",
+                "Doença grave",
+                "Agravo de saúde mental",
+                "Deficiência física",
+                "Outro"
+            ]
+        }
+    ]
+}
