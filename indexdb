@@ -15,6 +15,7 @@ Options:
 """
 
 import os
+import asyncio
 
 from docopt import docopt
 from subprocess import getoutput
@@ -64,17 +65,24 @@ def make_search_set(dados_brutos):
     return index_set
 
             
+async def make_index_set_async(set_name, target_col, dados_brutos, pointer=None):
+    return make_index_set(set_name, target_col, dados_brutos, pointer)
+
+async def make_search_set_async(dados_brutos):
+    return make_search_set(dados_brutos)
 
 
 def remake_index():
-    index_db = []
-    index_db.append(make_index_set('est', 'identificador', dados_usuarios))
-    index_db.append(make_index_set('est-eml', 'eml', dados_usuarios, 'identificador'))
-    index_db.append(make_index_set('atd', 'identificador', dados_atendimentos))
-    index_db.append(make_index_set('corr', 'identificador', dados_corrigidos))
-    index_db.append(make_index_set('proc', 'identificador', dados_processos))
-    index_db.append(make_index_set('proc_doc', 'numero_sei', dados_processos))
-    index_db.append(make_search_set(dados_usuarios))
+    loop = asyncio.get_event_loop()
+    index_db = loop.run_until_complete(asyncio.gather(
+        make_index_set_async('est', 'identificador', dados_usuarios),
+        make_index_set_async('est-eml', 'eml', dados_usuarios, 'identificador'),
+        make_index_set_async('atd', 'identificador', dados_atendimentos),
+        make_index_set_async('corr', 'identificador', dados_corrigidos),
+        make_index_set_async('proc', 'identificador', dados_processos),
+        make_index_set_async('proc_doc', 'numero_sei', dados_processos),
+        make_search_set_async(dados_usuarios),
+    ))
     save_json(index_db, arquivo_index)
 
 
