@@ -24,7 +24,7 @@ from modulos.py_sps_cli_base import get_mat,\
     dados_corrigidos,\
     dados_index
     
-from modulos.py_console_tools_v0 import save_json, verde, vermelho
+from modulos.py_console_tools import save_json, verde, vermelho
 
 args = docopt(__doc__)
 

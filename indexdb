@@ -26,7 +26,7 @@ from modulos.py_sps_cli_base import data_folder,\
     dados_estudo_estudante, arquivo_estudo_estudante,\
     arquivo_index
     
-from modulos.py_console_tools_v0 import save_json
+from modulos.py_console_tools import save_json
 
 args = docopt(__doc__)
 

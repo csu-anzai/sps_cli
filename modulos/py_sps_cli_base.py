@@ -5,7 +5,7 @@ import time
 import os
 import asyncio
 
-from .py_console_tools_v0 import load_json, listar_dicionario, save_json
+from .py_console_tools import load_json, listar_dicionario, save_json
 from subprocess import getoutput
 from string import punctuation
 

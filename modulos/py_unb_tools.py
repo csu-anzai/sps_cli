@@ -30,7 +30,7 @@ from string import whitespace, punctuation, digits
 from .py_euristic_tools import strip_simbols, get_indexes, strip_digits
 from .py_statistic_tools import mediaa
 from .py_csv_app import *
-from .py_console_tools_v0 import save_json
+from .py_json_handlers import save_json
 from math import fsum as soma
 
 curric_folder = '/home/danielc/Documentos/SPS/Currículos/FUP'
@@ -311,25 +311,25 @@ def calculate_mediaa_of_new_on_sem(csv_file):
 			sem20182 += 1
 	
 	if not (sem20091 == 0 or sem20092 == 0):
-		mediaa()
+		mediaa([])
 	if not (sem20101 == 0 or sem20102 == 0):
-		mediaa()
+		mediaa([])
 	if not (sem20111 == 0 or sem20112 == 0):
-		mediaa()
+		mediaa([])
 	if not (sem20121 == 0 or sem20122 == 0):
-		mediaa()
+		mediaa([])
 	if not (sem20131 == 0 or sem20132 == 0):
-		mediaa()
+		mediaa([])
 	if not (sem20141 == 0 or sem20142 == 0):
-		mediaa()
+		mediaa([])
 	if not (sem20151 == 0 or sem20152 == 0):
-		mediaa()
+		mediaa([])
 	if not (sem20161 == 0 or sem20162 == 0):
-		mediaa()
+		mediaa([])
 	if not (sem20171 == 0 or sem20172 == 0):
-		mediaa()
+		mediaa([])
 	if not (sem20181 == 0 or sem20182 == 0):
-		mediaa()
+		mediaa([])
 	
 
 def join_alurel(folder, output_fname):
@@ -403,7 +403,7 @@ def get_curric_branches(csv_file, habilit_num_col, curric_branche_col):
 	
 	output_data = []
 	for r in o:
-		if check_item_list(r, output_data) == False:
+		if not r in output_data:
 			output_data.append(r)
 	f = open('output_curric_L', 'w')
 	f.writelines(output_data)
@@ -412,9 +412,10 @@ def get_curric_branches(csv_file, habilit_num_col, curric_branche_col):
 	
 
 
-def set_campos_from_hcode(csv_file, hcode_col, campus_col):
+def set_campus_from_hcode(csv_file, hcode_col, campus_col):
 	'''
-	Define o campus do curso com base na avaliação do código da habiliatação e registra na coluna 'campus_col', não sobrescreve valores existentes. 
+	Define o campus do curso com base na avaliação do código da habiliatação e registra na coluna 'campus_col'.
+	Não sobrescreve valores existentes. 
 	'''	
 	conteudo = read_csv(csv_file)
 	
@@ -895,9 +896,10 @@ def multi_process_sigra_academic_history(filezip):
 			matricula_dos_erros.append(hfile.split('.')[0])
 			
 	os.chdir(initdir)
-	try: os.removedirs(path_name)
-	except: print("A existencia de erros no processamento de alguns históricos impediu a exclusão da pasta temporária...")
+	try: 
+		os.removedirs(path_name)
+	except: 
+		print("Houve erros no processamento de alguns históricos. Estes arquivos não foram excluídos...")
 	write_csv(hist_files_data, 'academic_analisis.csv')
-	save_json()
 	return matricula_dos_erros
 

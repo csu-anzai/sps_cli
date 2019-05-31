@@ -126,7 +126,7 @@ def show_dict_data(d, ofname):
 	for i in sorted(d.keys()):
 		o = o + u"Coluna/Variável: "+i.decode('utf-8')+u'\n'
 		for ii in sorted(d[i].keys()):
-			o = o + u"  --> %s:" % ii.decode('utf-8') + unicode(d[i][ii]) +'\n'
+			o = o + u"  --> %s:" % ii.decode('utf-8') + str(d[i][ii]) +'\n'
 		o = o + '\n'
 	f = open(ofname,'w')
 	f.write(o.encode('utf-8'))

@@ -15,7 +15,7 @@ Options:
 
 
 from docopt import docopt
-from modulos.py_console_tools_v0 import mk_randnum_seq
+from modulos.py_console_tools import mk_randnum_seq
 
 args = docopt(__doc__)
 
