@@ -76,7 +76,9 @@ from modulos.py_sps_cli_base import save_target_info, get_mat, timestamp, data_f
     dados_estudo_membros_familia, arquivo_estudo_membros_familia,\
     arquivo_index, automail, periodo_corrente, dados_index
     
-from modulos.py_console_tools import save_json, render_form_get_values, select_op, select_ops, load_json
+from modulos.py_json_handlers import save_json, load_json
+from modulos.py_console_tools import select_op, select_ops
+from modulos.py_data_tools import render_form_get_values
 
 
 args = docopt(__doc__)

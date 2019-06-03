@@ -74,7 +74,7 @@ def old_sae_etd_movefiles_to_folder(target_folder=old_etd_folder):
 					new_folders.append(fname)
 			shutil.move(f, "{}/{}/{}".format(target_folder, fname, f))
 
-def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=389):
+def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=719):
 	processos = read_csv(target_csv_lista_processos, '\t')
 	for p in processos[init_idx:]:
 		periodo = p['Semestre/Ano'].replace('/','-')
@@ -85,7 +85,7 @@ def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processo
 			print(p['Nome'])
 			print(matricula)
 			print(periodo)
-			print(p.index())
+			print("IDX:", processos.index(p))
 			input("Pressione para o próximo elemento da lista...")
 			#Cintia Silva Soares; 1-2011
 

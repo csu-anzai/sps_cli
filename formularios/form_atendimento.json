@@ -1,11 +1,13 @@
 {
     "questoes": [
         {
-            "id": "identificador",
             "tipo": "text",
-            "enunciado": "Matrícula"
+            "enunciado": "Matrícula",
+            "id": "identificador"
         },
         {
+            "tipo": "checkbox",
+            "enunciado": "Forma de atividade",
             "alternativas": [
                 "Articulação",
                 "Atendimento presencial",
@@ -16,11 +18,11 @@
                 "Processamento de demanda anterior",
                 "Outro"
             ],
-            "id": "procedimento",
-            "tipo": "checkbox",
-            "enunciado": "Forma de atividade"
+            "id": "procedimento"
         },
         {
+            "tipo": "checkbox",
+            "enunciado": "Demanda do atendimento",
             "alternativas": [
                 "Agendamento entrevista",
                 "Articulação de demandas com a Coordenaçãoo da Educação do Campo.",
@@ -34,21 +36,21 @@
                 "Consulta ao andamento de processo/encaminhamento remetido à DDS",
                 "Consulta ao resultado de estudo socioeconômico anterior",
                 "Consulta ao resultado do estudo socioeconômico",
-                "Explicação sobre o procedimento de lista de espera",
-                "Orientação sobre a necessidade de manter o estudo atualizado",
-                "Contacto telefônico com a tesouraria para verificação de pagamento de auxílio",
                 "Consulta sobre situação da Bolsa Permanência ME",
                 "Consulta sobre situação frente ao PACreche (auxílio não depositado)",
                 "Consulta sobre situação frente ao PASeUnB (auxílio não depositado)",
                 "Consulta sobre situação frente ao PASeUnB (comunicado de desligamento)",
+                "Contacto telefônico com a tesouraria para verificação de pagamento de auxílio",
                 "Dificuldade no recebimento do cartão referente ao Bolsa Permanência ME",
                 "Digitalização de documentos",
                 "Elaboração de relatório com parecer",
                 "Emissão de declaração PPAES",
                 "Emissão de declaração para criação de Conta Corrente",
                 "Encaminhamento de pedido de auxílio emergencial",
+                "Encaminhamento de reclamação à DDS com solicitação de resposta.",
                 "Entrevista com fins à auxílio emergencial",
                 "Entrevista com fins à coleta de informações sobre fragilização/rompimento de vínculos",
+                "Explicação sobre o procedimento de lista de espera",
                 "Fotocópia de documento",
                 "Fotocópia de termo do Programa Bolsa Alimentação",
                 "Identificação de demanda pendente (pagamento retroativo)",
@@ -67,6 +69,7 @@
                 "Orientação presencial em relação a estudo socioeconômico",
                 "Orientação sobre Auxílio Emergencial",
                 "Orientação sobre a impossibilidade de assinatura do termo de moradia",
+                "Orientação sobre a necessidade de manter o estudo atualizado",
                 "Orientação sobre encaminhamento coletivo de demandas à DDS",
                 "Orientação sobre mudança de modalidade do PME-G.",
                 "Participação na reunião de organicidade da Educação do Campo",
@@ -86,20 +89,18 @@
                 "Solicitação de verificação de vínculo com a assistencia estudantil.",
                 "Outro"
             ],
-            "id": "atd_t",
-            "tipo": "checkbox",
-            "enunciado": "Demanda do atendimento"
+            "id": "atd_t"
         },
         {
+            "tipo": "radio",
+            "enunciado": "Resultado do atendimento",
             "alternativas": [
                 "Aguardando resposta",
                 "Demanda atendida",
                 "Demanda não atendida",
                 "Outro"
             ],
-            "id": "resultado",
-            "tipo": "radio",
-            "enunciado": "Resultado do atendimento"
+            "id": "resultado"
         }
     ],
     "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
