@@ -63,11 +63,16 @@ def old_sae_etd_movefiles_to_folder(target_folder=old_etd_folder):
 	os.chdir(target_folder)
 	new_folders = []
 	for f in files:
-		fname = f.split('_')[1].split('.')[0]
-		if not fname in new_folders:
-			os.mkdir(fname)
-			new_folders.append(fname)
-		shutil.move(f, "{}/{}/{}".format(target_folder, fname, f))
+		if f.find('.txt') != -1:
+			print(f)
+			fname = f.split('_')[1].split('.')[0]
+			if not fname in new_folders:
+				try:
+					os.mkdir(fname)
+					new_folders.append(fname)
+				except FileExistsError:
+					new_folders.append(fname)
+			shutil.move(f, "{}/{}/{}".format(target_folder, fname, f))
 
 def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=389):
 	processos = read_csv(target_csv_lista_processos, '\t')
@@ -80,6 +85,7 @@ def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processo
 			print(p['Nome'])
 			print(matricula)
 			print(periodo)
+			print(p.index())
 			input("Pressione para o próximo elemento da lista...")
 			#Cintia Silva Soares; 1-2011
 
