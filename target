@@ -16,7 +16,7 @@ Usage:
 import os
 
 from docopt import docopt
-from modulos.py_console_tools import load_json, save_json
+from modulos.py_json_handlers import load_json, save_json
 from modulos.py_sps_cli_base import user_home_folder
 
 args = docopt(__doc__)

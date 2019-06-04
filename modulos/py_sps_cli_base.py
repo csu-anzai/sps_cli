@@ -5,8 +5,8 @@ import time
 import os
 import asyncio
 
-from .py_json_handlers import load_json, save_json
 from .py_data_tools import listar_dicionario
+from .py_json_handlers import load_json, save_json
 from subprocess import getoutput
 from string import punctuation
 
