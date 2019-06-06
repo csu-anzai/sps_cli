@@ -38,7 +38,6 @@ def show_each_dictArray_block(dict_array, print_fields, index_pos):
 	Elementos iniciais da lista podem ser ignorados definindo-se o local de inicio 'index_pos'.
 	'''
 	for i in dict_array[index_pos:]:
-		limpar_tela()
 		print_nfo = ""
 		for f in print_fields:
 			print_nfo += i[f].replace('/','') + os.linesep
