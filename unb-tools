@@ -48,7 +48,7 @@ def main():
         join_alurel(args['<target-folder>'], args['<output-txt-fname>'])
 
     elif args['rename-old-sae-etd']:
-        old_sae_etd_reorg_files()
+        old_sae_etd_rename_files()
 
     elif args['move-old-sae-etd']:
         old_sae_etd_movefiles_to_folder()

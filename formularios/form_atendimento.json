@@ -1,4 +1,6 @@
 {
+    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
+    "titulo": "Registro de atendimento",
     "questoes": [
         {
             "tipo": "text",
@@ -6,8 +8,6 @@
             "id": "identificador"
         },
         {
-            "tipo": "checkbox",
-            "enunciado": "Forma de atividade",
             "alternativas": [
                 "Articulação",
                 "Atendimento presencial",
@@ -18,11 +18,11 @@
                 "Processamento de demanda anterior",
                 "Outro"
             ],
+            "tipo": "checkbox",
+            "enunciado": "Forma de atividade",
             "id": "procedimento"
         },
         {
-            "tipo": "checkbox",
-            "enunciado": "Demanda do atendimento",
             "alternativas": [
                 "Agendamento entrevista",
                 "Articulação de demandas com a Coordenaçãoo da Educação do Campo.",
@@ -36,6 +36,8 @@
                 "Consulta ao andamento de processo/encaminhamento remetido à DDS",
                 "Consulta ao resultado de estudo socioeconômico anterior",
                 "Consulta ao resultado do estudo socioeconômico",
+                "Consulta sobre data de depósito de auxílio",
+                "Consulta sobre forma de pagamento de auxílio: CPF ou depósito em conta?",
                 "Consulta sobre situação da Bolsa Permanência ME",
                 "Consulta sobre situação frente ao PACreche (auxílio não depositado)",
                 "Consulta sobre situação frente ao PASeUnB (auxílio não depositado)",
@@ -48,6 +50,7 @@
                 "Emissão de declaração para criação de Conta Corrente",
                 "Encaminhamento de pedido de auxílio emergencial",
                 "Encaminhamento de reclamação à DDS com solicitação de resposta.",
+                "Entrevista com fins a avaliação de situação socioeconômica para ampliação do tempo de permanencia em programas de assistencia estudantil ou PME-G)",
                 "Entrevista com fins à auxílio emergencial",
                 "Entrevista com fins à coleta de informações sobre fragilização/rompimento de vínculos",
                 "Explicação sobre o procedimento de lista de espera",
@@ -69,6 +72,7 @@
                 "Orientação presencial em relação a estudo socioeconômico",
                 "Orientação sobre Auxílio Emergencial",
                 "Orientação sobre a impossibilidade de assinatura do termo de moradia",
+                "Orientação sobre a impossibilidade de pedido de auxílio emergencial de forma não presencial (Art. 3º (caput))",
                 "Orientação sobre a necessidade de manter o estudo atualizado",
                 "Orientação sobre encaminhamento coletivo de demandas à DDS",
                 "Orientação sobre mudança de modalidade do PME-G.",
@@ -89,20 +93,20 @@
                 "Solicitação de verificação de vínculo com a assistencia estudantil.",
                 "Outro"
             ],
+            "tipo": "checkbox",
+            "enunciado": "Demanda do atendimento",
             "id": "atd_t"
         },
         {
-            "tipo": "radio",
-            "enunciado": "Resultado do atendimento",
             "alternativas": [
                 "Aguardando resposta",
                 "Demanda atendida",
                 "Demanda não atendida",
                 "Outro"
             ],
+            "tipo": "radio",
+            "enunciado": "Resultado do atendimento",
             "id": "resultado"
         }
-    ],
-    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
-    "titulo": "Registro de atendimento"
+    ]
 }

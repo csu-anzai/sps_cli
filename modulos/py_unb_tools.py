@@ -74,20 +74,43 @@ def old_sae_etd_movefiles_to_folder(target_folder=old_etd_folder):
 					new_folders.append(fname)
 			shutil.move(f, "{}/{}/{}".format(target_folder, fname, f))
 
-def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=719):
+def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=2646):
 	processos = read_csv(target_csv_lista_processos, '\t')
-	for p in processos[init_idx:]:
-		periodo = p['Semestre/Ano'].replace('/','-')
-		matricula = p['Matrícula'].replace('/','')
+	total_itens = len(processos)-1
+	current_item = init_idx
+	total_itens -= init_idx
+	while total_itens != -1:
+		periodo = processos[current_item]['Semestre/Ano'].replace('/','-')
+		matricula = processos[current_item]['Matrícula'].replace('/','')
 		fname = matricula+"_"+periodo+'.txt'
 		if not os.path.isfile('{}/{}/{}'.format(target_folder, periodo, fname)):
 			limpar_tela()
-			print(p['Nome'])
+			print(processos[current_item]['Nome'])
 			print(matricula)
 			print(periodo)
-			print("IDX:", processos.index(p))
-			input("Pressione para o próximo elemento da lista...")
-			#Cintia Silva Soares; 1-2011
+			print("IDX:", current_item)
+			op = input("Pressione 'v' para voltar, enter para seguir...")
+		else:
+			op = None
+		if op == 'v':
+			current_item -= 1
+			total_itens += 1
+		else:
+			current_item += 1
+			total_itens -= 1
+
+	# for p in processos[init_idx:]:
+	# 	periodo = p['Semestre/Ano'].replace('/','-')
+	# 	matricula = p['Matrícula'].replace('/','')
+	# 	fname = matricula+"_"+periodo+'.txt'
+	# 	if not os.path.isfile('{}/{}/{}'.format(target_folder, periodo, fname)):
+	# 		limpar_tela()
+	# 		print(p['Nome'])
+	# 		print(matricula)
+	# 		print(periodo)
+	# 		print("IDX:", processos.index(p))
+	# 		input("Pressione para o próximo elemento da lista...")
+	# 		#Raquel Cristina Machado Cavalcanti; 2-2012
 
 
 
