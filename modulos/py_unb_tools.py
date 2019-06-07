@@ -74,7 +74,7 @@ def old_sae_etd_movefiles_to_folder(target_folder=old_etd_folder):
 					new_folders.append(fname)
 			shutil.move(f, "{}/{}/{}".format(target_folder, fname, f))
 
-def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=2646):
+def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=3361):
 	processos = read_csv(target_csv_lista_processos, '\t')
 	total_itens = len(processos)-1
 	current_item = init_idx
