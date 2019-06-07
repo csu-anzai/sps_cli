@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+
+Descriptografa o arquivo alvo.
+
+Usage:
+    sps-install ( criar-arquivos-de-dados ) 
+
+"""
+
+import os
+
+from docopt import docopt
+from modulos.py_sps_cli_base import app_root_folder
+
+args = docopt(__doc__)
+
+def main():
+    if os.getcwd() == app_root_folder:
+        os.mkdir('seguranca')
+        os.mkdir('eml-template')
+        os.mkdir('dados')
+        os.mkdir('dados/fragmentos')
+        os.mkdir('dados/indexados')
+        os.system('touch dados/atendimentos.json')
+        os.system('touch dados/corrigidos.json')
+        os.system('touch dados/processos.json')
+        os.system('touch dados/profissionais.json')
+        os.system('touch dados/usuarios.json')
+        #os.system('touch dados/estudos.json')
+        os.system('touch dados/indexados/index_db.json')
+        os.system('randnum 1024 > seguranca ccrypt-key')
+        #Adiciona caminho ao PATH, local e ao Skell de criação de usuários...
+        #Define as variáveis padrão do aplicativo '/etc/sps-cli-conf.json', global
+        #O arquivo py_sps_cli_base deve buscar informações de 'sps-cli-conf.json'
+    else:
+        print("O script de instalação deve ser executado a partir da pasta raíz do aplicativo...")
+        exit()
+        
+
+
+    
+
+if __name__ == '__main__':
+    main()
