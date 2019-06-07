@@ -30,6 +30,13 @@ from subprocess import getoutput
 from random import randrange
 from string import digits
 
+def convert_to_cli_args(lista):
+    o = '" "'.join(lista)
+    o = '"' + o + '"'
+    return o
+
+
+
 def create_lockfile(lockf):
 	f = open("/tmp/"+lockf,'w')
 	f.close()
