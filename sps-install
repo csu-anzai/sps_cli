@@ -6,7 +6,7 @@
 Descriptografa o arquivo alvo.
 
 Usage:
-    sps-install ( criar-arquivos-de-dados ) 
+    sps-install ( init ) 
 
 """
 
@@ -29,19 +29,25 @@ def main():
         os.system('touch dados/processos.json')
         os.system('touch dados/profissionais.json')
         os.system('touch dados/usuarios.json')
-        #os.system('touch dados/estudos.json')
+        os.system('touch dados/estudos.json')
         os.system('touch dados/indexados/index_db.json')
-        os.system('randnum 1024 > seguranca ccrypt-key')
+        os.system('touch seguranca/ccrypt-key')
+        os.system('if [ $(cat dados/atendimentos.json | wc -l) -lt 2 ]; then echo "[]" > dados/atendimentos.json; fi')
+        os.system('if [ $(cat dados/corrigidos.json | wc -l) -lt 2 ]; then echo "[]" > dados/corrigidos.json; fi')
+        os.system('if [ $(cat dados/processos.json | wc -l) -lt 2 ]; then echo "[]" > dados/processos.json; fi')
+        os.system('if [ $(cat dados/profissionais.json | wc -l) -lt 2 ]; then echo "[]" > dados/profissionais.json; fi')
+        os.system('if [ $(cat dados/usuarios.json | wc -l) -lt 2 ]; then echo "[]" > dados/usuarios.json; fi')
+        os.system('if [ $(cat dados/estudos.json | wc -l) -lt 2 ]; then echo "[]" > dados/estudos.json; fi')
+        os.system('if [ $(cat dados/indexados/index_db.json | wc -l) -lt 2 ]; then echo "[]" > dados/indexados/index_db.json; fi')
+        os.system('if [ $(cat seguranca/ccrypt-key | wc -c) -lt 5 ]; then randnum 1024 > seguranca/ccrypt-key; fi')
+
         #Adiciona caminho ao PATH, local e ao Skell de criação de usuários...
         #Define as variáveis padrão do aplicativo '/etc/sps-cli-conf.json', global
         #O arquivo py_sps_cli_base deve buscar informações de 'sps-cli-conf.json'
     else:
         print("O script de instalação deve ser executado a partir da pasta raíz do aplicativo...")
         exit()
-        
-
-
-    
+   
 
 if __name__ == '__main__':
     main()
