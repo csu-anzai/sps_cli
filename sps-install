@@ -3,22 +3,37 @@
 
 """
 
-Descriptografa o arquivo alvo.
+Cria os diretórios e arquivos de dados conforme a estrutura inicialmente pensadapelo aplicativo.
 
 Usage:
-    sps-install ( init ) 
+    sps-install ( createdb | config ) 
 
 """
 
-import os
-
 from docopt import docopt
-from modulos.py_sps_cli_base import app_root_folder
+from subprocess import getoutput
+
+import os
 
 args = docopt(__doc__)
 
 def main():
-    if os.getcwd() == app_root_folder:
+    if not args['config']:
+        check_config = bool(getoutput('if [ -f "$(echo $HOME)/.sps-cli.conf" ]; then echo "True"; else echo "False"; fi'))
+        if not check_config:
+            print('Arquivo de configuração não foi encontrado...')
+            r = input('Deseja criar um agora? [s|n]')
+            if r.lower() == 's':
+                os.system('sps-install config')
+            else:
+                exit()
+
+    elif args['config']:
+        pass
+
+    elif args['createdb']:
+        init_dir = os.getcwd()
+        os.chdir(app_root_folder)
         os.mkdir('seguranca')
         os.mkdir('eml-template')
         os.mkdir('dados')
@@ -40,13 +55,10 @@ def main():
         os.system('if [ $(cat dados/estudos.json | wc -l) -lt 2 ]; then echo "[]" > dados/estudos.json; fi')
         os.system('if [ $(cat dados/indexados/index_db.json | wc -l) -lt 2 ]; then echo "[]" > dados/indexados/index_db.json; fi')
         os.system('if [ $(cat seguranca/ccrypt-key | wc -c) -lt 5 ]; then randnum 1024 > seguranca/ccrypt-key; fi')
+        os.chdir(init_dir)
+    
+    
 
-        #Adiciona caminho ao PATH, local e ao Skell de criação de usuários...
-        #Define as variáveis padrão do aplicativo '/etc/sps-cli-conf.json', global
-        #O arquivo py_sps_cli_base deve buscar informações de 'sps-cli-conf.json'
-    else:
-        print("O script de instalação deve ser executado a partir da pasta raíz do aplicativo...")
-        exit()
    
 
 if __name__ == '__main__':

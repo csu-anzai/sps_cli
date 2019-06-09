@@ -60,18 +60,20 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from modulos.py_sps_cli_base import save_target_info, get_mat, timestamp, data_folder, numero_sei_mascara, numero_identificador_mascara,\
+from modulos.sps_cli_config import *
+from modulos.py_sps_cli_base import save_target_info, get_identificador, timestamp, data_folder, numero_sei_mascara, numero_identificador_mascara,\
     form_novo_usuario, dados_usuarios, arquivo_usuarios,\
     form_processos, dados_processos, arquivo_processos,\
     form_atendiento, dados_atendimentos, arquivo_atendimentos,\
     form_corrigidos, dados_corrigidos, arquivo_corrigidos,\
-    form_estudo_info_estudante,\
-    form_estudo_info_familia,\
-    form_estudo_info_membros_familia,\
-    dados_estudo_estudante, arquivo_estudo_estudante,\
-    dados_estudo_familia, arquivo_estudo_familia,\
-    dados_estudo_membros_familia, arquivo_estudo_membros_familia,\
     arquivo_index, automail, periodo_corrente, dados_index
+    #form_estudo_info_estudante,\
+    #form_estudo_info_familia,\
+    #form_estudo_info_membros_familia,\
+    #dados_estudo_estudante, arquivo_estudo_estudante,\
+    #dados_estudo_familia, arquivo_estudo_familia,\
+    #dados_estudo_membros_familia, arquivo_estudo_membros_familia,\
+    
     
 from modulos.py_json_handlers import save_json, load_json
 from modulos.py_console_tools import select_op, select_ops
@@ -81,7 +83,7 @@ from modulos.py_data_tools import render_form_get_values
 args = docopt(__doc__)
 
 
-matriculas = get_mat(dados_usuarios)
+matriculas = get_identificador(dados_usuarios)
 
 def novo_usuario(identificador):
     nfo = render_form_get_values(form_novo_usuario, ['identificador'])

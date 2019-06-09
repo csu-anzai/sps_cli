@@ -3,7 +3,8 @@
 
 """
 
-Adiniona novos registros nos arquivos de dados.
+Realiza processamento de arquivos nos formatos CSV, JSON ou TXT.
+Algumas funções foram concebidas para processarem arquivos de relatórios dos sistemas SAE e SIGRA da UnB.
 
 Usage:
     unb-tools ( join-alu-rel ) <target-folder> <output-txt-fname>

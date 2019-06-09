@@ -31,7 +31,7 @@ def main():
     if args['usr'] or args['estudantes']:
         if args['<marcador>']:
             if args['<marcador>'] == 'id':
-                print(set(get_mat(dados_usuarios)))
+                print(set(get_identificador(dados_usuarios)))
             else:
                 print(listar_dicionario(dados_usuarios, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [args['<marcador>']]))
 

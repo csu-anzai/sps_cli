@@ -3,13 +3,10 @@
 
 """
 
-Lista informações registradas nos arquivos de dados.
+Retorna uma string randômica numérica com a quantidade de algarismos solicitados.
 
 Usage:
     randnum ( <num_algarismos> )
-
-Options:
-    --version
 
 """
 

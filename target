@@ -4,12 +4,11 @@
 """
 
 Insere, altera ou lê informações do usuário alvo corrente, '.current_target'.
-
 Ao utilizar o comando 'novo' para realizar inserções, as informações do usuario alvo são armazenadas no arquivo '.current_target'.
 
 Usage:
     target ( set | edit ) <campo> <valor>
-    target get <campo>
+    target ( get ) <campo>
 
 """
 

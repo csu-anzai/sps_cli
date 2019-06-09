@@ -24,8 +24,9 @@ from modulos.py_sps_cli_base import data_folder,\
     dados_processos, arquivo_processos,\
     dados_atendimentos, arquivo_atendimentos,\
     dados_corrigidos, arquivo_corrigidos,\
-    dados_estudo_estudante, arquivo_estudo_estudante,\
     arquivo_index
+    #dados_estudo_estudante, arquivo_estudo_estudante,\
+    
     
 from modulos.py_json_handlers import save_json
 
