@@ -15,7 +15,7 @@ Usage:
 """
 
 from os import system, fork, listdir
-from modulos.py_sps_cli_base import security_folder, user_home_folder, fragmentos_folder
+from python_modules.py_sps_cli_base import security_folder, user_home_folder, fragmentos_folder
 
 from docopt import docopt
 

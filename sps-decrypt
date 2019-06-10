@@ -12,7 +12,7 @@ Usage:
 
 from docopt import docopt
 from os import system
-from modulos.py_sps_cli_base import security_folder
+from python_modules.py_sps_cli_base import security_folder
 
 args = docopt(__doc__)
 

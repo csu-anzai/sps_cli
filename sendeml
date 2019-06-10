@@ -22,8 +22,8 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from modulos.py_sps_cli_base import *
-from modulos.py_console_tools import mk_randnum_seq
+from python_modules.py_sps_cli_base import *
+from python_modules.py_console_tools import mk_randnum_seq
 from smtplib import SMTP
 from string import whitespace, punctuation, digits
 from email.message import EmailMessage

@@ -29,14 +29,14 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from modulos.py_sps_cli_base import timestamp, data_folder, numero_sei_mascara, numero_identificador_mascara, get_identificador,\
+from python_modules.py_sps_cli_base import timestamp, data_folder, numero_sei_mascara, numero_identificador_mascara, get_identificador,\
     dados_usuarios,\
     dados_processos,\
     dados_atendimentos,\
     dados_corrigidos,\
     dados_index
-from modulos.py_json_handlers import save_json, load_json
-from modulos.py_console_tools import verde, vermelho
+from python_modules.py_json_handlers import save_json, load_json
+from python_modules.py_console_tools import verde, vermelho
 
 args = docopt(__doc__)
 
