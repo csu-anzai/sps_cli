@@ -1,18 +1,17 @@
 {
+    "descricao": "Intrumental para registro de processos gerados no âmbito do SPS/FUP",
     "questoes": [
         {
-            "tipo": "text",
             "id": "identificador",
+            "tipo": "text",
             "enunciado": "Matrícula"
         },
         {
-            "tipo": "text",
             "id": "numero_sei",
+            "tipo": "text",
             "enunciado": "Número do processo no SEI"
         },
         {
-            "tipo": "checkbox",
-            "id": "motivo",
             "alternativas": [
                 "Alega custos com saúde de familiares, não apresentou comprovantes",
                 "Alega dificuldade para arcar com os custos de retorno à cumunidade",
@@ -21,6 +20,7 @@
                 "Alega impossibilidade de verificar a legibilidade do anexos",
                 "Alega mudança para pior na situação de renda",
                 "Alega necessidade de adquirir medicação de uso contínuo para si ou integrante do grupo familiar",
+                "Alega necessidade de arcar com custos inesperados de saúde",
                 "Alega que condições de moradia ou local de repouso interferem no rendimento acadêmico",
                 "Alega que contraiu dívidas e ficou em dificuldade em função do fechamento do RU",
                 "Alega que faz parte da excessão dos estudantes do DF",
@@ -48,9 +48,10 @@
                 "Solicita inclusão no pleito da alimentação",
                 "Outro"
             ],
+            "id": "motivo",
+            "tipo": "checkbox",
             "enunciado": "Motivação"
         }
     ],
-    "descricao": "Intrumental para registro de processos gerados no âmbito do SPS/FUP",
     "titulo": "Registro de processos"
 }
