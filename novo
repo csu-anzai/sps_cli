@@ -9,9 +9,8 @@ Usage:
     novo ( usr | usuario ) <identificador>
     novo ( atd | atendimento ) <identificador>
     novo ( sei | processo ) <identificador> <assunto>
-    novo ( res | resposta-de-processo )
+    novo ( res | resposta-de-processo ) <num_sei>
     novo ( est | estudo ) <identificador>
-    novo ( pro | profissional ) <uid>
     novo ( dbc | campo-db ) <arquivo_db> <coluna> [<lista-ops>] 
     novo ( dbi | inserir-form-info ) ( mesclado | aninhado ) <arquivo_db> <formulario> 
     novo ( opt | inserir-op) <coluna> <opcao> <formulario>
@@ -59,7 +58,9 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.sps_cli_config import *
+from python_modules.sps_cli_config import automail, periodo_corrente
+from python_modules.py_cli_decorators import check_config_existance
+
 from python_modules.py_sps_cli_base import save_target_info, get_identificador, timestamp, data_folder, numero_sei_mascara, numero_identificador_mascara,\
     form_novo_usuario, dados_usuarios, arquivo_usuarios,\
     form_processos, dados_processos, arquivo_processos,\
@@ -104,7 +105,11 @@ def novo_processo(identificador, assunto):
 def novo_resultado_processo(processo_num):
     for proc in dados_processos:
         if proc['numero_sei'] == processo_num:
-            pass
+            proc['resultado'] = select_op(['Deferido', 'Indeferido'], 1)
+            if proc['resultado'] == 'Indeferido':
+                proc['justificativa'] = input("Justificativa: ")
+            save_json(dados_processos, arquivo_processos)
+            return [proc['identificador'], proc['resultado']]
     
 def novo_atendimento(identificador):
     save_target_action = False
@@ -211,6 +216,7 @@ def insert_info(json_estudantes, print_fields, formulario_q_add, novo_nome_de_ca
             save_json(estudantes, './{}'.format(json_estudantes))
 
 
+@check_config_existance
 def main():
     if args['usr'] or args['usuario']:
         identificador = numero_identificador_mascara(args['<identificador>'])
@@ -243,6 +249,13 @@ def main():
         identificador = numero_identificador_mascara(args['<identificador>'])
         novo_processo(identificador, args['<assunto>'])
 
+    elif args['res'] or args['resposta-de-processo']:
+        resultado = novo_resultado_processo(args['<num_sei>'])
+        save_target_info(resultado[0])
+        if automail:
+            os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Comunicado de resultado de processo" "Informo que o processo {numero_sei} foi {resultado}."'.format(numero_sei=args['<num_sei>'], resultado=resultado[1]))
+            os.system('sps-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(resultado[0], "Atendimento via e-mail", "Comunicado de resultado de processo", "Verificar status de envio de email..."))
+
     elif args['est'] or args['estudo']:
         identificador = numero_identificador_mascara(args['<identificador>'])
         estudo_id = novo_estudo_info_estudante(identificador)
@@ -255,12 +268,6 @@ def main():
             print("Registrar outra pessoa?")
             resposta = select_op(["Sim", "Não"], 1)            
 
-
-    elif args['pro'] or args['profissional']:
-        if getoutput('whoami') != 'root':
-            print("Apenas o usuário 'root' pode adicionar outros profissionais...")
-        else:
-            novo_profissional()
 
     elif args['dbc'] or args['campo-db']:
         nova_coluna(args['<coluna>'], args['<arquivo_db>'], args['<lista-ops>'])

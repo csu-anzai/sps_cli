@@ -5,11 +5,12 @@ import time
 import os
 import asyncio
 
-from .sps_cli_config import *
+from .sps_cli_config import app_root_folder, automail, periodo_corrente, user_home_folder
+from .py_cli_decorators import only_root
 from .py_data_tools import listar_dicionario
 from .py_json_handlers import load_json, save_json
-#from subprocess import getoutput
 from string import punctuation
+
 
 def get_col_width(field_name, dict_array):
     width = 0
@@ -50,6 +51,7 @@ def save_target_info(identificador):
 
 def timestamp(mode=None):
     if mode == "mkid":
+        from subprocess import getoutput
         return time.strftime("{}%Y%m%d%H%M%S".format(getoutput('whoami')[0:3].upper()), time.localtime())
     else:
         return time.strftime("%Y-%m-%d %H:%M:%S %a", time.localtime())

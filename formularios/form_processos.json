@@ -1,19 +1,23 @@
 {
     "descricao": "Intrumental para registro de processos gerados no âmbito do SPS/FUP",
+    "titulo": "Registro de processos",
     "questoes": [
         {
-            "id": "identificador",
             "tipo": "text",
+            "id": "identificador",
             "enunciado": "Matrícula"
         },
         {
-            "id": "numero_sei",
             "tipo": "text",
+            "id": "numero_sei",
             "enunciado": "Número do processo no SEI"
         },
         {
+            "tipo": "checkbox",
+            "id": "motivo",
             "alternativas": [
                 "Alega custos com saúde de familiares, não apresentou comprovantes",
+                "Alega dificuldade para arcar com os custos de alimentação",
                 "Alega dificuldade para arcar com os custos de retorno à cumunidade",
                 "Alega dificuldades decorrentes da troca de profissional",
                 "Alega dificuldades para arcar com os custos básicos de permanência na instituição",
@@ -48,10 +52,7 @@
                 "Solicita inclusão no pleito da alimentação",
                 "Outro"
             ],
-            "id": "motivo",
-            "tipo": "checkbox",
             "enunciado": "Motivação"
         }
-    ],
-    "titulo": "Registro de processos"
+    ]
 }
