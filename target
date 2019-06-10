@@ -4,20 +4,19 @@
 """
 
 Insere, altera ou lê informações do usuário alvo corrente, '.current_target'.
-
 Ao utilizar o comando 'novo' para realizar inserções, as informações do usuario alvo são armazenadas no arquivo '.current_target'.
 
 Usage:
     target ( set | edit ) <campo> <valor>
-    target get <campo>
+    target ( get ) <campo>
 
 """
 
 import os
 
 from docopt import docopt
-from modulos.py_json_handlers import load_json, save_json
-from modulos.py_sps_cli_base import user_home_folder
+from python_modules.py_json_handlers import load_json, save_json
+from python_modules.py_sps_cli_base import user_home_folder
 
 args = docopt(__doc__)
 

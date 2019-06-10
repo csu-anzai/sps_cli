@@ -5,9 +5,10 @@ import time
 import os
 import asyncio
 
+from .sps_cli_config import *
 from .py_data_tools import listar_dicionario
 from .py_json_handlers import load_json, save_json
-from subprocess import getoutput
+#from subprocess import getoutput
 from string import punctuation
 
 def get_col_width(field_name, dict_array):
@@ -17,7 +18,7 @@ def get_col_width(field_name, dict_array):
             width = len(line[field_name])
     return (field_name, width+2)
 
-def get_mat(dados_usuarios):
+def get_identificador(dados_usuarios):
     matriculas = []
     for estudantes in dados_usuarios:
         matriculas.append(estudantes['identificador'])
@@ -80,13 +81,6 @@ async def get_col_label(formulario):
     return id_and_label
 
 
-automail=True
-periodo_corrente="1º/2019"
-
-#Quando os comandos estiverem disponíveis globalmente, utilizar caminhos absolutos.
-user_home_folder = getoutput("echo $HOME")
-app_root_folder = "/home/bwb0de/Devel/sps_fup2"
-
 data_folder = os.sep.join([app_root_folder, "dados"])
 security_folder = os.sep.join([app_root_folder, "seguranca"])
 fragmentos_folder = os.sep.join([data_folder, "fragmentos"])
@@ -107,9 +101,9 @@ form_atendiento = os.sep.join([form_folder, "form_atendimento.json"])
 form_novo_usuario = os.sep.join([form_folder, "form_novo_usuario.json"])
 form_processos = os.sep.join([form_folder, "form_processos.json"])
 form_corrigidos = os.sep.join([form_folder, "form_corrigidos.json"])
-form_estudo_info_estudante = os.sep.join([form_folder, "form_estudo_socioeconomico_estudante.json"])
-form_estudo_info_familia = os.sep.join([form_folder, "form_estudo_socioeconomico_grupo-familiar-info.json"])
-form_estudo_info_membros_familia = os.sep.join([form_folder, "form_estudo_socioeconomico_membros-grupo.json"])
+#form_estudo_info_estudante = os.sep.join([form_folder, "form_estudo_socioeconomico_estudante.json"])
+#form_estudo_info_familia = os.sep.join([form_folder, "form_estudo_socioeconomico_grupo-familiar-info.json"])
+#form_estudo_info_membros_familia = os.sep.join([form_folder, "form_estudo_socioeconomico_membros-grupo.json"])
 
 loop = asyncio.get_event_loop()
 dados = loop.run_until_complete(asyncio.gather(
@@ -119,9 +113,9 @@ dados = loop.run_until_complete(asyncio.gather(
     load_json_file(arquivo_processos),
     load_json_file(arquivo_corrigidos),
     load_json_file(arquivo_index),
-    load_json_file(arquivo_estudo_estudante),
-    load_json_file(arquivo_estudo_familia),
-    load_json_file(arquivo_estudo_membros_familia),    
+    #load_json_file(arquivo_estudo_estudante),
+    #load_json_file(arquivo_estudo_familia),
+    #load_json_file(arquivo_estudo_membros_familia),    
 ))
 
 dados_atendimentos = dados[0]
@@ -131,9 +125,9 @@ dados_processos = dados[3]
 dados_processos_pend = get_procp(dados_processos)
 dados_corrigidos = dados[4]
 dados_index = dados[5]
-dados_estudo_estudante = dados[6]
-dados_estudo_familia = dados[7]
-dados_estudo_membros_familia = dados[8]
+#dados_estudo_estudante = dados[6]
+#dados_estudo_familia = dados[7]
+#dados_estudo_membros_familia = dados[8]
 
 loop2 = asyncio.get_event_loop()
 col_width = loop2.run_until_complete(asyncio.gather(

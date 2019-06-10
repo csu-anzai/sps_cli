@@ -22,8 +22,8 @@ Options:
 
 from docopt import docopt
 from subprocess import check_output
-from modulos.py_sps_cli_base import *
-from modulos.py_console_tools import mk_randnum_seq
+from python_modules.py_sps_cli_base import *
+from python_modules.py_console_tools import mk_randnum_seq
 
 args = docopt(__doc__)
 
@@ -31,7 +31,7 @@ def main():
     if args['usr'] or args['estudantes']:
         if args['<marcador>']:
             if args['<marcador>'] == 'id':
-                print(set(get_mat(dados_usuarios)))
+                print(set(get_identificador(dados_usuarios)))
             else:
                 print(listar_dicionario(dados_usuarios, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [args['<marcador>']]))
 

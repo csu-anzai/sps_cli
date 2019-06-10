@@ -1,10 +1,11 @@
 *.pyc
 __pycache__
 dados
-eml_template
+eml-template
 Consultas*
 .current_target
 .directory
 fragz
 seguranca
 working_folder
+documentation

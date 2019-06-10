@@ -36,7 +36,6 @@ def convert_to_cli_args(lista):
     return o
 
 
-
 def create_lockfile(lockf):
 	f = open("/tmp/"+lockf,'w')
 	f.close()

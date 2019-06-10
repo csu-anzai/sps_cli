@@ -19,15 +19,16 @@ import asyncio
 
 from docopt import docopt
 from subprocess import getoutput
-from modulos.py_sps_cli_base import data_folder,\
+from python_modules.py_sps_cli_base import data_folder,\
     dados_usuarios, arquivo_usuarios,\
     dados_processos, arquivo_processos,\
     dados_atendimentos, arquivo_atendimentos,\
     dados_corrigidos, arquivo_corrigidos,\
-    dados_estudo_estudante, arquivo_estudo_estudante,\
     arquivo_index
+    #dados_estudo_estudante, arquivo_estudo_estudante,\
     
-from modulos.py_json_handlers import save_json
+    
+from python_modules.py_json_handlers import save_json
 
 args = docopt(__doc__)
 

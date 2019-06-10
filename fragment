@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+
+Envia ou baixa fragmentos de dados entre a nuvem 'box' e a pasta dados/fragmentos.
+Ao saírem do computador local as informações são criptografadas.
+Ao chegarem da nuvem, as informações poderão ser integradas à base de dados local.
+
+Usage:
+    fragment ( send ) <arquivo>
+    fragment ( get )
+    fragment ( joint )
+
+"""
+
+from os import system, fork, listdir
+from python_modules.py_sps_cli_base import security_folder, user_home_folder, fragmentos_folder
+
+from docopt import docopt
+
+args = docopt(__doc__)
+
+
+def getfrags():
+    system('cp "{}/rclone-token" "{}/.rclone.conf"'.format(security_folder, user_home_folder))
+    system("rclone copy box:/sps_fup2/ {}".format(fragmentos_folder))
+    system('rm "{}/.rclone.conf"'.format(user_home_folder))
+    fragfiles = listdir(fragmentos_folder)
+    for f in fragfiles:
+        if f.find('.cpt') != -1:
+            system("sps-decrypt {}/{}".format(fragmentos_folder, f))
+
+
+def sendfrag(arquivo):
+    system("sps-encrypt {}".format(arquivo))
+    arquivo_criptografado = arquivo + '.cpt'
+    system('cp "{}/rclone-token" "{}/.rclone.conf"'.format(security_folder, user_home_folder))
+    system("rclone copy {} box:/sps_fup2/".format(arquivo_criptografado))
+    system('rm "{}/.rclone.conf"'.format(user_home_folder))
+    system("sps-decrypt {}".format(arquivo_criptografado))
+
+
+def main():
+    if args['send']:
+        sendfrag(args["<arquivo>"])
+    
+    elif args['get']:
+        getfrags()
+        
+
+
+if __name__ == '__main__':
+    newpid = fork()
+    if newpid == 0: #Executa comando em background...
+        main()
