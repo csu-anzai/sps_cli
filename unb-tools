@@ -9,6 +9,7 @@ Algumas funções foram concebidas para processarem arquivos de relatórios dos 
 Usage:
     unb-tools ( join-alu-rel ) <target-folder> <output-txt-fname>
     unb-tools ( rename-old-sae-etd ) [<target-folder>]
+    unb-tools ( old_sae_etd_strip_chars ) [<target-folder>]
     unb-tools ( move-old-sae-etd ) [<target-folder>]
     unb-tools ( old_sae_extract_list )
     unb-tools ( fix-csv-alu-rel ) <csv-file> [ <csv-delimiter> ]
@@ -50,6 +51,9 @@ def main():
 
     elif args['rename-old-sae-etd']:
         old_sae_etd_rename_files()
+
+    elif args['old_sae_etd_strip_chars']:
+        old_sae_etd_strip_chars()
 
     elif args['move-old-sae-etd']:
         old_sae_etd_movefiles_to_folder()

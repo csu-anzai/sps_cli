@@ -248,3 +248,8 @@ def strip_spaces(s):
 		r = r.replace(i,"")
 	return r
 
+def strip_chars(s):
+	r = s
+	for i in "abcdefghijklmnopqrstuvxz":
+		r = r.replace(i,"")
+	return r

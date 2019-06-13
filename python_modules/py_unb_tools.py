@@ -28,7 +28,7 @@ import os
 import shutil
 
 from string import whitespace, punctuation, digits
-from .py_euristic_tools import strip_simbols, get_indexes, strip_digits
+from .py_euristic_tools import strip_simbols, get_indexes, strip_digits, strip_chars
 from .py_statistic_tools import mediaa
 from .py_csv_app import *
 from .py_json_handlers import save_json
@@ -45,7 +45,6 @@ def old_sae_etd_rename_files(target_folder=old_etd_folder):
 	os.chdir(target_folder)
 	for f in files:
 		if f.find('.txt') != -1:
-			print(f)
 			file_sae_etd = open(f, encoding="cp1252")
 			file_sae_etd_data = file_sae_etd.readlines()
 			file_sae_etd.close()
@@ -56,6 +55,23 @@ def old_sae_etd_rename_files(target_folder=old_etd_folder):
 					os.rename(f, f.replace('.txt', '_{}.txt'.format(periodo)))
 					break
 	os.chdir(init_folder)
+
+def old_sae_etd_strip_chars(target_folder=old_etd_folder):
+	subfolders = os.listdir(target_folder)
+	init_folder = os.getcwd()
+	os.chdir(target_folder)
+	for s in subfolders:
+		os.chdir(s)
+		files = os.listdir('.')
+		for f in files:
+			f_nnome = strip_chars(f.split('.')[0])+'.txt'
+			os.rename(f, f_nnome)
+			print("renomeado: {s}/{f} => {s}/{f_nn};".format(s=s, f=f, f_nn=f_nnome))
+		os.chdir('..')
+	os.chdir(init_folder)
+
+
+
 
 def old_sae_etd_movefiles_to_folder(target_folder=old_etd_folder):
 	files = os.listdir(target_folder)
@@ -74,7 +90,7 @@ def old_sae_etd_movefiles_to_folder(target_folder=old_etd_folder):
 					new_folders.append(fname)
 			shutil.move(f, "{}/{}/{}".format(target_folder, fname, f))
 
-def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=4564):
+def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=5435):
 	processos = read_csv(target_csv_lista_processos, '\t')
 	total_itens = len(processos)-1
 	current_item = init_idx
