@@ -25,18 +25,19 @@
 from subprocess import getoutput 
 
 def check_config_existance(function):
-	def wrapper():
+	def wrapper(*args):
 		check_config = bool(getoutput('if [ -f "$(echo $HOME)/.sps-cli.conf" ]; then echo 1; else echo ""; fi'))
 		if check_config == False:
 			print("Arquivo local de configuração não encontrado... Execute 'sps-install config' para criá-lo... ")
-		return function()
+			exit()
+		return function(*args)
 	return wrapper
 
 
 def only_root(function):
-	def wrapper():
+	def wrapper(*args):
 		if getoutput('whoami') != 'root':
 			return print("Apenas o 'root' pode executar essa ação...")
 		else:
-			return function()
+			return function(*args)
 	return wrapper

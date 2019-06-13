@@ -82,9 +82,33 @@ def create_db_files(target_folder):
     os.system('if [ $(cat dados/profissionais.json | wc -l) -lt 2 ]; then echo "[]" > dados/profissionais.json; fi')
     os.system('if [ $(cat dados/usuarios.json | wc -l) -lt 2 ]; then echo "[]" > dados/usuarios.json; fi')
     os.system('if [ $(cat dados/estudos.json | wc -l) -lt 2 ]; then echo "[]" > dados/estudos.json; fi')
+    os.system('if [ $(cat dados/backup-info.json | wc -l) -lt 2 ]; then echo "[]" > dados/backup-info.json; fi')    
     os.system('if [ $(cat dados/indexados/index_db.json | wc -l) -lt 2 ]; then echo "[]" > dados/indexados/index_db.json; fi')
     os.system('if [ $(cat seguranca/ccrypt-key | wc -c) -lt 5 ]; then randnum 1024 > seguranca/ccrypt-key; fi')
     os.chdir(init_dir)    
 
 
+def backup_db(target_folder):
+    check_folder = 0
+    check_folder += int(getoutput("if [ -f {}/atendimentos.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/corrigidos.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/processos.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/profissionais.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/usuarios.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/estudos.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/backup-info.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -d {}/indexados ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -d {}/fragmentos ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/indexados/index_db.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    if check_folder == 10:
+        print("Pasta de dados aparentemente íntegra...")
+        bkfname = getoutput("date +%Y%U%u%H%M%S%N")+'.zip'
+        os.system('zip "{bkf}" "{tf}" -9r'.format(bkf=bkfname, tf=target_folder))
+        os.system('sps-encrypt "{bkf}"'.format(bkf=bkfname))
+        os.system('rclone move "{bkf}.cpt" box:/sps_fup2/dbbk/'.format(bkf=bkfname))
+    else:
+        print("A estrutura da pasta de dados parece divergir...")
 
+
+def restore_db():
+    pass

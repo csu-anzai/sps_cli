@@ -7,6 +7,8 @@ Cria os diretórios e arquivos de dados conforme a estrutura inicialmente pensad
 
 Usage:
     sps-install ( createdb ) <folder>
+    sps-install ( backupdb ) <folder>
+    sps-install ( restoredb ) <folder>        
     sps-install ( config ) 
 
 """
@@ -14,14 +16,13 @@ Usage:
 from docopt import docopt
 from subprocess import getoutput
 from python_modules.py_cli_decorators import check_config_existance
-from python_modules.py_cli_db_creator import create_db_files, create_user_configuration
+from python_modules.py_cli_db_creator import create_db_files, create_user_configuration, backup_db
 
 import os
 
 args = docopt(__doc__)
 
 
-@check_config_existance
 def main():
     if args['config']:
         create_user_configuration()
@@ -29,6 +30,9 @@ def main():
     
     elif args['createdb']:
         create_db_files(args["<folder>"])
+
+    elif args['backupdb']:
+        backup_db(args["<folder>"])
 
    
 

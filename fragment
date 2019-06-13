@@ -36,9 +36,9 @@ def sendfrag(arquivo):
     system("sps-encrypt {}".format(arquivo))
     arquivo_criptografado = arquivo + '.cpt'
     system('cp "{}/rclone-token" "{}/.rclone.conf"'.format(security_folder, user_home_folder))
-    system("rclone copy {} box:/sps_fup2/".format(arquivo_criptografado))
+    system('rclone copy "{}" box:/sps_fup2/fragmentos/'.format(arquivo_criptografado))
     system('rm "{}/.rclone.conf"'.format(user_home_folder))
-    system("sps-decrypt {}".format(arquivo_criptografado))
+    system('sps-decrypt "{}"'.format(arquivo_criptografado))
 
 
 def main():
