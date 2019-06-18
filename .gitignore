@@ -9,3 +9,9 @@ fragz
 seguranca
 working_folder
 documentation
+node_modules
+*~
+.DS_Store
+.directory
+credentials.js
+nfo

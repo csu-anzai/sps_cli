@@ -15,8 +15,8 @@ Usage:
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.py_cli_decorators import check_config_existance
-from python_modules.py_cli_db_creator import create_db_files, create_user_configuration, backup_db
+from python_modules.cli_decorators import check_config_existance
+from python_modules.cli_db_manager import create_db_files, create_user_configuration, backup_db
 
 import os
 

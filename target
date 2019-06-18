@@ -15,19 +15,19 @@ Usage:
 import os
 
 from docopt import docopt
-from python_modules.py_json_handlers import load_json, save_json
-from python_modules.py_sps_cli_base import user_home_folder
+from python_modules.py_functions_json import load_json, save_json
+from python_modules.cli_sps_base import pasta_do_usuario
 
 args = docopt(__doc__)
 
 def main():
     if args['set'] or args['edit']:
-        current_target = load_json(os.sep.join([user_home_folder, '.current_target']))
+        current_target = load_json(os.sep.join([pasta_do_usuario, '.current_target']))
         current_target[args['<campo>']] = args['<valor>']
-        save_json(current_target, os.sep.join([user_home_folder, '.current_target']))
+        save_json(current_target, os.sep.join([pasta_do_usuario, '.current_target']))
 
     elif args['get']:
-        current_target = load_json(os.sep.join([user_home_folder, '.current_target']))
+        current_target = load_json(os.sep.join([pasta_do_usuario, '.current_target']))
         print(current_target.get(args['<campo>']))
 
 

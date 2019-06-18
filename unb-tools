@@ -37,11 +37,11 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.py_data_tools import render_form_get_values
-from python_modules.py_unb_tools import *
-from python_modules.py_console_tools import select_op, select_ops
-from python_modules.py_json_handlers import save_json, load_json
-from python_modules.py_csv_app import make_complete_stat_from_csv, join_csv_intersection, join_csv_union
+from python_modules.py_functions_data_manager import render_form_get_values
+from python_modules.cli_unb_tools import *
+from python_modules.cli_tools import select_op, select_ops
+from python_modules.py_functions_json import save_json, load_json
+from python_modules.py_functions_csv import make_complete_stat_from_csv, join_csv_intersection, join_csv_union
 
 args = docopt(__doc__)
 

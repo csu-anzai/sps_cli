@@ -58,15 +58,15 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.sps_cli_config import automail, periodo_corrente
-from python_modules.py_cli_decorators import check_config_existance
+from python_modules.cli_global_config import envio_automatico_email, periodo_corrente, hostname, pasta_raiz_do_aplicativo, fragment_emitter
+from python_modules.cli_decorators import check_config_existance
 
-from python_modules.py_sps_cli_base import save_target_info, get_identificador, timestamp, data_folder, numero_sei_mascara, numero_identificador_mascara,\
-    form_novo_usuario, dados_usuarios, arquivo_usuarios,\
-    form_processos, dados_processos, arquivo_processos,\
-    form_atendiento, dados_atendimentos, arquivo_atendimentos,\
-    form_corrigidos, dados_corrigidos, arquivo_corrigidos,\
-    arquivo_index, automail, periodo_corrente, dados_index
+from python_modules.cli_sps_base import save_target_info, get_col_values, timestamp, data_folder, numero_sei_mascara, numero_identificador_mascara,\
+    formulario_novo_usuario, dados_usuarios, arquivo_usuarios,\
+    formulario_novo_processo, dados_processos, arquivo_processos,\
+    formulario_atendimentos, dados_atendimentos, arquivo_atendimentos,\
+    formulario_registro_de_correcao, dados_corrigidos, arquivo_corrigidos,\
+    arquivo_index, envio_automatico_email, periodo_corrente, dados_index
     #form_estudo_info_estudante,\
     #form_estudo_info_familia,\
     #form_estudo_info_membros_familia,\
@@ -75,24 +75,30 @@ from python_modules.py_sps_cli_base import save_target_info, get_identificador, 
     #dados_estudo_membros_familia, arquivo_estudo_membros_familia,\
     
     
-from python_modules.py_json_handlers import save_json, load_json
-from python_modules.py_console_tools import select_op, select_ops
-from python_modules.py_data_tools import render_form_get_values
+from python_modules.py_functions_json import save_json, load_json
+from python_modules.cli_tools import select_op, select_ops
+from python_modules.py_functions_data_manager import render_form_get_values
 
 
 args = docopt(__doc__)
 
 
-matriculas = get_identificador(dados_usuarios)
+matriculas = get_col_values('identificador', dados_usuarios)
 
 def novo_usuario(identificador):
-    nfo = render_form_get_values(form_novo_usuario, ['identificador'])
+    nfo = render_form_get_values(formulario_novo_usuario, ['identificador'])
     nfo['identificador'] = identificador
     dados_usuarios.append(nfo)
     save_json(dados_usuarios, arquivo_usuarios)
+    if fragment_emitter:
+        fragmento = os.sep.join([pasta_raiz_do_aplicativo, 'USR'+getoutput("date +%Y%U%u%H%M%S%N")+'@'+hostname])
+        save_json(nfo, fragmento)
+        os.system('fragment send "{}"'.format(fragmento))
+
+
 
 def novo_processo(identificador, assunto):
-    nfo = render_form_get_values(form_processos, ['identificador'])
+    nfo = render_form_get_values(formulario_novo_processo, ['identificador'])
     nfo['timestamp'] = timestamp() 
     nfo['identificador'] = identificador
     nfo['assunto'] = assunto
@@ -117,10 +123,10 @@ def novo_atendimento(identificador):
         novo_usuario(identificador)
         matriculas.append(identificador)
         save_target_action = True
-    nfo = render_form_get_values(form_atendiento, ['identificador'])
+    nfo = render_form_get_values(formulario_atendimentos, ['identificador'])
     nfo['timestamp'] = timestamp() 
     nfo['identificador'] = identificador
-    nfo['prof_atd'] = getoutput("whoami")
+    nfo['prof_atd'] = getoutput("whoami")+'@'+getoutput("hostname")
     dados_atendimentos.append(nfo)
     if save_target_action == True:
         save_target_info(identificador)
@@ -129,7 +135,7 @@ def novo_atendimento(identificador):
 
 
 def nova_correcao(identificador):
-    nfo = render_form_get_values(form_corrigidos, ['identificador'])
+    nfo = render_form_get_values(formulario_registro_de_correcao, ['identificador'])
     nfo['timestamp'] = timestamp() 
     nfo['identificador'] = identificador
     if not identificador in matriculas:
@@ -229,19 +235,19 @@ def main():
         atd_t = novo_atendimento(identificador)
         if atd_t == "Encaminhamento de pedido de auxílio emergencial":
             numero_sei = novo_processo(identificador, atd_t)
-            if automail:
+            if envio_automatico_email:
                 os.system('sps-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(identificador, "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
                 os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Processo de Auxílio Emergencial" "Segue o número do processo para acompanhamento do resultado. Com este número você pode consultar o resultado com qualquer pessoa do SPS que possua acesso ao SEI."'.format(numero_sei=numero_sei))
 
         elif atd_t == "Solicitação de acesso extraordinário ao RU":
             numero_sei = novo_processo(identificador, atd_t)
-            if automail:
+            if envio_automatico_email:
                 os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Processo de Acesso ao RU" "Segue o número do processo para que você possa acompanhar do resultado. Com este número você pode consultar o resultado junto a qualquer pessoa do SPS que possua acesso ao SEI."'.format(numero_sei=numero_sei))
                 os.system('sps-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(identificador, "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
 
         elif atd_t == "Recebimento/digiralização de pedido de recurso ao resultado da avaliação socioeconômica":
             numero_sei = novo_processo(identificador, atd_t)
-            if automail:
+            if envio_automatico_email:
                 os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Processo de Recurso à Avaliação Socioeconômica" "Segue o númro do processo de recurso. Se até a data prevista para o resultado você não obtiver resposta, vá ao SPS, forneça este número e informe a pendência."'.format(numero_sei=numero_sei))
                 os.system('sps-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(identificador, "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
 
@@ -252,7 +258,7 @@ def main():
     elif args['res'] or args['resposta-de-processo']:
         resultado = novo_resultado_processo(args['<num_sei>'])
         save_target_info(resultado[0])
-        if automail:
+        if envio_automatico_email:
             os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Comunicado de resultado de processo" "Informo que o processo {numero_sei} foi {resultado}."'.format(numero_sei=args['<num_sei>'], resultado=resultado[1]))
             os.system('sps-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(resultado[0], "Atendimento via e-mail", "Comunicado de resultado de processo", "Verificar status de envio de email..."))
 

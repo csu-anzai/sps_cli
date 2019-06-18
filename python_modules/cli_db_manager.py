@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from subprocess import getoutput
-from .py_cli_decorators import only_root
+from .cli_decorators import only_root
+from .cli_sps_base import dados_profissionais
 import os
 
 
@@ -11,16 +12,16 @@ def create_user_configuration():
     user_config_file = os.sep.join([getoutput('echo $HOME'), '.sps-cli.conf'])
     
     import getpass
-    from python_modules.py_console_tools import select_op
-    from python_modules.py_json_handlers import save_json
+    from python_modules.cli_tools import select_op
+    from python_modules.py_functions_json import save_json
     
     nome = input("Insira o seu nome completo: ")
     eml = input("Insira o seu endereço de email: ")
     if eml.find('@unb.br') != -1:
-        automail = input("Enviar emails automaticamente? [s|n]")
+        envio_automatico_email = input("Enviar emails automaticamente? [s|n]")
 
-        if automail.lower() == 's':
-            automail = True
+        if envio_automatico_email.lower() == 's':
+            envio_automatico_email = True
             eml_server = "mail.unb.br"
             eml_port = "587"
 
@@ -28,11 +29,11 @@ def create_user_configuration():
                 eml_pwd = getpass.getpass('Insira a senha de acesso ao email apresentado: ')
                 verificar_senha = getpass.getpass('Repita a senha informada: ')
                 if eml_pwd == verificar_senha:
-                    eml_pwd = getoutput('echo {} | base64'.format(eml_pwd))
+                    eml_pwd = getoutput('echo "{}" | base64'.format(eml_pwd))
                     break
 
         else:
-            automail = False
+            envio_automatico_email = False
             eml_pwd = ""
             eml_server = ""
             eml_port = ""
@@ -46,7 +47,7 @@ def create_user_configuration():
 
     config['nome']=eml
     config['eml']=eml
-    config['automail']=automail
+    config['envio_automatico_email']=envio_automatico_email
     config['eml_pwd']=eml_pwd
     config['eml_server']=eml_server
     config['eml_port']=eml_port
@@ -84,6 +85,8 @@ def create_db_files(target_folder):
     os.system('if [ $(cat dados/estudos.json | wc -l) -lt 2 ]; then echo "[]" > dados/estudos.json; fi')
     os.system('if [ $(cat dados/backup-info.json | wc -l) -lt 2 ]; then echo "[]" > dados/backup-info.json; fi')    
     os.system('if [ $(cat dados/indexados/index_db.json | wc -l) -lt 2 ]; then echo "[]" > dados/indexados/index_db.json; fi')
+    os.system('if [ $(cat dados/fragmentos/emitidos.json | wc -l) -lt 2 ]; then echo "[]" > dados/fragmentos/emitidos.json; fi')
+    os.system('if [ $(cat dados/fragmentos/recebidos.json | wc -l) -lt 2 ]; then echo "[]" > dados/fragmentos/recebidos.json; fi')
     os.system('if [ $(cat seguranca/ccrypt-key | wc -c) -lt 5 ]; then randnum 1024 > seguranca/ccrypt-key; fi')
     os.chdir(init_dir)    
 
@@ -100,7 +103,9 @@ def backup_db(target_folder):
     check_folder += int(getoutput("if [ -d {}/indexados ]; then echo 1; else echo 0; fi".format(target_folder)))
     check_folder += int(getoutput("if [ -d {}/fragmentos ]; then echo 1; else echo 0; fi".format(target_folder)))
     check_folder += int(getoutput("if [ -f {}/indexados/index_db.json ]; then echo 1; else echo 0; fi".format(target_folder)))
-    if check_folder == 10:
+    check_folder += int(getoutput("if [ -f {}/fragmentos/emitidos.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/fragmentos/recebidos.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    if check_folder == 12:
         print("Pasta de dados aparentemente íntegra...")
         bkfname = getoutput("date +%Y%U%u%H%M%S%N")+'.zip'
         os.system('zip "{bkf}" "{tf}" -9r'.format(bkf=bkfname, tf=target_folder))

@@ -20,4 +20,8 @@ sudo pip3 install docopt colored
 ## Base do sistema ##
 
 - rclone
+- zip
+- ccrypt
+- less
+- nano
 

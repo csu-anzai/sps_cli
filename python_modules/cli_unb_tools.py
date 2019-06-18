@@ -29,9 +29,9 @@ import shutil
 
 from string import whitespace, punctuation, digits
 from .py_euristic_tools import strip_simbols, get_indexes, strip_digits, strip_chars
-from .py_statistic_tools import mediaa
-from .py_csv_app import *
-from .py_json_handlers import save_json
+from .py_functions_calculation import mediaa
+from .py_functions_csv import *
+from .py_functions_json import save_json
 from math import fsum as soma
 
 curric_folder = '/home/danielc/Documentos/SPS/Currículos/FUP'

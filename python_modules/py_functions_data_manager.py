@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  py_data_tools
+#  py_functions_data_manager
 #  Copyright 2018 Daniel Cruz <danielc@debian>
 #  Version 0.1
 #
@@ -33,12 +33,13 @@ import io
 import os
 import re
 import pickle
+import json
 
 from string import whitespace, punctuation, digits
-from .py_csv_app import read_csv
-from .py_console_tools import limpar_tela, select_op, select_ops
+from .py_functions_csv import read_csv
+from .cli_tools import limpar_tela, select_op, select_ops, verde
 from .py_euristic_tools import merge_lists
-from .py_json_handlers import load_json, save_json
+from .py_functions_json import load_json, save_json
 from collections import OrderedDict
 from copy import copy
 from time import ctime, sleep
@@ -92,10 +93,11 @@ def render_form_get_values(form_file, skip_q=[]):
 			pass
 
 		elif q['tipo'] == 'text':
-			nfo[q['id']] = input("{}: ".format(q['enunciado']))
+			nfo[q['id']] = input("{}: ".format(verde(q['enunciado'])))
+			print("")
 
 		elif q['tipo'] == 'radio':
-			print(q['enunciado'])
+			print(verde(q['enunciado']))
 			nfo[q['id']] = select_op(q['alternativas'], 1)
 			if nfo[q['id']].find('Outro') != -1:
 				outro_detalhes = input('Especifique: ')
@@ -105,10 +107,11 @@ def render_form_get_values(form_file, skip_q=[]):
 				q['alternativas'].sort()
 				q['alternativas'].append('Outro')
 				rewrite_form = True
+			print("")
 
 				
 		elif q['tipo'] == 'checkbox':
-			print(q['enunciado'])
+			print(verde(q['enunciado']))
 			nfo[q['id']] = "; ".join(select_ops(q['alternativas'], 1))
 			if nfo[q['id']].find('Outro') != -1:
 				outro_detalhes = input('Especifique: ')
@@ -118,22 +121,62 @@ def render_form_get_values(form_file, skip_q=[]):
 				q['alternativas'].sort()
 				q['alternativas'].append('Outro')
 				rewrite_form = True
+			print("")
 				
 	if rewrite_form == True:
 		save_json(form, form_file)
 
 	return nfo
 
+def listagem_cli(linhas_selecionadas, cols):
+	visual_nfo = ""
+	visual_count = len(linhas_selecionadas)
+	for linha in linhas_selecionadas:
+		w = 0
+		li = ""
+		linha_sem_quebra = True
+		for col in cols:
+			li += linha[col[0]].ljust(col[1])
+			if linha[col[0]].find(';') == -1:
+				w += col[1]
+			else:
+				linha_sem_quebra = False
+				lii = li.split(';')
+				if len(lii) > 1:
+					pri = True
+					for i in lii:
+						if pri == True:
+							visual_nfo += i + os.linesep
+							pri = False
+						else:
+							visual_nfo += "".ljust(w-1) + i + os.linesep
+		
+		if linha_sem_quebra == True:
+			visual_nfo += li + os.linesep
+	
+	visual_nfo += "Total: {}".format(visual_count)
+	return visual_nfo
 
-def listar_dicionario(dicionario, cols, marcadores=[]):
+
+def listagem_json(linhas_selecionadas, cols):
+	selected_cols = []
+	for linha in linhas_selecionadas:
+		l = {}
+		for col in cols:
+			l[col[0]] = linha[col[0]]
+		selected_cols.append(l)
+	return json.dumps(selected_cols, ensure_ascii=False, indent=4)
+
+
+def listar_dicionario(dicionario, cols, marcadores=[], tipo_output='cli'):
 	'''
 	Lista o conteúdo de um dicionário retornando uma tabela/string com colunas solicitadas.
 	O parametro 'cols' é uma lista de tuplas (t) em que t[0] é o 'id' e t[1] um número.
 	O número de t[1] representa a largura a ser definida para coluna id ou t[0].
 	Exibe ao final o total de elementos no dicionário.
 	'''
-	visual_nfo = ""
-	visual_count = 0
+
+	r = []
 	for linha in dicionario:
 		select_this = True
 		if marcadores != []:
@@ -142,35 +185,19 @@ def listar_dicionario(dicionario, cols, marcadores=[]):
 				for m in marcadores:
 					if m in linha['marcador']:
 						select_this = True
-						visual_count += 1
 			except KeyError:
 				pass
-		else:
-			visual_count += 1
-		if select_this == True:
-			w = 0
-			li = ""
-			linha_sem_quebra = True
-			for col in cols:
-				li += linha[col[0]].ljust(col[1])
-				if linha[col[0]].find(';') == -1:
-					w += col[1]
-				else:
-					linha_sem_quebra = False
-					lii = li.split(';')
-					if len(lii) > 1:
-						pri = True
-						for i in lii:
-							if pri == True:
-								visual_nfo += i + os.linesep
-								pri = False
-							else:
-								visual_nfo += "".ljust(w-1) + i + os.linesep
-			
-			if linha_sem_quebra == True:
-				visual_nfo += li + os.linesep
 
-	visual_nfo += "Total: {}".format(visual_count)
+		if select_this == True:
+			r.append(linha)
+
+
+	if tipo_output == 'cli':
+		visual_nfo = listagem_cli(r, cols)
+	
+	elif tipo_output == 'json':
+		visual_nfo = listagem_json(r, cols)
+
 	return visual_nfo
 
 

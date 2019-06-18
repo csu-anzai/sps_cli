@@ -29,10 +29,10 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.py_json_handlers import save_json, load_json
-from python_modules.py_console_tools import verde, vermelho
-from python_modules.py_cli_decorators import check_config_existance
-from python_modules.py_sps_cli_base import timestamp, data_folder, numero_sei_mascara, numero_identificador_mascara, get_identificador,\
+from python_modules.py_functions_json import save_json, load_json
+from python_modules.cli_tools import verde, vermelho
+from python_modules.cli_decorators import check_config_existance
+from python_modules.cli_sps_base import timestamp, data_folder, numero_sei_mascara, numero_identificador_mascara, get_col_values,\
     dados_usuarios,\
     dados_processos,\
     dados_atendimentos,\
@@ -131,7 +131,7 @@ def substituir_marcadores(arquivo_de_dados, etiqueta_antiga, etiqueta_substituti
                 item['marcador'].sort()
     save_json(arquivo_info, arquivo_alvo)
 
-matriculas = get_identificador(dados_usuarios)
+matriculas = get_col_values(dados_usuarios)
 
 
 @check_config_existance

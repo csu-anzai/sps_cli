@@ -160,8 +160,7 @@ def saida_rosa(rotulo, valor, referencia='', escalonamento=[]):
 
 
 def limpar_tela(msg=None):
-	try: os.system("clear")
-	except: os.system("cls")
+	os.system("clear")
 	if msg != None:
 		print(msg)
 
@@ -260,7 +259,7 @@ def select_op(lista_de_selecao, col_num, sort_list=False):
 	#while check_item_list(op,range(0,len(op_list))) != True:
 	while not op in range(0,len(op_list)):
 		try:
-			op = int(input('$: '))
+			op = int(input(amarelo('$: ')))
 		except:
 			print(vermelho('Resultado precisa ser numérico...'))
 	return op_list[op]
@@ -278,7 +277,7 @@ def select_ops(lista_de_selecao, col_num, sort_list=False):
 		lista_de_selecao.sort()
 	op_list = gerar_console_menu(lista_de_selecao, col_num)
 	while True:
-		op = input('$: ').replace(' ','').split(',')
+		op = input(amarelo('$: ')).replace(' ','').split(',')
 		try:
 			selecao = []
 			for i in op:

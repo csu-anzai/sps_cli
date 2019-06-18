@@ -22,9 +22,9 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.py_sps_cli_base import *
-from python_modules.py_cli_decorators import check_config_existance
-from python_modules.py_console_tools import mk_randnum_seq, verde
+from python_modules.cli_sps_base import *
+from python_modules.cli_decorators import check_config_existance
+from python_modules.cli_tools import mk_randnum_seq, verde
 from smtplib import SMTP
 from string import whitespace, punctuation, digits
 from email.message import EmailMessage

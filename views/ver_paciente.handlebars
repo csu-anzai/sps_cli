@@ -1,0 +1,484 @@
+<header>
+	<div class="header_title_box">
+    <p class="title">{{paciente_info_geral.dados.nome}}</ht>
+  </div>
+  <div class="header_action_box">
+			  <a href="/">Início...</a> |		    
+				<a href="/form/novo_paciente/n_pac">Novo paciente...</a> |
+				<a href="/view/listar/pacientes">Listar pacientes...</a> |
+				<a href="/form_pend">Listar pendências...</a> |
+				<a href="/view/sobre/nfo">Sobre... </a>
+  </div>
+</header>
+
+<div class="page_nfo">
+  <h3>Informações gerais</h3>
+ <table>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Nome social:</td>
+   <td>{{paciente_info_geral.dados.nome_social}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Cor:</td>
+   <td>{{paciente_info_geral.dados.cor}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Data de nascimento:</td>
+   <td>{{paciente_info_geral.dados.dn}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Idade:</td>
+   <td>{{paciente_info_geral.dados.idade}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Peso:</td>
+   <td>{{paciente_info_geral.dados.peso}}kg</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Altura:</td>
+   <td>{{paciente_info_geral.dados.altura}}m</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Profissão:</td>
+   <td>{{paciente_info_geral.dados.profissao}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Endereco:</td>
+   <td>{{paciente_info_geral.dados.endereco}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">e-Mail:</td>
+   <td>{{paciente_info_geral.dados.email}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Telefone:</td>
+   <td>{{paciente_info_geral.dados.telefone}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Indicação:</td>
+   <td>{{paciente_info_geral.dados.indicacao}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Médico:</td>
+   <td>{{paciente_info_geral.dados.medico}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Responsável:</td>
+   <td>{{paciente_info_geral.dados.responsavel}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">QP:</td>
+   <td>{{paciente_info_geral.dados.qp}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">HDA/HPP:</td>
+   <td>{{paciente_info_geral.dados.hda_hpp}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Mobilidade:</td>
+   <td>{{paciente_info_geral.dados.mobilidade}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Acompanhamento multidisciplinar:</td>
+   <td>{{paciente_info_geral.dados.acp_multidis}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Medicamentos:</td>
+   <td>{{paciente_info_geral.dados.medicamentos}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Tratamentos:</td>
+   <td>{{paciente_info_geral.dados.tratamentos}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Atividade física:</td>
+   <td>{{paciente_info_geral.dados.atividade_fisica}}</td>
+ </tr>
+ <tr>
+   <td style="text-align: right;  width: 420px;">Especialidades:</td>
+   <td>
+    <ul>
+     {{#each paciente_info_geral.dados.especialidades}}
+     <li>{{this}}</li>
+     {{/each}}
+    </ul>
+   </td>
+ </tr>
+ </table>
+
+ {{#if paciente_gineco_nfo}}
+  <h3>Gineco obstetrícia</h3>
+     {{#each paciente_gineco_nfo.dados}}
+    <h5>Data: {{this.datahora}}</h5>
+    <table>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Menopausa:</td>
+        <td>{{this.menopausa}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Vida sexual observações:</td>
+        <td>{{this.vida_sexual_obs}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Método contraceptivo:</td>
+        <td>{{this.metodo_contraceptivo}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Total de gestações:</td>
+        <td>{{this.n_gestacoes}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Número de abortos:</td>
+        <td>{{this.n_abortos}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Número de partos naturais:</td>
+        <td>{{this.n_partos_naturais}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Número de cesarianas:</td>
+        <td>{{this.n_cesarianas}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Informações sobre a anestesia no parto:</td>
+        <td>{{this.parto_anestesia}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">História dos partos:</td>
+        <td>{{this.historia_partos}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Peso nas gestações:</td>
+        <td>{{this.peso_gestacoes}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Peso dos bebês:</td>
+        <td>{{this.peso_bebes}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Tratamentos para incontinência:</td>
+        <td>{{this.incontinencia_tratamento}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Cirurgias uroginecológicas - observações:</td>
+        <td>{{this.cirurgias_uroginecologicas_obs}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Patologias ginecológicas associadas - observações:</td>
+        <td>{{this.patologias_ginecologicas_obs}}</td>
+        </tr>
+        <tr>
+        <td style="text-align: right;  width: 420px;">Disfunções sexuais - observações:</td>
+        <td>{{this.disfuncoes_sexuais_femininas_obs}}</td>
+        </tr>
+    </table>
+    {{/each}}    
+ {{/if}}
+
+ {{#if paciente_disfmic}}
+  <h3>Disfunções miccionais</h3>
+    {{#each paciente_disfmic.dados}}
+
+  <h5>Data: {{this.datahora}}</h5>
+  <table>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Ingesta de líquidos:</td>
+      <td>{{this.ingesta_de_liquidos}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Tipo de bebida:</td>
+      <td>{{this.tipo_bebida}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Com que idade adquiriu controle urina:</td>
+      <td>{{this.controle_urina}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Idade (enurese):</td>
+      <td>{{this.enurese_idade}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Frequência urinária diurna:</td>
+      <td>{{this.frq_urinaria_diurna}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Frequência urinária noturna:</td>
+      <td>{{this.frq_urinaria_noturna}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Número de protetores usados durante o dia:</td>
+      <td>{{this.n_protetores_dia}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Número de protetores usados durante a noite:</td>
+      <td>{{this.n_protetores_noite}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">A quanto tempo apresenta perda urinária?</td>
+      <td>{{this.perda_tempo}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Como começou a perda urinária?</td>
+      <td>{{this.perda_inicio}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Cirurgias uroginecológicas - observações:</td>
+      <td>{{this.tecnica_cirurgica}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Patologias ginecológicas associadas - observações:</td>
+      <td>{{this.tempo_de_sonda}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Disfunções sexuais - observações:</td>
+      <td>{{this.radioterapia}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Disfunções sexuais - observações:</td>
+      <td>{{this.disfunc_sexual_masc}}</td>
+    </tr>
+  </table>
+  {{/each}}
+ {{/if}}
+
+ {{#if paciente_disfproc}}
+  <h3>Disfunções proctológicas</h3>
+    {{#each paciente_disfproc.dados}}
+
+  <h5>Data:{{this.datahora}}</h5>
+  <table>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.momento_perda}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.momento_perda}}</td>
+    </tr>
+
+
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.momento_perda}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.freq_evacuatoria}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.bristol}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.h_evacuacoes}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.habito_intestinal}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.alimentacao}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.tratamentos_ant}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.cirurgias}}</td>
+    </tr>
+  </table>
+  {{/each}}
+ {{/if}}
+
+ {{#if paciente_ex_fis}}
+  <h3>Exames físicos</h3>
+
+{{#each paciente_ex_fis.dados}}
+
+  <h5>Data: {{this.datahora}}</h5>
+  <table>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Região abdominal - outras observações:</td>
+      <td>{{this.regiao_abdominal_obs}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Padrão respiratório:</td>
+      <td>{{this.pad_resp}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Inspeção região ano-vulvar:</td>
+      <td>{{this.inspecao_ano_vulv_obs}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Inspeção hímem:</td>
+      <td>{{this.inspecao_himem}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Inspeção grandes e pequenos lábios:</td>
+      <td>{{this.inspecao_labios}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Inspeção vulva:</td>
+      <td>{{this.inspecao_vulva}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Cicatrizes:</td>
+      <td>{{this.inspecao_cicatriz}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">Sensibilidade:</td>
+      <td>{{this.sensibilidade}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.sensibilidade_regiao}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.sensibilidade_obs}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.reflexos_anocut}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.reflexos_bol}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.valsalva}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.valsalva_c_tend}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.valsalva_prolap}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.afa_oxford_endurance}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.afa_oxford_rep}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.afa_oxford_fast}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.ect}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.perda_urinaria_obs}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.for_esfincter_ex12}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.for_esfincter_ex3}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.for_esfincter_ex6}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.for_esfincter_ex9}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.for_puboretal}}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right;  width: 420px;">xxxxxx:</td>
+      <td>{{this.reflexo_reto_anal}}</td>
+    </tr>
+  </table>
+  {{/each}}
+ {{/if}}
+
+ {{#if paciente_ex_compl}}
+  <h3>Exames complementares</h3>
+  <table>
+
+        {{paciente_ex_compl.dados.datahora}}
+        {{paciente_ex_compl.dados.psa_data}}
+        {{paciente_ex_compl.dados.psa_total}}
+        {{paciente_ex_compl.dados.psa_livre}}
+        {{paciente_ex_compl.dados.peso_prostata}}
+        {{paciente_ex_compl.dados.biopsia}}
+        {{paciente_ex_compl.dados.colpocitologia_data}}
+        {{paciente_ex_compl.dados.colpocitologia}}
+        {{paciente_ex_compl.dados.urinocultura_data}}
+        {{paciente_ex_compl.dados.urinocultura}}
+        {{paciente_ex_compl.dados.urodinamica_data}}
+        {{paciente_ex_compl.dados.urodinamica_curv_flux}}
+        {{paciente_ex_compl.dados.urodinamica_ccm}}
+        {{paciente_ex_compl.dados.urodinamica_complacencia}}
+        {{paciente_ex_compl.dados.urodinamica_sensibilidade}}
+        {{paciente_ex_compl.dados.urodinamica_estabilidade}}
+        {{paciente_ex_compl.dados.urodinamica_mom_perda}}
+        {{paciente_ex_compl.dados.urodinamica_mom_perda_f}}
+        {{paciente_ex_compl.dados.urodinamica_mom_perda_m}}
+        {{paciente_ex_compl.dados.urodinamica_press_p}}
+        {{paciente_ex_compl.dados.urodinamica_res_pm}}
+        {{paciente_ex_compl.dados.urodinamica_elet_reflex}}
+        {{paciente_ex_compl.dados.urodinamica_sinerg_esv}}
+        {{paciente_ex_compl.dados.urodinamica_conclusao}}
+        {{paciente_ex_compl.dados.diario_mic1_data}}
+        {{paciente_ex_compl.dados.diario_mic1_fd}}
+        {{paciente_ex_compl.dados.diario_mic1_fn}}
+        {{paciente_ex_compl.dados.diario_mic1_ingest_hid}}
+        {{paciente_ex_compl.dados.diario_mic1_menor}}
+        {{paciente_ex_compl.dados.diario_mic1_maior}}
+        {{paciente_ex_compl.dados.diario_mic1_urgencia}}
+        {{paciente_ex_compl.dados.diario_mic1_s_perda}}
+        {{paciente_ex_compl.dados.diario_mic1_t_protetores}}
+        {{paciente_ex_compl.dados.diario_mic1_n_protetores}}
+        {{paciente_ex_compl.dados.diario_mic1_rpm}}
+        {{paciente_ex_compl.dados.diario_mic2_data}}
+        {{paciente_ex_compl.dados.diario_mic2_fd}}
+        {{paciente_ex_compl.dados.diario_mic2_fn}}
+        {{paciente_ex_compl.dados.diario_mic2_ingest_hid}}
+        {{paciente_ex_compl.dados.diario_mic2_menor}}
+        {{paciente_ex_compl.dados.diario_mic2_maior}}
+        {{paciente_ex_compl.dados.diario_mic2_urgencia}}
+        {{paciente_ex_compl.dados.diario_mic2_s_perda}}
+        {{paciente_ex_compl.dados.diario_mic2_t_protetores}}
+        {{paciente_ex_compl.dados.diario_mic2_n_protetores}}
+        {{paciente_ex_compl.dados.diario_mic2_rpm}}
+        {{paciente_ex_compl.dados.diario_mic3_data}}
+        {{paciente_ex_compl.dados.diario_mic3_fd}}
+        {{paciente_ex_compl.dados.diario_mic3_fn}}
+        {{paciente_ex_compl.dados.diario_mic3_ingest_hid}}
+        {{paciente_ex_compl.dados.diario_mic3_menor}}
+        {{paciente_ex_compl.dados.diario_mic3_maior}}
+        {{paciente_ex_compl.dados.diario_mic3_urgencia}}
+        {{paciente_ex_compl.dados.diario_mic3_s_perda}}
+        {{paciente_ex_compl.dados.diario_mic3_t_protetores}}
+        {{paciente_ex_compl.dados.diario_mic3_n_protetores}}
+        {{paciente_ex_compl.dados.diario_mic3_rpm}}
+        {{paciente_ex_compl.dados.info_complement}}
+        {{paciente_ex_compl.dados.dcaf}}
+        {{paciente_ex_compl.dados.proposta}}
+
+  </table>
+ {{/if}}
+
+ 
+
+ <h3>Informações gerais</h3>
+
+
+</div> 

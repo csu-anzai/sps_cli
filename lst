@@ -6,7 +6,7 @@
 Lista informações registradas nos arquivos de dados.
 
 Usage:
-    lst ( usr | estudantes ) [<marcador>]
+    lst [-w|-j] ( usr | estudantes ) [<marcador>]
     lst ( atd | atendimentos )
     lst ( tag | marcadores ) 
     lst ( sei | processos ) 
@@ -15,35 +15,49 @@ Usage:
     lst ( pro | profissionais ) 
 
 Options:
-    --version
+    -v, --version
+    -j, --json-output
 
 """
 
+import json
+import os
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.py_sps_cli_base import get_identificador, get_tags, listar_dicionario
-from python_modules.py_console_tools import mk_randnum_seq
-from python_modules.py_cli_decorators import check_config_existance
+from python_modules.cli_db_loader import get_col_values, get_tags
+from python_modules.py_functions_data_manager import listar_dicionario
+from python_modules.cli_tools import mk_randnum_seq
+from python_modules.cli_decorators import check_config_existance
 
 args = docopt(__doc__)
 
 @check_config_existance
 def main():
     if args['usr'] or args['estudantes']:
-        from python_modules.py_sps_cli_base import dados_usuarios, col_width_etd_mat, col_width_etd_nome, col_width_etd_eml
+        from python_modules.cli_db_loader import dados_usuarios, col_width_etd_mat, col_width_etd_nome, col_width_etd_eml
 
         if args['<marcador>']:
             if args['<marcador>'] == 'id':
-                print(set(get_identificador(dados_usuarios)))
+                if args['--json-output']:
+                    print(listar_dicionario(dados_usuarios, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [], 'json'))
+                else:
+                    print(listar_dicionario(dados_usuarios, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [], 'cli'))
+
             else:
-                print(listar_dicionario(dados_usuarios, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [args['<marcador>']]))
+                if args['--json-output']:
+                    print(listar_dicionario(dados_usuarios, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [args['<marcador>']], 'json'))
+                else:
+                    print(listar_dicionario(dados_usuarios, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], [args['<marcador>']]))
 
         else:
-            print(listar_dicionario(dados_usuarios, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml]))
+            if args['--json-output']:
+                print(listar_dicionario(dados_usuarios, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], tipo_output='json'))
+            else:
+                print(listar_dicionario(dados_usuarios, [col_width_etd_mat, col_width_etd_nome, col_width_etd_eml], tipo_output='json'))
 
     elif args['atd'] or args['atendimentos']:
-        from python_modules.py_sps_cli_base import dados_atendimentos, col_width_atend_time, col_width_atend_ident
+        from python_modules.cli_sps_base import dados_atendimentos, col_width_atend_time, col_width_atend_ident
 
         print(listar_dicionario(dados_atendimentos, [col_width_atend_time, col_width_atend_ident, ('atd_t', 0)]))
 
@@ -57,18 +71,18 @@ def main():
         
 
     elif args['sei'] or args['processos']:
-        from python_modules.py_sps_cli_base import dados_processos, col_width_proc_sei_n, col_width_proc_motivo, col_width_proc_assunto
+        from python_modules.cli_sps_base import dados_processos, col_width_proc_sei_n, col_width_proc_motivo, col_width_proc_assunto
         print(listar_dicionario(dados_processos, [col_width_etd_mat, col_width_proc_sei_n, col_width_proc_motivo, col_width_proc_assunto]))
 
     elif args['pnd'] or args['processos-pendentes']:
-        from python_modules.py_sps_cli_base import dados_processos_pend, col_width_proc_sei_n, col_width_proc_assunto, col_width_etd_mat
+        from python_modules.cli_sps_base import dados_processos_pend, col_width_proc_sei_n, col_width_proc_assunto, col_width_etd_mat
         print(listar_dicionario(dados_processos_pend, [col_width_etd_mat, col_width_proc_sei_n, col_width_proc_assunto]))
 
     elif args['est'] or args['estudos']:
         pass
 
     elif args['pro'] or args['profissionais']:
-        from python_modules.py_sps_cli_base import dados_profissionais, col_width_prof_uid, col_width_prof_nome, col_width_prof_eml
+        from python_modules.cli_sps_base import dados_profissionais, col_width_prof_uid, col_width_prof_nome, col_width_prof_eml
         print(listar_dicionario(dados_profissionais, [col_width_prof_uid, col_width_prof_nome, col_width_prof_eml]))
 
 
