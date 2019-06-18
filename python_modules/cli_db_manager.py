@@ -3,7 +3,7 @@
 
 from subprocess import getoutput
 from .cli_decorators import only_root
-from .cli_sps_base import dados_profissionais
+from .cli_db_loader import dados_profissionais
 import os
 
 
@@ -60,7 +60,6 @@ def create_user_configuration():
     save_json(config, user_config_file)
 
 
-@only_root
 def create_db_files(target_folder):
     init_dir = os.getcwd()
     os.chdir(target_folder)
@@ -75,7 +74,10 @@ def create_db_files(target_folder):
     os.system('touch dados/profissionais.json')
     os.system('touch dados/usuarios.json')
     os.system('touch dados/estudos.json')
+    os.system('touch dados/backup-info.json')
     os.system('touch dados/indexados/index_db.json')
+    os.system('touch dados/fragmentos/emitidos.json')
+    os.system('touch dados/fragmentos/recebidos.json')
     os.system('touch seguranca/ccrypt-key')
     os.system('if [ $(cat dados/atendimentos.json | wc -l) -lt 2 ]; then echo "[]" > dados/atendimentos.json; fi')
     os.system('if [ $(cat dados/corrigidos.json | wc -l) -lt 2 ]; then echo "[]" > dados/corrigidos.json; fi')

@@ -28,10 +28,11 @@ app.use(express.static(`${__dirname}/public`)); //definindo caminho de acesso ao
 
 
 app.get('/', function(req, res){
-  var process = child_process('lst', ['-j', 'usr', 'id']);
-  process.stdout.on('data', function(data) { 
-    res.render('listar', {style_sheet: ['frontpage', 'w3'], nfo: JSON.parse(data.toString())});
-  }); 
+  //var process = child_process('lst', ['-j', 'usr', 'id']);
+  //process.stdout.on('data', function(data) { 
+  //  res.render('listar', {style_sheet: ['frontpage', 'w3'], nfo: JSON.parse(data.toString())});
+  //});
+  res.render('index'); 
 });
 
 
