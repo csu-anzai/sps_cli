@@ -58,22 +58,51 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.cli_global_config import envio_automatico_email, periodo_corrente, hostname, pasta_raiz_do_aplicativo, fragment_emitter
+from python_modules.cli_global_config import \
+    envio_automatico_email,\
+    periodo_corrente,\
+    hostname,\
+    pasta_raiz_do_aplicativo
+
 from python_modules.cli_decorators import check_config_existance
 
-from python_modules.cli_sps_base import save_target_info, get_col_values, timestamp, data_folder, numero_sei_mascara, numero_identificador_mascara,\
-    formulario_novo_usuario, dados_usuarios, arquivo_usuarios,\
-    formulario_novo_processo, dados_processos, arquivo_processos,\
-    formulario_atendimentos, dados_atendimentos, arquivo_atendimentos,\
-    formulario_registro_de_correcao, dados_corrigidos, arquivo_corrigidos,\
-    arquivo_index, envio_automatico_email, periodo_corrente, dados_index
+from python_modules.cli_global_config import \
+    envio_automatico_email,\
+    periodo_corrente,\
+    trabalhar_com_fragmentos
+
+from python_modules.cli_db_loader import \
+    get_col_values,\
+    timestamp,\
+    pasta_de_dados,\
+    pasta_de_fragmentos,\
+    formulario_novo_usuario,\
+    dados_usuarios,\
+    arquivo_usuarios,\
+    formulario_novo_processo,\
+    dados_processos,\
+    arquivo_processos,\
+    formulario_atendimentos,\
+    dados_atendimentos,\
+    arquivo_atendimentos,\
+    formulario_registro_de_correcao,\
+    dados_corrigidos,\
+    arquivo_corrigidos,\
+    arquivo_index,\
+    dados_index
     #form_estudo_info_estudante,\
     #form_estudo_info_familia,\
     #form_estudo_info_membros_familia,\
     #dados_estudo_estudante, arquivo_estudo_estudante,\
     #dados_estudo_familia, arquivo_estudo_familia,\
     #dados_estudo_membros_familia, arquivo_estudo_membros_familia,\
+
+from python_modules.cli_sps_base import \
+    save_target_info,\
+    numero_sei_mascara,\
+    numero_identificador_mascara
     
+
     
 from python_modules.py_functions_json import save_json, load_json
 from python_modules.cli_tools import select_op, select_ops
@@ -90,8 +119,8 @@ def novo_usuario(identificador):
     nfo['identificador'] = identificador
     dados_usuarios.append(nfo)
     save_json(dados_usuarios, arquivo_usuarios)
-    if fragment_emitter:
-        fragmento = os.sep.join([pasta_raiz_do_aplicativo, 'USR'+getoutput("date +%Y%U%u%H%M%S%N")+'@'+hostname])
+    if trabalhar_com_fragmentos:
+        fragmento = os.sep.join([pasta_de_fragmentos, 'USR'+getoutput("date +%Y%U%u%H%M%S%N")+'@'+hostname])
         save_json(nfo, fragmento)
         os.system('fragment send "{}"'.format(fragmento))
 
@@ -129,7 +158,7 @@ def novo_atendimento(identificador):
     nfo['prof_atd'] = getoutput("whoami")+'@'+getoutput("hostname")
     dados_atendimentos.append(nfo)
     if save_target_action == True:
-        save_target_info(identificador)
+        save_target_info(identificador, dados_usuarios)
     save_json(dados_atendimentos, arquivo_atendimentos)
     return nfo['atd_t']
 
@@ -145,7 +174,7 @@ def nova_correcao(identificador):
     save_json(dados_corrigidos, arquivo_corrigidos)
 
 def nova_coluna(nome_col, json_file, options=None):
-    db_file = load_json(os.sep.join([data_folder, json_file]))
+    db_file = load_json(os.sep.join([pasta_de_dados, json_file]))
     if options != None and options.find(";") != -1:
         opz = options.split(';')
         selection = True
@@ -166,7 +195,7 @@ def nova_coluna(nome_col, json_file, options=None):
                 i[nome_col] = input(str(nome_col)+': ')
             else:
                 i[nome_col] = opz
-        save_json(db_file, os.sep.join([data_folder, json_file]))
+        save_json(db_file, os.sep.join([pasta_de_dados, json_file]))
 
 def novo_estudo_info_estudante(identificador):
     nfo = {}

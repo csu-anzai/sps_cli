@@ -16,7 +16,7 @@ import os
 
 from docopt import docopt
 from python_modules.py_functions_json import load_json, save_json
-from python_modules.cli_sps_base import pasta_do_usuario
+from python_modules.cli_db_loader import pasta_do_usuario
 
 args = docopt(__doc__)
 

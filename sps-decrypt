@@ -12,12 +12,12 @@ Usage:
 
 from docopt import docopt
 from os import system
-from python_modules.cli_sps_base import security_folder
+from python_modules.cli_db_loader import pasta_de_seguranca
 
 args = docopt(__doc__)
 
 def main():
-    system("ccdecrypt {} -k {}/ccrypt-key".format(args['<arquivo>'], security_folder))
+    system("ccdecrypt {} -k {}/ccrypt-key".format(args['<arquivo>'], pasta_de_seguranca))
 
 if __name__ == '__main__':
     main()

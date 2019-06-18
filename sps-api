@@ -32,7 +32,15 @@ from subprocess import getoutput
 from python_modules.py_functions_json import save_json, load_json
 from python_modules.cli_tools import verde, vermelho
 from python_modules.cli_decorators import check_config_existance
-from python_modules.cli_sps_base import timestamp, data_folder, numero_sei_mascara, numero_identificador_mascara, get_col_values,\
+
+from python_modules.cli_sps_base import \
+    numero_sei_mascara,\
+    numero_identificador_mascara
+
+from python_modules.cli_db_loader import \
+    timestamp,\
+    pasta_de_dados,\
+    get_col_values,\
     dados_usuarios,\
     dados_processos,\
     dados_atendimentos,\
@@ -64,14 +72,14 @@ def inserir_info(arquivo_de_dados, chaves_e_valores, reg_time=False, profissiona
         chave = chave_e_valor.split("::")[0]
         valor = chave_e_valor.split("::")[1]
         nfo[chave]=valor
-    arquivo_alvo = os.sep.join([data_folder, arquivo_de_dados])
+    arquivo_alvo = os.sep.join([pasta_de_dados, arquivo_de_dados])
     arquivo_info = load_json(arquivo_alvo)
     arquivo_info.append(nfo)
     save_json(arquivo_info, arquivo_alvo)
 
 def remover_info(arquivo_de_dados, identificador, remove_all=False): # Otimizar com index
     target = None
-    arquivo_alvo = os.sep.join([data_folder, arquivo_de_dados])
+    arquivo_alvo = os.sep.join([pasta_de_dados, arquivo_de_dados])
     arquivo_info = load_json(arquivo_alvo)
     n = 0
     for item in arquivo_info:
@@ -93,7 +101,7 @@ def remover_info(arquivo_de_dados, identificador, remove_all=False): # Otimizar 
 
 def atualizar_info(arquivo_de_dados, identificador, chaves_e_valores): # Otimizar com index
     target = None
-    arquivo_alvo = os.sep.join([data_folder, arquivo_de_dados])
+    arquivo_alvo = os.sep.join([pasta_de_dados, arquivo_de_dados])
     arquivo_info = load_json(arquivo_alvo)
     for item in arquivo_info:
         if item['identificador'] == identificador:
@@ -107,7 +115,7 @@ def atualizar_info(arquivo_de_dados, identificador, chaves_e_valores): # Otimiza
 
 
 def inserir_marcador(arquivo_de_dados, etiqueta, identificadores):
-    arquivo_alvo = os.sep.join([data_folder, arquivo_de_dados])
+    arquivo_alvo = os.sep.join([pasta_de_dados, arquivo_de_dados])
     arquivo_info = load_json(arquivo_alvo)
     for identificador in identificadores:
         for item in arquivo_info:
@@ -121,7 +129,7 @@ def inserir_marcador(arquivo_de_dados, etiqueta, identificadores):
 
 
 def substituir_marcadores(arquivo_de_dados, etiqueta_antiga, etiqueta_substitutiva):
-    arquivo_alvo = os.sep.join([data_folder, arquivo_de_dados])
+    arquivo_alvo = os.sep.join([pasta_de_dados, arquivo_de_dados])
     arquivo_info = load_json(arquivo_alvo)
     for item in arquivo_info:
         if item.get('marcador'):
@@ -131,7 +139,7 @@ def substituir_marcadores(arquivo_de_dados, etiqueta_antiga, etiqueta_substituti
                 item['marcador'].sort()
     save_json(arquivo_info, arquivo_alvo)
 
-matriculas = get_col_values(dados_usuarios)
+matriculas = get_col_values('identificador', dados_usuarios)
 
 
 @check_config_existance

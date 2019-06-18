@@ -38,7 +38,19 @@ import os
 from docopt import docopt
 from subprocess import getoutput
 from python_modules.py_functions_data_manager import render_form_get_values
-from python_modules.cli_unb_tools import *
+from python_modules.cli_unb_tools import \
+    join_alurel,\
+    old_sae_etd_rename_files,\
+    old_sae_etd_strip_chars,\
+    old_sae_etd_movefiles_to_folder,\
+    old_sae_extract_list,\
+    fix_joined_alurel,\
+    process_curric,\
+    multi_process_curric,\
+    process_sigra_hist,\
+    multi_process_sigra_academic_history,\
+    cruzar_variaveis
+
 from python_modules.cli_tools import select_op, select_ops
 from python_modules.py_functions_json import save_json, load_json
 from python_modules.py_functions_csv import make_complete_stat_from_csv, join_csv_intersection, join_csv_union
