@@ -66,7 +66,6 @@ def old_sae_etd_strip_chars(target_folder=old_etd_folder):
 		for f in files:
 			f_nnome = strip_chars(f.split('.')[0])+'.txt'
 			os.rename(f, f_nnome)
-			print("renomeado: {s}/{f} => {s}/{f_nn};".format(s=s, f=f, f_nn=f_nnome))
 		os.chdir('..')
 	os.chdir(init_folder)
 
@@ -90,7 +89,7 @@ def old_sae_etd_movefiles_to_folder(target_folder=old_etd_folder):
 					new_folders.append(fname)
 			shutil.move(f, "{}/{}/{}".format(target_folder, fname, f))
 
-def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=5435):
+def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=6190):
 	processos = read_csv(target_csv_lista_processos, '\t')
 	total_itens = len(processos)-1
 	current_item = init_idx
@@ -114,20 +113,6 @@ def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processo
 		else:
 			current_item += 1
 			total_itens -= 1
-
-	# for p in processos[init_idx:]:
-	# 	periodo = p['Semestre/Ano'].replace('/','-')
-	# 	matricula = p['Matrícula'].replace('/','')
-	# 	fname = matricula+"_"+periodo+'.txt'
-	# 	if not os.path.isfile('{}/{}/{}'.format(target_folder, periodo, fname)):
-	# 		limpar_tela()
-	# 		print(p['Nome'])
-	# 		print(matricula)
-	# 		print(periodo)
-	# 		print("IDX:", processos.index(p))
-	# 		input("Pressione para o próximo elemento da lista...")
-	# 		#Raquel Cristina Machado Cavalcanti; 2-2012
-
 
 
 def fix_tgm_list(csv_file):
@@ -688,6 +673,14 @@ def process_sigra_hist(hist_file_txt):
 	tgj_geral = 0
 	tgj_saude = 0
 	tgm_geral = 0
+	ss_num = 0
+	ms_num = 0
+	mm_num = 0
+	mi_num = 0
+	ii_num = 0
+	sr_num = 0
+	tr_num = 0
+	cc_num = 0
 	
 	for line in conteudo:
 		if obter_matricula == True:
@@ -695,7 +688,7 @@ def process_sigra_hist(hist_file_txt):
 				matricula = line.replace(' ',';')
 				while matricula.find(';;') != -1:
 					matricula = matricula.replace(';;',';')
-				matricula = matricula.split(';')[1].replace('/','')
+				matricula = matricula.split(';')[1]#.replace('/','')
 				obter_matricula = False
 				print(matricula)
 		
@@ -708,6 +701,9 @@ def process_sigra_hist(hist_file_txt):
 		if obter_curso == True:
 			if conteudo.index(line) == 5:
 				curso = line.replace('  ','').strip()
+				obter_curso = False
+				print(curso)
+				'''
 				if curso == "Educação do Campo (Diurno)":
 					pass
 				else:
@@ -725,9 +721,9 @@ def process_sigra_hist(hist_file_txt):
 									creditos_p_formar = c_nfo['Quantidade de créditos para formatura']
 									turno = c_nfo['Turno']
 									break
-							break
+							break'''
 			
-			if conteudo.index(line) == 6:
+			'''if conteudo.index(line) == 6:
 				curso = line.split(':')[1].strip()
 				if curso == "Educação do Campo - Ciências da Natureza e Matemática":
 					curso = "Educação do Campo - Ciências da Natureza"
@@ -745,7 +741,7 @@ def process_sigra_hist(hist_file_txt):
 								creditos_p_formar = c_nfo['Quantidade de créditos para formatura']
 								turno = c_nfo['Turno']
 								break
-						break				
+						break				'''
 						
 
 		if obter_nome_pai == True:
@@ -779,18 +775,35 @@ def process_sigra_hist(hist_file_txt):
 				calculo_ira[periodo] = []
 				
 		if re.search("^\s*Aluno não registrou matrícula no Período", line) != None:
+			calculo_ira[periodo] = "Aluno não registrou matrícula no Período"
 			nreg_mat += 1
 			
 		if re.search("^\s*Trancamento Geral Justificado", line) != None:
+			calculo_ira[periodo] = "Trancamento Geral Justificado"
 			tgj_geral += 1
 
 		if re.search("^\s*Trancamento Geral Justificado (Problema de Saúde)", line) != None:
+			calculo_ira[periodo] = "Trancamento Geral Justificado (Problema de Saúde)"
 			tgj_saude += 1
 		
 		if re.search("^\s*Trancamento Geral de Matrícula", line) != None:
+			calculo_ira[periodo] = "Trancamento Geral de Matrícula"
 			tgm_geral += 1
+
+		if re.search("^\s*Período em Realização", line) != None:
+			calculo_ira[periodo] = "Período em Realização"
 		
 		if re.search("^\s*\d\d\d\d\d\d", line) != None:
+			idx_target = 98
+			#if line[idx_target] == " ":
+			#	idx_target += 1
+			calculo_ira[periodo].append(line[idx_target:idx_target+5].strip())
+
+			idx_target = 106
+			calculo_ira[periodo].append(line[idx_target:idx_target+5].strip())
+			
+			
+			'''
 			if line.find("Métodos de Organização e Educação Comunitária  1") != 1:
 				line = line.replace("Métodos de Organização e Educação Comunitária  1", "Métodos de Organização e Educação Comunitária 1")
 			if line.find("HISTORIA  DA PSICOLOGIA") != -1:
@@ -800,9 +813,10 @@ def process_sigra_hist(hist_file_txt):
 				disciplina = disciplina.replace(';;',';')
 			disciplina = disciplina.split(';')[1:]
 			disciplina.append(periodo)
-			calculo_ira[periodo].append(disciplina)
+			calculo_ira[periodo].append(disciplina)'''
 	
-
+	print(calculo_ira)
+	exit()
 
 	ira_por_semestre = []
 	
