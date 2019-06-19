@@ -1,14 +1,14 @@
-### SPS/FUP CLI Scrips ###
+# SPS/CLI Scrips #
 
-Este projeto consiste em um conjunto de Scripts/Ferramentas para o uso no cotidiano da Assitência Estudantil da UnB. Estes permitem realizar registros de atendimentos, reaver informações armazenadas, grava-lás em arquivos de saída e enviá-las facilmente via email pelo terminal.
+Este projeto consiste em um conjunto de **Scripts/Ferramentas** para o uso no cotidiano da **Assitência Estudantil da UnB**. Estes permitem realizar **registros de atendimentos, reaver informações armazenadas, grava-lás em arquivos de saída e enviá-las facilmente via email pelo terminal**.
 
-Estas ferramentas foram concebidas para trabalharem de forma integrada com o Bash, tendo sido testadas e desenvolvidas a partir de uma versão básica do Debian. O objetivo é fornecer uma ferramenta prática e funcional para lidar com as demandas e necessidades cotidianas do trabalho sem exigir muito tempo de desenvolvimento, manutenção e correção de erros.
+Estas ferramentas foram concebidas para trabalharem de forma integrada com o **Bash**, tendo sido testadas e desenvolvidas a partir de uma versão básica do Debian. O objetivo é fornecer uma ferramenta prática e funcional para lidar com as demandas e necessidades cotidianas do trabalho sem exigir muito tempo de desenvolvimento, manutenção e correção de erros. Nesse sentido este pacode de scripts foi pensado para ser executado em sistemas GNU/Linux.
 
-Para gestão dos profissionais, aproveitamos os recursos do próprio sistema operacional e do openssh que permite um ambiente multitarefa integrado. A ideia é que as ferramentas sejam instaladas em uma máquina virtual e que os acessos sejam efetuados por cada profissional a partir de sua própria estação de trabalho.
+Para gestão dos profissionais, aproveitamos os recursos do próprio sistema operacional. Assim a ideia é que os profissionais sejam cadastrados com o comando **adduser** e acessem o shell via **ssh**. Estes Scripts/Ferramentas seriam instalados em uma máquina virtual ou um servidor local e que os acessos seriam efetuados por cada profissional a partir de sua própria estação de trabalho.
 
 Os dados, no momento, estão sendo estruturados em arquivos de texto no formato JSON.
 
-### Dependências ###
+# Dependências #
 
 ## Python ##
 
@@ -24,37 +24,45 @@ Os dados, no momento, estão sendo estruturados em arquivos de texto no formato 
 - nano
 - nodejs
 - git
+- pandoc
 
-### Instalação ###
+# Instalação #
 
-[1] Instalar os programas base necessários via gerenciador de pacotes de sua respectiva distrubuição ou pela página do respectivo projeto.
+### [1] Instalar os programas base necessários.
+Eles provavelmente estão disponíveis via gerenciador de pacotes de sua respectiva distribuição.
 
-Debian:
-sudo apt install python3 rclone* zip ccrypt nano nodejs* git
+No **Debian**:
 
-Os pacotes marcados com [*] devem, preferencialmente, ser instalados em suas versões mais recentes.
+- sudo apt install python3 **rclone** zip ccrypt nano **nodejs** git
 
-[2] Instalar os módulos adicionais do python3.
+Os pacotes destacados devem, preferencialmente, ser instalados em suas versões mais recentes.
 
-sudo pip3 install docopt colored
+### [2] Instalar os módulos adicionais do python3.
 
-[3] Escolher o local da instalação do SPS/CLI e clonar este repositório no local.
+- sudo pip3 install docopt colored
 
-git clone http://www.github.com/bwb0de/sps_fup2.git
+### [3] Escolher o local da instalação do SPS/CLI e clonar este repositório no local.
 
-[4] Incluir a pasta de intalação ao PATH do sistema/usuario. Edite o arquivo de inicialização da sessão do Shell, por exemplo, no Debian, o arquivo '.basrc' presente na pasta HOME. Não esquecer de incluir a mesma alteração no '.bashrc' do usuário 'root'. Para que os comandos estejam disponíveis aos demais usuarios criados, altere o arquivo '.bashrc' presente na pasta '/etc/skel'. Usuarios criados após a alteralção de '/etc/skel' terão acesso aos comandos.
+- git clone *http://www.github.com/bwb0de/sps_fup2.git*
 
-Enserir em '.bashrc' ou outro arquivo de inicialização da sessão do shell:
-export PATH=$(echo $PATH):/pasta_de_destino/onde/sps_cli/foi_instalado
+### [4] Incluir a pasta de intalação ao PATH do sistema/usuario.
 
-[5] Baixar as dependencias do Node.JS. Executar dentro da pasta clonada o comando a seguir.
+Edite o arquivo de inicialização da sessão do Shell, por exemplo, no Debian, o arquivo *.bashrc* presente na pasta HOME. Não esquecer de incluir a mesma alteração no *.bashrc* do usuário **root**. Para que os comandos estejam disponíveis aos demais usuarios criados, altere o arquivo *.bashrc* presente na pasta */etc/skel*. Usuarios criados após a alteralção de */etc/skel* terão acesso aos comandos.
 
-npm install
+**Inserir em *.bashrc* ou outro arquivo de inicialização da sessão do shell:**
 
-[6] Executar o comando de criação do arquivo de configuração.
+- export PATH=$(echo $PATH):/pasta_de_destino/onde/sps_cli/foi_instalado
 
-sps-install config
+### [5] Baixar as dependencias do Node.JS. Executar dentro da pasta clonada o comando a seguir.
 
-[7] Executar o comando de criação dos arquivos de dados.
+- npm install
 
-[8] Editar os arquivos da pasta 'formularios' conforme a necessidade do uso. Observe o manual para se atentar aos padrões.
+### [6] Executar o comando de criação do arquivo de configuração.
+
+- sps-install config
+
+### [7] Executar o comando de criação dos arquivos de dados.
+
+- sps-install createdb
+
+### [8] Editar os arquivos da pasta 'formularios' conforme a necessidade do uso. Observe o manual para se atentar aos padrões.
