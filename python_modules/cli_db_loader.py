@@ -22,13 +22,14 @@
 #
 #
 
-#import time
+
 import os
 import asyncio
 
+from collections import OrderedDict
 from .cli_sps_base import timestamp
 
-from .cli_global_config import \
+from .cli_global_paths import \
     pasta_raiz_do_aplicativo,\
     pasta_de_dados,\
     pasta_de_seguranca,\
@@ -129,6 +130,18 @@ col_width = loop2.run_until_complete(asyncio.gather(
 ))
 
 #Larguras das colunas nas listas. Rodar método async aqui...
+col_width_info = OrderedDict()
+col_width_info['identificador'] = col_width[0]
+col_width_info['nome_usuario'] = col_width[1]
+col_width_info['eml_usuario'] = col_width[2]
+col_width_info['uid'] = col_width[3]
+col_width_info['nome_profissional'] = col_width[4]
+col_width_info['eml_profissional'] = col_width[5]
+col_width_info['numero_sei'] = col_width[6]
+col_width_info['assunto'] = col_width[7]
+col_width_info['motivo'] = col_width[8]
+col_width_info['timestamp'] = ('timestamp', len(timestamp()) + 2)
+
 col_width_etd_mat = col_width[0]
 col_width_atend_ident = col_width_etd_mat
 col_width_etd_nome = col_width[1]

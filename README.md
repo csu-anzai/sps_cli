@@ -25,6 +25,7 @@ Os dados, no momento, estão sendo estruturados em arquivos de texto no formato 
 - nodejs
 - git
 - pandoc
+- wkhtmltopdf
 
 # Instalação #
 

@@ -16,20 +16,20 @@ Usage:
 
 import os
 
-from python_modules.cli_sps_base import security_folder, pasta_do_usuario, fragmentos_folder
+from python_modules.cli_global_paths import pasta_de_seguranca, pasta_do_usuario, pasta_de_fragmentos
 from python_modules.cli_global_config import formato_lista_fragmentos
-from python_modules.py_functions_json import load_json, save_json
+from python_modules.py_functions_json import load_json, save_json 
 from docopt import docopt
 
 args = docopt(__doc__)
 
 
 def getfrags():
-    os.system('cp "{}/rclone-token" "{}/.rclone.conf"'.format(security_folder, pasta_do_usuario))
-    os.system('rclone copy box:/sps_fup2/fragmentos_lista/ "{}"'.format(fragmentos_folder))
+    os.system('cp "{}/rclone-token" "{}/.rclone.conf"'.format(pasta_de_seguranca, pasta_do_usuario))
+    os.system('rclone copy box:/sps_fup2/fragmentos_lista/ "{}"'.format(pasta_de_fragmentos))
     
-    lista_recebidos = load_json(os.sep.join([fragmentos_folder, 'recebidos.json']))
-    listas_emitidos = os.listdir(fragmentos_folder)
+    lista_recebidos = load_json(os.sep.join([pasta_de_fragmentos, 'recebidos.json']))
+    listas_emitidos = os.listdir(pasta_de_fragmentos)
     fragmentos_para_baixar = []
 
     for l in listas_emitidos:
@@ -38,12 +38,12 @@ def getfrags():
             for i in l_info:
                 if not i['arquivo'] in lista_recebidos:
                     fragmentos_para_baixar.append(i['arquivo'])
-            os.remove("{}/{}".format(fragmentos_folder, l))
+            os.remove("{}/{}".format(pasta_de_fragmentos, l))
 
     
     for f in fragmentos_para_baixar:
-        os.system('rclone copy "box:/sps_fup2/fragmentos/{}" "{}"'.format(f, fragmentos_folder))
-        os.system('sps-decrypt "{}/{}"'.format(fragmentos_folder, f))
+        os.system('rclone copy "box:/sps_fup2/fragmentos/{}" "{}"'.format(f, pasta_de_fragmentos))
+        os.system('sps-decrypt "{}/{}"'.format(pasta_de_fragmentos, f))
         
         if   f[0:3] == "USR": #Framgento usuários
             pass
@@ -58,27 +58,28 @@ def getfrags():
 
         lista_recebidos.append(f)
 
-    save_json(lista_recebidos, os.sep.join([fragmentos_folder, 'recebidos.json']))
+    save_json(lista_recebidos, os.sep.join([pasta_de_fragmentos, 'recebidos.json']))
 
     os.system('rm "{}/.rclone.conf"'.format(pasta_do_usuario))
 
-    fragfiles = os.listdir(fragmentos_folder)
+    fragfiles = os.listdir(pasta_de_fragmentos)
     for f in fragfiles:
         if f.find('.cpt') != -1:
+            pass
             
 
 
 def sendfrag(arquivo):
     os.system("sps-encrypt {}".format(arquivo))
     arquivo_criptografado = arquivo + '.cpt'
-    os.system('cp "{}/rclone-token" "{}/.rclone.conf"'.format(security_folder, pasta_do_usuario))
+    os.system('cp "{}/rclone-token" "{}/.rclone.conf"'.format(pasta_de_seguranca, pasta_do_usuario))
     os.system('rclone move "{}" box:/sps_fup2/fragmentos/'.format(arquivo_criptografado))
     os.system('sps-decrypt "{}"'.format(arquivo_criptografado))
     if arquivo_criptografado.find(os.sep) != -1:
         arquivo_criptografado = arquivo_criptografado.split(os.sep)[-1]
     os.system('sps-api insert -tp fragmentos/emitidos.json "arquivo::{}"'.format(arquivo_criptografado))
-    os.system('cp "{fragf}/emitidos.json" "{fragf}/{emit_name}"'.format(fragf=fragmentos_folder, emit_name=formato_lista_fragmentos))
-    os.system('rclone move "{fragf}/{emit_name}" box:/sps_fup2/fragmentos_lista/{emit_name}'.format(fragf=fragmentos_folder, emit_name=formato_lista_fragmentos))
+    os.system('cp "{fragf}/emitidos.json" "{fragf}/{emit_name}"'.format(fragf=pasta_de_fragmentos, emit_name=formato_lista_fragmentos))
+    os.system('rclone move "{fragf}/{emit_name}" box:/sps_fup2/fragmentos_lista/{emit_name}'.format(fragf=pasta_de_fragmentos, emit_name=formato_lista_fragmentos))
     os.system('rm "{}/.rclone.conf"'.format(pasta_do_usuario))
 
 
