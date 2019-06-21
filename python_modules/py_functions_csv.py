@@ -382,7 +382,7 @@ def write_csv(csv_data_list, csv_file, header=None, delimiter=',', lineterminato
 		w = csv.DictWriter(f, fields, delimiter=delimiter, lineterminator=lineterminator)
 		w.writeheader()
 		w.writerows(csv_data_list)
-		os.remove(lockf)
+		os.remove("/tmp/"+lockf)
 		
 
 

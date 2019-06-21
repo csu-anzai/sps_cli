@@ -37,12 +37,12 @@ def convert_to_cli_args(lista):
 
 
 def create_lockfile(lockf):
-	tmpdir = getoutput('echo $TMPDIR')
+	tmpdir = "/tmp"
 	f = open(tmpdir+os.sep+lockf,'w')
 	f.close()
 
 def remove_lockfile(lockf):
-	tmpdir = getoutput('echo $TMPDIR')
+	tmpdir = "/tmp"
 	os.remove(tmpdir+os.sep+lockf)
 
 
