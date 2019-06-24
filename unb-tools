@@ -12,6 +12,8 @@ Usage:
     unb-tools ( old_sae_etd_strip_chars ) [<target-folder>]
     unb-tools ( move-old-sae-etd ) [<target-folder>]
     unb-tools ( old_sae_extract_list )
+    unb-tools ( old_sae_extract_hist_list )
+    unb-tools ( process_sae_etd ) <target-sae-txt-file>
     unb-tools ( fix-csv-alu-rel ) <csv-file> [ <csv-delimiter> ]
     unb-tools ( curric-process ) <target-curric-txt-file>
     unb-tools ( multi-curric-process ) <target-curric-folder>
@@ -44,6 +46,8 @@ from python_modules.cli_unb_tools import \
     old_sae_etd_strip_chars,\
     old_sae_etd_movefiles_to_folder,\
     old_sae_extract_list,\
+    old_sae_extract_hist_list,\
+    process_sae_etd,\
     fix_joined_alurel,\
     process_curric,\
     multi_process_curric,\
@@ -72,6 +76,12 @@ def main():
 
     elif args['old_sae_extract_list']: 
         old_sae_extract_list()
+
+    elif args['old_sae_extract_hist_list']: 
+        old_sae_extract_hist_list()
+
+    elif args['process_sae_etd']: 
+        process_sae_etd(args['<target-sae-txt-file>'])
 
     elif args['fix-csv-alu-rel']:
         fix_joined_alurel(args['<csv-file>'], args['<csv-delimiter>'])

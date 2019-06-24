@@ -89,7 +89,33 @@ def old_sae_etd_movefiles_to_folder(target_folder=old_etd_folder):
 					new_folders.append(fname)
 			shutil.move(f, "{}/{}/{}".format(target_folder, fname, f))
 
-def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=6342):
+def old_sae_extract_hist_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=0):
+	processos = read_csv(target_csv_lista_processos, '\t')
+	total_itens = len(processos)-1
+	current_item = init_idx
+	total_itens -= init_idx
+	idts_verificados = []
+	while total_itens != -1:
+		periodo = processos[current_item]['Semestre/Ano'].replace('/','-')
+		matricula = processos[current_item]['Matrícula'].replace('/','')
+		op = None
+		if not matricula in idts_verificados:
+			idts_verificados.append(matricula)
+			limpar_tela()
+			print(processos[current_item]['Nome'])
+			print(matricula)
+			print(periodo)
+			print("IDX:", current_item)
+			op = input("Pressione 'v' para voltar, enter para seguir...")
+		if op == 'v':
+			current_item -= 1
+			total_itens += 1
+		else:
+			current_item += 1
+			total_itens -= 1
+
+
+def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=6385):
 	processos = read_csv(target_csv_lista_processos, '\t')
 	total_itens = len(processos)-1
 	current_item = init_idx
@@ -429,7 +455,7 @@ def join_alurel(folder, output_fname):
 		f.close()
 		
 		for line in conteudo:
-			if re.search("^\s*\d\d/\d\d\d*", line) != None:
+			if linha.find("\s*\d\d/\d\d\d*", line) != None:
 				if line.find(":") == -1:
 					line = line.replace('   ','\t').replace('\n','')
 					while line.find('\t\t') != -1:
@@ -457,7 +483,7 @@ def fix_joined_alurel(csv_file, delimiter='\t'):
 	conteudo_editado = []
 	for line in conteudo:
 		line_editada = line.split(delimiter)
-		if re.search("^.*\d\d\d\d\d", line_editada[1]) != None:
+		if linha.find(".*\d\d\d\d\d", line_editada[1]) != None:
 			num = line_editada[1].split(' ').pop()
 			line_editada[1] = strip_simbols(line_editada[1]).strip()+delimiter+num
 		line_editada = delimiter.join(line_editada)
@@ -595,7 +621,7 @@ def process_curric(curric_file_txt):
 			tipo_disciplina = 'OPT'
 			
 		if get_dep == True:
-			if re.search("^\s*[A-Z]*\s*GR$", line) != None:
+			if linha.find("\s*[A-Z]*\s*GR$", line) != None:
 				dep = line.replace('   ','^')
 				while dep.find('^^') != -1:
 					dep = dep.replace('^^','^')
@@ -611,7 +637,7 @@ def process_curric(curric_file_txt):
 			next_line_get = True
 			
 		if next_line_get == True:
-			if re.search("^\s*\d\d\d\d\d\d", line) != None:
+			if linha.find("\s*\d\d\d\d\d\d", line) != None:
 				disciplina_code = line.strip()
 				write_line = True
 				next_line_get = False
@@ -643,7 +669,508 @@ def process_curric(curric_file_txt):
 	
 	write_csv(novo_conteudo, curric_novo_nome, delimiter='\t', lineterminator='\n')
 			
+
+def process_sae_etd(sae_etd_file_txt):
+	f = open(sae_etd_file_txt, 'r', encoding="iso-8859-1")
+	conteudo = f.readlines()
+	f.close()
 	
+	output = OrderedDict()	
+
+	obter_matricula = True
+	obter_nome = True
+	obter_periodo_estudo = True
+	obter_motivos = True
+	obter_curso_nivel = True
+	obter_curso_nome = True
+	obter_campus = True
+	obter_periodo_ingresso_unb = True
+	obter_forma_ingresso = True
+	obter_sexo = True
+	obter_cpf = True
+	obter_isencao_vestibular = True
+	obter_teve_abatimento = True
+	obter_cor = True
+	obter_escola_em_tipo = True
+	obter_escola_em_nome = True
+	obter_escola_em_cidade = True
+	obter_escola_em_uf = True
+	obter_fez_pre_vestibular = True
+	obter_faz_outro_curso_superior = True
+	obter_fez_outro_curso_superior = True
+	obter_situacao_prof_corrente = True
+	obter_situacao_prof_anterior = True
+	obter_contribui_p_rendafam = True
+	obter_cidade_moradia_sae = False
+	obter_cidade_moradia_sigra = False
+	obter_email = False
+	obter_com_quem_reside = False
+	obter_situacao_residencia_familia = False
+	obter_estado_civil_estudante = True
+	obter_pai_nome = False
+	obter_pai_cpf = False
+	obter_pai_cidade = False
+	obter_pai_endereco = False
+	obter_pai_endereco_uf = False
+	obter_pai_escolaridade = False
+	obter_pai_profissao = False
+	obter_pai_remuneracao = False
+	obter_mae_nome = False
+	obter_mae_cpf = False
+	obter_mae_cidade = False
+	obter_mae_endereco = False
+	obter_mae_endereco_uf = False
+	obter_mae_escolaridade = False
+	obter_mae_profissao = False
+	obter_mae_remuneracao = False
+	obter_transporte_usado = True
+	obter_grupo_familiar = False
+	obter_justificativa = False
+	obter_pontuacao = False
+	obter_pontuacao_vinculo_emprego_estudante = False
+	obter_pontuacao_cidade_estudante = False
+	obter_pontuacao_vinculo_emprego_pai = False
+	obter_pontuacao_vinculo_emprego_mae = False
+	obter_pontuacao_vinculo_emprego_mantenedor = False
+	obter_pontuacao_fx_renda = False
+	obter_pontuacao_parecer = False
+
+	check_if_global_moradia_field = True
+	check_if_dados_pai_field = True
+	check_if_dados_mae_field = True
+	check_if_grpfam_field = True
+	check_if_justificativa_field = True
+	check_if_pontuacao_field = True
+
+	justificativa = ""
+	pontuacao_vinculo_emprego_estudante = ""
+	pontuacao_cidade_estudante = ""
+	pontuacao_vinculo_emprego_pai = ""
+	pontuacao_vinculo_emprego_mae = ""
+	pontuacao_vinculo_emprego_mantenedor = ""
+	pontuacao_fx_renda = ""
+	pontuacao_parecer = ""
+
+	for linha in conteudo:
+		if obter_matricula:
+			if linha.find("Matrícula: ;") != -1:
+				matricula = linha.split(": ;")[1].split(";")[0].strip()
+				obter_matricula = False
+			
+		if obter_nome:
+			if linha.find("Nome: ;") != -1:
+				nome = linha.split(": ;")[2].split(";")[0].strip()
+				obter_nome = False
+			
+		if obter_periodo_estudo:
+			if linha.find("Período: ;") != -1:
+				periodo_estudo = linha.split(": ;")[1].split(";")[0].strip()
+				obter_periodo_estudo = False
+			
+		if obter_motivos:
+			if linha.find("Motivo(s): ;") != -1:
+				motivos = linha.split(": ;")[1].split(";")[0].strip()
+				obter_motivos = False
+
+		if obter_curso_nivel:
+			if linha.find("Nível: ;") != -1:
+				curso_nivel = linha.split(": ;")[2].split(";")[0].strip()
+				obter_curso_nivel = False
+
+		if obter_curso_nome:
+			if linha.find("Curso: ;") != -1:
+				curso_nome = linha.split(": ;")[3].split(";")[0].strip()
+				obter_curso_nome = False
+
+		if obter_campus:
+			if linha.find("Campus: ;") != -1:
+				campus = linha.split(": ;")[1].split(";")[0].strip()
+				obter_campus = False
+			
+		if obter_periodo_ingresso_unb:
+			if linha.find("Período de ingresso: ;") != -1:
+				periodo_ingresso_unb = linha.split(": ;")[1].split(";")[0].strip()
+				obter_periodo_ingresso_unb = False
+			
+		if obter_forma_ingresso:
+			if linha.find("Forma de ingresso: ;") != -1:
+				forma_ingresso = linha.split(": ;")[1].split(";")[0].strip()
+				obter_forma_ingresso = False
+
+		if obter_sexo:
+			if linha.find("Sexo:;") != -1:
+				sexo = linha.split(":;")[1].split(";")[0].strip()
+				obter_sexo = False
+			
+		if obter_cpf:
+			if linha.find("CPF: ;") != -1:
+				cpf = linha.split(": ;")[2].split(";")[0].strip()
+				obter_cpf = False
+			
+		if obter_isencao_vestibular:
+			if linha.find("Isenção taxa vestibular: ;") != -1:
+				isencao_vestibular = linha.split(": ;")[1].split(";")[0].strip()
+				if isencao_vestibular == "Não":
+					teve_abatimento = "Não se aplica"
+					obter_teve_abatimento = False
+				obter_isencao_vestibular = False
+
+		if obter_teve_abatimento:
+			if linha.find("Teve abatimento: ;") != -1:
+				teve_abatimento = linha.split(": ;")[2].split(";")[0].strip()
+				obter_teve_abatimento = False
+
+		if obter_cor:
+			if linha.find("Raça: ;") != -1:
+				cor = linha.split(": ;")[1].split(";")[0].strip()
+				obter_cor = False
+			
+		if obter_escola_em_tipo:
+			if linha.find("Ensino médio: ;") != -1:
+				escola_em_tipo = linha.split(": ;")[1].split(";")[0].strip()
+				obter_escola_em_tipo = False
+
+		if obter_escola_em_nome:
+			if re.search("\s*Escola: ;", linha) != None:
+				escola_em_nome = linha.split(": ;")[1].split(";")[0].strip()
+				obter_escola_em_nome = False
+			
+		if obter_escola_em_cidade:
+			if re.search("\s*Escola: ;", linha) != None:
+				escola_em_cidade = linha.split(": ;")[2].split(";")[0].strip()
+				obter_escola_em_cidade = False
+			
+		if obter_escola_em_uf:
+			if re.search("\s*Escola: ;", linha) != None:
+				escola_em_uf = linha.split(": ;")[3].split(";")[0].strip()
+				obter_escola_em_uf = False
+			
+		if obter_fez_pre_vestibular:
+			if linha.find("Pré-vestibular: ;") != -1:
+				fez_pre_vestibular = linha.split(": ;")[1].split(";")[0].strip()
+				obter_fez_pre_vestibular = False
+
+		if obter_faz_outro_curso_superior:
+			if linha.find("Faz outro curso superior fora da UnB?: ;") != -1:
+				faz_outro_curso_superior = linha.split(": ;")[1].split(";")[0].strip()
+				obter_faz_outro_curso_superior = False			
+
+		if obter_fez_outro_curso_superior:
+			if linha.find("Fez outro curso de nível superior? ;") != -1:
+				fez_outro_curso_superior = linha.split("? ;")[1].split(";")[0].strip()
+				obter_fez_outro_curso_superior = False			
+
+		if obter_situacao_prof_corrente:
+			if linha.find("Situação Profissional/Renda") != -1:
+				situacao_prof_corrente = linha.split(" - ")[1].split(";")[0].strip()
+				obter_situacao_prof_corrente = False			
+
+		if obter_situacao_prof_anterior:
+			if linha.find("Já trabalhou? ;") != -1:
+				situacao_prof_anterior = linha.split("? ;")[1].split(";")[0].strip()
+				obter_situacao_prof_anterior = False			
+
+		if obter_contribui_p_rendafam == True:
+			if linha.find("Contribui p/ renda familiar? ;") != -1:
+				contribui_p_rendafam = linha.split("? ;")[1].split(";")[0].strip()
+				obter_contribui_p_rendafam = False
+			
+		if check_if_global_moradia_field:
+			if linha.find("Situação Atual de Moradia;") != -1:
+				obter_cidade_moradia_sae = True
+				obter_cidade_moradia_sigra = True
+				obter_email = True
+				obter_com_quem_reside = True
+				obter_situacao_residencia_familia = True
+				check_if_global_moradia_field = False
+
+		if obter_cidade_moradia_sae:
+			if linha.find("Cidade: ;") != -1:
+				cidade_moradia_sae = linha.split(": ;")[2].split(";")[0].strip()
+				endereco_moradia_sae = linha.split(": ;")[1].split(";")[0].strip()
+				obter_cidade_moradia_sae = False
+			
+		if obter_cidade_moradia_sigra:
+			if linha.find("Endereço DAA: ;") != -1:
+				endereco_moradia_sigra = linha.split(": ;")[1].split(";")[0].strip()
+				obter_cidade_moradia_sigra = False
+			
+		if obter_email:
+			if linha.find("Email: ;") != -1:
+				email = linha.split(": ;")[3].split(";")[0].strip()
+				obter_email = False
+			
+		if obter_com_quem_reside:
+			if linha.find("Como reside atualmente? ;") != -1:
+				com_quem_reside = linha.split("? ;")[1].split(";")[0].strip().replace(".",'')
+				obter_com_quem_reside = False
+			
+		if obter_situacao_residencia_familia:
+			if linha.find("Como reside sua família? ;") != -1:
+				situacao_residencia_familia = linha.split("? ;")[1].split(";")[0].strip().replace(".",'')
+				obter_situacao_residencia_familia = False
+
+		if obter_estado_civil_estudante:
+			if linha.find("Estado civil: ;") != -1:
+				estado_civil_estudante = linha.split(": ;")[1].split(";")[0].strip().replace(".",'')
+				obter_estado_civil_estudante = False
+
+		if check_if_dados_pai_field:
+			if linha.find("Dados do Pai;") != -1:
+				obter_pai_nome = True
+				obter_pai_cpf = True
+				obter_pai_cidade = True
+				obter_pai_endereco = True
+				obter_pai_endereco_uf = True
+				obter_pai_escolaridade = True
+				obter_pai_profissao = True
+				obter_pai_remuneracao = True
+				check_if_dados_pai_field = False
+
+		if obter_pai_nome:
+			if linha.find("Nome: ;") != -1:
+				pai_nome = linha.split(": ;")[1].split(";")[0].strip()
+				obter_pai_nome = False
+			
+		if obter_pai_cpf:
+			if linha.find("CPF: ;") != -1:
+				pai_cpf = linha.split(": ;")[3].split(";")[0].strip()
+				pai_idade = linha.split(": ;")[2].split(";")[0].strip()
+				obter_pai_cpf = False
+
+		if obter_pai_cidade:
+			if linha.find("Cidade: ;") != -1:
+				pai_cidade = linha.split(": ;")[2].split(";")[0].strip()
+				obter_pai_cidade = False
+			
+		if obter_pai_endereco:
+			if linha.find("Endereço: ;") != -1:
+				pai_endereco = linha.split(": ;")[1].split(";")[0].strip()
+				obter_pai_endereco = False
+
+		if obter_pai_endereco_uf:
+			if linha.find("UF: ;") != -1:
+				pai_endereco_uf = linha.split(": ;")[1].split(";")[0].strip()
+				obter_pai_endereco_uf = False
+
+		if obter_pai_escolaridade:
+			if linha.find("Grau de instrução: ;") != -1:
+				pai_escolaridade = linha.split(": ;")[1].split(";")[0].strip()
+				obter_pai_escolaridade = False
+			
+		if obter_pai_profissao:
+			if linha.find("Profissão: ;") != -1:
+				pai_profissao = linha.split(": ;")[1].split(";")[0].strip()
+				obter_pai_profissao = False
+			
+		if obter_pai_remuneracao:
+			if linha.find("Remuneração (R$): ;") != -1:
+				pai_remuneracao = linha.split(": ;")[2].split(";")[0].strip()
+				obter_pai_remunaracao = False
+
+		if check_if_dados_mae_field:
+			if linha.find("Dados da Mãe;") != -1:
+				obter_mae_nome = True
+				obter_mae_cpf = True
+				obter_mae_cidade = True
+				obter_mae_endereco = True
+				obter_mae_endereco_uf = True
+				obter_mae_escolaridade = True
+				obter_mae_profissao = True
+				obter_mae_remuneracao = True
+				check_if_dados_mae_field = False
+
+		if obter_mae_nome:
+			if linha.find("Nome: ;") != -1:
+				mae_nome = linha.split(": ;")[1].split(";")[0].strip()
+				obter_mae_nome = False
+			
+		if obter_mae_cpf:
+			if linha.find("CPF: ;") != -1:
+				mae_cpf = linha.split(": ;")[3].split(";")[0].strip()
+				mae_idade = linha.split(": ;")[2].split(";")[0].strip()
+				obter_mae_cpf = False
+
+		if obter_mae_cidade:
+			if linha.find("Cidade: ;") != -1:
+				mae_cidade = linha.split(": ;")[2].split(";")[0].strip()
+				obter_mae_cidade = False
+			
+		if obter_mae_endereco:
+			if linha.find("Endereço: ;") != -1:
+				mae_endereco = linha.split(": ;")[1].split(";")[0].strip()
+				obter_mae_endereco = False
+
+		if obter_mae_endereco_uf:
+			if linha.find("UF: ;") != -1:
+				mae_endereco_uf = linha.split(": ;")[1].split(";")[0].strip()
+				obter_mae_endereco_uf = False
+
+		if obter_mae_escolaridade:
+			if linha.find("Grau de instrução: ;") != -1:
+				mae_escolaridade = linha.split(": ;")[1].split(";")[0].strip()
+				obter_mae_escolaridade = False
+			
+		if obter_mae_profissao:
+			if linha.find("Profissão: ;") != -1:
+				mae_profissao = linha.split(": ;")[1].split(";")[0].strip()
+				obter_mae_profissao = False
+			
+		if obter_mae_remuneracao:
+			if linha.find("Remuneração (R$): ;") != -1:
+				mae_remuneracao = linha.split(": ;")[2].split(";")[0].strip()
+				obter_mae_remunaracao = False
+			
+		if obter_transporte_usado:
+			if linha.find("Meio de transporte utilizado semanalmente: ;") != -1:
+				transporte_usado = linha.split(": ;")[1].split(";")[0].strip()
+				obter_transporte_usado = False				
+
+		if obter_justificativa == True:
+				if linha.find("Pontuação;") == -1:
+					justificativa += linha
+				else:
+					obter_justificativa = False
+
+
+		if check_if_justificativa_field:
+			if linha.find("Justiticativa;") != -1:			
+				obter_justificativa = True
+				check_if_justificativa_field = False
+
+		if obter_pontuacao:
+			if obter_pontuacao_vinculo_emprego_estudante:
+				pontuacao_vinculo_emprego_estudante += linha#.split(" = ")[0].strip()
+
+			if obter_pontuacao_cidade_estudante:
+				pontuacao_cidade_estudante += linha#.split(" = ")[0].strip()
+
+			if obter_pontuacao_vinculo_emprego_pai:
+				pontuacao_vinculo_emprego_pai += linha
+
+			if obter_pontuacao_vinculo_emprego_mae:
+				pontuacao_vinculo_emprego_mae += linha
+
+			if obter_pontuacao_vinculo_emprego_mantenedor:
+				pontuacao_vinculo_emprego_mantenedor += linha
+			
+			if obter_pontuacao_fx_renda:
+				print(linha)
+				pontuacao_fx_renda += linha
+			
+			if obter_pontuacao_parecer:
+				pontuacao_parecer += linha
+
+			if linha.find("Profissão do aluno: ;") != -1:
+				obter_pontuacao_vinculo_emprego_estudante = True
+			
+			elif linha.find("Cidade do aluno: ;") != -1:
+				obter_pontuacao_vinculo_emprego_estudante = False
+				obter_pontuacao_cidade_estudante = True
+			
+			elif linha.find("Profissão do pai: ;") != -1:
+				obter_pontuacao_cidade_estudante = False
+				obter_pontuacao_vinculo_emprego_pai = True
+			
+			elif linha.find("Profissão da mãe: ;") != -1:
+				obter_pontuacao_vinculo_emprego_pai = False
+				obter_pontuacao_vinculo_emprego_mae = True
+			
+			elif linha.find("Profissão do mantenedor/cônjuge: ;") != -1:
+				obter_pontuacao_vinculo_emprego_mae = False
+				obter_pontuacao_vinculo_emprego_mantenedor = True
+			
+			elif linha.find("Faixa de renda: ;") != -1:
+				obter_pontuacao_vinculo_emprego_mantenedor = False
+				obter_pontuacao_fx_renda = True
+			
+			elif linha.find("Parecer técnico: ;") != -1: 
+				obter_pontuacao_fx_renda = False
+				obter_pontuacao_parecer = True
+			
+			elif linha.find("Grupo: ;") != -1:
+				pontuacao_grupo = linha.split(": ;")[3].split(";")[0].strip()
+
+			elif linha.find("Assistente social: ;") != -1:
+				pontuacao_assistente_social = linha.split(": ;")[1].split(";")[0].strip()
+
+
+		if check_if_pontuacao_field:
+			if linha.find("Pontuação;") != -1:
+				obter_pontuacao = True
+
+
+	output["matricula"] = matricula
+	output["nome"] = nome
+	output["periodo_estudo"] = periodo_estudo
+	output["motivos"] = motivos
+	output["curso_nivel"] = curso_nivel
+	output["curso_nome"] = curso_nome
+	output["campus"] = campus
+	output["periodo_ingresso_unb"] = periodo_ingresso_unb
+	output["forma_ingresso"] = forma_ingresso
+	output["sexo"] = sexo
+	output["cpf"] = cpf
+	output["isencao_vestibular"] = isencao_vestibular
+	output["teve_abatimento"] = teve_abatimento
+	output["cor"] = cor
+	output["escola_em_tipo"] = escola_em_tipo
+	output["escola_em_nome"] = escola_em_nome
+	output["escola_em_cidade"] = escola_em_cidade
+	output["escola_em_uf"] = escola_em_uf
+	output["fez_pre_vestibular"] = fez_pre_vestibular
+	output["faz_outro_curso_superior"] = faz_outro_curso_superior
+	output["fez_outro_curso_superior"] = fez_outro_curso_superior
+	output["situacao_prof_corrente"] = situacao_prof_corrente
+	output["situacao_prof_anterior"] = situacao_prof_anterior
+	output["contribui_p_rendafam"] = contribui_p_rendafam
+	output["cidade_moradia_sae"] = cidade_moradia_sae
+	output["endereco_moradia_sae"] = endereco_moradia_sae
+	output["endereco_moradia_sigra"] = endereco_moradia_sigra
+	output["email"] = email
+	output["com_quem_reside"] = com_quem_reside
+	output["situacao_residencia_familia"] = situacao_residencia_familia
+	output["estado_civil_estudante"] = estado_civil_estudante
+	output["pai_nome"] = pai_nome
+	output["pai_cpf"] = pai_cpf
+	output["pai_cidade"] = pai_cidade
+	output["pai_endereco"] = pai_endereco
+	try:
+		output["pai_endereco_uf"] = pai_endereco_uf
+	except UnboundLocalError:
+		output["pai_endereco_uf"] = ""
+	output["pai_escolaridade"] = pai_escolaridade
+	output["pai_profissao"] = pai_profissao
+	output["pai_remuneracao"] = pai_remuneracao
+	output["mae_nome"] = mae_nome
+	output["mae_cpf"] = mae_cpf
+	output["mae_cidade"] = mae_cidade
+	output["mae_endereco"] = mae_endereco
+	try:
+		output["mae_endereco_uf"] = mae_endereco_uf
+	except UnboundLocalError:
+		output["mae_endereco_uf"] = ""		
+	output["mae_escolaridade"] = mae_escolaridade
+	output["mae_profissao"] = mae_profissao
+	try:
+		output["mae_remuneracao"] = mae_remuneracao
+	except UnboundLocalError:
+		output["mae_remuneracao"] = ""
+	output["transporte_usado"] = transporte_usado
+	output["justificativa"] = justificativa.replace(";"," ").replace('\n',' ').replace('  ',' ').strip()
+	output["pontuacao_vinculo_emprego_estudante"] = pontuacao_vinculo_emprego_estudante
+	output["pontuacao_cidade_estudante"] = pontuacao_cidade_estudante
+	output["pontuacao_vinculo_emprego_pai"] = pontuacao_vinculo_emprego_pai
+	output["pontuacao_vinculo_emprego_mae"] = pontuacao_vinculo_emprego_mae
+	output["pontuacao_vinculo_emprego_mantenedor"] = pontuacao_vinculo_emprego_mantenedor
+	output["pontuacao_fx_renda"] = pontuacao_fx_renda
+	output["pontuacao_parecer"] = pontuacao_parecer
+
+
+	print(output)
+
+	return output	
+
 
 
 def process_sigra_hist(hist_file_txt):
@@ -677,7 +1204,7 @@ def process_sigra_hist(hist_file_txt):
 	
 	for line in conteudo:
 		if obter_matricula == True:
-			if re.search("^\s*\d\d/\d*", line) != None:
+			if linha.find("\s*\d\d/\d*", line) != None:
 				matricula = line.replace(' ',';')
 				while matricula.find(';;') != -1:
 					matricula = matricula.replace(';;',';')
@@ -698,19 +1225,19 @@ def process_sigra_hist(hist_file_txt):
 				
 
 		if obter_nome_pai == True:
-			if re.search("^\s*Pai\:", line) != None:
+			if linha.find("\s*Pai\:", line) != None:
 				nome_pai = line.split(':')[1].strip()
 				obter_nome_pai = False
 				
 				
 		if obter_nome_mae == True:
-			if re.search("^\s*Mãe\:", line) != None:
+			if linha.find("\s*Mãe\:", line) != None:
 				nome_mae = line.split(':')[1].strip()
 				obter_nome_mae = False
 				
 
 		if obter_dn == True:
-			if re.search("^\s*Nascimento\:", line) != None:
+			if linha.find("\s*Nascimento\:", line) != None:
 				dn = line.replace('  ',':')
 				while dn.find('::') != -1:
 					dn = dn.replace('::',':')
@@ -718,35 +1245,35 @@ def process_sigra_hist(hist_file_txt):
 				obter_dn = False
 				
 			
-		if re.search("^\s*Período\:", line) != None:
+		if linha.find("\s*Período\:", line) != None:
 			if line.find('(Continuação)') != -1:
 				pass
-			elif re.search("^\s*\d\d\d\d/0", line) != None:
+			elif linha.find("\s*\d\d\d\d/0", line) != None:
 				verao += 1
 			else:
 				periodo += 1
 				calculo_ira[periodo] = []
 				
-		if re.search("^\s*Aluno não registrou matrícula no Período", line) != None:
+		if linha.find("\s*Aluno não registrou matrícula no Período", line) != None:
 			calculo_ira[periodo] = "Aluno não registrou matrícula no Período"
 			nreg_mat += 1
 			
-		if re.search("^\s*Trancamento Geral Justificado", line) != None:
+		if linha.find("\s*Trancamento Geral Justificado", line) != None:
 			calculo_ira[periodo] = "Trancamento Geral Justificado"
 			tgj_geral += 1
 
-		if re.search("^\s*Trancamento Geral Justificado (Problema de Saúde)", line) != None:
+		if linha.find("\s*Trancamento Geral Justificado (Problema de Saúde)", line) != None:
 			calculo_ira[periodo] = "Trancamento Geral Justificado (Problema de Saúde)"
 			tgj_saude += 1
 		
-		if re.search("^\s*Trancamento Geral de Matrícula", line) != None:
+		if linha.find("\s*Trancamento Geral de Matrícula", line) != None:
 			calculo_ira[periodo] = "Trancamento Geral de Matrícula"
 			tgm_geral += 1
 
-		if re.search("^\s*Período em Realização", line) != None:
+		if linha.find("\s*Período em Realização", line) != None:
 			calculo_ira[periodo] = "Período em Realização"
 		
-		if re.search("^\s*\d\d\d\d\d\d", line) != None:
+		if linha.find("\s*\d\d\d\d\d\d", line) != None:
 			idx_target = 98
 			if line[idx_target:idx_target+5].strip() != "":
 				mensao = line[idx_target:idx_target+5].strip()
@@ -771,7 +1298,7 @@ def process_sigra_hist(hist_file_txt):
 			if line[idx_target:idx_target+5].strip() != "":
 				calculo_ira[periodo].append('MLV--'+line[idx_target:idx_target+5].strip()+"-"+mensao)
 			
-		if re.search("^\s*Curso.....", line) != None:
+		if linha.find("\s*Curso.....", line) != None:
 			idx_target = 55
 			if line[idx_target:idx_target+5].strip() != "":
 				total_cretitos_exigidos = int(line[idx_target:idx_target+5].strip())
