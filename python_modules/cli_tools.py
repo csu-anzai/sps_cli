@@ -29,6 +29,7 @@ from colored import fg, bg, attr
 from subprocess import getoutput
 from random import randrange
 from string import digits
+from .cli_global_config import tmpdir
 
 def convert_to_cli_args(lista):
     o = '" "'.join(lista)
@@ -37,12 +38,10 @@ def convert_to_cli_args(lista):
 
 
 def create_lockfile(lockf):
-	tmpdir = getoutput('echo $TMPDIR')
 	f = open(tmpdir+os.sep+lockf,'w')
 	f.close()
 
 def remove_lockfile(lockf):
-	tmpdir = getoutput('echo $TMPDIR')
 	os.remove(tmpdir+os.sep+lockf)
 
 

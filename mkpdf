@@ -32,12 +32,9 @@ def convert_md_to_html(arquivo_alvo, template=base_html_layout, initdir=None):
     output = template.replace("###INFO###",converted_md_data)
     print(tmpdir)
     print(tmphtmlfile)
-    f = open(tmphtmlfile, 'w')
-    f.write(output)
-    f.close()
-    
-    '''with open(tmphtmlfile, 'w') as output_file:
-        output_file.write(output)'''
+      
+    with open(tmphtmlfile, 'w') as output_file:
+        output_file.write(output)
 
     if not initdir == None:
         os.system('mv "{html}" "{initdir}/{html_final}"'.format(html=tmphtmlfile, initdir=initdir, html_final=nome_arquivo_html))    

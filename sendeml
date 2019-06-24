@@ -24,7 +24,7 @@ from docopt import docopt
 from subprocess import getoutput
 from python_modules.cli_sps_base import *
 from python_modules.cli_decorators import check_config_existance
-from python_modules.cli_tools import mk_randnum_seq, verde
+from python_modules.cli_tools import mk_randnum_seq, verde, amarelo
 from smtplib import SMTP
 from string import whitespace, punctuation, digits
 from email.message import EmailMessage
@@ -39,7 +39,7 @@ def send_email_op(msg, profissional):
     smtpserver.login(profissional['eml'], getoutput("echo {} | base64 -d".format(profissional['eml_pwd'])))
     smtpserver.send_message(msg)
     smtpserver.close()
-    print(verde("Mensagem enviada"))
+    print(amarelo("Mensagem enviada"))
 
 
 @check_config_existance
