@@ -89,7 +89,7 @@ def old_sae_etd_movefiles_to_folder(target_folder=old_etd_folder):
 					new_folders.append(fname)
 			shutil.move(f, "{}/{}/{}".format(target_folder, fname, f))
 
-def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=6190):
+def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=6342):
 	processos = read_csv(target_csv_lista_processos, '\t')
 	total_itens = len(processos)-1
 	current_item = init_idx
@@ -652,6 +652,7 @@ def process_sigra_hist(hist_file_txt):
 	f = open(hist_file_txt, 'r', encoding="iso-8859-1")
 	conteudo = f.readlines()
 	f.close()
+	#print(hist_file_txt)
 	
 	output = OrderedDict()
 	
@@ -668,6 +669,9 @@ def process_sigra_hist(hist_file_txt):
 	total_creditos_obr_aprovados = 0
 	total_creditos_opt_aprovados = 0
 	total_creditos_mod_aprovados = 0
+	total_cretitos_exigidos = 0
+	total_creditos_obtidos = 0
+	total_creditos_pendentes = 0
 	total_creditos_aprovados_por_semestre = []
 	nreg_mat = 0
 	tgj_geral = 0
@@ -690,71 +694,31 @@ def process_sigra_hist(hist_file_txt):
 					matricula = matricula.replace(';;',';')
 				matricula = matricula.split(';')[1]#.replace('/','')
 				obter_matricula = False
-				print(matricula)
+				#print(matricula)
 		
 		if obter_nome == True:
 			if conteudo.index(line) == 4:
 				nome = line.replace('  ','').strip()
 				obter_nome = False
-				print(nome)
+				#print(nome)
 				
 		if obter_curso == True:
 			if conteudo.index(line) == 5:
 				curso = line.replace('  ','').strip()
 				obter_curso = False
-				print(curso)
-				'''
-				if curso == "Educação do Campo (Diurno)":
-					pass
-				else:
-					obter_curso = False
-					print(curso)
-					curric_list = os.listdir(curric_folder)
-					for c in curric_list:
-						if c.find(curso) != -1:
-							curso_cod = c.split('-')[0].strip()
-							print(curso_cod)
-							curric_nfo = read_csv(os.path.join(curric_folder, c))
-							curric_metadados_nfo = read_csv(os.path.join(curric_metadados_folder, "Cursos_Metainfo.csv"))
-							for c_nfo in curric_metadados_nfo:
-								if c_nfo['Código Habilitação'] == curso_cod:
-									creditos_p_formar = c_nfo['Quantidade de créditos para formatura']
-									turno = c_nfo['Turno']
-									break
-							break'''
-			
-			'''if conteudo.index(line) == 6:
-				curso = line.split(':')[1].strip()
-				if curso == "Educação do Campo - Ciências da Natureza e Matemática":
-					curso = "Educação do Campo - Ciências da Natureza"
-				obter_curso = False
-				print(curso)
-				curric_list = os.listdir(curric_folder)
-				for c in curric_list:
-					if c.find(curso) != -1:
-						curso_cod = c.split('-')[0].strip()
-						print(curso_cod)
-						curric_nfo = read_csv(os.path.join(curric_folder, c))
-						curric_metadados_nfo = read_csv(os.path.join(curric_metadados_folder, "Cursos_Metainfo.csv"))
-						for c_nfo in curric_metadados_nfo:
-							if c_nfo['Código Habilitação'] == curso_cod:
-								creditos_p_formar = c_nfo['Quantidade de créditos para formatura']
-								turno = c_nfo['Turno']
-								break
-						break				'''
-						
+				#print(curso)
 
 		if obter_nome_pai == True:
 			if re.search("^\s*Pai\:", line) != None:
 				nome_pai = line.split(':')[1].strip()
 				obter_nome_pai = False
-				print(nome_pai)
+				#print(nome_pai)
 				
 		if obter_nome_mae == True:
 			if re.search("^\s*Mãe\:", line) != None:
 				nome_mae = line.split(':')[1].strip()
 				obter_nome_mae = False
-				print(nome_mae)
+				#print(nome_mae)
 
 		if obter_dn == True:
 			if re.search("^\s*Nascimento\:", line) != None:
@@ -763,7 +727,7 @@ def process_sigra_hist(hist_file_txt):
 					dn = dn.replace('::',':')
 				dn = dn.split(':')[2].strip()
 				obter_dn = False
-				print(dn)
+				#print(dn)
 			
 		if re.search("^\s*Período\:", line) != None:
 			if line.find('(Continuação)') != -1:
@@ -795,163 +759,181 @@ def process_sigra_hist(hist_file_txt):
 		
 		if re.search("^\s*\d\d\d\d\d\d", line) != None:
 			idx_target = 98
-			#if line[idx_target] == " ":
-			#	idx_target += 1
-			calculo_ira[periodo].append(line[idx_target:idx_target+5].strip())
+			if line[idx_target:idx_target+5].strip() != "":
+				mensao = line[idx_target:idx_target+5].strip()
 
 			idx_target = 106
-			calculo_ira[periodo].append(line[idx_target:idx_target+5].strip())
-			
-			
-			'''
-			if line.find("Métodos de Organização e Educação Comunitária  1") != 1:
-				line = line.replace("Métodos de Organização e Educação Comunitária  1", "Métodos de Organização e Educação Comunitária 1")
-			if line.find("HISTORIA  DA PSICOLOGIA") != -1:
-				line = line.replace("HISTORIA  DA PSICOLOGIA", "HISTORIA DA PSICOLOGIA")
-			disciplina = line.replace('  ',';').replace('\n','')
-			while disciplina.find(';;') != -1:
-				disciplina = disciplina.replace(';;',';')
-			disciplina = disciplina.split(';')[1:]
-			disciplina.append(periodo)
-			calculo_ira[periodo].append(disciplina)'''
-	
-	print(calculo_ira)
-	exit()
+			if line[idx_target:idx_target+5].strip() != "":
+				calculo_ira[periodo].append('OBR-Area-'+line[idx_target:idx_target+5].strip()+"-"+mensao)
 
+			idx_target = 114
+			if line[idx_target:idx_target+5].strip() != "":
+				calculo_ira[periodo].append('OPT-Area-'+line[idx_target:idx_target+5].strip()+"-"+mensao)
+
+			idx_target = 125
+			if line[idx_target:idx_target+5].strip() != "":
+				calculo_ira[periodo].append('OBR-Domínio-'+line[idx_target:idx_target+5].strip()+"-"+mensao)
+
+			idx_target = 131
+			if line[idx_target:idx_target+5].strip() != "":
+				calculo_ira[periodo].append('OPT-Domínio-'+line[idx_target:idx_target+5].strip()+"-"+mensao)
+
+			idx_target = 143
+			if line[idx_target:idx_target+5].strip() != "":
+				calculo_ira[periodo].append('MLV--'+line[idx_target:idx_target+5].strip()+"-"+mensao)
+			
+		if re.search("^\s*Curso.....", line) != None:
+			idx_target = 55
+			if line[idx_target:idx_target+5].strip() != "":
+				total_cretitos_exigidos = int(line[idx_target:idx_target+5].strip())
+
+			idx_target = 64
+			if line[idx_target:idx_target+5].strip() != "":
+				total_creditos_obtidos = int(line[idx_target:idx_target+5].strip())
+
+			idx_target = 72
+			if line[idx_target:idx_target+5].strip() != "":
+				total_creditos_pendentes = int(line[idx_target:idx_target+5].strip())
+
+
+	
 	ira_por_semestre = []
 	
 	for periodo in calculo_ira.keys():
+		if type(calculo_ira[periodo]) != list:
+			pass
+		else:
 
-		ira_numerador = 0
-		ira_denominador = 0
-		ira_TR = 0
-		ira_tr_obr = 0
-		ira_tr_opt = 0
-		tj_obr = 0
-		tj_opt = 0
-		ira_total_creditos = 0
-		total_creditos_aprovados = 0
+			ira_numerador = 0
+			ira_denominador = 0
+			ira_TR = 0
+			ira_tr_obr = 0
+			ira_tr_opt = 0
+			tj_obr = 0
+			tj_opt = 0
+			ira_total_creditos = 0
+			total_creditos_aprovados = 0
 
-		for disciplina in calculo_ira[periodo]:
-			#print(disciplina)
-			creditos = float(disciplina[3])
-			ira_total_creditos += creditos
-			disciplina_tipo = "ML"
-			for disciplina_curricular in curric_nfo:
-				if disciplina_curricular['Código'] == disciplina[0]:
-					disciplina_tipo = disciplina_curricular['Tipo']
-					break			
-			if  disciplina[2].find('SS')  != -1:
-				peso = 5.0
-				if disciplina_tipo == 'OBR':
-					total_creditos_obr_aprovados += creditos
-					total_creditos_aprovados += creditos
-				elif disciplina_tipo == 'OPT':
-					total_creditos_opt_aprovados += creditos
-					total_creditos_aprovados += creditos
+			for disciplina in calculo_ira[periodo]:
+				disciplina_split = disciplina.split("-")
+				creditos = float(disciplina_split[2])
+				disciplina_tipo = disciplina_split[0]
+				mensao = disciplina_split[3]
+				ira_total_creditos += creditos
+				
+				if mensao == "SS":
+					peso = 5.0
+					if disciplina_tipo == 'OBR':
+						total_creditos_obr_aprovados += creditos
+						total_creditos_aprovados += creditos
+					elif disciplina_tipo == 'OPT':
+						total_creditos_opt_aprovados += creditos
+						total_creditos_aprovados += creditos
+					else:
+						total_creditos_mod_aprovados += creditos
+						total_creditos_aprovados += creditos
+				
+				elif mensao == 'MS':
+					peso = 4.0
+					if disciplina_tipo == 'OBR':
+						total_creditos_obr_aprovados += creditos
+						total_creditos_aprovados += creditos
+					elif disciplina_tipo == 'OPT':
+						total_creditos_opt_aprovados += creditos
+						total_creditos_aprovados += creditos
+					else:
+						total_creditos_mod_aprovados += creditos
+						total_creditos_aprovados += creditos
+
+				elif mensao == 'MM':
+					peso = 3.0
+					if disciplina_tipo == 'OBR':
+						total_creditos_obr_aprovados += creditos
+						total_creditos_aprovados += creditos
+					elif disciplina_tipo == 'OPT':
+						total_creditos_opt_aprovados += creditos
+						total_creditos_aprovados += creditos
+					else:
+						total_creditos_mod_aprovados += creditos
+						total_creditos_aprovados += creditos
+			
+				elif mensao == 'MI':
+					peso = 2.0
+				
+				elif mensao == 'II':
+					peso = 1.0
+				
+				elif mensao == 'SR':
+					peso = 0.0
+				
+				elif mensao == 'TR':
+					peso = 0.0
+					if disciplina_tipo == 'OBR':
+						ira_tr_obr += 1
+					elif disciplina_tipo == 'OPT':
+						ira_tr_opt += 1
+				
+				elif mensao == 'TJ':
+					peso = 0.0
+					if disciplina_tipo == 'OBR':
+						tj_obr += 1
+					elif disciplina_tipo == 'OPT':
+						tj_opt += 1
+						
+				elif mensao == 'DP':
+					peso = 0.0
+
+				elif mensao == 'TM':
+					peso = 0.0
+
+				elif mensao == 'AP':
+					peso = 0.0
+
+				elif mensao == 'CC':
+					peso = 0.0
+					cc += creditos
+				
 				else:
-					total_creditos_mod_aprovados += creditos
-					total_creditos_aprovados += creditos
+					peso = 0.0
+				
+				numerador = float(peso) * float(creditos) * float(periodo)
+				denominador = float(creditos) * float(periodo)
+				
+				ira_numerador += numerador
+				ira_denominador += denominador
 			
-			elif disciplina[2].find('MS') != -1:
-				peso = 4.0
-				if disciplina_tipo == 'OBR':
-					total_creditos_obr_aprovados += creditos
-					total_creditos_aprovados += creditos
-				elif disciplina_tipo == 'OPT':
-					total_creditos_opt_aprovados += creditos
-					total_creditos_aprovados += creditos
-				else:
-					total_creditos_mod_aprovados += creditos
-					total_creditos_aprovados += creditos
-
-			elif disciplina[2].find('MM') != -1:
-				peso = 3.0
-				if disciplina_tipo == 'OBR':
-					total_creditos_obr_aprovados += creditos
-					total_creditos_aprovados += creditos
-				elif disciplina_tipo == 'OPT':
-					total_creditos_opt_aprovados += creditos
-					total_creditos_aprovados += creditos
-				else:
-					total_creditos_mod_aprovados += creditos
-					total_creditos_aprovados += creditos
+			if not calculo_ira[periodo] == []:
+				total_creditos_aprovados_por_semestre.append(total_creditos_aprovados)
+				try:
+					ira = (1.0 - (((0.6 * ira_tr_obr) + (0.4 * ira_tr_opt))/ira_total_creditos)) * (ira_numerador/ira_denominador)
+					ira_por_semestre.append(ira)
+				except ZeroDivisionError:
+					pass
 		
-			elif disciplina[2].find('MI') != -1:
-				peso = 2.0
-			
-			elif disciplina[2].find('II') != -1:
-				peso = 1.0
-			
-			elif disciplina[2].find('SR') != -1:
-				peso = 0.0
-			
-			elif disciplina[2].find('TR') != -1:
-				peso = 0.0
-				if disciplina_tipo == 'OBR':
-					ira_tr_obr += 1
-				elif disciplina_tipo == 'OPT':
-					ira_tr_opt += 1
-			
-			elif disciplina[2].find('TJ') != -1:
-				peso = 0.0
-				if disciplina_tipo == 'OBR':
-					tj_obr += 1
-				elif disciplina_tipo == 'OPT':
-					tj_opt += 1
-					
-			elif disciplina[2].find('DP') != -1:
-				peso = 0.0
-
-			elif disciplina[2].find('TM') != -1:
-				peso = 0.0
-
-			elif disciplina[2].find('AP') != -1:
-				peso = 0.0
-
-			elif disciplina[2].find('CC') != -1:
-				peso = 0.0
-				cc += creditos
-			
-			numerador = float(peso) * float(disciplina[3]) * float(disciplina[4])
-			denominador = float(disciplina[3]) * float(disciplina[4])
-			
-			ira_numerador += numerador
-			ira_denominador += denominador
-		
-		if not calculo_ira[periodo] == []:
-			ira = (1.0 - (((0.6 * ira_tr_obr) + (0.4 * ira_tr_opt))/ira_total_creditos)) * (ira_numerador/ira_denominador)
-			ira_por_semestre.append(ira)
-			total_creditos_aprovados_por_semestre.append(total_creditos_aprovados)
-		
-	percentual_d_conclusao = float((total_creditos_obr_aprovados + total_creditos_opt_aprovados + total_creditos_mod_aprovados)/(float(creditos_p_formar)) * 100)
-	expectativa_de_semestres_adicionais = (float(creditos_p_formar) - (total_creditos_obr_aprovados + total_creditos_opt_aprovados + total_creditos_mod_aprovados)) / mediaa(total_creditos_aprovados_por_semestre)
+	try:
+		percentual_d_conclusao = float((total_creditos_obtidos/float(total_cretitos_exigidos)) * 100)
+	except ZeroDivisionError:
+		percentual_d_conclusao = "Impossível calcular"
 	
-	'''
-	print("Periodo: " + str(periodo))
-	print("Curso de verão: " + str(verao))
-	print("Variação no IRA: " + str(ira_por_semestre))
-	print("Média IRA: " + str(mediaa(ira_por_semestre)))
-	print("Créditos OBR obtidos: " + str(total_creditos_obr_aprovados))
-	print("Créditos OPT obtidos: " + str(total_creditos_opt_aprovados))
-	print("Créditos Módulo Livre obtidos: " + str(total_creditos_mod_aprovados))
-	print("Média céditos obtidos por semestre: " + str(mediaa(total_creditos_aprovados_por_semestre)))
-	print("Quantidade de creditos para formar: " + str(creditos_p_formar))
-	print("Percentual de conclusão do curso: " + str(percentual_d_conclusao) +"%")
-	print("Expectativa de semestres para conclusão do curso: " + str(expectativa_de_semestres_adicionais))
-	print("Turno: " + str(turno))
-	input('...')
-	'''
+	try:
+		expectativa_de_semestres_adicionais = (float(total_cretitos_exigidos) - (total_creditos_obtidos)) / mediaa(total_creditos_aprovados_por_semestre)
+	except ZeroDivisionError:
+		expectativa_de_semestres_adicionais = "Impossível calcular"
 	
 	output['Matrícula'] = matricula
 	output['Data de Nascimento'] = dn
 	output['Pai'] = nome_pai
 	output['Mae'] = nome_mae
-	output['Código Habilitação'] = curso_cod
-	output['Turno do curso'] = turno
-	output['Créditos a obter'] = creditos_p_formar
-	output['Percentual de conclusão do curso'] = creditos_p_formar
-	output['Média de créditos obtidos por semestre'] = mediaa(total_creditos_aprovados_por_semestre)
+	#output['Código Habilitação'] = "Criar Tabela - COD/CURSO/TURNO"
+	output['Curso'] = curso
+	if curso.find("Diurno") != -1:
+		output['Turno do curso'] = "Diruno"
+	else:
+		output['Turno do curso'] = "Noturno"
+	try:
+		output['Média de créditos obtidos por semestre'] = mediaa(total_creditos_aprovados_por_semestre)
+	except ZeroDivisionError:
+		output['Média de créditos obtidos por semestre'] = "Impossível calcular"
 	output['Quantidade de semestres cursados'] = periodo
 	output['Quantidade de semestres de verão cursados'] = verao
 	output['Quantidade de semestres sem registro de matrícula'] = nreg_mat
@@ -959,11 +941,19 @@ def process_sigra_hist(hist_file_txt):
 	output['TGJs Saúde'] = tgj_saude
 	output['TGMs'] = tgm_geral
 	output['Expectativa de semestres à cursar até a conclusão'] = expectativa_de_semestres_adicionais
-	output['IRA médio'] = mediaa(ira_por_semestre)
+	output['Variação no IRA'] = ira_por_semestre
+	try:
+		output['IRA médio'] = mediaa(ira_por_semestre)
+	except ZeroDivisionError:
+		output['IRA médio'] = "Impossível calcular"
 	output['Total créditos OBR obtidos'] = total_creditos_obr_aprovados
 	output['Total créditos OPT obtidos'] = total_creditos_opt_aprovados
-	output['Total créditos ML obtidos'] = total_creditos_mod_aprovados
-		
+	output['Total créditos MLV obtidos'] = total_creditos_mod_aprovados
+	output['Total créditos obtidos'] = total_creditos_obtidos
+	output['Total créditos exigidos'] = total_cretitos_exigidos
+	output['Créditos a obter'] = total_creditos_pendentes
+	output['Percentual de conclusão do curso'] = str(percentual_d_conclusao)+"%"
+
 	return output
 
 				
@@ -993,6 +983,9 @@ def multi_process_sigra_academic_history(filezip):
 	hist_files_data = []
 	matricula_dos_erros = []
 	for hfile in hist_files:
+		hist_files_data.append(process_sigra_hist(hfile))
+		os.remove(hfile)
+		'''
 		try:
 			hist_files_data.append(process_sigra_hist(hfile))
 			os.remove(hfile)
@@ -1000,6 +993,7 @@ def multi_process_sigra_academic_history(filezip):
 			error_count += 1
 			#os.remove(hfile)
 			matricula_dos_erros.append(hfile.split('.')[0])
+		'''
 			
 	os.chdir(initdir)
 	try: 
