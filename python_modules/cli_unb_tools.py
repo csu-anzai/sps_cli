@@ -647,12 +647,9 @@ def process_curric(curric_file_txt):
 
 
 def process_sigra_hist(hist_file_txt):
-	'''
-	'''
 	f = open(hist_file_txt, 'r', encoding="iso-8859-1")
 	conteudo = f.readlines()
 	f.close()
-	#print(hist_file_txt)
 	
 	output = OrderedDict()
 	
@@ -677,14 +674,6 @@ def process_sigra_hist(hist_file_txt):
 	tgj_geral = 0
 	tgj_saude = 0
 	tgm_geral = 0
-	ss_num = 0
-	ms_num = 0
-	mm_num = 0
-	mi_num = 0
-	ii_num = 0
-	sr_num = 0
-	tr_num = 0
-	cc_num = 0
 	
 	for line in conteudo:
 		if obter_matricula == True:
@@ -694,31 +683,31 @@ def process_sigra_hist(hist_file_txt):
 					matricula = matricula.replace(';;',';')
 				matricula = matricula.split(';')[1]#.replace('/','')
 				obter_matricula = False
-				#print(matricula)
+				
 		
 		if obter_nome == True:
 			if conteudo.index(line) == 4:
 				nome = line.replace('  ','').strip()
 				obter_nome = False
-				#print(nome)
+				
 				
 		if obter_curso == True:
 			if conteudo.index(line) == 5:
 				curso = line.replace('  ','').strip()
 				obter_curso = False
-				#print(curso)
+				
 
 		if obter_nome_pai == True:
 			if re.search("^\s*Pai\:", line) != None:
 				nome_pai = line.split(':')[1].strip()
 				obter_nome_pai = False
-				#print(nome_pai)
+				
 				
 		if obter_nome_mae == True:
 			if re.search("^\s*Mãe\:", line) != None:
 				nome_mae = line.split(':')[1].strip()
 				obter_nome_mae = False
-				#print(nome_mae)
+				
 
 		if obter_dn == True:
 			if re.search("^\s*Nascimento\:", line) != None:
@@ -727,7 +716,7 @@ def process_sigra_hist(hist_file_txt):
 					dn = dn.replace('::',':')
 				dn = dn.split(':')[2].strip()
 				obter_dn = False
-				#print(dn)
+				
 			
 		if re.search("^\s*Período\:", line) != None:
 			if line.find('(Continuação)') != -1:
@@ -806,7 +795,7 @@ def process_sigra_hist(hist_file_txt):
 
 			ira_numerador = 0
 			ira_denominador = 0
-			ira_TR = 0
+			#ira_TR = 0
 			ira_tr_obr = 0
 			ira_tr_opt = 0
 			tj_obr = 0
