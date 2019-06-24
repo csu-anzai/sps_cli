@@ -23,3 +23,6 @@ formulario_atendimentos = os.sep.join([pasta_de_formularios, "form_atendimento.j
 formulario_novo_usuario = os.sep.join([pasta_de_formularios, "form_novo_usuario.json"])
 formulario_novo_processo = os.sep.join([pasta_de_formularios, "form_processos.json"])
 formulario_registro_de_correcao = os.sep.join([pasta_de_formularios, "form_corrigidos.json"])
+formulario_estudo_estudante = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_estudante.json"])
+formulario_estudo_grupo_familiar = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_grupo-familiar-info.json"])
+formulario_estudo_membros_grupo_familiar = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_membros-grupo-familiar.json"])

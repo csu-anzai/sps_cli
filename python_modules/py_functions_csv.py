@@ -26,13 +26,12 @@
 import os
 import csv
 import re
-
+import time
 
 from .py_euristic_tools import merge_lists, join_dictArray_intersection, join_dictArray_union, show_each_dictArray_block
 from .cli_tools import limpar_tela, select_ops, create_lockfile, remove_lockfile, lockfile_name
 from collections import OrderedDict
 from copy import copy
-from time import ctime, sleep
 
 
 def show_each_csv_line(csv_file, print_fields, index_pos):
@@ -302,7 +301,7 @@ def remove_lines(csv_file, csv_col, test_value, delimiter='\t', backup_2_trash=T
 	if op == "s" or op == "S":
 		write_csv(keep_this, csv_file)
 		if backup_2_trash == True:
-			new_csv_file = ctime().replace(' ','_') + "_rmLines_from_" + csv_file
+			new_csv_file = time.ctime().replace(' ','_') + "_rmLines_from_" + csv_file
 			write_csv(remove_that, new_csv_file)
 
 
@@ -357,33 +356,34 @@ def convert_csv_type(csv_file, old_delimiter, new_delimiter, old_lineterminator=
 	write_csv(conteudo, csv_file, delimiter=new_delimiter, lineterminator=new_lineterminator)
 
 
-def write_csv(csv_data_list, csv_file, header=None, delimiter=',', lineterminator='\n'):
+def write_csv(novos_dados, path_to_file, header=None, delimiter=',', lineterminator='\n', tmpdir=tmpdir):
 	'''
 	write_csv(csv_data_list, csv_file, header=None) -> escreve o conteudo de uma lista de dicionários em um arquivo CSV.
 	
 	Esta função gera um arquivo de trava até que o processo seja concluído impossibilitanto a realização de cópias simultâneas. A ordem do cabeçalho pode ser definido arbitrariamente mediante a inclusão de uma lista com o come das colunas na argumento "header".
 	'''
-	
-	lockf = lockfile_name(csv_file)
-	
-	if header == None:
-		fields = csv_data_list[0].keys()
-	else:
-		fields = header
-	
+
+	lockf = lockfile_name(path_to_file)
+	initfolder = os.getcwd()
+	nfo = path_to_file.split('/')
+	fname = nfo[-1]
+	path = path_to_file.replace(fname, '')
+
 	while True:
-		if os.path.isfile(lockf):
-			sleep(0.7)
+		if os.path.isfile(tmpdir+os.sep+lockf):
+			time.time.sleep(0.1)
 		else:
 			create_lockfile(lockf)
 			break
-	
-	with open(csv_file, 'w') as f:
+
+	os.chdir(path.replace('/', os.sep))
+	with open(path_to_file, 'w') as f:
 		w = csv.DictWriter(f, fields, delimiter=delimiter, lineterminator=lineterminator)
 		w.writeheader()
-		w.writerows(csv_data_list)
-		os.remove("/tmp/"+lockf)
-		
+		w.writerows(novos_dados)
+
+	os.chdir(initfolder)
+	remove_lockfile(lockf)
 
 
 

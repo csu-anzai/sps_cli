@@ -267,6 +267,21 @@
             "enunciado": "Valor da renda pessoal do estudante",
             "id" : "valor_renda",
             "tipo": "text"
+        },
+        {
+            "enunciado": "Situação de saúde",
+            "id" : "situacao_saude",
+            "tipo": "checkbox",
+            "alternativas": 
+            [
+                "Sem agravos de saúde",
+                "Doença crônica",
+                "Doença grave",
+                "Agravo de saúde mental",
+                "Deficiência física",
+                "Outro"
+            ]
         }
+
     ]
 }

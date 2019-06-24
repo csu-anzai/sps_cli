@@ -100,9 +100,7 @@ dados = loop.run_until_complete(asyncio.gather(
     load_json_file(arquivo_processos),
     load_json_file(arquivo_corrigidos),
     load_json_file(arquivo_index),
-    #load_json_file(arquivo_estudo_estudante),
-    #load_json_file(arquivo_estudo_familia),
-    #load_json_file(arquivo_estudo_membros_familia),    
+    load_json_file(arquivo_estudos)
 ))
 
 dados_atendimentos = dados[0]
@@ -112,9 +110,7 @@ dados_processos = dados[3]
 dados_processos_pend = get_itens('resultado', '', dados_processos)
 dados_corrigidos = dados[4]
 dados_index = dados[5]
-#dados_estudo_estudante = dados[6]
-#dados_estudo_familia = dados[7]
-#dados_estudo_membros_familia = dados[8]
+dados_estudos = dados[6]
 
 loop2 = asyncio.get_event_loop()
 col_width = loop2.run_until_complete(asyncio.gather(

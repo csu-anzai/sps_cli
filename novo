@@ -71,52 +71,49 @@ from python_modules.cli_global_config import \
     periodo_corrente,\
     trabalhar_com_fragmentos
 
+from python_modules.cli_global_paths import \
+    arquivo_corrigidos,\
+    arquivo_index,\
+    arquivo_usuarios,\
+    arquivo_processos,\
+    arquivo_atendimentos,\
+    arquivo_estudos,\
+    pasta_de_dados,\
+    pasta_de_fragmentos,\
+    formulario_registro_de_correcao,\
+    formulario_atendimentos,\
+    formulario_novo_usuario,\
+    formulario_novo_processo,\
+    formulario_estudo_estudante,\
+    formulario_estudo_grupo_familiar,\
+    formulario_estudo_membros_grupo_familiar
+
 from python_modules.cli_db_loader import \
     get_col_values,\
     timestamp,\
-    pasta_de_dados,\
-    pasta_de_fragmentos,\
-    formulario_novo_usuario,\
     dados_usuarios,\
-    arquivo_usuarios,\
-    formulario_novo_processo,\
     dados_processos,\
-    arquivo_processos,\
-    formulario_atendimentos,\
     dados_atendimentos,\
-    arquivo_atendimentos,\
-    formulario_registro_de_correcao,\
     dados_corrigidos,\
-    arquivo_corrigidos,\
-    arquivo_index,\
-    dados_index
-    #form_estudo_info_estudante,\
-    #form_estudo_info_familia,\
-    #form_estudo_info_membros_familia,\
-    #dados_estudo_estudante, arquivo_estudo_estudante,\
-    #dados_estudo_familia, arquivo_estudo_familia,\
-    #dados_estudo_membros_familia, arquivo_estudo_membros_familia,\
+    dados_index,\
+    dados_estudos
 
 from python_modules.cli_sps_base import \
     save_target_info,\
     numero_sei_mascara,\
     numero_identificador_mascara
     
-
-    
 from python_modules.py_functions_json import save_json, load_json
-from python_modules.cli_tools import select_op, select_ops
+from python_modules.cli_tools import select_op, select_ops, limpar_tela, verde
 from python_modules.py_functions_data_manager import render_form_get_values
 
-
 args = docopt(__doc__)
-
 
 matriculas = get_col_values('identificador', dados_usuarios)
 
 def novo_usuario(identificador):
     nfo = render_form_get_values(formulario_novo_usuario, ['identificador'])
-    nfo['identificador'] = identificador
+    nfo['identificador'] = numero_identificador_mascara(identificador)
     dados_usuarios.append(nfo)
     save_json(dados_usuarios, arquivo_usuarios)
     if trabalhar_com_fragmentos:
@@ -129,7 +126,7 @@ def novo_usuario(identificador):
 def novo_processo(identificador, assunto):
     nfo = render_form_get_values(formulario_novo_processo, ['identificador'])
     nfo['timestamp'] = timestamp() 
-    nfo['identificador'] = identificador
+    nfo['identificador'] = numero_identificador_mascara(identificador)
     nfo['assunto'] = assunto
     nfo['resultado'] = ''
     nfo['numero_sei'] = numero_sei_mascara(nfo['numero_sei'])
@@ -148,28 +145,30 @@ def novo_resultado_processo(processo_num):
     
 def novo_atendimento(identificador):
     save_target_action = False
-    if not identificador in matriculas:
-        novo_usuario(identificador)
-        matriculas.append(identificador)
+    idt = numero_identificador_mascara(identificador)
+    if not idt in matriculas:
+        novo_usuario(idt)
+        matriculas.append(idt)
         save_target_action = True
     nfo = render_form_get_values(formulario_atendimentos, ['identificador'])
     nfo['timestamp'] = timestamp() 
-    nfo['identificador'] = identificador
+    nfo['identificador'] = idt
     nfo['prof_atd'] = getoutput("whoami")+'@'+getoutput("hostname")
     dados_atendimentos.append(nfo)
     if save_target_action == True:
-        save_target_info(identificador, dados_usuarios)
+        save_target_info(idt, dados_usuarios)
     save_json(dados_atendimentos, arquivo_atendimentos)
     return nfo['atd_t']
 
 
 def nova_correcao(identificador):
     nfo = render_form_get_values(formulario_registro_de_correcao, ['identificador'])
+    idt = numero_identificador_mascara(identificador)
     nfo['timestamp'] = timestamp() 
-    nfo['identificador'] = identificador
-    if not identificador in matriculas:
-        novo_usuario(identificador)
-        matriculas.append(identificador)    
+    nfo['identificador'] = idt
+    if not idt in matriculas:
+        novo_usuario(idt)
+        matriculas.append(idt)    
     dados_corrigidos.append(nfo)
     save_json(dados_corrigidos, arquivo_corrigidos)
 
@@ -199,39 +198,46 @@ def nova_coluna(nome_col, json_file, options=None):
 
 def novo_estudo_info_estudante(identificador):
     nfo = {}
+    idt = numero_identificador_mascara(identificador)
     nfo['semestre'] = periodo_corrente
-    nfo['identificador'] = identificador
+    nfo['identificador'] = idt
     nfo['estudo_id'] = timestamp('mkid')
-    if not identificador in matriculas:
-        novo_usuario(identificador)
-        matriculas.append(identificador)
-    nfo_tmp = render_form_get_values(form_estudo_info_estudante, ['identificador'])
+    if not idt in matriculas:
+        novo_usuario(idt)
+        matriculas.append(idt)
+    nfo_tmp = render_form_get_values(formulario_estudo_estudante, ['identificador'])
     for col in nfo_tmp.keys():
         nfo[col] = nfo_tmp[col]
     del(nfo_tmp)
-    dados_estudo_estudante.append(nfo)
-    save_json(dados_estudo_estudante, arquivo_estudo_estudante)
-    return nfo['estudo_id']
+    dados_estudos.append(nfo)
+    save_json(dados_estudos, arquivo_estudos)
+    return nfo
 
 
-def novo_estudo_info_familia(identificador, estudo_id):
-    nfo_tmp = render_form_get_values(form_estudo_info_familia, ['identificador'])
-    nfo = {}
-    for set_de_dados in dados_index:
-        if set_de_dados['set_de_dados'] == 'estudo':
-            nfo = dados_estudo_estudante[set_de_dados['dados'][estudo_id]]
-            break
+def novo_estudo_info_familia(identificador, nfo):
+    nfo_tmp = render_form_get_values(formulario_estudo_grupo_familiar, ['identificador'])
+    dados_estudos.remove(nfo)
     for col in nfo_tmp.keys():
         nfo[col] = nfo_tmp[col]
-    del(nfo_tmp)
-    save_json(dados_estudo_estudante, arquivo_estudo_estudante)
+    dados_estudos.append(nfo)
+    save_json(dados_estudos, arquivo_estudos)
+    return nfo
 
 
-def novo_estudo_info_membros_familia(identificador, estudo_id):
-    nfo = render_form_get_values(form_estudo_info_membros_familia, ['identificador'])
-    nfo['identificador'] = identificador
-    nfo['estudo_id'] = estudo_id
-    save_json(dados_estudo_membros_familia, arquivo_estudo_membros_familia)
+
+def novo_estudo_info_membros_familia(identificador, nfo):
+    nfo_tmp = render_form_get_values(formulario_estudo_membros_grupo_familiar, ['identificador'])
+    dados_estudos.remove(nfo)
+    if nfo.get('membros_grupo_familiar'):
+        nfo['membros_grupo_familiar'][nfo_tmp['nome']] = nfo_tmp
+    else:
+        nfo['membros_grupo_familiar'] = {}
+        nfo['membros_grupo_familiar'][nfo_tmp['nome']] = nfo_tmp
+    for col in nfo_tmp.keys():
+        nfo[col] = nfo_tmp[col]
+    dados_estudos.append(nfo)
+    save_json(dados_estudos, arquivo_estudos)
+    return nfo
 
 
 def insert_info(json_estudantes, print_fields, formulario_q_add, novo_nome_de_campo):
@@ -260,7 +266,7 @@ def main():
 
     elif args['atd'] or args['atendimento']:
         identificador = numero_identificador_mascara(args['<identificador>'])
-        save_target_info(identificador)
+        save_target_info(identificador, dados_usuarios)
         atd_t = novo_atendimento(identificador)
         if atd_t == "Encaminhamento de pedido de auxílio emergencial":
             numero_sei = novo_processo(identificador, atd_t)
@@ -286,21 +292,22 @@ def main():
 
     elif args['res'] or args['resposta-de-processo']:
         resultado = novo_resultado_processo(args['<num_sei>'])
-        save_target_info(resultado[0])
+        save_target_info(resultado[0], dados_usuarios)
         if envio_automatico_email:
             os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Comunicado de resultado de processo" "Informo que o processo {numero_sei} foi {resultado}."'.format(numero_sei=args['<num_sei>'], resultado=resultado[1]))
             os.system('sps-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(resultado[0], "Atendimento via e-mail", "Comunicado de resultado de processo", "Verificar status de envio de email..."))
 
     elif args['est'] or args['estudo']:
         identificador = numero_identificador_mascara(args['<identificador>'])
-        estudo_id = novo_estudo_info_estudante(identificador)
-        os.system("indexdb")
-        novo_estudo_info_familia(identificador, estudo_id)
-        print("Outras pessoas constituem o seu grupo familiar além de você?")
+        nfo = novo_estudo_info_estudante(identificador)
+        nfo = novo_estudo_info_familia(identificador, nfo)
+        print("")
+        print(verde("Outras pessoas constituem o seu grupo familiar além de você?"))
         resposta = select_op(["Sim", "Não"], 1)
         while resposta == "Sim":
-            novo_estudo_info_membros_familia(identificador, estudo_id)
-            print("Registrar outra pessoa?")
+            print("")
+            nfo = novo_estudo_info_membros_familia(identificador, nfo)
+            print(verde("Registrar outra pessoa?"))
             resposta = select_op(["Sim", "Não"], 1)            
 
 
