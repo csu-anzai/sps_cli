@@ -364,6 +364,7 @@ def write_csv(novos_dados, path_to_file, header=None, delimiter=',', linetermina
 	Esta função gera um arquivo de trava até que o processo seja concluído impossibilitanto a realização de cópias simultâneas. A ordem do cabeçalho pode ser definido arbitrariamente mediante a inclusão de uma lista com o come das colunas na argumento "header".
 	'''
 
+	fields = novos_dados[0].keys()
 	lockf = lockfile_name(path_to_file)
 	initfolder = os.getcwd()
 	nfo = path_to_file.split('/')
@@ -372,7 +373,7 @@ def write_csv(novos_dados, path_to_file, header=None, delimiter=',', linetermina
 
 	while True:
 		if os.path.isfile(tmpdir+os.sep+lockf):
-			time.time.sleep(0.1)
+			time.sleep(0.1)
 		else:
 			create_lockfile(lockf)
 			break

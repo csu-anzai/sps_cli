@@ -674,6 +674,8 @@ def process_sae_etd(sae_etd_file_txt):
 	f = open(sae_etd_file_txt, 'r', encoding="iso-8859-1")
 	conteudo = f.readlines()
 	f.close()
+
+	print(os.getcwd(), sae_etd_file_txt)
 	
 	output = OrderedDict()	
 
@@ -853,7 +855,12 @@ def process_sae_etd(sae_etd_file_txt):
 		if obter_faz_outro_curso_superior:
 			if linha.find("Faz outro curso superior fora da UnB?: ;") != -1:
 				faz_outro_curso_superior = linha.split(": ;")[1].split(";")[0].strip()
-				obter_faz_outro_curso_superior = False			
+				outro_curso_superior_ies = ""
+				obter_faz_outro_curso_superior = False
+			elif linha.find("Curso superior sendo feito fora da UnB: ;") != -1:
+				faz_outro_curso_superior = linha.split(": ;")[1].split(";")[0].strip()
+				outro_curso_superior_ies = linha.split(": ;")[2].split(";")[0].strip()
+				obter_faz_outro_curso_superior = False				
 
 		if obter_fez_outro_curso_superior:
 			if linha.find("Fez outro curso de nível superior? ;") != -1:
@@ -868,7 +875,10 @@ def process_sae_etd(sae_etd_file_txt):
 		if obter_situacao_prof_anterior:
 			if linha.find("Já trabalhou? ;") != -1:
 				situacao_prof_anterior = linha.split("? ;")[1].split(";")[0].strip()
-				obter_situacao_prof_anterior = False			
+				obter_situacao_prof_anterior = False
+			elif linha.find("Já trabalhou na atividade: ;") != -1:
+				situacao_prof_anterior = linha.split(": ;")[1].split(";")[0].strip()
+				obter_situacao_prof_anterior = False
 
 		if obter_contribui_p_rendafam == True:
 			if linha.find("Contribui p/ renda familiar? ;") != -1:
@@ -897,13 +907,19 @@ def process_sae_etd(sae_etd_file_txt):
 			
 		if obter_email:
 			if linha.find("Email: ;") != -1:
-				email = linha.split(": ;")[3].split(";")[0].strip()
+				try:
+					email = linha.split(": ;")[3].split(";")[0].strip()
+				except IndexError:
+					email = ""
 				obter_email = False
 			
 		if obter_com_quem_reside:
 			if linha.find("Como reside atualmente? ;") != -1:
 				com_quem_reside = linha.split("? ;")[1].split(";")[0].strip().replace(".",'')
 				obter_com_quem_reside = False
+			else:
+				com_quem_reside = "Outra situação: "+linha.split(";")[0].strip()
+				obter_com_quem_reside = False				
 			
 		if obter_situacao_residencia_familia:
 			if linha.find("Como reside sua família? ;") != -1:
@@ -930,6 +946,26 @@ def process_sae_etd(sae_etd_file_txt):
 		if obter_pai_nome:
 			if linha.find("Nome: ;") != -1:
 				pai_nome = linha.split(": ;")[1].split(";")[0].strip()
+				if linha.find("Falecido") != -1:
+					pai_situacao = "Falecido"
+					pai_remuneracao = "Não se aplica"
+					pai_profissao = "Não se aplica"
+					pai_cpf = "Não se aplica"
+					pai_cidade = "Não se aplica"
+					pai_endereco = "Não se aplica"
+					pai_endereco_uf = "Não se aplica"
+					pai_escolaridade = "Não se aplica"
+				elif linha.find("Desconhecido") != -1:
+					pai_situacao = "Desconhecido"
+					pai_remuneracao = "Não se aplica"
+					pai_profissao = "Não se aplica"
+					pai_cpf = "Não se aplica"
+					pai_cidade = "Não se aplica"
+					pai_endereco = "Não se aplica"
+					pai_endereco_uf = "Não se aplica"
+					pai_escolaridade = "Não se aplica"
+				else:
+					pai_situacao = "Vivo"
 				obter_pai_nome = False
 			
 		if obter_pai_cpf:
@@ -983,6 +1019,26 @@ def process_sae_etd(sae_etd_file_txt):
 		if obter_mae_nome:
 			if linha.find("Nome: ;") != -1:
 				mae_nome = linha.split(": ;")[1].split(";")[0].strip()
+				if linha.find("Falecida") != -1:
+					mae_situacao = "Falecida"
+					mae_remuneracao = "Não se aplica"
+					mae_profissao = "Não se aplica"
+					mae_cpf = "Não se aplica"
+					mae_cidade = "Não se aplica"
+					mae_endereco = "Não se aplica"
+					mae_endereco_uf = "Não se aplica"
+					mae_escolaridade = "Não se aplica"
+				elif linha.find("Desconhecida") != -1:
+					mae_situacao = "Desconhecida"
+					mae_remuneracao = "Não se aplica"
+					mae_profissao = "Não se aplica"
+					mae_cpf = "Não se aplica"
+					mae_cidade = "Não se aplica"
+					mae_endereco = "Não se aplica"
+					mae_endereco_uf = "Não se aplica"
+					mae_escolaridade = "Não se aplica"
+				else:
+					mae_situacao = "Viva"
 				obter_mae_nome = False
 			
 		if obter_mae_cpf:
@@ -1040,52 +1096,66 @@ def process_sae_etd(sae_etd_file_txt):
 
 		if obter_pontuacao:
 			if obter_pontuacao_vinculo_emprego_estudante:
-				pontuacao_vinculo_emprego_estudante += linha#.split(" = ")[0].strip()
+				if linha.find("Cidade do aluno: ;") != -1:
+					obter_pontuacao_vinculo_emprego_estudante = False
+				else:
+					pontuacao_vinculo_emprego_estudante += linha
 
 			if obter_pontuacao_cidade_estudante:
-				pontuacao_cidade_estudante += linha#.split(" = ")[0].strip()
+				if linha.find("Profissão do pai: ;") != -1:
+					obter_pontuacao_cidade_estudante = False
+				else:
+					pontuacao_cidade_estudante += linha
 
 			if obter_pontuacao_vinculo_emprego_pai:
-				pontuacao_vinculo_emprego_pai += linha
+				if linha.find("Profissão da mãe: ;") != -1:
+					obter_pontuacao_vinculo_emprego_pai = False
+				else:
+					pontuacao_vinculo_emprego_pai += linha
 
 			if obter_pontuacao_vinculo_emprego_mae:
-				pontuacao_vinculo_emprego_mae += linha
+				if linha.find("Profissão do mantenedor/cônjuge: ;") != -1:
+					obter_pontuacao_vinculo_emprego_mae = False
+				else:
+					pontuacao_vinculo_emprego_mae += linha
 
 			if obter_pontuacao_vinculo_emprego_mantenedor:
-				pontuacao_vinculo_emprego_mantenedor += linha
+				if linha.find("Faixa de renda: ;") != -1:
+					obter_pontuacao_vinculo_emprego_mantenedor = False
+				else:
+					pontuacao_vinculo_emprego_mantenedor += linha
 			
 			if obter_pontuacao_fx_renda:
-				print(linha)
-				pontuacao_fx_renda += linha
+				if linha.find("Parecer técnico: ;") != -1: 
+					obter_pontuacao_fx_renda = False
+				else:
+					pontuacao_fx_renda += linha
 			
 			if obter_pontuacao_parecer:
-				pontuacao_parecer += linha
+				if linha.find("Independente: ;") != -1:
+					obter_pontuacao_parecer = False
+				else:
+					pontuacao_parecer += linha
 
 			if linha.find("Profissão do aluno: ;") != -1:
 				obter_pontuacao_vinculo_emprego_estudante = True
 			
 			elif linha.find("Cidade do aluno: ;") != -1:
-				obter_pontuacao_vinculo_emprego_estudante = False
 				obter_pontuacao_cidade_estudante = True
 			
 			elif linha.find("Profissão do pai: ;") != -1:
-				obter_pontuacao_cidade_estudante = False
 				obter_pontuacao_vinculo_emprego_pai = True
 			
 			elif linha.find("Profissão da mãe: ;") != -1:
-				obter_pontuacao_vinculo_emprego_pai = False
 				obter_pontuacao_vinculo_emprego_mae = True
 			
 			elif linha.find("Profissão do mantenedor/cônjuge: ;") != -1:
-				obter_pontuacao_vinculo_emprego_mae = False
 				obter_pontuacao_vinculo_emprego_mantenedor = True
 			
 			elif linha.find("Faixa de renda: ;") != -1:
-				obter_pontuacao_vinculo_emprego_mantenedor = False
 				obter_pontuacao_fx_renda = True
 			
 			elif linha.find("Parecer técnico: ;") != -1: 
-				obter_pontuacao_fx_renda = False
 				obter_pontuacao_parecer = True
 			
 			elif linha.find("Grupo: ;") != -1:
@@ -1111,15 +1181,23 @@ def process_sae_etd(sae_etd_file_txt):
 	output["forma_ingresso"] = forma_ingresso
 	output["sexo"] = sexo
 	output["cpf"] = cpf
-	output["isencao_vestibular"] = isencao_vestibular
-	output["teve_abatimento"] = teve_abatimento
+	try:
+		output["isencao_vestibular"] = isencao_vestibular
+		output["teve_abatimento"] = teve_abatimento
+	except:
+		output["isencao_vestibular"] = "Não se aplica"
+		output["teve_abatimento"] = "Não se aplica"
 	output["cor"] = cor
 	output["escola_em_tipo"] = escola_em_tipo
 	output["escola_em_nome"] = escola_em_nome
 	output["escola_em_cidade"] = escola_em_cidade
 	output["escola_em_uf"] = escola_em_uf
-	output["fez_pre_vestibular"] = fez_pre_vestibular
+	try:
+		output["fez_pre_vestibular"] = fez_pre_vestibular
+	except UnboundLocalError:
+		output["fez_pre_vestibular"] = ""
 	output["faz_outro_curso_superior"] = faz_outro_curso_superior
+	output["outro_curso_superior_ies"] = outro_curso_superior_ies
 	output["fez_outro_curso_superior"] = fez_outro_curso_superior
 	output["situacao_prof_corrente"] = situacao_prof_corrente
 	output["situacao_prof_anterior"] = situacao_prof_anterior
@@ -1127,12 +1205,22 @@ def process_sae_etd(sae_etd_file_txt):
 	output["cidade_moradia_sae"] = cidade_moradia_sae
 	output["endereco_moradia_sae"] = endereco_moradia_sae
 	output["endereco_moradia_sigra"] = endereco_moradia_sigra
-	output["email"] = email
+	try:
+		output["email"] = email
+	except UnboundLocalError:
+		output["email"] = ""
 	output["com_quem_reside"] = com_quem_reside
-	output["situacao_residencia_familia"] = situacao_residencia_familia
+	try:
+		output["situacao_residencia_familia"] = situacao_residencia_familia
+	except UnboundLocalError:
+		output["situacao_residencia_familia"] = ""
 	output["estado_civil_estudante"] = estado_civil_estudante
 	output["pai_nome"] = pai_nome
-	output["pai_cpf"] = pai_cpf
+	output["pai_situacao"] = pai_situacao
+	try:
+		output["pai_cpf"] = pai_cpf
+	except UnboundLocalError:
+		output["pai_cpf"] = ""
 	output["pai_cidade"] = pai_cidade
 	output["pai_endereco"] = pai_endereco
 	try:
@@ -1143,6 +1231,7 @@ def process_sae_etd(sae_etd_file_txt):
 	output["pai_profissao"] = pai_profissao
 	output["pai_remuneracao"] = pai_remuneracao
 	output["mae_nome"] = mae_nome
+	output["mae_situacao"] = mae_situacao
 	output["mae_cpf"] = mae_cpf
 	output["mae_cidade"] = mae_cidade
 	output["mae_endereco"] = mae_endereco
@@ -1158,18 +1247,36 @@ def process_sae_etd(sae_etd_file_txt):
 		output["mae_remuneracao"] = ""
 	output["transporte_usado"] = transporte_usado
 	output["justificativa"] = justificativa.replace(";"," ").replace('\n',' ').replace('  ',' ').strip()
-	output["pontuacao_vinculo_emprego_estudante"] = pontuacao_vinculo_emprego_estudante
-	output["pontuacao_cidade_estudante"] = pontuacao_cidade_estudante
-	output["pontuacao_vinculo_emprego_pai"] = pontuacao_vinculo_emprego_pai
-	output["pontuacao_vinculo_emprego_mae"] = pontuacao_vinculo_emprego_mae
-	output["pontuacao_vinculo_emprego_mantenedor"] = pontuacao_vinculo_emprego_mantenedor
-	output["pontuacao_fx_renda"] = pontuacao_fx_renda
-	output["pontuacao_parecer"] = pontuacao_parecer
-
-
-	print(output)
-
+	output["pontuacao_vinculo_emprego_estudante"] = pontuacao_vinculo_emprego_estudante.replace(";"," ").replace('\n',' ').replace('  ',' ').strip()
+	output["pontuacao_cidade_estudante"] = pontuacao_cidade_estudante.replace(";"," ").replace('\n',' ').replace('  ',' ').strip()
+	output["pontuacao_vinculo_emprego_pai"] = pontuacao_vinculo_emprego_pai.replace(";"," ").replace('\n',' ').replace('  ',' ').strip()
+	output["pontuacao_vinculo_emprego_mae"] = pontuacao_vinculo_emprego_mae.replace(";"," ").replace('\n',' ').replace('  ',' ').strip()
+	output["pontuacao_vinculo_emprego_mantenedor"] = pontuacao_vinculo_emprego_mantenedor.replace(";"," ").replace('\n',' ').replace('  ',' ').strip()
+	output["pontuacao_fx_renda"] = pontuacao_fx_renda.replace(";"," ").replace('\n',' ').replace('  ',' ').strip()
+	output["pontuacao_parecer"] = pontuacao_parecer.replace(";"," ").replace('\n',' ').replace('  ',' ').strip()
+	try:
+		output["pontuacao_grupo"] = pontuacao_grupo
+	except UnboundLocalError:
+		output["pontuacao_grupo"] = ""
+	try:
+		output["pontuacao_assistente_social"] = pontuacao_assistente_social
+	except UnboundLocalError:
+		output["pontuacao_assistente_social"] = ""
+	
 	return output	
+
+def multiprocess_sae_etd():
+	initdir = os.getcwd()
+	output = []
+	os.chdir(old_etd_folder)
+	for folder in os.listdir(old_etd_folder):
+		os.chdir(old_etd_folder)
+		os.chdir(folder)
+		for old_sae_file in os.listdir("."):
+			old_sae_file_nfo = process_sae_etd(old_sae_file)
+			output.append(old_sae_file_nfo)
+	os.chdir(initdir)
+	write_csv(output, "./old_sae_nfo.csv", delimiter='\t')
 
 
 
