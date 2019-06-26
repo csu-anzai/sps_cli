@@ -1,13 +1,12 @@
 {
-    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
-    "titulo": "Registro de atendimento",
     "questoes": [
         {
             "tipo": "text",
-            "enunciado": "Matrícula",
-            "id": "identificador"
+            "id": "identificador",
+            "enunciado": "Matrícula"
         },
         {
+            "tipo": "checkbox",
             "alternativas": [
                 "Articulação",
                 "Atendimento presencial",
@@ -18,11 +17,11 @@
                 "Processamento de demanda anterior",
                 "Outro"
             ],
-            "tipo": "checkbox",
-            "enunciado": "Forma de atividade",
-            "id": "procedimento"
+            "id": "procedimento",
+            "enunciado": "Forma de atividade"
         },
         {
+            "tipo": "checkbox",
             "alternativas": [
                 "Agendamento entrevista",
                 "Articulação de demandas com a Coordenaçãoo da Educação do Campo.",
@@ -89,24 +88,26 @@
                 "Solicitação de desligamento do Programa de Moradia Estudantil",
                 "Solicitação de documentação adicional para fundamentação de pedido de emergencial",
                 "Solicitação de informações/relatórios do SPS",
+                "Solicitação de modelo de termo para o Programa Bolsa Permanência",
                 "Solicitação de pagamento retroativo",
                 "Solicitação de verificação de vínculo com a assistencia estudantil.",
                 "Outro"
             ],
-            "tipo": "checkbox",
-            "enunciado": "Demanda do atendimento",
-            "id": "atd_t"
+            "id": "atd_t",
+            "enunciado": "Demanda do atendimento"
         },
         {
+            "tipo": "radio",
             "alternativas": [
                 "Aguardando resposta",
                 "Demanda atendida",
                 "Demanda não atendida",
                 "Outro"
             ],
-            "tipo": "radio",
-            "enunciado": "Resultado do atendimento",
-            "id": "resultado"
+            "id": "resultado",
+            "enunciado": "Resultado do atendimento"
         }
-    ]
+    ],
+    "titulo": "Registro de atendimento",
+    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP"
 }
