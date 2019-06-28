@@ -8,16 +8,29 @@ email: danielc@unb.br
 
 //Importando módulos do a serem usados
 const express = require('express'); //http framework
-const formidable = require('formidable'); //para aceitar upload de arquivos
 const handlebars = require('express-handlebars').create({defaultLayout:'main'}); //Definindo os padrões dos templates (handlebars)
-const cookie_parser = require('cookie-parser');
 const body_parser = require('body-parser'); //para obter dados encaminhados via POST.
+const fs = require("fs");
+const db = require("db_json_paths");
+
+/*
 const session = require('express-session');
 const parseurl = require('parseurl');
-const fs = require("fs");
+
 const child_process = require('child_process').spawn;
+const formidable = require('formidable'); //para aceitar upload de arquivos
+const cookie_parser = require('cookie-parser');
+*/
+
+function read_json_file(target_json_file) {
+	let rawdata = fs.readFileSync(target_json_file);
+	let jsondata = JSON.parse(rawdata);
+	return jsondata;
+}
+
 
 let app = express();
+
 
 app.disable('x-powered-by'); //evitando que informações do servidor sejam exibidas
 app.engine('handlebars', handlebars.engine);
@@ -28,12 +41,30 @@ app.use(express.static(`${__dirname}/public`)); //definindo caminho de acesso ao
 
 
 app.get('/', function(req, res){
-  var process = child_process('lst', ['-j', 'usr', 'id']);
-  process.stdout.on('data', function(data) { 
-    console.log(data.toString());
-    res.json(JSON.parse(data.toString()));
-    //res.render('listar', {nfo: JSON.parse(data.toString())}); //style_sheet: ['frontpage', 'w3'],
-  });
+  res.render('index', {style_sheet: ['frontpage', 'w3']}); 
+});
+
+
+app.get('/listar_usuarios', function(req, res){
+  usr = read_json_file(db.usr);
+  for (let u in usr) {
+    if (usr[u].identificador.indexOf("/") != 2) {
+      delete usr[u]
+    }
+  } 
+  res.render('listar_usuarios', {style_sheet: ['frontpage', 'w3'], nfo: usr});
+});
+
+app.get('/listar_atendimentos', function(req, res){
+  res.render('listar_atendimentos', {style_sheet: ['frontpage', 'w3'], nfo: read_json_file(db.atd)}); 
+});
+
+app.get('/listar_processos', function(req, res){
+  res.render('listar_processos', {style_sheet: ['frontpage', 'w3'], nfo: read_json_file(db.sei)}); 
+});
+
+app.get('/listar_processos_pendentes', function(req, res){
+  res.render('listar_processos_pnd', {style_sheet: ['frontpage', 'w3'], nfo: read_json_file(db.sei)}); 
 });
 
 
