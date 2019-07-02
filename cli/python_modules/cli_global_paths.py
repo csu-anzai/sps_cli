@@ -5,10 +5,10 @@ import os
 from .cli_global_config import pasta_raiz_do_aplicativo, pasta_do_usuario
 
 pasta_de_dados = os.sep.join([pasta_raiz_do_aplicativo, "dados"])
-pasta_de_seguranca = os.sep.join([pasta_raiz_do_aplicativo, "seguranca"])
+pasta_de_seguranca = os.sep.join([pasta_raiz_do_aplicativo, "cli/seguranca"])
 pasta_de_fragmentos = os.sep.join([pasta_de_dados, "fragmentos"])
 pasta_de_indice = os.sep.join([pasta_de_dados, "indexados"])
-pasta_de_formularios = os.sep.join([pasta_raiz_do_aplicativo, "formularios"])
+pasta_de_formularios = os.sep.join([pasta_raiz_do_aplicativo, "cli/formularios"])
 
 arquivo_atendimentos = os.sep.join([pasta_de_dados, "atendimentos.json"])
 arquivo_usuarios = os.sep.join([pasta_de_dados, "usuarios.json"])

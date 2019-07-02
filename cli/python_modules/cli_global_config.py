@@ -9,7 +9,7 @@ pasta_do_usuario = getoutput("echo $HOME")
 hostname = getoutput("hostname")
 username = getoutput("whoami")
 
-trabalhar_com_fragmentos = True
+trabalhar_com_fragmentos = True #O computador central deverá ser posto como Falso
 formato_lista_fragmentos = "emitidos-{}@{}.json".format(username, hostname)
 tmpdir='/tmp'
 
@@ -20,4 +20,6 @@ elif hostname == "debian":
 elif hostname == "localhost":
     tmpdir = getoutput("echo $TMPDIR")
     pasta_raiz_do_aplicativo = "/data/data/com.termux/files/home/sps_fup2"
+elif hostname == "spsfup":
+    pasta_raiz_do_aplicativo = "/srv/sps_fup2"
 

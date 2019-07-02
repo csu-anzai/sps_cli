@@ -80,17 +80,6 @@ app.use(function(err, req, res, next){
 });
 
 
-//Definir rotas daqui para baixo...
-//*******************************/
-app.get('/rotas_sps', function(req, res) {
-  
-  console.log('')
-});
-
-
-
-
-//*******************************/
 
 //Define página padrão de erro 404.
 app.use(function(req, res) {
