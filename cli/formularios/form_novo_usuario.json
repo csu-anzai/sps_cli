@@ -1,5 +1,8 @@
 {
+    "titulo": "Formulário para cadastro de estudante",
     "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
+    "arquivo_de_registro": "usuarios.json",
+    "campos_de_listagem": "identificador, nome, curso, eml",
     "questoes": [
         {
             "enunciado": "Identificador",
@@ -50,6 +53,5 @@
             "id": "eml",
             "tipo": "text"
         }
-    ],
-    "titulo": "Formulário para cadastro de estudante"
+    ]
 }

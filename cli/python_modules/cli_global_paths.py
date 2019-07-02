@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import os
-from .cli_global_config import pasta_raiz_do_aplicativo, pasta_do_usuario
+
+from .cli_machine_info import pasta_do_usuario, hostname, username, pasta_raiz_do_aplicativo
 
 pasta_de_dados = os.sep.join([pasta_raiz_do_aplicativo, "dados"])
+pasta_de_configuracao = os.sep.join([pasta_raiz_do_aplicativo, "cli/config"])
 pasta_de_seguranca = os.sep.join([pasta_raiz_do_aplicativo, "cli/seguranca"])
 pasta_de_fragmentos = os.sep.join([pasta_de_dados, "fragmentos"])
 pasta_de_indice = os.sep.join([pasta_de_dados, "indexados"])
@@ -17,6 +19,7 @@ arquivo_processos = os.sep.join([pasta_de_dados, "processos.json"])
 arquivo_corrigidos = os.sep.join([pasta_de_dados, "corrigidos.json"])
 arquivo_index = os.sep.join([pasta_de_indice, "index_db.json"])
 arquivo_estudos = os.sep.join([pasta_de_dados, "estudos.json"])
+arquivo_de_configuracao = os.sep.join([pasta_de_configuracao, "opcoes.json"])
 arquivo_usuario_alvo = os.sep.join([pasta_do_usuario, '.current_target'])
 
 formulario_atendimentos = os.sep.join([pasta_de_formularios, "form_atendimento.json"])

@@ -28,6 +28,8 @@ Observações:
 	{
 		"titulo": "Registro de atendimento",
 		"descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
+        "arquivo_de_registro": "atendimentos.json",
+        "campos_de_listagem": "timestamp, identificador, atd_t",
 		"questoes":
 		[
 			{
@@ -61,10 +63,11 @@ from subprocess import getoutput
 from python_modules.cli_global_config import \
     envio_automatico_email,\
     periodo_corrente,\
-    hostname,\
-    pasta_raiz_do_aplicativo
+    hostname
 
 from python_modules.cli_decorators import check_config_existance
+
+from python_modules.cli_machine_info import pasta_raiz_do_aplicativo
 
 from python_modules.cli_global_config import \
     envio_automatico_email,\

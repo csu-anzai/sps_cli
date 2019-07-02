@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from collections import OrderedDict
-
-etiquetas = OrderedDict()
+etiquetas = {}
 etiquetas['identificador'] = "Identificador"
 etiquetas['nome_usuario'] = "Nome"
 etiquetas['eml_usuario'] = "e-Mail"

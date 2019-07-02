@@ -1,6 +1,8 @@
 {
     "titulo": "Formulário de entrada para estatística de estudos corrigidos",
     "descricao": "Intrumental para registro de informações sobre correções e erros nos estudos no âmbito do SPS/FUP",
+    "arquivo_de_registro": "corrigidos.json",
+    "campos_de_listagem": "identificador, situacao, encaminhamento",        
     "questoes": [
         {
             "id": "identificador",

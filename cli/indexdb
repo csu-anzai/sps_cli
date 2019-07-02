@@ -31,32 +31,40 @@ from python_modules.cli_db_loader import \
     dados_processos,\
     dados_atendimentos,\
     dados_corrigidos,\
-    arquivo_index
+    arquivo_index,\
+    get_tags_idx
 
 from python_modules.py_functions_json import save_json
 
 args = docopt(__doc__)
 
 def make_index_set(set_name, target_col, dados_brutos, pointer=None):
+    #Pointer se refere ao campo/informação de retorno que será enviada, geralmente é usado quando uma referência é vinculada à outra
     index_set = {}
     index_set['set_de_dados'] = set_name
     index_set['dados'] = {}
-    for linha in dados_brutos:
-        if pointer != None:
-            if linha[target_col].find(',') != -1:
-                for sub_set in linha[target_col].split(','):
-                    if index_set['dados'].get(sub_set.strip()) == None:
-                        index_set['dados'][sub_set.strip()] = []
-                    index_set['dados'][sub_set.strip()].append(linha[pointer])
+    if set_name == 'tag' and target_col == 'marcador':
+        index_set['dados'] = get_tags_idx(dados_brutos)
+
+    else:
+        for linha in dados_brutos:
+            if pointer != None:
+                if linha[target_col].find(',') != -1:
+                    for sub_set in linha[target_col].split(','):
+                        if index_set['dados'].get(sub_set.strip()) == None:
+                            index_set['dados'][sub_set.strip()] = []
+                        index_set['dados'][sub_set.strip()].append(linha[pointer])
+                else:
+                    if index_set['dados'].get(linha[target_col]) == None:
+                        index_set['dados'][linha[target_col]] = []
+                    index_set['dados'][linha[target_col]].append(linha[pointer])
             else:
                 if index_set['dados'].get(linha[target_col]) == None:
                     index_set['dados'][linha[target_col]] = []
-                index_set['dados'][linha[target_col]].append(linha[pointer])
-        else:
-            if index_set['dados'].get(linha[target_col]) == None:
-                index_set['dados'][linha[target_col]] = []
-            index_set['dados'][linha[target_col]].append(dados_brutos.index(linha))
+                index_set['dados'][linha[target_col]].append(dados_brutos.index(linha))
     return index_set
+
+
 
 def make_search_set(dados_brutos):
     index_set = {}
@@ -88,6 +96,7 @@ def remake_index():
         make_index_set_async('corr', 'identificador', dados_corrigidos),
         make_index_set_async('proc', 'identificador', dados_processos),
         make_index_set_async('proc_doc', 'numero_sei', dados_processos),
+        make_index_set_async('tag', 'marcador', dados_usuarios),
         make_search_set_async(dados_usuarios),
     ))
     save_json(index_db, arquivo_index)

@@ -28,7 +28,7 @@ import json
 import time
 
 from .py_euristic_tools import show_each_dictArray_block
-from .cli_global_config import tmpdir
+from .cli_machine_info import tmpdir
 from .cli_tools import create_lockfile, remove_lockfile, lockfile_name 
 
 def show_each_json_block(json_file, print_fields, index_pos):

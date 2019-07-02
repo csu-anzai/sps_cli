@@ -8,9 +8,7 @@ Algumas funções foram concebidas para processarem arquivos de relatórios dos 
 
 Usage:
     unb-tools ( join-alu-rel ) <target-folder> <output-txt-fname>
-    unb-tools ( rename-old-sae-etd ) [<target-folder>]
-    unb-tools ( old_sae_etd_strip_chars ) [<target-folder>]
-    unb-tools ( move-old-sae-etd ) [<target-folder>]
+    unb-tools ( integrate_old_sae_etd )
     unb-tools ( old_sae_extract_list )
     unb-tools ( old_sae_extract_hist_list )
     unb-tools ( process_sae_etd ) <target-sae-txt-file>
@@ -67,14 +65,10 @@ def main():
     if args['join-alu-rel']:
         join_alurel(args['<target-folder>'], args['<output-txt-fname>'])
 
-    elif args['rename-old-sae-etd']:
+    elif args['integrate_old_sae_etd']:
         old_sae_etd_rename_files()
-
-    elif args['old_sae_etd_strip_chars']:
-        old_sae_etd_strip_chars()
-
-    elif args['move-old-sae-etd']:
         old_sae_etd_movefiles_to_folder()
+        old_sae_etd_strip_chars()
 
     elif args['old_sae_extract_list']: 
         old_sae_extract_list()

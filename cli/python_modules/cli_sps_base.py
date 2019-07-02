@@ -3,7 +3,7 @@
 
 import time
 
-from .cli_global_config import username
+from .cli_machine_info import username
 from .cli_global_paths import arquivo_usuario_alvo
 from .py_functions_json import save_json
 from string import punctuation

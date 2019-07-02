@@ -1,6 +1,8 @@
 {
-    "descricao": "Intrumental para registro de processos gerados no âmbito do SPS/FUP",
     "titulo": "Registro de processos",
+    "descricao": "Intrumental para registro de processos gerados no âmbito do SPS/FUP",
+    "arquivo_de_registro": "corrigidos.json",
+    "campos_de_listagem": "identificador, numero_sei, assunto, resultado",
     "questoes": [
         {
             "tipo": "text",

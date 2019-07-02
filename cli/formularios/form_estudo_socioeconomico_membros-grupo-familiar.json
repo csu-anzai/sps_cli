@@ -1,6 +1,8 @@
 {
     "titulo": "Questões para avaliação socioeconômica",
     "descricao": "Intrumental destinado à coleta de informações para avaliação de vulnerabilidade socioeconômica.",
+    "arquivo_de_registro": "estudos.json",
+    "campos_de_listagem": "identificador, motivos_estudo, campus",    
     "questoes":
     [
         {

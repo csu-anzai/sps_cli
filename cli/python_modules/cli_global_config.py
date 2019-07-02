@@ -2,24 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from subprocess import getoutput
+from .cli_machine_info import hostname, username
+from .cli_global_paths import arquivo_de_configuracao
 
-envio_automatico_email=True
-periodo_corrente="1º/2019"
-pasta_do_usuario = getoutput("echo $HOME")
-hostname = getoutput("hostname")
-username = getoutput("whoami")
+from .py_functions_json import load_json
 
-trabalhar_com_fragmentos = True #O computador central deverá ser posto como Falso
+global_config = load_json(arquivo_de_configuracao)
+
+periodo_corrente = "1º/2019"
+envio_automatico_email = global_config[hostname]["envio_automatico_email"]
+trabalhar_com_fragmentos = global_config[hostname]["trabalhar_com_fragmentos"]
 formato_lista_fragmentos = "emitidos-{}@{}.json".format(username, hostname)
-tmpdir='/tmp'
-
-if hostname == "oracleVM":
-    pasta_raiz_do_aplicativo = "/home/bwb0de/Devel/sps_fup2"
-elif hostname == "debian":
-    pasta_raiz_do_aplicativo = "/home/danielc/Documentos/Devel/GitHub/sps_fup2"
-elif hostname == "localhost":
-    tmpdir = getoutput("echo $TMPDIR")
-    pasta_raiz_do_aplicativo = "/data/data/com.termux/files/home/sps_fup2"
-elif hostname == "spsfup":
-    pasta_raiz_do_aplicativo = "/srv/sps_fup2"
-

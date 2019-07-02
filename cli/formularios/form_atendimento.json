@@ -1,4 +1,8 @@
 {
+    "titulo": "Registro de atendimento",
+    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
+    "arquivo_de_registro": "atendimentos.json",
+    "campos_de_listagem": "timestamp, identificador, atd_t",    
     "questoes": [
         {
             "tipo": "text",
@@ -107,7 +111,5 @@
             "id": "resultado",
             "enunciado": "Resultado do atendimento"
         }
-    ],
-    "titulo": "Registro de atendimento",
-    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP"
+    ]
 }

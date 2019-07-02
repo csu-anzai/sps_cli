@@ -29,7 +29,7 @@ from colored import fg, bg, attr
 from subprocess import getoutput
 from random import randrange
 from string import digits
-from .cli_global_config import tmpdir
+from .cli_machine_info import tmpdir
 
 def convert_to_cli_args(lista):
     o = '" "'.join(lista)

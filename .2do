@@ -1,7 +1,7 @@
-[ ] Reprogramar indexador para correção de erros e inclusão de novos elementos
-[ ] Migrar arquivo de configuração para o formato JSON
-[ ] Reorganizar estrutura do pacote para separar comandos CLI e Node.JS
-[ ] Construir em 'unb-tools' função integradora das subfunções rename/move/strip para OldSAE_etd
+[x] Reprogramar indexador para correção de erros e inclusão de novos elementos
+[x] Migrar arquivo de configuração para o formato JSON
+[x] Reorganizar estrutura do pacote para separar comandos CLI e Node.JS
+[x] Construir em 'unb-tools' função integradora das subfunções rename/move/strip para OldSAE_etd
 [ ] Construir em 'unb-tools' função para converter metadados dos cursos em indexador por 'código' e 'nome' da habilitação
 [ ] Construir em 'unb-tools' função de eliminação de duplicata no arquivo CSV dos NovoSAE_etd
 [ ] Refatorar o código para uma abordagem mais funcional
@@ -10,11 +10,14 @@
 [ ] Ajustar app Node.js para renderização dos formulários SPS/CLI
 [ ] Reestruturar formulários para incluirem [arquivo_de_registro], [campos_de_listagem]
 [ ] Instituir comando para criação de novos formulários
+[ ] Reestruturar 'createdb' para buscar informações de criação das bases de dados nos formulários
+[ ] Fazer ajuste do código para que as larguras das colunas, nos campos listados, estejam em um unico dict (arquivo de dados JSON)
 [ ] Instituir subcomando em 'novo' para registro de novos subcomandos aos comandos 'novo' e 'lst' (arquivo de dados JSON)
     * if cmd in keys:
     * novo cmd <subcmd_nome> <db_json_file>
-[ ] Reestruturar 'createdb' para buscar informações de criação das bases de dados nos formulários
-[ ] Fazer ajuste do código para que as larguras das colunas, nos campos listados, estejam em um unico dict (arquivo de dados JSON)
 [ ] As informações de largura de colunas precisam ser re-indexadas e cada modificação de formulário ou inclusão de dados
 [ ] Reestruturar a opção "Especifique" em na função 'render_for_get_values' para perguntar se deseja inclir mais opções não listadas
 [ ] Verificar/corrigir contador das listagens
+[ ] Reconstituir 'working_folder'
+[x] Instituir pesquisa por nome
+[~] Redigir documentação básica

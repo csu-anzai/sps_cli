@@ -78,6 +78,16 @@ def get_tags(dados_usuarios):
     marcadores.sort()
     return marcadores
 
+def get_tags_idx(dados_usuarios):
+    marcadores_idx = {}
+    for estudante in dados_usuarios:
+        if estudante.get("marcador"):
+            for m in estudante['marcador']:
+                if marcadores_idx.get(m) == None:
+                    marcadores_idx[m] = [dados_usuarios.index(estudante)]
+                else:
+                    marcadores_idx[m].append(dados_usuarios.index(estudante))
+    return marcadores_idx
 
 async def load_json_file(arquivo):
     return load_json(arquivo)

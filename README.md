@@ -44,7 +44,7 @@ Os pacotes destacados devem, preferencialmente, ser instalados em suas versões 
 
 ### [3] Escolher o local da instalação do SPS/CLI e clonar este repositório no local.
 
-- git clone *http://www.github.com/bwb0de/sps_fup2.git*
+- git clone *http://www.github.com/bwb0de/sps_cli.git*
 
 ### [4] Incluir a pasta de intalação ao PATH do sistema/usuario.
 
