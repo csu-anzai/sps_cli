@@ -1,4 +1,4 @@
-# SPS/CLI Scrips - Documentação#
+# SPS/CLI Scrips - Documentação
 
 Este arquivo tem por finalidade fornecer sobre estruturação/organização desse pacote de recursos em especial para aqueles que desejarem modificar o código para uma configuração mais adequada aos seus interesses.
 

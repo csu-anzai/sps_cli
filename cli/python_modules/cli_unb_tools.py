@@ -32,12 +32,19 @@ from .py_euristic_tools import strip_simbols, get_indexes, strip_digits, strip_c
 from .py_functions_calculation import mediaa
 from .py_functions_csv import *
 from .py_functions_json import save_json
+from .cli_machine_info import hostname
 from math import fsum as soma
 
-curric_folder = '/home/danielc/Documentos/SPS/Currículos/FUP'
-curric_metadados_folder = '/home/danielc/Documentos/SPS/Dados_AES/Consultas'
-old_etd_folder = '/home/bwb0de/Devel/sps_fup2/working_folder/SPS-UnB-Data_pesquisa/SPS/DadosAES/OldSAE_ESTUDOS/'
-old_sae_processos_list = "/home/bwb0de/Devel/sps_fup2/working_folder/SPS-UnB-Data_pesquisa/SPS/DadosAES/Informações_antigas_SAE-candidatos_processos_seletivos.csv"
+if hostname == "oracleVM":
+	curric_folder = '/home/danielc/Documentos/SPS/Currículos/FUP'
+	curric_metadados_folder = '/home/danielc/Documentos/SPS/Dados_AES/Consultas'
+	old_etd_folder = '/home/bwb0de/Devel/sps_fup2/working_folder/SPS-UnB-Data_pesquisa/SPS/DadosAES/OldSAE_ESTUDOS/'
+	old_sae_processos_list = "/home/bwb0de/Devel/sps_fup2/working_folder/SPS-UnB-Data_pesquisa/SPS/DadosAES/Informações_antigas_SAE-candidatos_processos_seletivos.csv"
+elif hostname == "debian":
+	#curric_folder = '/home/danielc/Documentos/SPS/Currículos/FUP'
+	#curric_metadados_folder = '/home/danielc/Documentos/SPS/Dados_AES/Consultas'
+	old_etd_folder = '/home/danielc/Documentos/SPS/SPS-UnB-Data_pesquisa/SPS/DadosAES/OldSAE_ESTUDOS'
+	old_sae_processos_list = "/home/danielc/Documentos/Devel/GitHub/sps_fup2/working_folder/Informações_antigas_SAE-candidatos_processos_seletivos.csv"
 
 def old_sae_etd_rename_files(target_folder=old_etd_folder):
 	files = os.listdir(target_folder)
