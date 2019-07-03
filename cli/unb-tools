@@ -9,6 +9,7 @@ Algumas funções foram concebidas para processarem arquivos de relatórios dos 
 Usage:
     unb-tools ( join-alu-rel ) <target-folder> <output-txt-fname>
     unb-tools ( integrate_old_sae_etd )
+    unb-tools ( create_curric_metainfo_index )
     unb-tools ( old_sae_extract_list )
     unb-tools ( old_sae_extract_hist_list )
     unb-tools ( process_sae_etd ) <target-sae-txt-file>
@@ -53,7 +54,8 @@ from python_modules.cli_unb_tools import \
     multiprocess_sae_etd,\
     process_sigra_hist,\
     multi_process_sigra_academic_history,\
-    cruzar_variaveis
+    cruzar_variaveis,\
+    create_curric_metainfo_index
 
 from python_modules.cli_tools import select_op, select_ops
 from python_modules.py_functions_json import save_json, load_json
@@ -69,6 +71,9 @@ def main():
         old_sae_etd_rename_files()
         old_sae_etd_movefiles_to_folder()
         old_sae_etd_strip_chars()
+
+    elif args['create_curric_metainfo_index']: 
+        create_curric_metainfo_index()
 
     elif args['old_sae_extract_list']: 
         old_sae_extract_list()

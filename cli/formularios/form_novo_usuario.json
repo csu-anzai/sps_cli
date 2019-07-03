@@ -1,33 +1,31 @@
 {
-    "titulo": "Formulário para cadastro de estudante",
-    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
-    "arquivo_de_registro": "usuarios.json",
     "campos_de_listagem": "identificador, nome, curso, eml",
+    "titulo": "Formulário para cadastro de estudante",
     "questoes": [
         {
             "enunciado": "Identificador",
-            "id": "identificador",
-            "tipo": "text"
+            "tipo": "text",
+            "id": "identificador"
         },
         {
             "enunciado": "Nome",
-            "id": "nome",
-            "tipo": "text"
+            "tipo": "text",
+            "id": "nome"
         },
         {
             "enunciado": "Grupo de pertencimento do usuário",
-            "id": "publico_tipo",
+            "tipo": "radio",
             "alternativas": [
+                "Comunidade externa",
                 "Estudante",
                 "Servidor",
-                "Comunidade externa",
                 "Outro"
             ],
-            "tipo": "radio"
+            "id": "publico_tipo"
         },
         {
             "enunciado": "Curso/Setor",
-            "id": "curso",
+            "tipo": "radio",
             "alternativas": [
                 "Administração",
                 "COORD/LEDOC/FUP",
@@ -46,12 +44,14 @@
                 "Meio Ambiente e Desenvolvimento Rural - Mestrado",
                 "Outro"
             ],
-            "tipo": "radio"
+            "id": "curso"
         },
         {
             "enunciado": "Contato (e-Mail, Zap...)",
-            "id": "eml",
-            "tipo": "text"
+            "tipo": "text",
+            "id": "eml"
         }
-    ]
+    ],
+    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
+    "arquivo_de_registro": "usuarios.json"
 }

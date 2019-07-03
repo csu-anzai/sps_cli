@@ -45,6 +45,18 @@ elif hostname == "debian":
 	#curric_metadados_folder = '/home/danielc/Documentos/SPS/Dados_AES/Consultas'
 	old_etd_folder = '/home/danielc/Documentos/SPS/SPS-UnB-Data_pesquisa/SPS/DadosAES/OldSAE_ESTUDOS'
 	old_sae_processos_list = "/home/danielc/Documentos/Devel/GitHub/sps_fup2/working_folder/Informações_antigas_SAE-candidatos_processos_seletivos.csv"
+	arquivo_metadados_cursos = "/home/danielc/Documentos/Devel/GitHub/sps_fup2/working_folder/Cursos_Metainfo.csv"
+	arquivo_metadados_cursos_json = "/home/danielc/Documentos/Devel/GitHub/sps_fup2/working_folder/cursos-metainfo.json"
+
+
+def create_curric_metainfo_index(target_metainfo_hab_file=arquivo_metadados_cursos):
+	info = read_csv(target_metainfo_hab_file, delimiter="\t")
+	output = {}
+	for l in info:
+		if l["Código Habilitação"] != "":
+			output[l["Código Habilitação"]] = l
+	save_json(output, arquivo_metadados_cursos_json)
+
 
 def old_sae_etd_rename_files(target_folder=old_etd_folder):
 	files = os.listdir(target_folder)

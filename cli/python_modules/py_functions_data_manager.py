@@ -37,7 +37,7 @@ import json
 
 from string import whitespace, punctuation, digits
 from .py_functions_csv import read_csv
-from .cli_tools import limpar_tela, select_op, select_ops, verde
+from .cli_tools import limpar_tela, select_op, select_ops, verde, input_op
 from .py_euristic_tools import merge_lists
 from .py_functions_json import load_json, save_json
 from collections import OrderedDict
@@ -100,13 +100,28 @@ def render_form_get_values(form_file, skip_q=[]):
 			print(verde(q['enunciado']))
 			nfo[q['id']] = select_op(q['alternativas'], 1)
 			if nfo[q['id']].find('Outro') != -1:
-				outro_detalhes = input('Especifique: ')
-				nfo[q['id']] = nfo[q['id']].replace('Outro', outro_detalhes)
-				q['alternativas'].remove('Outro')
-				q['alternativas'].append(outro_detalhes)
-				q['alternativas'].sort()
-				q['alternativas'].append('Outro')
+				outros_recem_listados = []
+				while True:
+					outro_detalhes = input('Especifique: ')
+					outros_recem_listados.append(outro_detalhes)
+					q['alternativas'].remove('Outro')
+					q['alternativas'].append(outro_detalhes)
+					q['alternativas'].sort()
+					q['alternativas'].append('Outro')
+					print("")
+					print(verde("Adicionar outra opção? [s|n]"))
+					op = input_op(['s','n'])
+					if op == 'n':
+						break
+				
+				if len(outros_recem_listados) > 1:
+					outros_recem_listados = "; ".join(outros_recem_listados)
+				else:
+					outros_recem_listados = outros_recem_listados[0]
+
+				nfo[q['id']] = nfo[q['id']].replace('Outro', outros_recem_listados)
 				rewrite_form = True
+
 			print("")
 
 				
@@ -114,13 +129,28 @@ def render_form_get_values(form_file, skip_q=[]):
 			print(verde(q['enunciado']))
 			nfo[q['id']] = "; ".join(select_ops(q['alternativas'], 1))
 			if nfo[q['id']].find('Outro') != -1:
-				outro_detalhes = input('Especifique: ')
-				nfo[q['id']] = nfo[q['id']].replace('Outro', outro_detalhes)
-				q['alternativas'].remove('Outro')
-				q['alternativas'].append(outro_detalhes)
-				q['alternativas'].sort()
-				q['alternativas'].append('Outro')
+				outros_recem_listados = []
+				while True:
+					outro_detalhes = input('Especifique: ')
+					outros_recem_listados.append(outro_detalhes)
+					q['alternativas'].remove('Outro')
+					q['alternativas'].append(outro_detalhes)
+					q['alternativas'].sort()
+					q['alternativas'].append('Outro')
+					print("")
+					print(verde("Adicionar outra opção? [s|n]"))
+					op = input_op(['s','n'])
+					if op == 'n':
+						break
+				
+				if len(outros_recem_listados) > 1:
+					outros_recem_listados = "; ".join(outros_recem_listados)
+				else:
+					outros_recem_listados = outros_recem_listados[0]
+
+				nfo[q['id']] = nfo[q['id']].replace('Outro', outros_recem_listados)
 				rewrite_form = True
+
 			print("")
 				
 	if rewrite_form == True:

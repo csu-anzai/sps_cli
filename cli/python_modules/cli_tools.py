@@ -244,6 +244,13 @@ def input_num(nome, default=0):
 	return num
 
 
+def input_op(lista_de_opcoes_validas):
+	while True:
+		op = input(amarelo('$: '))
+		if not op in lista_de_opcoes_validas:
+			print(vermelho("Opção inválida! Selecione entre [{}].".format("|".join(lista_de_opcoes_validas))))
+		else:
+			return op
 
 
 def select_op(lista_de_selecao, col_num, sort_list=False):
