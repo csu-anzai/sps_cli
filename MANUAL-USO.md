@@ -1,4 +1,4 @@
-# SPS/CLI Scrips - Documentação
+# SPS/CLI Scrips - Manual de Uso
 
 ## Visão geral
 O aplicativo em questão trata-se de um conjunto de scripts que tem por finalidade proporcionar o registro e controle das atividades desenvolvidas pelas profissionais do Serviço de Programas Sociais da Faculdade UnB Planaltina (SPS-FUP). Dessa forma a ferramenta foi concebida como um conjunto de comandos que executam funções de registro, edição e processamento de dados. O objetivo é fornecer uma ferramenta prática e funcional para lidar com as demandas e necessidades cotidianas do trabalho sem exigir muito tempo de desenvolvimento, manutenção e correção de erros.
