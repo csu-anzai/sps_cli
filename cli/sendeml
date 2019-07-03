@@ -25,6 +25,7 @@ from subprocess import getoutput
 from python_modules.cli_sps_base import *
 from python_modules.cli_decorators import check_config_existance
 from python_modules.cli_tools import mk_randnum_seq, verde, amarelo
+from python_modules.cli_db_loader import dados_profissionais
 from smtplib import SMTP
 from string import whitespace, punctuation, digits
 from email.message import EmailMessage

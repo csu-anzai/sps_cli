@@ -38,8 +38,10 @@ from math import fsum as soma
 if hostname == "oracleVM":
 	curric_folder = '/home/danielc/Documentos/SPS/Currículos/FUP'
 	curric_metadados_folder = '/home/danielc/Documentos/SPS/Dados_AES/Consultas'
-	old_etd_folder = '/home/bwb0de/Devel/sps_fup2/working_folder/SPS-UnB-Data_pesquisa/SPS/DadosAES/OldSAE_ESTUDOS/'
-	old_sae_processos_list = "/home/bwb0de/Devel/sps_fup2/working_folder/SPS-UnB-Data_pesquisa/SPS/DadosAES/Informações_antigas_SAE-candidatos_processos_seletivos.csv"
+	old_etd_folder = '/home/bwb0de/Working_Folder/OldSAE_etd'
+	old_sae_processos_list = "/home/bwb0de/Working_Folder/Informações_antigas_SAE-candidatos_processos_seletivos.csv"
+	arquivo_metadados_cursos = ""
+	arquivo_metadados_cursos_json = ""
 elif hostname == "debian":
 	#curric_folder = '/home/danielc/Documentos/SPS/Currículos/FUP'
 	#curric_metadados_folder = '/home/danielc/Documentos/SPS/Dados_AES/Consultas'
@@ -135,7 +137,7 @@ def old_sae_extract_hist_list(target_folder=old_etd_folder, target_csv_lista_pro
 			total_itens -= 1
 
 
-def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=8598):
+def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=9224):
 	processos = read_csv(target_csv_lista_processos, '\t')
 	total_itens = len(processos)-1
 	current_item = init_idx
