@@ -6,8 +6,9 @@
 Cria ou recria arquivo de índices do banco de dados.
 
 Usage:
-    indexdb
-    indexdb ( insert ) <identificador> <set_de_dados>
+    indexdb ( construir )
+    indexdb ( inserir ) <identificador> <set_de_dados>
+    indexdb ( sexo )
 
 Options:
     --version
@@ -24,7 +25,8 @@ from python_modules.cli_global_paths import \
     arquivo_usuarios,\
     arquivo_processos,\
     arquivo_atendimentos,\
-    arquivo_corrigidos
+    arquivo_corrigidos,\
+    arquivo_sex_info
 
 from python_modules.cli_db_loader import \
     dados_usuarios,\
@@ -34,7 +36,9 @@ from python_modules.cli_db_loader import \
     arquivo_index,\
     get_tags_idx
 
-from python_modules.py_functions_json import save_json
+from python_modules.py_functions_json import save_json, load_json
+
+from python_modules.cli_tools import amarelo, verde, input_op
 
 args = docopt(__doc__)
 
@@ -103,7 +107,23 @@ def remake_index():
 
 
 def main():
-    remake_index()
+    if args['construir']:
+        remake_index()
+
+    elif args['inserir']:
+        pass
+        print("Não definido...")
+
+    elif args['sexo']:
+        sex_info = load_json(arquivo_sex_info)
+        for usr in dados_usuarios:
+            primeiro_nome = usr['nome'].split(" ")[0]
+            if not primeiro_nome in sex_info.keys():
+                print(amarelo(primeiro_nome)+" "+verde("é um nome masculino ou feminino? [m|f|?]"))
+                op = input_op(["m", "f", "?"])
+                sex_info[primeiro_nome] = op
+                save_json(sex_info, arquivo_sex_info)
+    
 
 
 if __name__ == '__main__':

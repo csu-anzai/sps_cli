@@ -19,9 +19,13 @@ arquivo_processos = os.sep.join([pasta_de_dados, "processos.json"])
 arquivo_corrigidos = os.sep.join([pasta_de_dados, "corrigidos.json"])
 arquivo_index = os.sep.join([pasta_de_indice, "index_db.json"])
 arquivo_col_wid = os.sep.join([pasta_de_indice, "col_wid.json"])
+arquivo_sex_info = os.sep.join([pasta_de_indice, "sex_info.json"])
 arquivo_estudos = os.sep.join([pasta_de_dados, "estudos.json"])
 arquivo_de_configuracao = os.sep.join([pasta_de_configuracao, "global_config.json"])
 arquivo_usuario_alvo = os.sep.join([pasta_do_usuario, '.current_target'])
+arquivo_modelo_ppaes = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/ppaes.odt"])
+arquivo_modelo_ppaes_detalhado = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/ppaes_det.odt"])
+
 
 formulario_atendimentos = os.sep.join([pasta_de_formularios, "form_atendimento.json"])
 formulario_novo_usuario = os.sep.join([pasta_de_formularios, "form_novo_usuario.json"])

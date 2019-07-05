@@ -40,7 +40,7 @@ def main():
 
     elif args['get']:
         ct = load_json(os.sep.join([pasta_do_usuario, '.current_target']))
-        print(amarelo(ct.get(args['<campo>'])))
+        print(ct.get(args['<campo>']))
 
     elif args['show']:
         ct = load_json(os.sep.join([pasta_do_usuario, '.current_target']))

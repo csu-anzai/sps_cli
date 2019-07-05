@@ -1,16 +1,15 @@
 {
-    "titulo": "Registro de atendimento",
-    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
-    "arquivo_de_registro": "atendimentos.json",
-    "campos_de_listagem": "timestamp, identificador, atd_t",    
+    "campos_de_listagem": "timestamp, identificador, atd_t",
     "questoes": [
         {
-            "tipo": "text",
+            "enunciado": "Matrícula",
             "id": "identificador",
-            "enunciado": "Matrícula"
+            "tipo": "text"
         },
         {
+            "enunciado": "Forma de atividade",
             "tipo": "checkbox",
+            "id": "procedimento",
             "alternativas": [
                 "Articulação",
                 "Atendimento presencial",
@@ -20,17 +19,18 @@
                 "Elaboração de relatório ou documento",
                 "Processamento de demanda anterior",
                 "Outro"
-            ],
-            "id": "procedimento",
-            "enunciado": "Forma de atividade"
+            ]
         },
         {
+            "enunciado": "Demanda do atendimento",
             "tipo": "checkbox",
+            "id": "atd_t",
             "alternativas": [
                 "Agendamento entrevista",
                 "Articulação de demandas com a Coordenaçãoo da Educação do Campo.",
                 "Articulação de demandas com a Direção da FUP",
                 "Articulação de demandas da DDS",
+                "Auxílio na comunicação com o MEC",
                 "Auxílio no preenchimento do estudo",
                 "Auxílio para Recuperação da senha BPME",
                 "Colsulta sobre situação do Bolsa Alimentação",
@@ -61,6 +61,7 @@
                 "Fotocópia de termo do Programa Bolsa Alimentação",
                 "Identificação de demanda pendente (pagamento retroativo)",
                 "Identificação de pontos de referências para visita domiciliar",
+                "Identificação de problemas na plataforma SISBP",
                 "Identificação de referências para visita domiciliar",
                 "Impressão de declaração constante no anexo do edital",
                 "Impressão de documentos para apresentação junto à direção da FUP",
@@ -95,21 +96,24 @@
                 "Solicitação de modelo de termo para o Programa Bolsa Permanência",
                 "Solicitação de pagamento retroativo",
                 "Solicitação de verificação de vínculo com a assistencia estudantil.",
+                "Verificação se o estudante foi chamado na segunda chamada",
                 "Outro"
-            ],
-            "id": "atd_t",
-            "enunciado": "Demanda do atendimento"
+            ]
         },
         {
+            "enunciado": "Resultado do atendimento",
             "tipo": "radio",
+            "id": "resultado",
             "alternativas": [
                 "Aguardando resposta",
                 "Demanda atendida",
+                "Demanda atendida, mas sem resultado sarisfatório",
                 "Demanda não atendida",
                 "Outro"
-            ],
-            "id": "resultado",
-            "enunciado": "Resultado do atendimento"
+            ]
         }
-    ]
+    ],
+    "arquivo_de_registro": "atendimentos.json",
+    "titulo": "Registro de atendimento",
+    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP"
 }
