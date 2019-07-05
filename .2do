@@ -11,17 +11,18 @@
 [~] Reestruturar formulários para incluirem [arquivo_de_registro], [campos_de_listagem]
 [ ] Instituir comando para criação de novos formulários
 [ ] Reestruturar 'createdb' para buscar informações de criação das bases de dados nos formulários
-[ ] Fazer ajuste do código para que as larguras das colunas, nos campos listados, estejam em um unico dict (arquivo de dados JSON)
+[x] Fazer ajuste do código para que as larguras das colunas, nos campos listados, estejam em um unico dict (arquivo de dados JSON)
+[x] As informações de largura de colunas precisam ser re-indexadas e cada modificação de formulário ou inclusão de dados
 [ ] Instituir subcomando em 'novo' para registro de novos subcomandos aos comandos 'novo' e 'lst' (arquivo de dados JSON)
     * if cmd in keys:
     * novo cmd <subcmd_nome> <db_json_file>
-[ ] As informações de largura de colunas precisam ser re-indexadas e cada modificação de formulário ou inclusão de dados
 [x] Reestruturar a opção "Especifique" em na função 'render_for_get_values' para perguntar se deseja inclir mais opções não listadas
 [x] Verificar/corrigir contador das listagens
 [x] Reconstituir 'working_folder'
 [x] Instituir pesquisa por nome
 [~] Redigir documentação básica
-[ ] Instituir 'obterinfo' com opção "-s" informação curta: NOME - MATRÍCULA...
-[ ] Corrigido erro no envio de emails automáticos...
-[ ] Criar arquivo JSON para definição de situações em que o email automárico deve ser encaminhado...
+[x] Instituir 'obterinfo' com opção "-s" informação curta: NOME - MATRÍCULA... [implementado como 'target -s show']
+[x] Corrigido erro no envio de emails automáticos...
+[~] Criar arquivo JSON para definição de situações em que o email automárico deve ser encaminhado...
 [ ] Criar função que verifica se a situação de atendimento corresponde à situação na qual deve-se comunicar o estudante por email a partir das configurações do profissional
+[ ] Substituir instruções de pesquisa em 'sps-api get' e 'target select' por uma única função em 'cli_sps_base.py'

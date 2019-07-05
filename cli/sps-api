@@ -49,47 +49,9 @@ from python_modules.cli_db_loader import \
 
 from python_modules.cli_tools import select_op
 
+from python_modules.cli_sps_base import show_nfo_frag, show_nfo_frag_by_nome, get_nfo
+
 args = docopt(__doc__)
-
-def get_nfo(identificador, set_de_dados, index_de_dados=dados_index):
-    for s in index_de_dados:
-        if s['set_de_dados'] == set_de_dados:
-            return s['dados'].get(identificador)
-
-def show_nfo_frag(identificador, set_de_dados, db):
-    ret_nfo = get_nfo(identificador, set_de_dados)
-    if ret_nfo:
-        for i in ret_nfo:
-            print(db[i])
-
-def show_nfo_frag_by_nome(identificador, index_de_dados=dados_index, informacoes_usuarios=dados_usuarios):
-    identificador_init = identificador[0]
-    set_de_nomes = {}
-    for sets in index_de_dados:
-        if sets['set_de_dados'] == 'nome':
-            set_de_nomes = sets['dados']
-    try:
-        entries = set_de_nomes.get(identificador_init).get(identificador)
-        num_entries = len(entries)
-    except:
-        entries = []
-        num_entries = 0
-    
-    if num_entries > 1:
-        nomes_op = []
-        for idx in entries:
-            nomes_op.append(informacoes_usuarios[idx]['nome'])
-        print(verde("Mais de um estudante possui registro do nome solicitado em seu nome completo, selecione o estudante correto:"))
-        op = select_op(nomes_op, 1)
-        op_idx = entries[nomes_op.index(op)]
-        return informacoes_usuarios[op_idx]['identificador']
-    
-    elif num_entries == 0:
-        print(vermelho("Registro não encontrado..."))
-    
-    else:
-        return informacoes_usuarios[entries[0]]['identificador']
-    
 
 def inserir_info(arquivo_de_dados, chaves_e_valores, reg_time=False, profissional=False):
     nfo={}
@@ -184,8 +146,8 @@ def main():
 
     elif args['get']:
         obter_pelo_nome = False
-        if args["<identificador>"][0].find('@') != -1:
-            identificador_real = get_nfo(args["<identificador>"][0], 'est-eml', index_de_dados=dados_index)
+        if args["<identificador>"].find('@') != -1:
+            identificador_real = get_nfo(args["<identificador>"], 'est-eml', index_de_dados=dados_index)
             if identificador_real == None:
                 print(vermelho("Identificador não encontrado..."))
                 exit()
@@ -194,29 +156,29 @@ def main():
             else:
                 identificador_real = identificador_real[0]
             
-        elif args["<identificador>"][0].find('/') != -1:
-            identificador_real = args["<identificador>"][0]
+        elif args["<identificador>"].find('/') != -1:
+            identificador_real = args["<identificador>"]
             if not identificador_real in matriculas:
                 print(vermelho("Identificador não encontrado..."))
                 exit()
         
         else:
             obter_pelo_nome = True
-            identificador_real = show_nfo_frag_by_nome(args["<identificador>"][0])
+            identificador_real = show_nfo_frag_by_nome(args["<identificador>"], dados_usuarios, dados_index)
 
         if identificador_real == None:
             pass
         else:
             print(verde("Dados pessoais"))
-            show_nfo_frag(identificador_real, 'est', dados_usuarios)
+            show_nfo_frag(identificador_real, 'est', dados_usuarios, dados_index)
 
             print("")
             print(verde("Dados de atendimentos"))
-            show_nfo_frag(identificador_real, 'atd', dados_atendimentos)
+            show_nfo_frag(identificador_real, 'atd', dados_atendimentos, dados_index)
             
             print("")
             print(verde("Dados de processos"))
-            show_nfo_frag(identificador_real, 'proc', dados_processos)
+            show_nfo_frag(identificador_real, 'proc', dados_processos, dados_index)
 
     elif args['tag-insert']:
         inserir_marcador(args['<arquivo_de_dados>'], args['<etiqueta>'], args['<identificador>'])

@@ -25,9 +25,12 @@
 
 import os
 import asyncio
+import time
 
 from collections import OrderedDict
-from .cli_sps_base import timestamp
+from subprocess import getoutput
+
+from .cli_machine_info import username
 
 from .cli_global_paths import \
     pasta_raiz_do_aplicativo,\
@@ -43,10 +46,18 @@ from .cli_global_paths import \
     arquivo_processos,\
     arquivo_corrigidos,\
     arquivo_index,\
-    arquivo_estudos
+    arquivo_estudos,\
+    arquivo_col_wid
     
 from .py_functions_json import load_json, save_json
 
+
+def timestamp(mode=None):
+    if mode == "mkid":
+        from subprocess import getoutput
+        return time.strftime("{}%Y%m%d%H%M%S".format(username[0:3].upper()), time.localtime())
+    else:
+        return time.strftime("%Y-%m-%d %H:%M:%S %a", time.localtime())
 
 def get_col_width(field_name, dict_array):
     width = 0
@@ -101,6 +112,35 @@ async def get_col_label(formulario):
         id_and_label[i['id']] = i['enunciado']
     return id_and_label
 
+def calculate_col_width():
+    loop2 = asyncio.get_event_loop()
+    col_width = loop2.run_until_complete(asyncio.gather(
+        get_col_width_nfo('identificador', dados_usuarios),
+        get_col_width_nfo('nome', dados_usuarios),
+        get_col_width_nfo('eml', dados_usuarios),
+        get_col_width_nfo('uid', dados_profissionais),
+        get_col_width_nfo('prof_nome', dados_profissionais),
+        get_col_width_nfo('eml', dados_profissionais),
+        get_col_width_nfo('numero_sei', dados_processos),
+        get_col_width_nfo('assunto', dados_processos),
+        get_col_width_nfo('motivo', dados_processos),
+    ))
+
+    #Larguras das colunas nas listas. Rodar método async aqui...
+    col_wid = OrderedDict()
+    col_wid['identificador'] = col_width[0]
+    col_wid['nome_usuario'] = col_width[1]
+    col_wid['eml_usuario'] = col_width[2]
+    col_wid['uid'] = col_width[3]
+    col_wid['nome_profissional'] = col_width[4]
+    col_wid['eml_profissional'] = col_width[5]
+    col_wid['numero_sei'] = col_width[6]
+    col_wid['assunto'] = col_width[7]
+    col_wid['motivo'] = col_width[8]
+    col_wid['timestamp'] = ('timestamp', len(timestamp()) + 2)
+
+    save_json(col_wid, arquivo_col_wid)    
+
 
 loop = asyncio.get_event_loop()
 dados = loop.run_until_complete(asyncio.gather(
@@ -122,41 +162,10 @@ dados_corrigidos = dados[4]
 dados_index = dados[5]
 dados_estudos = dados[6]
 
-loop2 = asyncio.get_event_loop()
-col_width = loop2.run_until_complete(asyncio.gather(
-    get_col_width_nfo('identificador', dados_usuarios),
-    get_col_width_nfo('nome', dados_usuarios),
-    get_col_width_nfo('eml', dados_usuarios),
-    get_col_width_nfo('uid', dados_profissionais),
-    get_col_width_nfo('nome', dados_profissionais),
-    get_col_width_nfo('eml', dados_profissionais),
-    get_col_width_nfo('numero_sei', dados_processos),
-    get_col_width_nfo('assunto', dados_processos),
-    get_col_width_nfo('motivo', dados_processos),
-))
+col_wid_test = int(getoutput("if [ -f {} ]; then echo 1; else echo 0; fi".format(arquivo_col_wid)))
 
-#Larguras das colunas nas listas. Rodar método async aqui...
-col_width_info = OrderedDict()
-col_width_info['identificador'] = col_width[0]
-col_width_info['nome_usuario'] = col_width[1]
-col_width_info['eml_usuario'] = col_width[2]
-col_width_info['uid'] = col_width[3]
-col_width_info['nome_profissional'] = col_width[4]
-col_width_info['eml_profissional'] = col_width[5]
-col_width_info['numero_sei'] = col_width[6]
-col_width_info['assunto'] = col_width[7]
-col_width_info['motivo'] = col_width[8]
-col_width_info['timestamp'] = ('timestamp', len(timestamp()) + 2)
-
-col_width_etd_mat = col_width[0]
-col_width_atend_ident = col_width_etd_mat
-col_width_etd_nome = col_width[1]
-col_width_etd_eml = col_width[2]
-col_width_atend_time = ('timestamp', len(timestamp()) + 2)
-col_width_prof_uid = col_width[3]
-col_width_prof_nome = col_width[4]
-col_width_prof_eml = col_width[5]
-col_width_proc_sei_n = col_width[6]
-col_width_proc_assunto = col_width[7]
-col_width_proc_motivo = col_width[8]
+if col_wid_test == 1:
+    col_wid = load_json(arquivo_col_wid)
+else:
+    calculate_col_width()
 

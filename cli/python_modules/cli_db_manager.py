@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from subprocess import getoutput
 from .cli_decorators import only_root
 from .cli_db_loader import dados_profissionais
+from .cli_machine_info import pasta_do_usuario
+from .cli_tools import verde
+from subprocess import getoutput
+
 import os
 
 
 def create_user_configuration():
     config = {}
-    user_config_file = os.sep.join([getoutput('echo $HOME'), '.sps-cli.conf'])
+    user_config_file = os.sep.join([pasta_do_usuario, '.sps-cli.conf'])
     
     import getpass
     from python_modules.cli_tools import select_op
@@ -18,36 +21,36 @@ def create_user_configuration():
     nome = input("Insira o seu nome completo: ")
     eml = input("Insira o seu endereço de email: ")
     if eml.find('@unb.br') != -1:
-        envio_automatico_email = input("Enviar emails automaticamente? [s|n]")
+        envio_automatico_email = input(verde("Enviar emails automaticamente? [s|n]"))
 
         if envio_automatico_email.lower() == 's':
-            envio_automatico_email = True
+            #envio_automatico_email = True
             eml_server = "mail.unb.br"
             eml_port = "587"
 
             while True:
-                eml_pwd = getpass.getpass('Insira a senha de acesso ao email apresentado: ')
-                verificar_senha = getpass.getpass('Repita a senha informada: ')
+                eml_pwd = getpass.getpass(verde('Insira a senha de acesso para "{}": '.format(eml)))
+                verificar_senha = getpass.getpass(verde('Repita a senha informada: '))
                 if eml_pwd == verificar_senha:
                     eml_pwd = getoutput('echo "{}" | base64'.format(eml_pwd))
                     break
 
         else:
-            envio_automatico_email = False
+            #envio_automatico_email = False
             eml_pwd = ""
             eml_server = ""
             eml_port = ""
 
-    print('Selecione a sua especialidade profissional: ')
+    print(verde('Selecione a sua especialidade profissional: '))
     especialidade = select_op(['Assistente Social', 'Administrador', 'Administradora', 'Assistente Administrativo', 'Estatístico', 'Estatística', 'Pedagogo', 'Pedagoga', 'Psicólogo', 'Psicóloga', 'Técnico em assuntos educacionais', 'Técnica em assuntos educacionais'], 1, sort_list=True) 
-    sigla_conselho = input('Informe a sigla do conselho profissional: ')
-    numero_no_concelho = input('Qual a matrícula frente ao conselho profissional: ')
-    matricula_instituicao = input('Qual a matrícula institucional: ')
+    sigla_conselho = input(verde('Informe a sigla do conselho profissional: '))
+    numero_no_concelho = input(verde('Qual a matrícula frente ao conselho profissional: '))
+    matricula_instituicao = input(verde('Qual a matrícula institucional: '))
     eml_assinatura = "Atenciosamente,\n---\n{nome}\n{cargo}\n{conselho} {matricula_conselho}\nFUB {matricula_fub}".format(nome=nome, cargo=especialidade, conselho=sigla_conselho, matricula_conselho=numero_no_concelho, matricula_fub=matricula_instituicao)
 
-    config['nome']=eml
-    config['eml']=eml
-    config['envio_automatico_email']=envio_automatico_email
+    config['prof_nome']=nome
+    config['prof_eml']=eml
+    #config['envio_automatico_email']=envio_automatico_email
     config['eml_pwd']=eml_pwd
     config['eml_server']=eml_server
     config['eml_port']=eml_port

@@ -9,6 +9,12 @@ Ao utilizar o comando 'novo' para realizar inserções, as informações do usua
 Usage:
     target ( set | edit ) <campo> <valor>
     target ( get ) <campo>
+    target [ -s|-e ] ( show )
+    target ( select ) <identificador>
+
+Options:
+    -s, --info-simples
+    -e, --info-emergencial
 
 """
 
@@ -16,19 +22,61 @@ import os
 
 from docopt import docopt
 from python_modules.py_functions_json import load_json, save_json
-from python_modules.cli_db_loader import pasta_do_usuario
+from python_modules.cli_machine_info import pasta_do_usuario
+from python_modules.cli_global_paths import arquivo_usuario_alvo
+from python_modules.cli_db_loader import dados_usuarios, dados_index, get_col_values
+from python_modules.cli_tools import verde, amarelo, vermelho
+from python_modules.cli_sps_base import show_nfo_frag, show_nfo_frag_by_nome, get_nfo
+
+matriculas = get_col_values('identificador', dados_usuarios)
 
 args = docopt(__doc__)
 
 def main():
     if args['set'] or args['edit']:
-        current_target = load_json(os.sep.join([pasta_do_usuario, '.current_target']))
-        current_target[args['<campo>']] = args['<valor>']
-        save_json(current_target, os.sep.join([pasta_do_usuario, '.current_target']))
+        ct = load_json(os.sep.join([pasta_do_usuario, '.current_target']))
+        ct[args['<campo>']] = args['<valor>']
+        save_json(ct, os.sep.join([pasta_do_usuario, '.current_target']))
 
     elif args['get']:
-        current_target = load_json(os.sep.join([pasta_do_usuario, '.current_target']))
-        print(current_target.get(args['<campo>']))
+        ct = load_json(os.sep.join([pasta_do_usuario, '.current_target']))
+        print(amarelo(ct.get(args['<campo>'])))
+
+    elif args['show']:
+        ct = load_json(os.sep.join([pasta_do_usuario, '.current_target']))
+        if args['--info-simples']:
+            print(amarelo(ct['nome'])+' - '+amarelo(ct['identificador']))
+        elif args['--info-emergencial']:
+            print(amarelo("Solicito pagamento de auxílio emergencial a {nome} ({idt}), vinculado ao curso {curso}.".format(nome=ct['nome'], idt=ct['identificador'], curso=ct['curso'])))
+        else:
+            for k in ct.keys():
+                print(verde("{}: ".format(k))+amarelo("{}".format(ct[k])))
+
+    elif args['select']:
+        if args["<identificador>"].find('@') != -1:
+            identificador_real = get_nfo(args["<identificador>"], 'est-eml', index_de_dados=dados_index)
+            if identificador_real == None:
+                print(vermelho("Identificador não encontrado..."))
+                exit()
+            elif len(identificador_real) > 1:
+                pass
+            else:
+                identificador_real = identificador_real[0]
+            
+        elif args["<identificador>"].find('/') != -1:
+            identificador_real = args["<identificador>"]
+            if not identificador_real in matriculas:
+                print(vermelho("Identificador não encontrado..."))
+                exit()
+        
+        else:
+            identificador_real = show_nfo_frag_by_nome(args["<identificador>"], dados_usuarios, dados_index)
+
+        if identificador_real == None:
+            pass
+        else:
+            save_json(show_nfo_frag(identificador_real, 'est', dados_usuarios, dados_index, print_info=False), arquivo_usuario_alvo)
+
 
 
  

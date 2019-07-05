@@ -99,7 +99,8 @@ from python_modules.cli_db_loader import \
     dados_atendimentos,\
     dados_corrigidos,\
     dados_index,\
-    dados_estudos
+    dados_estudos,\
+    calculate_col_width
 
 from python_modules.cli_sps_base import \
     save_target_info,\
@@ -271,6 +272,7 @@ def main():
         identificador = numero_identificador_mascara(args['<identificador>'])
         save_target_info(identificador, dados_usuarios)
         atd_t = novo_atendimento(identificador)
+
         if atd_t == "Encaminhamento de pedido de auxílio emergencial":
             numero_sei = novo_processo(identificador, atd_t)
             if envio_automatico_email:
@@ -324,4 +326,5 @@ if __name__ == '__main__':
     cmd = main()
     newpid = os.fork()
     if newpid == 0:
+        calculate_col_width()
         os.system("indexdb")
