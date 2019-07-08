@@ -25,6 +25,7 @@ arquivo_de_configuracao = os.sep.join([pasta_de_configuracao, "global_config.jso
 arquivo_usuario_alvo = os.sep.join([pasta_do_usuario, '.current_target'])
 arquivo_modelo_ppaes = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/ppaes.odt"])
 arquivo_modelo_ppaes_detalhado = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/ppaes_det.odt"])
+arquivo_modelo_ccc = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/criacao-cc.odt"])
 
 
 formulario_atendimentos = os.sep.join([pasta_de_formularios, "form_atendimento.json"])

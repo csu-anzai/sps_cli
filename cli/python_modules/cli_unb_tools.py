@@ -137,7 +137,7 @@ def old_sae_extract_hist_list(target_folder=old_etd_folder, target_csv_lista_pro
 			total_itens -= 1
 
 
-def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=10539):
+def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=11639):
 	processos = read_csv(target_csv_lista_processos, '\t')
 	total_itens = len(processos)-1
 	current_item = init_idx

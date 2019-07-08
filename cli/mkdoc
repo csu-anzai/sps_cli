@@ -21,7 +21,7 @@ from docopt import docopt
 from subprocess import getoutput
 #from python_modules.templates import base_html_layout 
 from python_modules.cli_machine_info import tmpdir
-from python_modules.cli_global_paths import arquivo_sex_info, arquivo_modelo_ppaes, arquivo_modelo_ppaes_detalhado
+from python_modules.cli_global_paths import arquivo_sex_info, arquivo_modelo_ppaes, arquivo_modelo_ppaes_detalhado, arquivo_modelo_ccc
 from python_modules.cli_db_loader import timestamp
 from python_modules.cli_tools import verde, amarelo, input_op
 from python_modules.py_functions_json import load_json, save_json
@@ -31,57 +31,72 @@ initdir = getoutput('pwd')
 
 
 def main():
+    idt = args['<identificador>'].replace('/','')
+    sex_info = load_json(arquivo_sex_info)
+    tmp_working_folder = os.sep.join([tmpdir, idt])
+    os.mkdir(tmp_working_folder)
+
+    os.system("target select '{}'".format(args['<identificador>']))
+
+    nome = getoutput("target get nome")
+    identificador = getoutput("target get identificador")
+    curso = getoutput("target get curso")
+    data = timestamp("long")
+    cpf = "#CPFNUM#"
+    programas = "#PROGRAMAS#" #checar vinculo programas
+    valor_programas = "#SOMA_PROGRAMAS#"
+
     if args['dec-ppaes']:
-        idt = args['<identificador>'].replace('/','')
-        sex_info = load_json(arquivo_sex_info)
-        tmp_working_folder = os.sep.join([tmpdir, idt])
-        os.mkdir(tmp_working_folder)
-        os.system("target select '{}'".format(args['<identificador>']))
+        print(amarelo("Gerando declaração PPAES na lasta local..."))
+        output_fname = "{identificador} {nome} - PPAES.odt".format(identificador=idt, nome=nome)
         if args['--detalhada']:
             os.system('cp "{}" "{}"'.format(arquivo_modelo_ppaes_detalhado, tmp_working_folder))
             modelo_fname = arquivo_modelo_ppaes_detalhado.split("/")[-1]
         else:
             os.system('cp "{}" "{}"'.format(arquivo_modelo_ppaes, tmp_working_folder))
-            modelo_fname = arquivo_modelo_ppaes.split("/")[-1]
-        os.chdir(tmp_working_folder)
-        os.system('unzip "{mod_fn}"; rm "{mod_fn}"'.format(mod_fn=modelo_fname))
-        
-        with open("content.xml", 'r') as contentxml:
-            fdata = contentxml.read()
-        
-        nome = getoutput("target get nome")
-        identificador = getoutput("target get identificador")
-        curso = getoutput("target get curso")
-        data = timestamp("long")
+            modelo_fname = arquivo_modelo_ppaes.split("/")[-1]        
 
-        if sex_info[nome.split(" ")[0]] == "m":
+    elif args['dec-cc']:
+        print(amarelo("Gerando declaração para criação de conta bancária na lasta local..."))
+        output_fname = "{identificador} {nome} - Dec CCC.odt".format(identificador=idt, nome=nome)
+        os.system('cp "{}" "{}"'.format(arquivo_modelo_ccc, tmp_working_folder))
+        modelo_fname = arquivo_modelo_ccc.split("/")[-1]        
+
+    os.chdir(tmp_working_folder)
+    os.system('unzip "{mod_fn}" > /dev/null; rm "{mod_fn}"'.format(mod_fn=modelo_fname))
+    
+    with open("content.xml", 'r') as contentxml:
+        fdata = contentxml.read()
+    
+
+    if sex_info[nome.split(" ")[0]] == "m":
+        fdata = fdata.replace('#@#', 'o')
+    elif sex_info[nome.split(" ")[0]] == "f":
+        fdata = fdata.replace('#@#', 'a')
+    else:
+        print(verde("Utilizar qual flexão de gênero? [m|f|i]"))
+        op = input_op(["m", "f", "i"])
+        if op == "m":
             fdata = fdata.replace('#@#', 'o')
-        elif sex_info[nome.split(" ")[0]] == "f":
+        elif op == "f":
             fdata = fdata.replace('#@#', 'a')
         else:
-            print(verde("Utilizar qual flexão de gênero? [m|f|i]"))
-            op = input_op(["m", "f", "i"])
-            if op == "m":
-                fdata = fdata.replace('#@#', 'o')
-            elif op == "f":
-                fdata = fdata.replace('#@#', 'a')
-            else:
-                fdata = fdata.replace('#@#', 'x')
+            fdata = fdata.replace('#@#', 'x')
 
-        fdata = fdata.replace('#NOME#', nome)
-        fdata = fdata.replace('#IDENTIFICADOR#', identificador)
-        fdata = fdata.replace('#CURSO#', curso)
-        fdata = fdata.replace('#DATA#', data)
+    fdata = fdata.replace('#NOME#', nome)
+    fdata = fdata.replace('#IDENTIFICADOR#', identificador)
+    fdata = fdata.replace('#CURSO#', curso)
+    fdata = fdata.replace('#DATA#', data)
+    fdata = fdata.replace('#CPF#', cpf)
+    fdata = fdata.replace('#PROGRAMAS#', programas)
+    fdata = fdata.replace('#VALOR_PROGRAMAS#', valor_programas)
 
-        with open("content.xml", 'w') as contentxml:
-            contentxml.write(fdata)
+    with open("content.xml", 'w') as contentxml:
+        contentxml.write(fdata)
 
-        os.system('zip "{identificador} {nome} - PPAES.odt" * -mr0; mv "{identificador} {nome} - PPAES.odt" "{initdir}/"'.format(nome=nome, identificador=idt, initdir=initdir))
-        os.system('rm -fR "{}"'.format(tmp_working_folder))
+    os.system('zip "{out_fn}" * -mr0q; mv "{out_fn}" "{initdir}/"'.format(out_fn=output_fname, initdir=initdir))
+    os.system('rm -fR "{}"'.format(tmp_working_folder))
         
-    elif args['dec-cc']:
-        pass
-
         
 if __name__ == '__main__':
     main()

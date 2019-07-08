@@ -1,14 +1,12 @@
 {
-    "campos_de_listagem": "timestamp, identificador, atd_t",
+    "arquivo_de_registro": "atendimentos.json",
     "questoes": [
         {
-            "enunciado": "Matrícula",
             "id": "identificador",
+            "enunciado": "Matrícula",
             "tipo": "text"
         },
         {
-            "enunciado": "Forma de atividade",
-            "tipo": "checkbox",
             "id": "procedimento",
             "alternativas": [
                 "Articulação",
@@ -19,11 +17,11 @@
                 "Elaboração de relatório ou documento",
                 "Processamento de demanda anterior",
                 "Outro"
-            ]
+            ],
+            "enunciado": "Forma de atividade",
+            "tipo": "checkbox"
         },
         {
-            "enunciado": "Demanda do atendimento",
-            "tipo": "checkbox",
             "id": "atd_t",
             "alternativas": [
                 "Agendamento entrevista",
@@ -74,6 +72,7 @@
                 "Informação sobre andamento/situação da avaliação socioeconômica",
                 "Notificação de recebimento de ameaças",
                 "Orientação presencial em relação a estudo socioeconômico",
+                "Orientação presencial no cadastro junto à plataforma \"Fale Conosco\" do Ministério da Educação.",
                 "Orientação sobre Auxílio Emergencial",
                 "Orientação sobre a impossibilidade de assinatura do termo de moradia",
                 "Orientação sobre a impossibilidade de pedido de auxílio emergencial de forma não presencial (Art. 3º (caput))",
@@ -98,11 +97,11 @@
                 "Solicitação de verificação de vínculo com a assistencia estudantil.",
                 "Verificação se o estudante foi chamado na segunda chamada",
                 "Outro"
-            ]
+            ],
+            "enunciado": "Demanda do atendimento",
+            "tipo": "checkbox"
         },
         {
-            "enunciado": "Resultado do atendimento",
-            "tipo": "radio",
             "id": "resultado",
             "alternativas": [
                 "Aguardando resposta",
@@ -110,10 +109,12 @@
                 "Demanda atendida, mas sem resultado sarisfatório",
                 "Demanda não atendida",
                 "Outro"
-            ]
+            ],
+            "enunciado": "Resultado do atendimento",
+            "tipo": "radio"
         }
     ],
-    "arquivo_de_registro": "atendimentos.json",
     "titulo": "Registro de atendimento",
+    "campos_de_listagem": "timestamp, identificador, atd_t",
     "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP"
 }
