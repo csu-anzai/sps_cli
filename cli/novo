@@ -81,6 +81,7 @@ from python_modules.cli_global_paths import \
     arquivo_processos,\
     arquivo_atendimentos,\
     arquivo_estudos,\
+    arquivo_fragmentos_recebidos,\
     pasta_de_dados,\
     pasta_de_fragmentos,\
     formulario_registro_de_correcao,\
@@ -121,8 +122,13 @@ def novo_usuario(identificador):
     dados_usuarios.append(nfo)
     save_json(dados_usuarios, arquivo_usuarios)
     if trabalhar_com_fragmentos:
-        fragmento = os.sep.join([pasta_de_fragmentos, 'USR'+getoutput("date +%Y%U%u%H%M%S%N")+'@'+hostname])
+        frag_name = 'USR'+getoutput("date +%Y%U%u%H%M%S%N")+'@'+hostname
+        cripto_frag_name = frag_name+'.cpt'
+        fragmento = os.sep.join([pasta_de_fragmentos, frag_name])
         save_json(nfo, fragmento)
+        recebidos = load_json(arquivo_fragmentos_recebidos)
+        recebidos.append(cripto_frag_name)
+        save_json(recebidos, arquivo_fragmentos_recebidos)
         os.system('fragment send "{}"'.format(fragmento))
 
 

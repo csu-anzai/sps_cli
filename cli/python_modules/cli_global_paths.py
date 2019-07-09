@@ -12,6 +12,8 @@ pasta_de_fragmentos = os.sep.join([pasta_de_dados, "fragmentos"])
 pasta_de_indice = os.sep.join([pasta_de_dados, "indexados"])
 pasta_de_formularios = os.sep.join([pasta_raiz_do_aplicativo, "cli/formularios"])
 
+arquivo_fragmentos_emitidos = os.sep.join([pasta_de_fragmentos, "emitidos.json"])
+arquivo_fragmentos_recebidos = os.sep.join([pasta_de_fragmentos, "recebidos.json"])
 arquivo_atendimentos = os.sep.join([pasta_de_dados, "atendimentos.json"])
 arquivo_usuarios = os.sep.join([pasta_de_dados, "usuarios.json"])
 arquivo_profissionais = os.sep.join([pasta_de_dados, "profissionais.json"])

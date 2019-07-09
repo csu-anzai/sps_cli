@@ -13,3 +13,4 @@ periodo_corrente = "1º/2019"
 envio_automatico_email = global_config[hostname]["envio_automatico_email"]
 trabalhar_com_fragmentos = global_config[hostname]["trabalhar_com_fragmentos"]
 formato_lista_fragmentos = "emitidos-{}@{}.json".format(username, hostname)
+
