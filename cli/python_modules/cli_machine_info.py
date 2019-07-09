@@ -17,7 +17,7 @@ elif hostname == "debian":
 
 elif hostname == "localhost":
     tmpdir = getoutput("echo $TMPDIR")
-    pasta_raiz_do_aplicativo = "/data/data/com.termux/files/home/sps_fup2"
+    pasta_raiz_do_aplicativo = "/data/data/com.termux/files/home/sps_cli"
 
 elif hostname == "spsfup":
     pasta_raiz_do_aplicativo = "/srv/sps_fup2"
