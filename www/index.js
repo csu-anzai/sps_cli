@@ -10,8 +10,8 @@ email: danielc@unb.br
 const express = require('express'); //http framework
 const handlebars = require('express-handlebars').create({defaultLayout:'main'}); //Definindo os padrões dos templates (handlebars)
 const body_parser = require('body-parser'); //para obter dados encaminhados via POST.
-const fs = require("fs");
-const db = require("db_json_paths");
+//const fs = require("fs");
+//const db = require("db_json_paths");
 
 /*
 const session = require('express-session');
@@ -22,12 +22,15 @@ const formidable = require('formidable'); //para aceitar upload de arquivos
 const cookie_parser = require('cookie-parser');
 */
 
+const child_process = require('child_process').spawn;
+
+/*
 function read_json_file(target_json_file) {
 	let rawdata = fs.readFileSync(target_json_file);
 	let jsondata = JSON.parse(rawdata);
 	return jsondata;
 }
-
+*/
 
 let app = express();
 
@@ -45,29 +48,6 @@ app.get('/', function(req, res){
 });
 
 
-app.get('/listar_usuarios', function(req, res){
-  usr = read_json_file(db.usr);
-  for (let u in usr) {
-    if (usr[u].identificador.indexOf("/") != 2) {
-      delete usr[u]
-    }
-  } 
-  res.render('listar_usuarios', {style_sheet: ['frontpage', 'w3'], nfo: usr});
-});
-
-app.get('/listar_atendimentos', function(req, res){
-  res.render('listar_atendimentos', {style_sheet: ['frontpage', 'w3'], nfo: read_json_file(db.atd)}); 
-});
-
-app.get('/listar_processos', function(req, res){
-  res.render('listar_processos', {style_sheet: ['frontpage', 'w3'], nfo: read_json_file(db.sei)}); 
-});
-
-app.get('/listar_processos_pendentes', function(req, res){
-  res.render('listar_processos_pnd', {style_sheet: ['frontpage', 'w3'], nfo: read_json_file(db.sei)}); 
-});
-
-
 app.use(function(req, res, next){
   console.log('Looking for URL : ' + req.url); // Imprime tentativas de acesso a locais ou arquivos além da raiz do site e continua...
   next();
@@ -77,6 +57,36 @@ app.use(function(req, res, next){
 app.use(function(err, req, res, next){
   console.log('Error : ' + err.message); // Apanha o erro, apresenta-o no console e continua...
   next();
+});
+
+
+
+app.get('/listar_usuarios', function(req, res){
+  var process = child_process('lst', ['-j', 'usr', 'id']);
+  process.stdout.on('data', function(data) { 
+    res.render('listar_usuarios', {style_sheet: ['frontpage', 'w3'], nfo: JSON.parse(data.toString())});
+  });
+});
+
+app.get('/listar_atendimentos', function(req, res){
+  var process = child_process('lst', ['-j', 'atd']);
+  process.stdout.on('data', function(data) { 
+    res.render('listar_atendimentos', {style_sheet: ['frontpage', 'w3'], nfo: JSON.parse(data.toString())});
+  });
+});
+
+app.get('/listar_processos', function(req, res){
+  var process = child_process('lst', ['-j', 'sei']);
+  process.stdout.on('data', function(data) { 
+    res.render('listar_processos', {style_sheet: ['frontpage', 'w3'], nfo: JSON.parse(data.toString())});
+  });
+});
+
+app.get('/listar_processos_pendentes', function(req, res){
+  var process = child_process('lst', ['-j', 'pnd']);
+  process.stdout.on('data', function(data) { 
+    res.render('listar_processos_pnd', {style_sheet: ['frontpage', 'w3'], nfo: JSON.parse(data.toString())});
+  });
 });
 
 
