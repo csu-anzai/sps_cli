@@ -28,3 +28,9 @@
 [ ] Substituir instruções de pesquisa em 'sps-api get' e 'target select' por uma única função em 'cli_sps_base.py'
 [ ] Criar script de criação da base de dados 'sexo_auto_set.json'; passa por todos usuários adicionando informação de sexo conforme nome, pula nomes repetidos...
 [ ] Criar script de instalação.
+[ ] Converter script de instalação para versao shell
+    * criação arquivos de dados
+    * backup de arquivos de dados
+    * instalação de dependências
+    * backup de arquivos memoi
+[ ] Criação de scripts workers em shell...
