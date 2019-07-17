@@ -1,0 +1,51 @@
+#!/bin/bash
+
+#
+# Processo responsável por verificar a existência de novos dados e incluí-los nos respectivos arquivos
+#
+
+
+if [ "$(whoami)" != "root" ];
+then
+    echo "Apenas o root pode executar esta ação..."
+    exit
+fi
+
+
+if [ "$1" == "required" ];
+then
+    echo "Instala as dependencias..."
+
+elif [ "$1" == "db" ];
+then
+    DB_IS_SET=$(./cli-config read DB_FOLDER)
+    if [ $DB_IS_SET ];
+    then
+        echo "Pasta definida..."
+    else
+        echo "Pasta não definida..."
+    fi
+    echo "Criar arquivos de dados?..."
+
+elif [ "$1" == 'app' ];
+then
+    echo "Instala aplicativo com as configurações básicas..."
+
+else
+    echo "Usage:"
+    echo "    cli-install ( required )"
+    echo "    cli-install ( db )"
+    echo "    cli-install ( app )"
+    exit
+
+fi
+
+
+if [ $# -eq 0 ];
+then
+    echo "Usage:"
+    echo "    cli-install ( required )"
+    echo "    cli-install ( db )"
+    echo "    cli-install ( app )"
+    exit
+fi

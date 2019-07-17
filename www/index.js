@@ -7,40 +7,34 @@ email: danielc@unb.br
 *****/
 
 //Importando módulos do a serem usados
-const express = require('express'); //http framework
-const handlebars = require('express-handlebars').create({defaultLayout:'main'}); //Definindo os padrões dos templates (handlebars)
-const body_parser = require('body-parser'); //para obter dados encaminhados via POST.
-//const fs = require("fs");
-//const db = require("db_json_paths");
+var express = require('express'); //http framework
+var handlebars = require('express-handlebars').create({defaultLayout:'main'}); //Definindo os padrões dos templates (handlebars)
+var body_parser = require('body-parser'); //para obter dados encaminhados via POST.
+var fs = require("fs");
 
-/*
-const session = require('express-session');
-const parseurl = require('parseurl');
 
-const child_process = require('child_process').spawn;
-const formidable = require('formidable'); //para aceitar upload de arquivos
-const cookie_parser = require('cookie-parser');
-*/
+pasta_de_dados= "/home/danielc/Documentos/Devel/GitHub/sps_fup2/dados/";
+//pasta_de_dados= "/outro/local/";
 
-const child_process = require('child_process').spawn;
+arquivo_usuarios = pasta_de_dados+"usuarios.json";
+arquivo_atendimentos = pasta_de_dados+"atendimentos.json";
+arquivo_processos = pasta_de_dados+"processos.json";
 
-/*
 function read_json_file(target_json_file) {
-	let rawdata = fs.readFileSync(target_json_file);
-	let jsondata = JSON.parse(rawdata);
+	var rawdata = fs.readFileSync(target_json_file);
+	var jsondata = JSON.parse(rawdata);
 	return jsondata;
 }
-*/
 
-let app = express();
 
+var app = express();
 
 app.disable('x-powered-by'); //evitando que informações do servidor sejam exibidas
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.use(body_parser.urlencoded({extended: true}));
 app.set('port', process.env.PORT || 3000); //definindo a porta do servidor http
-app.use(express.static(`${__dirname}/public`)); //definindo caminho de acesso ao conteúdo estático
+app.use(express.static(__dirname+"/public")); //definindo caminho de acesso ao conteúdo estático
 
 
 app.get('/', function(req, res){
@@ -60,35 +54,28 @@ app.use(function(err, req, res, next){
 });
 
 
-
 app.get('/listar_usuarios', function(req, res){
-  var process = child_process('lst', ['-j', 'usr', 'id']);
-  process.stdout.on('data', function(data) { 
-    res.render('listar_usuarios', {style_sheet: ['frontpage', 'w3'], nfo: JSON.parse(data.toString())});
-  });
+  nfo = read_json_file(arquivo_usuarios);
+  res.render('listar_usuarios', {style_sheet: ['frontpage', 'w3'], nfo: nfo});
 });
+
 
 app.get('/listar_atendimentos', function(req, res){
-  var process = child_process('lst', ['-j', 'atd']);
-  process.stdout.on('data', function(data) { 
-    res.render('listar_atendimentos', {style_sheet: ['frontpage', 'w3'], nfo: JSON.parse(data.toString())});
-  });
+  nfo = read_json_file(arquivo_atendimentos);
+  res.render('listar_atendimentos', {style_sheet: ['frontpage', 'w3'], nfo: nfo});
 });
+
 
 app.get('/listar_processos', function(req, res){
-  var process = child_process('lst', ['-j', 'sei']);
-  process.stdout.on('data', function(data) { 
-    res.render('listar_processos', {style_sheet: ['frontpage', 'w3'], nfo: JSON.parse(data.toString())});
-  });
+  nfo = read_json_file(arquivo_processos);
+  res.render('listar_processos', {style_sheet: ['frontpage', 'w3'], nfo: nfo});
 });
+
 
 app.get('/listar_processos_pendentes', function(req, res){
-  var process = child_process('lst', ['-j', 'pnd']);
-  process.stdout.on('data', function(data) { 
-    res.render('listar_processos_pnd', {style_sheet: ['frontpage', 'w3'], nfo: JSON.parse(data.toString())});
-  });
+  nfo = read_json_file(arquivo_processos);
+  res.render('listar_processos_pnd', {style_sheet: ['frontpage', 'w3'], nfo: nfo});
 });
-
 
 
 //Define página padrão de erro 404.
@@ -106,8 +93,8 @@ app.use(function(err, req, res, next) {
   res.render('500', { style_sheet: ['frontpage', 'w3'] });
 });
 
-let port = app.get('port');
+var port = app.get('port');
 
 app.listen(port, function(){
-  console.log(`Node.JS App iniciado em http://localhost:${port}/ aperte Ctrl-C para fechar.`);
+  console.log("Node iniciado em http://localhost:"+port+" aperte Ctrl-C para fechar.");
 });

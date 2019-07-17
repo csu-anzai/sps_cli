@@ -33,4 +33,5 @@
     * backup de arquivos de dados
     * instalação de dependências
     * backup de arquivos memoi
-[ ] Criação de scripts workers em shell...
+[ ] Criação de scripts workers em shell 'mergeintodbwrk', 'sendemlwrk', 'fragmentwrk'...
+[ ]

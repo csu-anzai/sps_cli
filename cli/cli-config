@@ -1,0 +1,73 @@
+#!/bin/bash
+
+#
+# Processo responsável por verificar a existência de novos dados e incluí-los nos respectivos arquivos
+#
+
+GLOBAL_CONFIG_FOLDER="/etc/cli/"
+GLOBAL_CONFIG_FILE="cli_tools.conf"
+
+if [ "$1" == "save" ];
+then
+    if [ "$(whoami)" != "root" ];
+    then
+        echo "Apenas o root pode executar esta ação..."
+        exit
+    else
+        if [ "$2" ];
+        then
+            if [ "$3" ];
+            then
+                if [ ! -d /etc/cli ];
+                then
+                    mkdir -p "$GLOBAL_CONFIG_FOLDER"
+                    touch "$GLOBAL_CONFIG_FOLDER$GLOBAL_CONFIG_FILE"
+                fi
+                echo "$2=$3" >> "$GLOBAL_CONFIG_FOLDER$GLOBAL_CONFIG_FILE"
+
+            else
+                echo "Necessário fornecer argumento 'valor'."
+            fi
+
+        else
+            echo "Necessário fornecer argumento 'chave'."
+        fi
+    fi
+
+elif [ "$1" == "read" ];
+then
+    if [ "$2" ];
+    then
+        cat "$GLOBAL_CONFIG_FOLDER$GLOBAL_CONFIG_FILE" | grep "$2" | awk -F"=" '{ print $2 }'
+    fi
+
+elif [ "$1" == 'edit' ];
+then
+    if [ "$(whoami)" != "root" ];
+    then
+        echo "Apenas o root pode executar esta ação..."
+        exit 
+    else
+        nano "$GLOBAL_CONFIG_FOLDER$GLOBAL_CONFIG_FILE"
+    fi
+
+
+else
+    echo "Usage:"
+    echo "    confkey ( save ) <chave> <valor>"
+    echo "    confkey ( read ) <chave>"
+    exit
+
+fi
+
+
+if [ $# -eq 0 ];
+then
+    echo "Usage:"
+    echo "    confkey ( save ) <chave> <valor>"
+    echo "    confkey ( read ) <chave>"
+    exit
+fi
+
+
+

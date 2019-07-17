@@ -1,34 +1,18 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+#!/bin/bash
 
-"""
+#
+# Inicia servidor Node.js e outros serviços.
+#
 
-Inicia servidor Node.js e outros serviços.
+function main() {
+    www_folder="/home/danielc/Documentos/Devel/GitHub/sps_fup2/www/"
+    wrk_folder="/home/danielc/Documentos/Devel/GitHub/sps_fup2/cli/workers"
+    ini_folder=$(pwd)
 
-Usage:
-    initsrv
+    echo "Preparando Node.JS e demais workes..."
+    cd "$www_folder"
+    node index.js&
+    mergedbwrk&
+}
 
-Options:
-    -v, --version
-
-"""
-
-import os
-
-from docopt import docopt
-from subprocess import getoutput
-
-args = docopt(__doc__)
-initdir = getoutput('pwd')
-
-
-def main():
-    newid = os.fork()
-    if newid == 0:
-        print('Iniciando Node.Js...')
-        os.system('node index.js')
-    else:
-        os.system('echo "Iniciando subprocesso..."')
-        
-if __name__ == '__main__':
-    main()
+main
