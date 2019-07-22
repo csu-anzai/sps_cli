@@ -182,6 +182,7 @@ printf "  Arquivos antigos que possuam conteúdo serão preservados...\n"
 mkdir -p "$PASTA_DE_DADOS/fragmentos"
 mkdir -p "$PASTA_DE_DADOS/indexados"
 mkdir -p "$PASTA_DE_SEGURANCA"
+mkdir -p "$PASTA_DE_MANIPULACAO_DE_DADOS"
 
 ARQUIVOS_DE_DADOS="atendimentos.json corrigidos.json processos.json profissionais.json usuarios.json estudos.json backup-info.json index_db.json emitidos.json recebidos.json"
 for ARQUIVO in $ARQUIVOS_DE_DADOS;
@@ -212,9 +213,15 @@ do
     fi
 done
 
+
+
 chown root:cli "$PASTA_DE_DADOS" -R
 chmod g+rw "$PASTA_DE_DADOS" -R 
 chmod o-rwx "$PASTA_DE_DADOS" -R
+
+chown root:cli "$PASTA_DE_MANIPULACAO_DE_DADOS" -R
+chmod g+rw "$PASTA_DE_MANIPULACAO_DE_DADOS" -R 
+chmod o-rwx "$PASTA_DE_MANIPULACAO_DE_DADOS" -R
 
 OP=false
 FIRST_LOOP=true
