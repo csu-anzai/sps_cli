@@ -4,15 +4,44 @@
 # Script de exclusão dos arquivos de dados e configuração 'cli-tools'.
 #
 
+warning () {
+    printf "Usage:\n"
+    printf "    cli-uninstall\n"
+}
+
+full_info () {
+    printf "\n"
+    printf "Script de remoção do pacote 'cli-tools'.\n"
+    printf "\n"
+    warning
+    printf "\n"
+    printf "Options:\n"
+    printf "    -h, --help\n"
+    printf "\n"
+}
+
+only_root () {
+    printf "Apenas o root pode executar esta ação...\n"
+    exit 
+}
+
+
+if [ "$(whoami)" != "root" ];
+then
+    only_root
+fi
+
+
 if [ -f /etc/cli/cli_tools.conf ];
 then
     . /etc/cli/cli_tools.conf
 fi
 
-sudo rm -fR /etc/cli/ 
-sudo nano /etc/skel/.bashrc 
-sudo nano /root/.bashrc
-sudo nano "$HOME/.bashrc"
-sudo rm -fR "$PASTA_DE_DADOS" 
-sudo rm -fR "$PASTA_DE_SEGURANCA" 
-sudo groupdel cli
+
+rm -fR /etc/cli/ 
+nano /etc/skel/.bashrc 
+nano /root/.bashrc
+nano "$HOME/.bashrc"
+rm -fR "$PASTA_DE_DADOS" 
+rm -fR "$PASTA_DE_SEGURANCA" 
+groupdel cli
