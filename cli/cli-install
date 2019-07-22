@@ -170,7 +170,7 @@ then
     for USER in $LINUX_USERS;
     do
         printf "   - %s\n" "$USER"
-        printf "PATH='$(printf "%s"):%s'\n" "$PATH" "$PASTA_DE_COMANDOS" >> "/home/$USER/.bashrc"
+        printf "PATH=\"$(printf "%s"):%s\"\n" "$PATH" "$PASTA_DE_COMANDOS" >> "/home/$USER/.bashrc"
         usermod -a -G cli "$USER"
         MSG="Execute o comando [newgrp cli] para ter acesso ao banco de dados do SPS."
         printf "if [ ! -f '%s/%s' ]; \nthen \n\tclear; \n\tprintf '%s'; \n\ttouch '%s/%s'; \nfi" "$PASTA_TEMPORARIA" "$USER" "$MSG" "$PASTA_TEMPORARIA" "$USER" >> "/home/$USER/.bashrc"
