@@ -1,18 +1,44 @@
-#!/bin/bash
+#!/bin/sh
 
 #
 # Processo responsável por verificar a existência de novos dados e incluí-los nos respectivos arquivos
 #
 
-GLOBAL_CONFIG_FOLDER="/etc/cli/"
+GLOBAL_CONFIG_FOLDER="/etc/cli"
 GLOBAL_CONFIG_FILE="cli_tools.conf"
+
+function warning () {
+    printf "Usage:\n"
+    printf "    cli-config ( save ) <chave> <valor>\n"
+    printf "    cli-config ( read ) <chave>\n"
+    printf "    cli-config ( edit )\n"
+    printf "    cli-config ( usercfg )\n"
+}
+
+function full_info () {
+    printf "\n"
+    printf "Comando para edição rápida das configurações do pacote 'cli-tools'.\n"
+    printf "\n"
+    warning
+    printf "\n"
+    printf "Options:\n"
+    printf "    -h, --help\n"
+    printf "\n"
+}
+
+function only_root () {
+    setterm -foreground red
+    printf "Apenas o root pode executar esta ação...\n"
+    setterm -foreground default
+    exit 
+}
 
 if [ "$1" == "save" ];
 then
     if [ "$(whoami)" != "root" ];
     then
-        echo "Apenas o root pode executar esta ação..."
-        exit
+        only_root
+
     else
         if [ "$2" ];
         then
@@ -21,16 +47,18 @@ then
                 if [ ! -d /etc/cli ];
                 then
                     mkdir -p "$GLOBAL_CONFIG_FOLDER"
-                    touch "$GLOBAL_CONFIG_FOLDER$GLOBAL_CONFIG_FILE"
+                    touch "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
                 fi
-                echo "$2=$3" >> "$GLOBAL_CONFIG_FOLDER$GLOBAL_CONFIG_FILE"
+                echo "$2=$3" >> "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
 
             else
-                echo "Necessário fornecer argumento 'valor'."
+                warning
+                exit
             fi
 
         else
-            echo "Necessário fornecer argumento 'chave'."
+            warning
+            exit
         fi
     fi
 
@@ -38,34 +66,139 @@ elif [ "$1" == "read" ];
 then
     if [ "$2" ];
     then
-        cat "$GLOBAL_CONFIG_FOLDER$GLOBAL_CONFIG_FILE" | grep "$2" | awk -F"=" '{ print $2 }'
+        cat "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE" | grep "$2" | awk -F"=" '{ print $2 }'
     fi
 
 elif [ "$1" == 'edit' ];
 then
     if [ "$(whoami)" != "root" ];
     then
-        echo "Apenas o root pode executar esta ação..."
-        exit 
+        only_root
     else
-        nano "$GLOBAL_CONFIG_FOLDER$GLOBAL_CONFIG_FILE"
+        nano "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
     fi
 
+elif [ "$1" == 'usercfg' ];
+then
+    clear
+    CAMPOS="prof_nome prof_eml eml_pwd especialidade sigla_conselho numero_no_concelho matricula_instituicao"
+    PROF_EML=0
+    echo "{" > "$HOME/.sps-cli.conf"
+    for CAMPO in $CAMPOS;
+    do
+        if [ "$CAMPO" == "prof_nome" ];
+        then
+            setterm -foreground green
+            printf "Insira o seu nome completo"
+            setterm -foreground default
+            printf ": "
+            read CAMPO_VALOR
 
-else
-    echo "Usage:"
-    echo "    confkey ( save ) <chave> <valor>"
-    echo "    confkey ( read ) <chave>"
+        elif [ "$CAMPO" == "prof_eml" ];
+        then
+            setterm -foreground green
+            printf "Insira o seu endereço de email"
+            setterm -foreground default
+            printf ": "
+            read CAMPO_VALOR
+            PROF_EML="$(echo "$CAMPO_VALOR" | grep '@unb.br' | wc -l)"
+
+        elif [ "$CAMPO" == "eml_pwd" ];
+        then
+            if [ $PROF_EML -eq 1 ];
+            then
+                while true;
+                do
+                    stty -echo
+                    setterm -foreground green
+                    printf "Insira a senha do email registrado"
+                    setterm -foreground default
+                    printf ": "
+                    read CAMPO_VALOR
+                    setterm -foreground green
+                    printf "Reinsira a senha do email"
+                    setterm -foreground default
+                    printf ": "
+                    read CAMPO_VALOR2
+                    stty echo
+                    if [ "$CAMPO_VALOR" == "$CAMPO_VALOR2" ];
+                    then
+                        CAMPO_VALOR="$(echo "$CAMPO_VALOR" | base64)"
+                        break
+                    else
+                        setterm -foreground red
+                        printf "As senhas fornecidas devem ser iguais...\n"
+                        setterm -foreground default
+                    fi
+                done
+            else
+                echo "    \"emp_pwd\": \"\"," >> "$HOME/.sps-cli.conf"
+            fi
+
+        elif [ "$CAMPO" == "especialidade" ];
+        then
+            setterm -foreground green
+            printf "Informe a especialidade profissional"
+            setterm -foreground default
+            printf ": "
+            read CAMPO_VALOR
+
+        elif [ "$CAMPO" == "sigla_conselho" ];
+        then
+            setterm -foreground green
+            printf "Informe a sigla do conselho profissional"
+            setterm -foreground default
+            printf ": "
+            read CAMPO_VALOR
+
+        elif [ "$CAMPO" == "numero_no_concelho" ];
+        then
+            setterm -foreground green
+            printf "Informe a matrícula frente ao conselho"
+            setterm -foreground default
+            printf ": "
+            read CAMPO_VALOR
+
+        elif [ "$CAMPO" == "matricula_instituicao" ];
+        then
+            setterm -foreground green
+            printf "Informa a matrícula frente à instituição"
+            setterm -foreground default
+            printf ": "
+            read CAMPO_VALOR
+        fi
+
+        if [ "$CAMPO" != "eml_pwd" ];
+        then
+            echo "    \"$CAMPO\": \"$CAMPO_VALOR\"," >> "$HOME/.sps-cli.conf"
+        fi
+    done
+
+    if [ $PROF_EML -eq 1 ];
+    then
+        echo "    \"eml_server\": \"mail.unb.br\"," >> "$HOME/.sps-cli.conf"
+        echo "    \"eml_port\": \"587\"" >> "$HOME/.sps-cli.conf"
+    else
+        echo "    \"eml_server\": \"\"," >> "$HOME/.sps-cli.conf"
+        echo "    \"eml_port\": \"\"" >> "$HOME/.sps-cli.conf"
+    fi
+
+    echo "}" >> "$HOME/.sps-cli.conf"
+
+elif [ "$1" == '-h' ] || [ "$1" == '--help' ];
+then
+    full_info
     exit
 
+else
+    warning
+    exit    
 fi
 
 
 if [ $# -eq 0 ];
 then
-    echo "Usage:"
-    echo "    confkey ( save ) <chave> <valor>"
-    echo "    confkey ( read ) <chave>"
+    warning
     exit
 fi
 

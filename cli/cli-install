@@ -1,51 +1,262 @@
-#!/bin/bash
+#!/bin/sh
 
 #
-# Processo responsável por verificar a existência de novos dados e incluí-los nos respectivos arquivos
+# Script de intalação
 #
+
+GLOBAL_CONFIG_FOLDER="/etc/cli"
+GLOBAL_CONFIG_FILE="cli_tools.conf"
+PASTA_RAIZ_DO_PROGRAMA=""
+PASTA_DE_DADOS=""
+PASTA_DE_SEGURANCA=""
+PASTA_DE_COMANDOS=""
+PASTA_TEMPORARIA=""
+RCLONE_DRIVE=""
+
+function warning () {
+    printf "Usage:\n"
+    printf "    cli-install\n"
+}
+
+function full_info () {
+    printf "\n"
+    printf "Script de intalação do pacote 'cli-tools'.\n"
+    printf "\n"
+    warning
+    printf "\n"
+    printf "Options:\n"
+    printf "    -h, --help\n"
+    printf "\n"
+}
+
+function only_root () {
+    setterm -foreground red
+    printf "Apenas o root pode executar esta ação...\n"
+    setterm -foreground default
+    exit 
+}
 
 
 if [ "$(whoami)" != "root" ];
 then
-    echo "Apenas o root pode executar esta ação..."
-    exit
+    only_root
 fi
 
-
-if [ "$1" == "required" ];
+clear
+setterm -foreground green
+printf "Iniciando instalação do 'cli-tools'...\n\n"
+setterm -foreground yellow
+printf "» Criando arquivo de configuração padrão: "
+setterm -foreground default
+printf "/etc/cli/cli_tools.conf\n\n"
+mkdir -p "$GLOBAL_CONFIG_FOLDER"
+if [ ! -f "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE" ]; 
 then
-    echo "Instala as dependencias..."
+    touch "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
+    setterm -foreground yellow
+    printf "» Inserindo variáveis globais no arquivo...\n\n"
+    printf "» Indique a pasta raíz de 'cli-tools' (caminho para pasta de clonagem).\n"
+    printf "$: "
+    setterm -foreground default
+    read PASTA_RAIZ_DO_PROGRAMA
+    setterm -foreground yellow
+    printf "\n» Indique o caminho absoluto para a pasta de dados.\n"
+    printf "$: "
+    setterm -foreground default
+    read PASTA_DE_DADOS
+    setterm -foreground yellow
+    printf "\n» Indique o caminho absoluto para a pasta de segurança.\n"
+    printf "$: "
+    setterm -foreground default
+    read PASTA_DE_SEGURANCA
+    setterm -foreground yellow
+    printf "\n» Indique o caminho absoluto para a pasta temporária do sistema.\n"
+    printf "$: "
+    setterm -foreground default
+    read PASTA_TEMPORARIA
+    setterm -foreground yellow
+    printf "\n» Indique o nome do drive do rclone que será utilizado para fragmentos e backup.\n"
+    printf "$: "
+    setterm -foreground default
+    read RCLONE_DRIVE
 
-elif [ "$1" == "db" ];
-then
-    DB_IS_SET=$(./cli-config read DB_FOLDER)
-    if [ $DB_IS_SET ];
+    PASTA_DE_COMANDOS="$PASTA_RAIZ_DO_PROGRAMA/cli/"
+    printf "PASTA_RAIZ_DO_PROGRAMA=$PASTA_RAIZ_DO_PROGRAMA\n" > "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
+    printf "PASTA_DE_DADOS=$PASTA_DE_DADOS\n" >> "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
+    printf "PASTA_DE_COMANDOS=$PASTA_DE_COMANDOS\n" >> "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
+    printf "PASTA_DE_SEGURANCA=$PASTA_DE_SEGURANCA\n" >> "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"    
+    printf "PASTA_TEMPORARIA=$PASTA_TEMPORARIA\n" >> "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"    
+    printf "RCLONE_DRIVE=$RCLONE_DRIVE\n" >> "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"        
+    printf "\n" >> /root/.bashrc
+    printf "PATH='$(echo $PATH):$PASTA_DE_COMANDOS'\n" >> /root/.bashrc
+    printf "\n" >> /etc/skel/.bashrc
+    printf "PATH='$(echo $PATH):$PASTA_DE_COMANDOS'\n" >> /etc/skel/.bashrc
+
+    LINUX_USERS=$(cat /etc/passwd | grep home | awk -F":" '{ print $1 }')
+    setterm -foreground yellow
+
+    printf "\n» Criando grupo 'cli'...\n"
+    sudo groupadd cli
+
+    printf "\n» Incluindo pasta dos comandos no PATH local dos usuários:\n"
+    for USER in $LINUX_USERS;
+    do
+        setterm -foreground blue
+        printf "   - $USER\n"
+        printf "PATH='$(echo $PATH):$PASTA_DE_COMANDOS'\n" >> /home/$USER/.bashrc
+        sudo usermod -a -G cli $USER
+        printf "if [ ! -f $PASTA_TEMPORARIA/$USER ]; \nthen \n\tclear; \n\techo 'Execute o comando [newgrp cli] para ter acesso ao banco de dados do SPS.'; \n\ttouch $PASTA_TEMPORARIA/$USER; \nfi" >> /home/$USER/.bashrc
+    done
+fi
+
+setterm -foreground yellow
+printf "\n» Criando arquivos de dados pendentes:\n"
+setterm -foreground default
+printf "  Arquivos antigos que possuam conteúdo serão preservados...\n"
+mkdir -p "$PASTA_DE_DADOS/fragmentos"
+mkdir -p "$PASTA_DE_DADOS/indexados"
+mkdir -p "$PASTA_DE_SEGURANCA"
+
+ARQUIVOS_DE_DADOS="atendimentos.json corrigidos.json processos.json profissionais.json usuarios.json estudos.json backup-info.json index_db.json emitidos.json recebidos.json"
+setterm -foreground blue
+for ARQUIVO in $ARQUIVOS_DE_DADOS;
+do
+    if [ "$ARQUIVO" == "index_db.json" ];
     then
-        echo "Pasta definida..."
+        touch "$PASTA_DE_DADOS/indexados/$ARQUIVO"
+        if [ $(cat "$PASTA_DE_DADOS/indexados/$ARQUIVO" | wc -l) -lt 2 ]; 
+        then 
+            printf "[]" > "$PASTA_DE_DADOS/indexados/$ARQUIVO";
+            printf "   - $ARQUIVO\n"
+        fi
+    elif [ "$ARQUIVO" == "emitidos.json" ] || [ "$ARQUIVO" == "recebidos.json" ];
+    then
+        touch "$PASTA_DE_DADOS/fragmentos/$ARQUIVO"
+        if [ $(cat "$PASTA_DE_DADOS/fragmentos/$ARQUIVO" | wc -l) -lt 2 ]; 
+        then 
+            printf "[]" > "$PASTA_DE_DADOS/fragmentos/$ARQUIVO";
+            printf "   - $ARQUIVO\n"
+        fi
     else
-        echo "Pasta não definida..."
+        touch "$PASTA_DE_DADOS/$ARQUIVO"    
+        if [ $(cat "$PASTA_DE_DADOS/$ARQUIVO" | wc -l) -lt 2 ]; 
+        then 
+            printf "[]" > "$PASTA_DE_DADOS/$ARQUIVO";
+            printf "   - $ARQUIVO\n"
+        fi
     fi
-    echo "Criar arquivos de dados?..."
+done
 
-elif [ "$1" == 'app' ];
+chown root:cli "$PASTA_DE_DADOS" -R
+chmod g+rw "$PASTA_DE_DADOS" -R #|| mesmo comando pegando informações do arquivo global...
+chmod o-rwx "$PASTA_DE_DADOS" -R
+#chmod o-xw $PASTA_DE_DADOS #||
+
+OP=false
+FIRST_LOOP=true
+while true;
+do
+    if [ $FIRST_LOOP == true ];
+    then
+        setterm -foreground yellow
+        printf "\n» Criar um arquivo com código para encriptação de dados? [s|n]\n$: "
+        FIRST_LOOP=false
+    fi
+    setterm -foreground default
+    read OP
+    case $OP in
+    [sS]* )
+        OLD_CCRYPT_KEY=$(cat "$PASTA_DE_SEGURANCA/ccrypt-key | wc -c" 2> /dev/null || echo 1)
+        if [ $OLD_CCRYPT_KEY -lt 5 ];
+        then 
+            setterm -foreground yellow;
+            printf "\n» Criando arquivo com código para encriptação...\n";
+            C=1024;
+            while [ $C -gt 0 ];
+            do 
+                N=$((( ( RANDOM % 10 ) + 1 ))); 
+                printf "$N" >> "$PASTA_TEMPORARIA/ccrypt_key";
+                C=$(expr $C - 1); 
+            done
+        fi
+        break;;
+    
+    [nN]* )
+        break;;
+
+    * )
+        setterm -foreground red
+        printf "Você deve optar entre [s|n]...\n";;
+    esac
+done
+
+mv /tmp/ccrypt_key "$PASTA_DE_SEGURANCA/ccrypt-key"
+
+chown root:cli "$PASTA_DE_SEGURANCA" -R
+chmod g+r "$PASTA_DE_SEGURANCA" -R
+chmod o-rwx "$PASTA_DE_SEGURANCA" -R
+
+setterm -foreground yellow
+printf "\n» Verificando dependências não instaladas...:\n"
+
+DEPENDENCIAS="python3 rclone zip ccrypt nano node npm git pandoc wkhtmltopdf"
+INSTALAR_DEPENDENCIAS=false
+
+for PROGRAMA in $DEPENDENCIAS;
+do
+    which $PROGRAMA &> /dev/null
+    if [ $? -eq 1 ];
+    then
+        setterm -foreground blue
+        printf "   - $PROGRAMA\n"
+        printf "$PROGRAMA " > $PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS
+        INSTALAR_DEPENDENCIAS=true
+    fi
+done
+
+DEPENDENCIAS="$(cat "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS")"
+
+if [ $INSTALAR_DEPENDENCIAS == true ];
 then
-    echo "Instala aplicativo com as configurações básicas..."
+    FIRST_LOOP=true
+    while true;
+    do
+        if [ $FIRST_LOOP == true ];
+        then
+            setterm -foreground yellow
+            printf "\n» Qual a distribuição linux do dispositivo?\n"
+            setterm -foreground default
+            printf "d: Debian/Ubuntu\n"
+            printf "f: Fedora\n"
+            printf "t: Android Termux\n"
+            printf "n: Nenhuma das listas...\n"
 
-else
-    echo "Usage:"
-    echo "    cli-install ( required )"
-    echo "    cli-install ( db )"
-    echo "    cli-install ( app )"
-    exit
+            FIRST_LOOP=false
+        fi
+        setterm -foreground yellow
+        printf "$: "
+        setterm -foreground default
+        read OP
+        case $OP in
+        [dD]* )
+            sudo apt install $DEPENDENCIAS;
+            break;;
 
-fi
+        [fF]* )
+            sudo dnf install $DEPENDENCIAS;
+            break;;
 
-
-if [ $# -eq 0 ];
-then
-    echo "Usage:"
-    echo "    cli-install ( required )"
-    echo "    cli-install ( db )"
-    echo "    cli-install ( app )"
-    exit
+        [tT]* ) 
+            pkg install $DEPENDENCIAS;
+            break;;
+        
+        [nN]* )
+            break;;
+        
+        * )
+            setterm -foreground red;
+            printf "Você deve escolher uma das opções fornecidas... [d|f|t|n]\n"
+            ;;
+        esac
+    done
 fi

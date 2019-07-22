@@ -16,7 +16,7 @@ Usage:
 
 import os
 
-from python_modules.cli_global_paths import pasta_de_seguranca, pasta_de_fragmentos, arquivo_usuarios
+from python_modules.cli_global_paths import pasta_de_seguranca, pasta_de_fragmentos, arquivo_usuarios, rclone_drive
 from python_modules.cli_machine_info import pasta_do_usuario
 from python_modules.cli_global_config import formato_lista_fragmentos
 from python_modules.cli_db_loader import dados_usuarios
@@ -30,7 +30,7 @@ args = docopt(__doc__)
 
 def getfrags(dados_usuarios=dados_usuarios):
     os.system('cp "{}/rclone-token" "{}/.rclone.conf"'.format(pasta_de_seguranca, pasta_do_usuario))
-    os.system('rclone copy box:/sps_fup2/fragmentos_lista/ "{}/"'.format(pasta_de_fragmentos))
+    os.system('rclone copy {rclone_drive}:/sps_fup2/fragmentos_lista/ "{pasta_frags}/"'.format(pasta_frags=pasta_de_fragmentos, rclone_drive=rclone_drive))
     
     lista_recebidos = load_json(os.sep.join([pasta_de_fragmentos, 'recebidos.json']))
     listas_emitidos = os.listdir(pasta_de_fragmentos)
@@ -48,8 +48,8 @@ def getfrags(dados_usuarios=dados_usuarios):
     print(fragmentos_para_baixar)
     for f in fragmentos_para_baixar:
         print(f)
-        os.system('rclone copy "box:/sps_fup2/fragmentos/{}" "{}/"'.format(f, pasta_de_fragmentos))
-        os.system('sps-decrypt "{}/{}"'.format(pasta_de_fragmentos, f))
+        os.system('rclone copy "{rclone_drive}:/sps_fup2/fragmentos/{fragmento}" "{pasta_frag}/"'.format(fragmento=f, pasta_frag=pasta_de_fragmentos, rclone_drive=rclone_drive))
+        os.system('cli-decrypt "{}/{}"'.format(pasta_de_fragmentos, f))
         
         if f[0:3] == "USR": #Framgento usuários
             fragment_info = load_json("./"+f.replace('.cpt',''))
@@ -81,16 +81,16 @@ def getfrags(dados_usuarios=dados_usuarios):
 
 
 def sendfrag(arquivo):
-    os.system("sps-encrypt {}".format(arquivo))
+    os.system("cli-encrypt {}".format(arquivo))
     arquivo_criptografado = arquivo + '.cpt'
     os.system('cp "{}/rclone-token" "{}/.rclone.conf"'.format(pasta_de_seguranca, pasta_do_usuario))
-    os.system('rclone move "{}" box:/sps_fup2/fragmentos/'.format(arquivo_criptografado))
-    #os.system('sps-decrypt "{}"'.format(arquivo_criptografado))
+    os.system('rclone move "{frag_crypt}" {rclone_drive}:/sps_fup2/fragmentos/'.format(frag_crypt=arquivo_criptografado, rclone_drive=rclone_drive))
+    #os.system('cli-decrypt "{}"'.format(arquivo_criptografado))
     if arquivo_criptografado.find(os.sep) != -1:
         arquivo_criptografado = arquivo_criptografado.split(os.sep)[-1]
-    os.system('sps-api insert -tp fragmentos/emitidos.json "arquivo::{}"'.format(arquivo_criptografado))
+    os.system('cli-api insert -tp fragmentos/emitidos.json "arquivo::{}"'.format(arquivo_criptografado))
     os.system('cp "{fragf}/emitidos.json" "{fragf}/{emit_name}"'.format(fragf=pasta_de_fragmentos, emit_name=formato_lista_fragmentos))
-    os.system('rclone move "{fragf}/{emit_name}" box:/sps_fup2/fragmentos_lista/'.format(fragf=pasta_de_fragmentos, emit_name=formato_lista_fragmentos))
+    os.system('rclone move "{fragf}/{emit_name}" {rclone_drive}:/sps_fup2/fragmentos_lista/'.format(fragf=pasta_de_fragmentos, emit_name=formato_lista_fragmentos, rclone_drive=rclone_drive))
     os.system('rm "{}/.rclone.conf"'.format(pasta_do_usuario))
 
 

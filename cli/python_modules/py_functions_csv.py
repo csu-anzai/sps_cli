@@ -30,7 +30,7 @@ import time
 
 from .py_euristic_tools import merge_lists, join_dictArray_intersection, join_dictArray_union, show_each_dictArray_block
 from .cli_tools import limpar_tela, select_ops, create_lockfile, remove_lockfile, lockfile_name
-from .cli_machine_info import tmpdir
+from .cli_machine_info import pasta_temporaria
 from collections import OrderedDict
 from copy import copy
 
@@ -357,7 +357,7 @@ def convert_csv_type(csv_file, old_delimiter, new_delimiter, old_lineterminator=
 	write_csv(conteudo, csv_file, delimiter=new_delimiter, lineterminator=new_lineterminator)
 
 
-def write_csv(novos_dados, path_to_file, header=None, delimiter=',', lineterminator='\n', tmpdir=tmpdir):
+def write_csv(novos_dados, path_to_file, header=None, delimiter=',', lineterminator='\n', pasta_temporaria=pasta_temporaria):
 	'''
 	write_csv(csv_data_list, csv_file, header=None) -> escreve o conteudo de uma lista de dicionários em um arquivo CSV.
 	
@@ -372,7 +372,7 @@ def write_csv(novos_dados, path_to_file, header=None, delimiter=',', linetermina
 	path = path_to_file.replace(fname, '')
 
 	while True:
-		if os.path.isfile(tmpdir+os.sep+lockf):
+		if os.path.isfile(pasta_temporaria+os.sep+lockf):
 			time.sleep(0.1)
 		else:
 			create_lockfile(lockf)

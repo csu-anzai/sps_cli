@@ -1,0 +1,18 @@
+#!/bin/sh
+
+#
+# Script de exclusão dos arquivos de dados e configuração 'cli-tools'.
+#
+
+if [ -f /etc/cli/cli_tools.conf ];
+then
+    . /etc/cli/cli_tools.conf
+fi
+
+sudo rm -fR /etc/cli/ 
+sudo nano /etc/skel/.bashrc 
+sudo nano /root/.bashrc
+sudo nano $HOME/.bashrc
+sudo rm -fR "$PASTA_DE_DADOS" 
+sudo rm -fR "$PASTA_DE_SEGURANCA" 
+sudo groupdel cli

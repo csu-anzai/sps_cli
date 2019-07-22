@@ -3,11 +3,17 @@
 
 import os
 
-from .cli_machine_info import pasta_do_usuario, hostname, username, pasta_raiz_do_aplicativo
+from .cli_machine_info import \
+    hostname,\
+    username,\
+    pasta_do_usuario,\
+    pasta_raiz_do_aplicativo,\
+    pasta_de_seguranca,\
+    pasta_de_dados
 
-pasta_de_dados = os.sep.join([pasta_raiz_do_aplicativo, "dados"])
+#pasta_de_dados = os.sep.join([pasta_raiz_do_aplicativo, "dados"])
 pasta_de_configuracao = os.sep.join([pasta_raiz_do_aplicativo, "cli/config"])
-pasta_de_seguranca = os.sep.join([pasta_raiz_do_aplicativo, "cli/seguranca"])
+#pasta_de_seguranca = os.sep.join([pasta_raiz_do_aplicativo, "cli/seguranca"])
 pasta_de_fragmentos = os.sep.join([pasta_de_dados, "fragmentos"])
 pasta_de_indice = os.sep.join([pasta_de_dados, "indexados"])
 pasta_de_formularios = os.sep.join([pasta_raiz_do_aplicativo, "cli/formularios"])
@@ -28,7 +34,6 @@ arquivo_usuario_alvo = os.sep.join([pasta_do_usuario, '.current_target'])
 arquivo_modelo_ppaes = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/ppaes.odt"])
 arquivo_modelo_ppaes_detalhado = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/ppaes_det.odt"])
 arquivo_modelo_ccc = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/criacao-cc.odt"])
-
 
 formulario_atendimentos = os.sep.join([pasta_de_formularios, "form_atendimento.json"])
 formulario_novo_usuario = os.sep.join([pasta_de_formularios, "form_novo_usuario.json"])

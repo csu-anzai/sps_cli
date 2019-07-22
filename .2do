@@ -25,13 +25,20 @@
 [x] Corrigido erro no envio de emails automáticos...
 [~] Criar arquivo JSON para definição de situações em que o email automárico deve ser encaminhado...
 [ ] Criar função que verifica se a situação de atendimento corresponde à situação na qual deve-se comunicar o estudante por email a partir das configurações do profissional
-[ ] Substituir instruções de pesquisa em 'sps-api get' e 'target select' por uma única função em 'cli_sps_base.py'
-[ ] Criar script de criação da base de dados 'sexo_auto_set.json'; passa por todos usuários adicionando informação de sexo conforme nome, pula nomes repetidos...
-[ ] Criar script de instalação.
-[ ] Converter script de instalação para versao shell
+[ ] Substituir instruções de pesquisa em 'cli-api get' e 'target select' por uma única função em 'cli_sps_base.py'
+[~] Criar script de criação da base de dados 'sexo_auto_set.json'; passa por todos usuários adicionando informação de sexo conforme nome, pula nomes repetidos...
+[x] Criar script de instalação.
+[x] Converter script de instalação para versao shell
     * criação arquivos de dados
-    * backup de arquivos de dados
     * instalação de dependências
-    * backup de arquivos memoi
+    * criação de chave de segurança
+    * inclusão do PATH no .bashrc
+[ ] Converter scripts de backup e restauração para shell
+    * backup de arquivos de dados
+    * backup de arquivos memoi    
 [ ] Criação de scripts workers em shell 'mergeintodbwrk', 'sendemlwrk', 'fragmentwrk'...
-[ ]
+[ ] Conversão de 'cli-decrypt', 'cli-encrypt', 'sps-menu' para shellscript...
+[ ] Junção dos comandos 'mkdoc' e 'mkpdf'
+[ ] Incluir em 'cli-config' rclone-setconfig, rclone-getconfig e rclone-sendconfig
+[ ] Incluir em cli_tools.py conversor de intervalos 2-8 para 2,3,4,5,6,7,8...
+[ ] Incluir em cli-indexdb sets de agrupamento...

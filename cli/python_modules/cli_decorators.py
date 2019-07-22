@@ -28,7 +28,7 @@ def check_config_existance(function):
 	def wrapper(*args):
 		check_config = bool(getoutput('if [ -f "$(echo $HOME)/.sps-cli.conf" ]; then echo 1; else echo ""; fi'))
 		if check_config == False:
-			print("Arquivo local de configuração não encontrado... Execute 'sps-install config' para criá-lo... ")
+			print("Arquivo pessoal de configuração não encontrado...\nExecute 'cli-config usercfg' para criá-lo... ")
 			exit()
 		return function(*args)
 	return wrapper
