@@ -164,14 +164,14 @@ then
     LINUX_USERS=$(grep "home" /etc/passwd | awk -F":" '{ print $1 }')
 
     printf "\n» Criando grupo 'cli'...\n"
-    sudo groupadd cli
+    groupadd cli
 
     printf "\n» Incluindo pasta dos comandos no PATH local dos usuários:\n"
     for USER in $LINUX_USERS;
     do
         printf "   - %s\n" "$USER"
         printf "PATH='$(printf "%s"):%s'\n" "$PATH" "$PASTA_DE_COMANDOS" >> "/home/$USER/.bashrc"
-        sudo usermod -a -G cli "$USER"
+        usermod -a -G cli "$USER"
         MSG="Execute o comando [newgrp cli] para ter acesso ao banco de dados do SPS."
         printf "if [ ! -f '%s/%s' ]; \nthen \n\tclear; \n\tprintf '%s'; \n\ttouch '%s/%s'; \nfi" "$PASTA_TEMPORARIA" "$USER" "$MSG" "$PASTA_TEMPORARIA" "$USER" >> "/home/$USER/.bashrc"
     done
@@ -285,11 +285,11 @@ then
         read -r OP
         case $OP in
         [dD]* )
-            sudo apt install "$DEPENDENCIAS";
+            apt install "$DEPENDENCIAS";
             break;;
 
         [fF]* )
-            sudo dnf install "$DEPENDENCIAS";
+            dnf install "$DEPENDENCIAS";
             break;;
 
         [tT]* ) 
