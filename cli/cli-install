@@ -13,12 +13,12 @@ PASTA_DE_COMANDOS=""
 PASTA_TEMPORARIA=""
 RCLONE_DRIVE=""
 
-function warning () {
+warning () {
     printf "Usage:\n"
     printf "    cli-install\n"
 }
 
-function full_info () {
+full_info () {
     printf "\n"
     printf "Script de intalação do pacote 'cli-tools'.\n"
     printf "\n"
@@ -29,7 +29,7 @@ function full_info () {
     printf "\n"
 }
 
-function only_root () {
+only_root () {
     printf "Apenas o root pode executar esta ação...\n"
     exit 
 }
