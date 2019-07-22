@@ -42,6 +42,5 @@ rm -fR /etc/cli/
 nano /etc/skel/.bashrc 
 nano /root/.bashrc
 nano "$HOME/.bashrc"
-rm -fR "$PASTA_DE_DADOS" 
 rm -fR "$PASTA_DE_SEGURANCA" 
 groupdel cli
