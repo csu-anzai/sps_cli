@@ -228,7 +228,7 @@ do
     read -r OP
     case $OP in
     [sS]* )
-        OLD_CCRYPT_KEY=$(wc -c < "$PASTA_DE_SEGURANCA/ccrypt-key" 2> /dev/null || printf 1)
+        OLD_CCRYPT_KEY=$(wc -c < "$PASTA_DE_SEGURANCA/ccrypt-key" || printf 1 2> /dev/null)
         if [ $OLD_CCRYPT_KEY -lt 5 ];
         then 
             printf "\n» Criando arquivo com código para encriptação...\n";
