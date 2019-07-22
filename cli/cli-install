@@ -11,7 +11,11 @@ PASTA_DE_DADOS=""
 PASTA_DE_SEGURANCA=""
 PASTA_DE_COMANDOS=""
 PASTA_TEMPORARIA=""
+PASTA_DE_MANIPULACAO_DE_DADOS=""
 RCLONE_DRIVE=""
+ENVIO_AUTOMATICO_EMAIL=1
+ENVIO_DE_FRAGMENTOS=1
+
 
 warning () {
     printf "Usage:\n"
@@ -34,6 +38,18 @@ only_root () {
     exit 
 }
 
+mkrandnum () {
+    rm -f "$1" || touch "$1"
+    awk '
+        BEGIN {	
+        srand()
+        for (i = 0; i < 256; i++)
+            printf("%d %d\n", 256 * rand(), 256 * rand())
+        }' | while read byteone bytetwo;
+            do	
+                printf "%s%s" "$byteone" "$bytetwo" >> "$1"
+            done
+}
 
 if [ "$(whoami)" != "root" ];
 then
@@ -49,35 +65,103 @@ if [ ! -f "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE" ];
 then
     touch "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
     printf "» Inserindo variáveis globais no arquivo...\n\n"
+
     printf "» Indique a pasta raíz de 'cli-tools' (caminho para pasta de clonagem).\n"
     printf "$: "
-    read PASTA_RAIZ_DO_PROGRAMA
+    read -r PASTA_RAIZ_DO_PROGRAMA
+
     printf "\n» Indique o caminho absoluto para a pasta de dados.\n"
     printf "$: "
-    read PASTA_DE_DADOS
+    read -r PASTA_DE_DADOS
+
     printf "\n» Indique o caminho absoluto para a pasta de segurança.\n"
     printf "$: "
-    read PASTA_DE_SEGURANCA
+    read -r PASTA_DE_SEGURANCA
+
     printf "\n» Indique o caminho absoluto para a pasta temporária do sistema.\n"
     printf "$: "
-    read PASTA_TEMPORARIA
+    read -r PASTA_TEMPORARIA
+
+    printf "\n» Indique o caminho para a pasta de trabalho.\n"
+    printf "$: "
+    read -r PASTA_DE_MANIPULACAO_DE_DADOS
+
+    FIRST_LOOP=1
+    while true;
+    do 
+        if [ $FIRST_LOOP -eq 1 ];
+        then
+            printf "\n» Ativar envio automático de email? [s|n]\n"
+        else
+            printf "\n» Responda [s] para 'sim' ou [n] para 'não'...\n"
+        fi
+        printf "$: "
+        read -r ENVIO_AUTOMATICO_EMAIL
+        case $ENVIO_AUTOMATICO_EMAIL in
+        [sS]* )
+            ENVIO_AUTOMATICO_EMAIL=1
+            break;;
+        
+        [nN]* )
+            ENVIO_AUTOMATICO_EMAIL=0
+            break;;
+
+        * )
+            FIRST_LOOP=0
+            printf "Reposta inválida...\n";;
+        esac
+    done
+
+    FIRST_LOOP=1
+    while true;
+    do 
+        if [ $FIRST_LOOP -eq 1 ];
+        then
+            printf "\n» Ativar envio de fragmentos? [s|n]\n"
+        else
+            printf "\n» Responda [s] para 'sim' ou [n] para 'não'...\n"
+        fi
+        printf "$: "
+        read -r ENVIO_DE_FRAGMENTOS
+        case $ENVIO_DE_FRAGMENTOS in
+        [sS]* )
+            ENVIO_DE_FRAGMENTOS=1
+            break;;
+        
+        [nN]* )
+            ENVIO_DE_FRAGMENTOS=0
+            break;;
+
+        * )
+            FIRST_LOOP=0
+            printf "Reposta inválida...\n";;
+        esac
+    done
+   
     printf "\n» Indique o nome do drive do rclone que será utilizado para fragmentos e backup.\n"
     printf "$: "
-    read RCLONE_DRIVE
+    read -r RCLONE_DRIVE
+
+
 
     PASTA_DE_COMANDOS="$PASTA_RAIZ_DO_PROGRAMA/cli/"
-    printf "PASTA_RAIZ_DO_PROGRAMA=$PASTA_RAIZ_DO_PROGRAMA\n" > "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
-    printf "PASTA_DE_DADOS=$PASTA_DE_DADOS\n" >> "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
-    printf "PASTA_DE_COMANDOS=$PASTA_DE_COMANDOS\n" >> "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
-    printf "PASTA_DE_SEGURANCA=$PASTA_DE_SEGURANCA\n" >> "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"    
-    printf "PASTA_TEMPORARIA=$PASTA_TEMPORARIA\n" >> "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"    
-    printf "RCLONE_DRIVE=$RCLONE_DRIVE\n" >> "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"        
-    printf "\n" >> /root/.bashrc
-    printf "PATH='$(echo $PATH):$PASTA_DE_COMANDOS'\n" >> /root/.bashrc
-    printf "\n" >> /etc/skel/.bashrc
-    printf "PATH='$(echo $PATH):$PASTA_DE_COMANDOS'\n" >> /etc/skel/.bashrc
+    {
+        printf "PASTA_RAIZ_DO_PROGRAMA=%s\n" "$PASTA_RAIZ_DO_PROGRAMA";
+        printf "PASTA_DE_DADOS=%s\n" "$PASTA_DE_DADOS";
+        printf "PASTA_DE_COMANDOS=%s\n" "$PASTA_DE_COMANDOS";
+        printf "PASTA_DE_SEGURANCA=%s\n" "$PASTA_DE_SEGURANCA";
+        printf "PASTA_TEMPORARIA=%s\n" "$PASTA_TEMPORARIA";
+        printf "PASTA_DE_MANIPULACAO_DE_DADOS=%s\n" "$PASTA_DE_MANIPULACAO_DE_DADOS";
+        printf "ENVIO_AUTOMATICO_EMAIL=%s\n" "$ENVIO_AUTOMATICO_EMAIL";
+        printf "ENVIO_DE_FRAGMENTOS=%s\n" "$ENVIO_DE_FRAGMENTOS";        
+        printf "RCLONE_DRIVE=\n" "$RCLONE_DRIVE";
+    } > "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
 
-    LINUX_USERS=$(cat /etc/passwd | grep home | awk -F":" '{ print $1 }')
+    printf "\nPATH='$(printf %s):%s'\n" "$PATH" "$PASTA_DE_COMANDOS" >> /root/.bashrc
+
+    printf "\nPATH='$(printf %s):%s'\n" "$PATH" "$PASTA_DE_COMANDOS" >> /etc/skel/.bashrc
+
+    LINUX_USERS=$(grep "home" /etc/passwd | awk -F":" '{ print $1 }')
 
     printf "\n» Criando grupo 'cli'...\n"
     sudo groupadd cli
@@ -85,10 +169,11 @@ then
     printf "\n» Incluindo pasta dos comandos no PATH local dos usuários:\n"
     for USER in $LINUX_USERS;
     do
-        printf "   - $USER\n"
-        printf "PATH='$(echo $PATH):$PASTA_DE_COMANDOS'\n" >> /home/$USER/.bashrc
-        sudo usermod -a -G cli $USER
-        printf "if [ ! -f $PASTA_TEMPORARIA/$USER ]; \nthen \n\tclear; \n\techo 'Execute o comando [newgrp cli] para ter acesso ao banco de dados do SPS.'; \n\ttouch $PASTA_TEMPORARIA/$USER; \nfi" >> /home/$USER/.bashrc
+        printf "   - %s\n" "$USER"
+        printf "PATH='$(printf "%s"):%s'\n" "$PATH" "$PASTA_DE_COMANDOS" >> "/home/$USER/.bashrc"
+        sudo usermod -a -G cli "$USER"
+        MSG="Execute o comando [newgrp cli] para ter acesso ao banco de dados do SPS."
+        printf "if [ ! -f '%s/%s' ]; \nthen \n\tclear; \n\tprintf '%s'; \n\ttouch '%s/%s'; \nfi" "$PASTA_TEMPORARIA" "$USER" "$MSG" "$PASTA_TEMPORARIA" "$USER" >> "/home/$USER/.bashrc"
     done
 fi
 
@@ -101,60 +186,53 @@ mkdir -p "$PASTA_DE_SEGURANCA"
 ARQUIVOS_DE_DADOS="atendimentos.json corrigidos.json processos.json profissionais.json usuarios.json estudos.json backup-info.json index_db.json emitidos.json recebidos.json"
 for ARQUIVO in $ARQUIVOS_DE_DADOS;
 do
-    if [ "$ARQUIVO" == "index_db.json" ];
+    if [ "$ARQUIVO" = "index_db.json" ];
     then
         touch "$PASTA_DE_DADOS/indexados/$ARQUIVO"
-        if [ $(cat "$PASTA_DE_DADOS/indexados/$ARQUIVO" | wc -l) -lt 2 ]; 
+        if [ $(wc -l < "$PASTA_DE_DADOS/indexados/$ARQUIVO") -lt 2 ]; 
         then 
             printf "[]" > "$PASTA_DE_DADOS/indexados/$ARQUIVO";
-            printf "   - $ARQUIVO\n"
+            printf "   - %s\n" "$ARQUIVO"
         fi
-    elif [ "$ARQUIVO" == "emitidos.json" ] || [ "$ARQUIVO" == "recebidos.json" ];
+    elif [ "$ARQUIVO" = "emitidos.json" ] || [ "$ARQUIVO" = "recebidos.json" ];
     then
         touch "$PASTA_DE_DADOS/fragmentos/$ARQUIVO"
-        if [ $(cat "$PASTA_DE_DADOS/fragmentos/$ARQUIVO" | wc -l) -lt 2 ]; 
+        if [ $(wc -l < "$PASTA_DE_DADOS/fragmentos/$ARQUIVO") -lt 2 ]; 
         then 
             printf "[]" > "$PASTA_DE_DADOS/fragmentos/$ARQUIVO";
-            printf "   - $ARQUIVO\n"
+            printf "   - %s\n" "$ARQUIVO"
         fi
     else
         touch "$PASTA_DE_DADOS/$ARQUIVO"    
-        if [ $(cat "$PASTA_DE_DADOS/$ARQUIVO" | wc -l) -lt 2 ]; 
+        if [ $(wc -l < "$PASTA_DE_DADOS/$ARQUIVO") -lt 2 ]; 
         then 
             printf "[]" > "$PASTA_DE_DADOS/$ARQUIVO";
-            printf "   - $ARQUIVO\n"
+            printf "   - %s\n" "$ARQUIVO"
         fi
     fi
 done
 
 chown root:cli "$PASTA_DE_DADOS" -R
-chmod g+rw "$PASTA_DE_DADOS" -R #|| mesmo comando pegando informações do arquivo global...
+chmod g+rw "$PASTA_DE_DADOS" -R 
 chmod o-rwx "$PASTA_DE_DADOS" -R
-#chmod o-xw $PASTA_DE_DADOS #||
 
 OP=false
 FIRST_LOOP=true
 while true;
 do
-    if [ $FIRST_LOOP == true ];
+    if [ $FIRST_LOOP = true ];
     then
         printf "\n» Criar um arquivo com código para encriptação de dados? [s|n]\n$: "
         FIRST_LOOP=false
     fi
-    read OP
+    read -r OP
     case $OP in
     [sS]* )
-        OLD_CCRYPT_KEY=$(cat "$PASTA_DE_SEGURANCA/ccrypt-key | wc -c" 2> /dev/null || echo 1)
+        OLD_CCRYPT_KEY=$(wc -c < "$PASTA_DE_SEGURANCA/ccrypt-key" 2> /dev/null || printf 1)
         if [ $OLD_CCRYPT_KEY -lt 5 ];
         then 
             printf "\n» Criando arquivo com código para encriptação...\n";
-            C=1024;
-            while [ $C -gt 0 ];
-            do 
-                N=$((( ( RANDOM % 10 ) + 1 ))); 
-                printf "$N" >> "$PASTA_TEMPORARIA/ccrypt_key";
-                C=$(expr $C - 1); 
-            done
+            mkrandnum "$PASTA_DE_SEGURANCA/ccrypt-key"
         fi
         break;;
     
@@ -166,8 +244,6 @@ do
     esac
 done
 
-mv /tmp/ccrypt_key "$PASTA_DE_SEGURANCA/ccrypt-key"
-
 chown root:cli "$PASTA_DE_SEGURANCA" -R
 chmod g+r "$PASTA_DE_SEGURANCA" -R
 chmod o-rwx "$PASTA_DE_SEGURANCA" -R
@@ -175,27 +251,27 @@ chmod o-rwx "$PASTA_DE_SEGURANCA" -R
 printf "\n» Verificando dependências não instaladas...:\n"
 
 DEPENDENCIAS="python3 rclone zip ccrypt nano node npm git pandoc wkhtmltopdf"
-INSTALAR_DEPENDENCIAS=false
+INSTALAR_DEPENDENCIAS=0
 
 for PROGRAMA in $DEPENDENCIAS;
 do
-    which $PROGRAMA &> /dev/null
+    which "$PROGRAMA" 2> 1> /dev/null
     if [ $? -eq 1 ];
     then
-        printf "   - $PROGRAMA\n"
-        printf "$PROGRAMA " > $PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS
-        INSTALAR_DEPENDENCIAS=true
+        printf "   - %s\n" "$PROGRAMA"
+        printf "%s " "$PROGRAMA" > "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS"
+        INSTALAR_DEPENDENCIAS=1
     fi
 done
 
 DEPENDENCIAS="$(cat "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS")"
 
-if [ $INSTALAR_DEPENDENCIAS == true ];
+if [ $INSTALAR_DEPENDENCIAS -eq 1 ];
 then
-    FIRST_LOOP=true
+    FIRST_LOOP=1
     while true;
     do
-        if [ $FIRST_LOOP == true ];
+        if [ $FIRST_LOOP -eq 1 ];
         then
             printf "\n» Qual a distribuição linux do dispositivo?\n"
             printf "d: Debian/Ubuntu\n"
@@ -203,29 +279,28 @@ then
             printf "t: Android Termux\n"
             printf "n: Nenhuma das listas...\n"
 
-            FIRST_LOOP=false
+            FIRST_LOOP=0
         fi
         printf "$: "
-        read OP
+        read -r OP
         case $OP in
         [dD]* )
-            sudo apt install $DEPENDENCIAS;
+            sudo apt install "$DEPENDENCIAS";
             break;;
 
         [fF]* )
-            sudo dnf install $DEPENDENCIAS;
+            sudo dnf install "$DEPENDENCIAS";
             break;;
 
         [tT]* ) 
-            pkg install $DEPENDENCIAS;
+            pkg install "$DEPENDENCIAS";
             break;;
         
         [nN]* )
             break;;
         
         * )
-            printf "Você deve escolher uma das opções fornecidas... [d|f|t|n]\n"
-            ;;
+            printf "Você deve escolher uma das opções fornecidas... [d|f|t|n]\n";;
         esac
     done
 fi

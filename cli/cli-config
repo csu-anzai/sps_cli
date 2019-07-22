@@ -7,7 +7,7 @@
 GLOBAL_CONFIG_FOLDER="/etc/cli"
 GLOBAL_CONFIG_FILE="cli_tools.conf"
 
-function warning () {
+warning () {
     printf "Usage:\n"
     printf "    cli-config ( save ) <chave> <valor>\n"
     printf "    cli-config ( read ) <chave>\n"
@@ -15,7 +15,7 @@ function warning () {
     printf "    cli-config ( usercfg )\n"
 }
 
-function full_info () {
+full_info () {
     printf "\n"
     printf "Comando para edição rápida das configurações do pacote 'cli-tools'.\n"
     printf "\n"
@@ -26,12 +26,12 @@ function full_info () {
     printf "\n"
 }
 
-function only_root () {
+only_root () {
     printf "Apenas o root pode executar esta ação...\n"
     exit 
 }
 
-if [ "$1" == "save" ];
+if [ "$1" = "save" ];
 then
     if [ "$(whoami)" != "root" ];
     then
@@ -60,14 +60,14 @@ then
         fi
     fi
 
-elif [ "$1" == "read" ];
+elif [ "$1" = "read" ];
 then
     if [ "$2" ];
     then
-        cat "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE" | grep "$2" | awk -F"=" '{ print $2 }'
+        grep "$2" "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE" | awk -F"=" '{ print $2 }'
     fi
 
-elif [ "$1" == 'edit' ];
+elif [ "$1" = 'edit' ];
 then
     if [ "$(whoami)" != "root" ];
     then
@@ -76,7 +76,7 @@ then
         nano "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
     fi
 
-elif [ "$1" == 'usercfg' ];
+elif [ "$1" = 'usercfg' ];
 then
     clear
     CAMPOS="prof_nome prof_eml eml_pwd especialidade sigla_conselho numero_no_concelho matricula_instituicao"
@@ -84,20 +84,20 @@ then
     echo "{" > "$HOME/.sps-cli.conf"
     for CAMPO in $CAMPOS;
     do
-        if [ "$CAMPO" == "prof_nome" ];
+        if [ "$CAMPO" = "prof_nome" ];
         then
             printf "Insira o seu nome completo"
             printf ": "
-            read CAMPO_VALOR
+            read -r CAMPO_VALOR
 
-        elif [ "$CAMPO" == "prof_eml" ];
+        elif [ "$CAMPO" = "prof_eml" ];
         then
             printf "Insira o seu endereço de email"
             printf ": "
-            read CAMPO_VALOR
-            PROF_EML="$(echo "$CAMPO_VALOR" | grep '@unb.br' | wc -l)"
+            read -r CAMPO_VALOR
+            PROF_EML="$(printf "%s" "$CAMPO_VALOR" | grep -c '@unb.br')"
 
-        elif [ "$CAMPO" == "eml_pwd" ];
+        elif [ "$CAMPO" = "eml_pwd" ];
         then
             if [ $PROF_EML -eq 1 ];
             then
@@ -106,12 +106,12 @@ then
                     stty -echo
                     printf "Insira a senha do email registrado"
                     printf ": "
-                    read CAMPO_VALOR
+                    read -r CAMPO_VALOR
                     printf "Reinsira a senha do email"
                     printf ": "
-                    read CAMPO_VALOR2
+                    read -r CAMPO_VALOR2
                     stty echo
-                    if [ "$CAMPO_VALOR" == "$CAMPO_VALOR2" ];
+                    if [ "$CAMPO_VALOR" = "$CAMPO_VALOR2" ];
                     then
                         CAMPO_VALOR="$(echo "$CAMPO_VALOR" | base64)"
                         break
@@ -120,52 +120,52 @@ then
                     fi
                 done
             else
-                echo "    \"emp_pwd\": \"\"," >> "$HOME/.sps-cli.conf"
+                printf "    \"emp_pwd\": \"\"," >> "$HOME/.sps-cli.conf"
             fi
 
-        elif [ "$CAMPO" == "especialidade" ];
+        elif [ "$CAMPO" = "especialidade" ];
         then
             printf "Informe a especialidade profissional"
             printf ": "
-            read CAMPO_VALOR
+            read -r CAMPO_VALOR
 
-        elif [ "$CAMPO" == "sigla_conselho" ];
+        elif [ "$CAMPO" = "sigla_conselho" ];
         then
             printf "Informe a sigla do conselho profissional"
             printf ": "
-            read CAMPO_VALOR
+            read -r CAMPO_VALOR
 
-        elif [ "$CAMPO" == "numero_no_concelho" ];
+        elif [ "$CAMPO" = "numero_no_concelho" ];
         then
             printf "Informe a matrícula frente ao conselho"
             printf ": "
-            read CAMPO_VALOR
+            read -r CAMPO_VALOR
 
-        elif [ "$CAMPO" == "matricula_instituicao" ];
+        elif [ "$CAMPO" = "matricula_instituicao" ];
         then
             printf "Informa a matrícula frente à instituição"
             printf ": "
-            read CAMPO_VALOR
+            read -r CAMPO_VALOR
         fi
 
         if [ "$CAMPO" != "eml_pwd" ];
         then
-            echo "    \"$CAMPO\": \"$CAMPO_VALOR\"," >> "$HOME/.sps-cli.conf"
+            printf "    \"%s\": \"%s\"," "$CAMPO" "$CAMPO_VALOR" >> "$HOME/.sps-cli.conf"
         fi
     done
 
     if [ $PROF_EML -eq 1 ];
     then
-        echo "    \"eml_server\": \"mail.unb.br\"," >> "$HOME/.sps-cli.conf"
-        echo "    \"eml_port\": \"587\"" >> "$HOME/.sps-cli.conf"
+        printf "    \"eml_server\": \"mail.unb.br\"," >> "$HOME/.sps-cli.conf"
+        printf "    \"eml_port\": \"587\"" >> "$HOME/.sps-cli.conf"
     else
-        echo "    \"eml_server\": \"\"," >> "$HOME/.sps-cli.conf"
-        echo "    \"eml_port\": \"\"" >> "$HOME/.sps-cli.conf"
+        printf "    \"eml_server\": \"\"," >> "$HOME/.sps-cli.conf"
+        printf "    \"eml_port\": \"\"" >> "$HOME/.sps-cli.conf"
     fi
 
-    echo "}" >> "$HOME/.sps-cli.conf"
+    printf "}" >> "$HOME/.sps-cli.conf"
 
-elif [ "$1" == '-h' ] || [ "$1" == '--help' ];
+elif [ "$1" = '-h' ] || [ "$1" = '--help' ];
 then
     full_info
     exit
