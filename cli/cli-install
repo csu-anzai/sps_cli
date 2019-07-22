@@ -235,7 +235,7 @@ do
     read -r OP
     case $OP in
     [sS]* )
-        wc -c < "$PASTA_DE_SEGURANCA/ccrypt-key" 1> 2> /dev/null
+        wc -c < "$PASTA_DE_SEGURANCA/ccrypt-key" 1&2> /dev/null
         if [ $? -eq 0 ];
         then
             OLD_CCRYPT_KEY=$(wc -c < "$PASTA_DE_SEGURANCA/ccrypt-key")
