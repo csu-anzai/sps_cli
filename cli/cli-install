@@ -30,9 +30,7 @@ function full_info () {
 }
 
 function only_root () {
-    setterm -foreground red
     printf "Apenas o root pode executar esta ação...\n"
-    setterm -foreground default
     exit 
 }
 
@@ -43,41 +41,28 @@ then
 fi
 
 clear
-setterm -foreground green
 printf "Iniciando instalação do 'cli-tools'...\n\n"
-setterm -foreground yellow
 printf "» Criando arquivo de configuração padrão: "
-setterm -foreground default
 printf "/etc/cli/cli_tools.conf\n\n"
 mkdir -p "$GLOBAL_CONFIG_FOLDER"
 if [ ! -f "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE" ]; 
 then
     touch "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
-    setterm -foreground yellow
     printf "» Inserindo variáveis globais no arquivo...\n\n"
     printf "» Indique a pasta raíz de 'cli-tools' (caminho para pasta de clonagem).\n"
     printf "$: "
-    setterm -foreground default
     read PASTA_RAIZ_DO_PROGRAMA
-    setterm -foreground yellow
     printf "\n» Indique o caminho absoluto para a pasta de dados.\n"
     printf "$: "
-    setterm -foreground default
     read PASTA_DE_DADOS
-    setterm -foreground yellow
     printf "\n» Indique o caminho absoluto para a pasta de segurança.\n"
     printf "$: "
-    setterm -foreground default
     read PASTA_DE_SEGURANCA
-    setterm -foreground yellow
     printf "\n» Indique o caminho absoluto para a pasta temporária do sistema.\n"
     printf "$: "
-    setterm -foreground default
     read PASTA_TEMPORARIA
-    setterm -foreground yellow
     printf "\n» Indique o nome do drive do rclone que será utilizado para fragmentos e backup.\n"
     printf "$: "
-    setterm -foreground default
     read RCLONE_DRIVE
 
     PASTA_DE_COMANDOS="$PASTA_RAIZ_DO_PROGRAMA/cli/"
@@ -93,7 +78,6 @@ then
     printf "PATH='$(echo $PATH):$PASTA_DE_COMANDOS'\n" >> /etc/skel/.bashrc
 
     LINUX_USERS=$(cat /etc/passwd | grep home | awk -F":" '{ print $1 }')
-    setterm -foreground yellow
 
     printf "\n» Criando grupo 'cli'...\n"
     sudo groupadd cli
@@ -101,7 +85,6 @@ then
     printf "\n» Incluindo pasta dos comandos no PATH local dos usuários:\n"
     for USER in $LINUX_USERS;
     do
-        setterm -foreground blue
         printf "   - $USER\n"
         printf "PATH='$(echo $PATH):$PASTA_DE_COMANDOS'\n" >> /home/$USER/.bashrc
         sudo usermod -a -G cli $USER
@@ -109,16 +92,13 @@ then
     done
 fi
 
-setterm -foreground yellow
 printf "\n» Criando arquivos de dados pendentes:\n"
-setterm -foreground default
 printf "  Arquivos antigos que possuam conteúdo serão preservados...\n"
 mkdir -p "$PASTA_DE_DADOS/fragmentos"
 mkdir -p "$PASTA_DE_DADOS/indexados"
 mkdir -p "$PASTA_DE_SEGURANCA"
 
 ARQUIVOS_DE_DADOS="atendimentos.json corrigidos.json processos.json profissionais.json usuarios.json estudos.json backup-info.json index_db.json emitidos.json recebidos.json"
-setterm -foreground blue
 for ARQUIVO in $ARQUIVOS_DE_DADOS;
 do
     if [ "$ARQUIVO" == "index_db.json" ];
@@ -158,18 +138,15 @@ while true;
 do
     if [ $FIRST_LOOP == true ];
     then
-        setterm -foreground yellow
         printf "\n» Criar um arquivo com código para encriptação de dados? [s|n]\n$: "
         FIRST_LOOP=false
     fi
-    setterm -foreground default
     read OP
     case $OP in
     [sS]* )
         OLD_CCRYPT_KEY=$(cat "$PASTA_DE_SEGURANCA/ccrypt-key | wc -c" 2> /dev/null || echo 1)
         if [ $OLD_CCRYPT_KEY -lt 5 ];
         then 
-            setterm -foreground yellow;
             printf "\n» Criando arquivo com código para encriptação...\n";
             C=1024;
             while [ $C -gt 0 ];
@@ -185,7 +162,6 @@ do
         break;;
 
     * )
-        setterm -foreground red
         printf "Você deve optar entre [s|n]...\n";;
     esac
 done
@@ -196,7 +172,6 @@ chown root:cli "$PASTA_DE_SEGURANCA" -R
 chmod g+r "$PASTA_DE_SEGURANCA" -R
 chmod o-rwx "$PASTA_DE_SEGURANCA" -R
 
-setterm -foreground yellow
 printf "\n» Verificando dependências não instaladas...:\n"
 
 DEPENDENCIAS="python3 rclone zip ccrypt nano node npm git pandoc wkhtmltopdf"
@@ -207,7 +182,6 @@ do
     which $PROGRAMA &> /dev/null
     if [ $? -eq 1 ];
     then
-        setterm -foreground blue
         printf "   - $PROGRAMA\n"
         printf "$PROGRAMA " > $PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS
         INSTALAR_DEPENDENCIAS=true
@@ -223,9 +197,7 @@ then
     do
         if [ $FIRST_LOOP == true ];
         then
-            setterm -foreground yellow
             printf "\n» Qual a distribuição linux do dispositivo?\n"
-            setterm -foreground default
             printf "d: Debian/Ubuntu\n"
             printf "f: Fedora\n"
             printf "t: Android Termux\n"
@@ -233,9 +205,7 @@ then
 
             FIRST_LOOP=false
         fi
-        setterm -foreground yellow
         printf "$: "
-        setterm -foreground default
         read OP
         case $OP in
         [dD]* )
@@ -254,7 +224,6 @@ then
             break;;
         
         * )
-            setterm -foreground red;
             printf "Você deve escolher uma das opções fornecidas... [d|f|t|n]\n"
             ;;
         esac

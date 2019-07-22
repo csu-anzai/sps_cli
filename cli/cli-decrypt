@@ -6,9 +6,7 @@
 
 if [ $# -eq 0 ];
 then
-    setterm -foreground red
     printf "É necessário indicar um arquivo alvo criptografado...\n"
-    setterm -foreground default
     exit
 fi
 

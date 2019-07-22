@@ -27,9 +27,7 @@ function full_info () {
 }
 
 function only_root () {
-    setterm -foreground red
     printf "Apenas o root pode executar esta ação...\n"
-    setterm -foreground default
     exit 
 }
 
@@ -88,17 +86,13 @@ then
     do
         if [ "$CAMPO" == "prof_nome" ];
         then
-            setterm -foreground green
             printf "Insira o seu nome completo"
-            setterm -foreground default
             printf ": "
             read CAMPO_VALOR
 
         elif [ "$CAMPO" == "prof_eml" ];
         then
-            setterm -foreground green
             printf "Insira o seu endereço de email"
-            setterm -foreground default
             printf ": "
             read CAMPO_VALOR
             PROF_EML="$(echo "$CAMPO_VALOR" | grep '@unb.br' | wc -l)"
@@ -110,14 +104,10 @@ then
                 while true;
                 do
                     stty -echo
-                    setterm -foreground green
                     printf "Insira a senha do email registrado"
-                    setterm -foreground default
                     printf ": "
                     read CAMPO_VALOR
-                    setterm -foreground green
                     printf "Reinsira a senha do email"
-                    setterm -foreground default
                     printf ": "
                     read CAMPO_VALOR2
                     stty echo
@@ -126,9 +116,7 @@ then
                         CAMPO_VALOR="$(echo "$CAMPO_VALOR" | base64)"
                         break
                     else
-                        setterm -foreground red
                         printf "As senhas fornecidas devem ser iguais...\n"
-                        setterm -foreground default
                     fi
                 done
             else
@@ -137,33 +125,25 @@ then
 
         elif [ "$CAMPO" == "especialidade" ];
         then
-            setterm -foreground green
             printf "Informe a especialidade profissional"
-            setterm -foreground default
             printf ": "
             read CAMPO_VALOR
 
         elif [ "$CAMPO" == "sigla_conselho" ];
         then
-            setterm -foreground green
             printf "Informe a sigla do conselho profissional"
-            setterm -foreground default
             printf ": "
             read CAMPO_VALOR
 
         elif [ "$CAMPO" == "numero_no_concelho" ];
         then
-            setterm -foreground green
             printf "Informe a matrícula frente ao conselho"
-            setterm -foreground default
             printf ": "
             read CAMPO_VALOR
 
         elif [ "$CAMPO" == "matricula_instituicao" ];
         then
-            setterm -foreground green
             printf "Informa a matrícula frente à instituição"
-            setterm -foreground default
             printf ": "
             read CAMPO_VALOR
         fi
