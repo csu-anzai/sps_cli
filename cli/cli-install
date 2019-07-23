@@ -258,7 +258,7 @@ INSTALAR_DEPENDENCIAS=0
 
 for PROGRAMA in $DEPENDENCIAS;
 do
-    which "$PROGRAMA" 1&2> /dev/null
+    which "$PROGRAMA"
     if [ $? -eq 1 ];
     then
         printf "   - %s\n" "$PROGRAMA"
