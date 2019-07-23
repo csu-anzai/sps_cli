@@ -251,11 +251,12 @@ chown root:cli "$PASTA_DE_SEGURANCA" -R
 chmod g+r "$PASTA_DE_SEGURANCA" -R
 chmod o-rwx "$PASTA_DE_SEGURANCA" -R
 
-printf "\n» Verificando dependências não instaladas...:\n"
+printf "\n» Verificando dependências...\n"
 
 DEPENDENCIAS="python3 pip3 rclone zip ccrypt nano node npm git pandoc wkhtmltopdf"
 INSTALAR_DEPENDENCIAS=0
 INSTALAR_PIP3=0
+printf "" > "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS"
 
 for PROGRAMA in $DEPENDENCIAS;
 do
@@ -276,11 +277,11 @@ done
 
 if [ $INSTALAR_DEPENDENCIAS -eq 1 ];
 then
-    printf "» Os seguintes pacotes devem ser instalados...\n"
+    printf "\n» Os seguintes pacotes devem ser instalados...\n"
     cat "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS"
     if [ $INSTALAR_PIP3 -eq 1 ];
     then
-        printf "\n» Após instalar o pacote 'python3-pip', execute o comando:\npip3 install docopt colored\n\n"
+        printf "\n\n» Após instalar o pacote 'python3-pip', execute o comando:\npip3 install docopt colored\n\n"
     fi
 fi
 
