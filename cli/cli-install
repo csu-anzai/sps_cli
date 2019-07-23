@@ -264,10 +264,10 @@ do
     then
         if [ "$PROGRAMA" = "pip3" ];
         then
-            printf "python3-pip " > "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS"
+            printf "python3-pip " >> "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS"
             INSTALAR_PIP3=1
         else
-            printf "%s " "$PROGRAMA" > "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS"
+            printf "%s " "$PROGRAMA" >> "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS"
         fi
         INSTALAR_DEPENDENCIAS=1
     fi
@@ -280,7 +280,7 @@ then
     cat "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS"
     if [ $INSTALAR_PIP3 -eq 1 ];
     then
-        printf "» Após instalar o pacote 'python3-pip', execute o comando:\npip3 install docopt colored\n\n"
+        printf "\n» Após instalar o pacote 'python3-pip', execute o comando:\npip3 install docopt colored\n\n"
     fi
 fi
 
