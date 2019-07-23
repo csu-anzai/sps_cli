@@ -255,6 +255,7 @@ printf "\n» Verificando dependências não instaladas...:\n"
 
 DEPENDENCIAS="python3 pip3 rclone zip ccrypt nano node npm git pandoc wkhtmltopdf"
 INSTALAR_DEPENDENCIAS=0
+INSTALAR_PIP3=0
 
 for PROGRAMA in $DEPENDENCIAS;
 do
@@ -263,10 +264,9 @@ do
     then
         if [ "$PROGRAMA" = "pip3" ];
         then
-            printf "Não encontrado: python3-pip\n"
             printf "python3-pip " > "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS"
+            INSTALAR_PIP3=1
         else
-            printf "Não encontrado: %s\n" "$PROGRAMA"
             printf "%s " "$PROGRAMA" > "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS"
         fi
         INSTALAR_DEPENDENCIAS=1
@@ -276,43 +276,11 @@ done
 
 if [ $INSTALAR_DEPENDENCIAS -eq 1 ];
 then
-    DEPENDENCIAS="$(cat "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS")"
-    FIRST_LOOP=1
-    while true;
-    do
-        if [ $FIRST_LOOP -eq 1 ];
-        then
-            printf "\n» Qual a distribuição linux do dispositivo?\n"
-            printf "d: Debian/Ubuntu\n"
-            printf "f: Fedora\n"
-            printf "t: Android Termux\n"
-            printf "n: Nenhuma das listas...\n"
-
-            FIRST_LOOP=0
-        fi
-        printf "$: "
-        read -r OP
-        case $OP in
-        [dD]* )
-            apt update && apt -yfm install "$DEPENDENCIAS";
-            break;;
-
-        [fF]* )
-            dnf install "$DEPENDENCIAS";
-            break;;
-
-        [tT]* ) 
-            pkg install "$DEPENDENCIAS";
-            break;;
-        
-        [nN]* )
-            break;;
-        
-        * )
-            printf "Você deve escolher uma das opções fornecidas... [d|f|t|n]\n";;
-        esac
-    done
+    printf "» Os seguintes pacotes devem ser instalados...\n"
+    cat "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS"
+    if [ $INSTALAR_PIP3 -eq 1 ];
+    then
+        printf "» Após instalar o pacote 'python3-pip', execute o comando:\npip3 install docopt colored\n\n"
+    fi
 fi
 
-printf "\n» Instalando pacotes do python3: 'docopt' e 'colored'"
-pip3 install docopt colored
