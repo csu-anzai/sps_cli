@@ -46,24 +46,8 @@ Os pacotes destacados devem, preferencialmente, ser instalados em suas versões 
 
 - git clone *http://www.github.com/bwb0de/sps_cli.git*
 
-### [4] Incluir a pasta de intalação ao PATH do sistema/usuario.
+### [4] Navegar até a pasta onde o projeto foi clonado e acessar a pasta 'cli'.
 
-Edite o arquivo de inicialização da sessão do Shell, por exemplo, no Debian, o arquivo *.bashrc* presente na pasta HOME. Não esquecer de incluir a mesma alteração no *.bashrc* do usuário **root**. Para que os comandos estejam disponíveis aos demais usuarios criados, altere o arquivo *.bashrc* presente na pasta */etc/skel*. Usuarios criados após a alteralção de */etc/skel* terão acesso aos comandos.
+### [5] Executar o script de instalação './cli-install'.
 
-**Inserir em *.bashrc* ou outro arquivo de inicialização da sessão do shell:**
-
-- export PATH=$(echo $PATH):/pasta_de_destino/onde/sps_cli/foi_instalado
-
-### [5] Baixar as dependencias do Node.JS. Executar dentro da pasta clonada o comando a seguir.
-
-- npm install
-
-### [6] Executar o comando de criação do arquivo de configuração.
-
-- sps-install config
-
-### [7] Executar o comando de criação dos arquivos de dados.
-
-- sps-install createdb
-
-### [8] Editar os arquivos da pasta 'formularios' conforme a necessidade do uso. Observe o manual para se atentar aos padrões.
+### [6] Fazer o 'logout' e o 'login'...

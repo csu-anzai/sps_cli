@@ -4,6 +4,7 @@
 # Script de intalação
 #
 
+INIT_DIR=$(pwd)
 GLOBAL_CONFIG_FOLDER="/etc/cli"
 GLOBAL_CONFIG_FILE="cli_tools.conf"
 PASTA_RAIZ_DO_PROGRAMA=""
@@ -15,6 +16,7 @@ PASTA_DE_MANIPULACAO_DE_DADOS=""
 RCLONE_DRIVE=""
 ENVIO_AUTOMATICO_EMAIL=1
 ENVIO_DE_FRAGMENTOS=1
+
 
 
 warning () {
@@ -49,6 +51,16 @@ mkrandnum () {
             do	
                 printf "%s%s" "$byteone" "$bytetwo" >> "$1"
             done
+}
+
+link2path () {
+    for FILE in $(ls "$PASTA_DE_COMANDOS");
+    do
+        if [ -f "$FILE" ] && [ -x "$FILE" ];
+        then
+            ln -s "$PASTA_DE_COMANDOS/$FILE" "/usr/bin/$FILE"
+        fi
+    done
 }
 
 if [ "$(whoami)" != "root" ];
@@ -157,23 +169,21 @@ then
         printf "RCLONE_DRIVE=%s\n" "$RCLONE_DRIVE";
     } > "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
 
-    printf "\nPATH='$(echo %s):%s'\n" "$PATH" "$PASTA_DE_COMANDOS" >> /root/.bashrc
-
-    printf "\nPATH='$(echo %s):%s'\n" "$PATH" "$PASTA_DE_COMANDOS" >> /etc/skel/.bashrc
+    printf "\n» Criando links para os scripts na pasta '/usr/bin'...\n"
+    link2path
 
     LINUX_USERS=$(grep "home" /etc/passwd | awk -F":" '{ print $1 }')
 
     printf "\n» Criando grupo 'cli'...\n"
     groupadd cli
 
-    printf "\n» Incluindo pasta dos comandos no PATH local dos usuários:\n"
+    printf "\n» Configurando permissões dos usuários...\n"
     for USER in $LINUX_USERS;
     do
         printf "   - %s\n" "$USER"
-        printf "PATH=\"$(printf "%s"):%s\"\n" "$PATH" "$PASTA_DE_COMANDOS" >> "/home/$USER/.bashrc"
         usermod -a -G cli "$USER"
         MSG="Execute o comando [newgrp cli] para ter acesso ao banco de dados do SPS."
-        printf "if [ ! -f '%s/%s' ]; \nthen \n\tclear; \n\tprintf '%s'; \n\ttouch '%s/%s'; \nfi" "$PASTA_TEMPORARIA" "$USER" "$MSG" "$PASTA_TEMPORARIA" "$USER" >> "/home/$USER/.bashrc"
+        printf "\n\nif [ ! -f '%s/%s' ]; \nthen \n\tclear; \n\tprintf '%s'; \n\ttouch '%s/%s'; \nfi" "$PASTA_TEMPORARIA" "$USER" "$MSG" "$PASTA_TEMPORARIA" "$USER" >> "/home/$USER/.bashrc"
     done
 fi
 
