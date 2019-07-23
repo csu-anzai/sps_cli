@@ -154,12 +154,12 @@ then
         printf "PASTA_DE_MANIPULACAO_DE_DADOS=%s\n" "$PASTA_DE_MANIPULACAO_DE_DADOS";
         printf "ENVIO_AUTOMATICO_EMAIL=%s\n" "$ENVIO_AUTOMATICO_EMAIL";
         printf "ENVIO_DE_FRAGMENTOS=%s\n" "$ENVIO_DE_FRAGMENTOS";        
-        printf "RCLONE_DRIVE=\n" "$RCLONE_DRIVE";
+        printf "RCLONE_DRIVE=%s\n" "$RCLONE_DRIVE";
     } > "$GLOBAL_CONFIG_FOLDER/$GLOBAL_CONFIG_FILE"
 
-    printf "\nPATH='$(printf %s):%s'\n" "$PATH" "$PASTA_DE_COMANDOS" >> /root/.bashrc
+    printf "\nPATH='$(echo %s):%s'\n" "$PATH" "$PASTA_DE_COMANDOS" >> /root/.bashrc
 
-    printf "\nPATH='$(printf %s):%s'\n" "$PATH" "$PASTA_DE_COMANDOS" >> /etc/skel/.bashrc
+    printf "\nPATH='$(echo %s):%s'\n" "$PATH" "$PASTA_DE_COMANDOS" >> /etc/skel/.bashrc
 
     LINUX_USERS=$(grep "home" /etc/passwd | awk -F":" '{ print $1 }')
 
