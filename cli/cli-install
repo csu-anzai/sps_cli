@@ -294,7 +294,7 @@ then
         read -r OP
         case $OP in
         [dD]* )
-            apt update && apt -y install "$DEPENDENCIAS";
+            apt update && apt -yfm install "$DEPENDENCIAS";
             break;;
 
         [fF]* )
