@@ -23,7 +23,7 @@ Usage:
     unb-tools ( join-intersection )  ( csv | json ) <file1> <file2> <joint-col>
     unb-tools ( cross-values ) ( csv | json ) <file>
     unb-tools ( fill-gaps) ( csv | json ) <file> <ref-cols>
-    unb-tools ( remove-lines-from-csv ) 
+    unb-tools ( remove-lines ) <file1> <coluna> <valor-de-conferencia>
 
 
 Options:
@@ -56,6 +56,8 @@ from python_modules.cli_unb_tools import \
     multi_process_sigra_academic_history,\
     cruzar_variaveis,\
     create_curric_metainfo_index
+
+from python_modules.py_functions_csv import remove_lines
 
 from python_modules.cli_tools import select_op, select_ops
 from python_modules.py_functions_json import save_json, load_json
@@ -113,6 +115,9 @@ def main():
             join_csv_intersection(args['<file1>'], args['<file2>'], args['<joint-col>'])
         elif args['json']:
             pass
+    
+    elif args['remove-lines']:
+        remove_lines(args['<file1>'], args['<coluna>'], args['<valor-de-conferencia>'])
  
     elif args['cross-values']:
         if args['csv']:

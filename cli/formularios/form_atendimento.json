@@ -1,13 +1,15 @@
 {
     "arquivo_de_registro": "atendimentos.json",
+    "campos_de_listagem": "timestamp, identificador, atd_t",
+    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
+    "titulo": "Registro de atendimento",
     "questoes": [
         {
             "id": "identificador",
-            "enunciado": "Matrícula",
-            "tipo": "text"
+            "tipo": "text",
+            "enunciado": "Matrícula"
         },
         {
-            "id": "procedimento",
             "alternativas": [
                 "Articulação",
                 "Atendimento presencial",
@@ -18,11 +20,11 @@
                 "Processamento de demanda anterior",
                 "Outro"
             ],
-            "enunciado": "Forma de atividade",
-            "tipo": "checkbox"
+            "id": "procedimento",
+            "tipo": "checkbox",
+            "enunciado": "Forma de atividade"
         },
         {
-            "id": "atd_t",
             "alternativas": [
                 "Agendamento entrevista",
                 "Articulação de demandas com a Coordenaçãoo da Educação do Campo.",
@@ -31,6 +33,7 @@
                 "Auxílio na comunicação com o MEC",
                 "Auxílio no preenchimento do estudo",
                 "Auxílio para Recuperação da senha BPME",
+                "Avaliação de fundamentos em relação ao pedido de emergencial",
                 "Colsulta sobre situação do Bolsa Alimentação",
                 "Comunicado de deferimento/indeferimento de emergencial",
                 "Consulta ao andamento de emergencial",
@@ -54,6 +57,7 @@
                 "Entrevista com fins a avaliação de situação socioeconômica para ampliação do tempo de permanencia em programas de assistencia estudantil ou PME-G)",
                 "Entrevista com fins à auxílio emergencial",
                 "Entrevista com fins à coleta de informações sobre fragilização/rompimento de vínculos",
+                "Escuta",
                 "Explicação sobre o procedimento de lista de espera",
                 "Fotocópia de documento",
                 "Fotocópia de termo do Programa Bolsa Alimentação",
@@ -98,11 +102,11 @@
                 "Verificação se o estudante foi chamado na segunda chamada",
                 "Outro"
             ],
-            "enunciado": "Demanda do atendimento",
-            "tipo": "checkbox"
+            "id": "atd_t",
+            "tipo": "checkbox",
+            "enunciado": "Demanda do atendimento"
         },
         {
-            "id": "resultado",
             "alternativas": [
                 "Aguardando resposta",
                 "Demanda atendida",
@@ -110,11 +114,9 @@
                 "Demanda não atendida",
                 "Outro"
             ],
-            "enunciado": "Resultado do atendimento",
-            "tipo": "radio"
+            "id": "resultado",
+            "tipo": "radio",
+            "enunciado": "Resultado do atendimento"
         }
-    ],
-    "titulo": "Registro de atendimento",
-    "campos_de_listagem": "timestamp, identificador, atd_t",
-    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP"
+    ]
 }
