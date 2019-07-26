@@ -17,6 +17,12 @@
             "trabalhar_com_fragmentos": true,
             "pasta_de_manipulacao_de_dados": ""
         },
+    "fedora":
+        {
+            "envio_automatico_email": true,
+            "trabalhar_com_fragmentos": true,
+            "pasta_de_manipulacao_de_dados": ""
+        },
     "spsfup":
         {
             "envio_automatico_email": true,

@@ -28,7 +28,7 @@ import json
 import time
 
 from .py_euristic_tools import show_each_dictArray_block
-from .cli_machine_info import tmpdir
+from .cli_machine_info import pasta_temporaria
 from .cli_tools import create_lockfile, remove_lockfile, lockfile_name 
 
 def show_each_json_block(json_file, print_fields, index_pos):
@@ -49,7 +49,7 @@ def load_json(path_to_file):
     return json.loads(data)
 
 
-def save_json(novos_dados, path_to_file, tmpdir=tmpdir):
+def save_json(novos_dados, path_to_file, pasta_temporaria=pasta_temporaria):
 	lockf = lockfile_name(path_to_file)
 	initfolder = os.getcwd()
 	nfo = path_to_file.split('/')
@@ -57,7 +57,7 @@ def save_json(novos_dados, path_to_file, tmpdir=tmpdir):
 	path = path_to_file.replace(fname, '')
 
 	while True:
-		if os.path.isfile(tmpdir+os.sep+lockf):
+		if os.path.isfile(pasta_temporaria+os.sep+lockf):
 			time.sleep(0.1)
 		else:
 			create_lockfile(lockf)

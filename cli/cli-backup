@@ -1,0 +1,32 @@
+#!/bin/sh
+
+#
+# Script para automação de backup e restauração dos arquivos de dados
+#
+
+def backup_db(target_folder):
+    check_folder = 0
+    check_folder += int(getoutput("if [ -f {}/atendimentos.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/corrigidos.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/processos.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/profissionais.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/usuarios.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/estudos.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/backup-info.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -d {}/indexados ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -d {}/fragmentos ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/indexados/index_db.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/fragmentos/emitidos.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    check_folder += int(getoutput("if [ -f {}/fragmentos/recebidos.json ]; then echo 1; else echo 0; fi".format(target_folder)))
+    if check_folder == 12:
+        print("Pasta de dados aparentemente íntegra...")
+        bkfname = getoutput("date +%Y%U%u%H%M%S%N")+'.zip'
+        os.system('zip "{bkf}" "{tf}" -9r'.format(bkf=bkfname, tf=target_folder))
+        os.system('cli-encrypt "{bkf}"'.format(bkf=bkfname))
+        os.system('rclone move "{bkf}.cpt" {rclone_drive}:/sps_fup2/dbbk/'.format(bkf=bkfname, rclone_drive=rclone_drive))
+    else:
+        print("A estrutura da pasta de dados parece divergir...")
+
+
+def restore_db():
+    pass

@@ -81,6 +81,7 @@ from python_modules.cli_global_paths import \
     arquivo_processos,\
     arquivo_atendimentos,\
     arquivo_estudos,\
+    arquivo_fragmentos_recebidos,\
     pasta_de_dados,\
     pasta_de_fragmentos,\
     formulario_registro_de_correcao,\
@@ -120,9 +121,15 @@ def novo_usuario(identificador):
     nfo['identificador'] = numero_identificador_mascara(identificador)
     dados_usuarios.append(nfo)
     save_json(dados_usuarios, arquivo_usuarios)
+    os.system("cli-indexdb sexo")
     if trabalhar_com_fragmentos:
-        fragmento = os.sep.join([pasta_de_fragmentos, 'USR'+getoutput("date +%Y%U%u%H%M%S%N")+'@'+hostname])
+        frag_name = 'USR'+getoutput("date +%Y%U%u%H%M%S%N")+'@'+hostname
+        cripto_frag_name = frag_name+'.cpt'
+        fragmento = os.sep.join([pasta_de_fragmentos, frag_name])
         save_json(nfo, fragmento)
+        recebidos = load_json(arquivo_fragmentos_recebidos)
+        recebidos.append(cripto_frag_name)
+        save_json(recebidos, arquivo_fragmentos_recebidos)
         os.system('fragment send "{}"'.format(fragmento))
 
 
@@ -276,20 +283,20 @@ def main():
         if atd_t == "Encaminhamento de pedido de auxílio emergencial":
             numero_sei = novo_processo(identificador, atd_t)
             if envio_automatico_email:
-                os.system('sps-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(identificador, "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
+                os.system('cli-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(identificador, "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
                 os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Processo de Auxílio Emergencial" "Segue o número do processo para acompanhamento do resultado. Com este número você pode consultar o resultado com qualquer pessoa do SPS que possua acesso ao SEI."'.format(numero_sei=numero_sei))
 
         elif atd_t == "Solicitação de acesso extraordinário ao RU":
             numero_sei = novo_processo(identificador, atd_t)
             if envio_automatico_email:
                 os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Processo de Acesso ao RU" "Segue o número do processo para que você possa acompanhar do resultado. Com este número você pode consultar o resultado junto a qualquer pessoa do SPS que possua acesso ao SEI."'.format(numero_sei=numero_sei))
-                os.system('sps-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(identificador, "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
+                os.system('cli-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(identificador, "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
 
         elif atd_t == "Recebimento/digiralização de pedido de recurso ao resultado da avaliação socioeconômica":
             numero_sei = novo_processo(identificador, atd_t)
             if envio_automatico_email:
                 os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Processo de Recurso à Avaliação Socioeconômica" "Segue o númro do processo de recurso. Se até a data prevista para o resultado você não obtiver resposta, vá ao SPS, forneça este número e informe a pendência."'.format(numero_sei=numero_sei))
-                os.system('sps-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(identificador, "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
+                os.system('cli-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(identificador, "Atendimento via e-mail", "Envio de número de processo", "Verificar status de envio de email..."))
 
         elif atd_t == "Emissão de declaração PPAES":
             os.system('mkdoc dec-ppaes "{}"'.format(identificador))
@@ -306,7 +313,7 @@ def main():
         save_target_info(resultado[0], dados_usuarios)
         if envio_automatico_email:
             os.system('echo "{numero_sei}" | sendeml get "$(target get eml)" "Assistência Estudantil - Comunicado de resultado de processo" "Informo que o processo {numero_sei} foi {resultado}."'.format(numero_sei=args['<num_sei>'], resultado=resultado[1]))
-            os.system('sps-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(resultado[0], "Atendimento via e-mail", "Comunicado de resultado de processo", "Verificar status de envio de email..."))
+            os.system('cli-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(resultado[0], "Atendimento via e-mail", "Comunicado de resultado de processo", "Verificar status de envio de email..."))
 
     elif args['est'] or args['estudo']:
         identificador = numero_identificador_mascara(args['<identificador>'])
@@ -333,4 +340,4 @@ if __name__ == '__main__':
     newpid = os.fork()
     if newpid == 0:
         calculate_col_width()
-        os.system("indexdb construir")
+        os.system("cli-indexdb construir")

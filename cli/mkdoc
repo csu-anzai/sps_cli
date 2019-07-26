@@ -20,7 +20,7 @@ import os
 from docopt import docopt
 from subprocess import getoutput
 #from python_modules.templates import base_html_layout 
-from python_modules.cli_machine_info import tmpdir
+from python_modules.cli_machine_info import pasta_temporaria
 from python_modules.cli_global_paths import arquivo_sex_info, arquivo_modelo_ppaes, arquivo_modelo_ppaes_detalhado, arquivo_modelo_ccc
 from python_modules.cli_db_loader import timestamp
 from python_modules.cli_tools import verde, amarelo, input_op
@@ -33,7 +33,7 @@ initdir = getoutput('pwd')
 def main():
     idt = args['<identificador>'].replace('/','')
     sex_info = load_json(arquivo_sex_info)
-    tmp_working_folder = os.sep.join([tmpdir, idt])
+    tmp_working_folder = os.sep.join([pasta_temporaria, idt])
     os.mkdir(tmp_working_folder)
 
     os.system("target select '{}'".format(args['<identificador>']))

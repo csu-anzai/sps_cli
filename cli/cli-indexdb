@@ -6,9 +6,9 @@
 Cria ou recria arquivo de índices do banco de dados.
 
 Usage:
-    indexdb ( construir )
-    indexdb ( inserir ) <identificador> <set_de_dados>
-    indexdb ( sexo )
+    cli-indexdb ( construir )
+    cli-indexdb ( inserir ) <identificador> <set_de_dados>
+    cli-indexdb ( sexo )
 
 Options:
     --version

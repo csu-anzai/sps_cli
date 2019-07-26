@@ -19,18 +19,18 @@ import os
 from docopt import docopt
 from subprocess import getoutput
 from python_modules.templates import base_html_layout 
-from python_modules.cli_machine_info import tmpdir
+from python_modules.cli_machine_info import pasta_temporaria
 
 args = docopt(__doc__)
 initdir = getoutput('pwd')
-tmphtmlfile = os.sep.join([tmpdir, 'tmp-mkpdf.html'])
-tmppdffile = os.sep.join([tmpdir, 'tmp-mkpdf.pdf'])
+tmphtmlfile = os.sep.join([pasta_temporaria, 'tmp-mkpdf.html'])
+tmppdffile = os.sep.join([pasta_temporaria, 'tmp-mkpdf.pdf'])
 
 def convert_md_to_html(arquivo_alvo, template=base_html_layout, initdir=None):
     converted_md_data = getoutput('pandoc "{}"'.format(arquivo_alvo))
     nome_arquivo_html = arquivo_alvo.replace('.md', '.html')
     output = template.replace("###INFO###",converted_md_data)
-    print(tmpdir)
+    print(pasta_temporaria)
     print(tmphtmlfile)
       
     with open(tmphtmlfile, 'w') as output_file:
