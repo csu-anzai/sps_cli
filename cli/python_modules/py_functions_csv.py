@@ -40,7 +40,7 @@ def show_each_csv_line(csv_file, print_fields, index_pos):
 	show_each_dictArray_block(info_file, print_fields, index_pos)
 
 
-def read_csv(csv_file, delimiter=',', lineterminator='\n'):
+def read_csv(csv_file, delimiter='\t', lineterminator='\n'):
 	'''
 	Acessa o conteúdo do arquivo CSV e o armazena na memória como um dict_array.
 	'''
@@ -357,6 +357,7 @@ def convert_csv_type(csv_file, old_delimiter, new_delimiter, old_lineterminator=
 	write_csv(conteudo, csv_file, delimiter=new_delimiter, lineterminator=new_lineterminator)
 
 
+
 def write_csv(novos_dados, path_to_file, header=None, delimiter=',', lineterminator='\n', pasta_temporaria=pasta_temporaria):
 	'''
 	write_csv(csv_data_list, csv_file, header=None) -> escreve o conteudo de uma lista de dicionários em um arquivo CSV.
@@ -378,7 +379,7 @@ def write_csv(novos_dados, path_to_file, header=None, delimiter=',', linetermina
 			create_lockfile(lockf)
 			break
 
-	os.chdir(path.replace('/', os.sep))
+	#os.chdir(path.replace('/', os.sep))
 	with open(path_to_file, 'w') as f:
 		w = csv.DictWriter(f, fields, delimiter=delimiter, lineterminator=lineterminator)
 		w.writeheader()

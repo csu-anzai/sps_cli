@@ -289,9 +289,10 @@ if [ $INSTALAR_DEPENDENCIAS -eq 1 ];
 then
     printf "\n» Os seguintes pacotes devem ser instalados...\n"
     cat "$PASTA_TEMPORARIA/LISTA_DE_DEPENDENCIAS"
+    printf "\n"
     if [ $INSTALAR_PIP3 -eq 1 ];
     then
-        printf "\n\n» Após instalar o pacote 'python3-pip', execute o comando:\npip3 install docopt colored\n\n"
+        printf "\n» Após instalar o pacote 'python3-pip', execute o comando:\npip3 install docopt colored\n\n"
     fi
 fi
 

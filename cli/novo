@@ -121,6 +121,7 @@ def novo_usuario(identificador):
     nfo['identificador'] = numero_identificador_mascara(identificador)
     dados_usuarios.append(nfo)
     save_json(dados_usuarios, arquivo_usuarios)
+    os.system("cli-indexdb sexo")
     if trabalhar_com_fragmentos:
         frag_name = 'USR'+getoutput("date +%Y%U%u%H%M%S%N")+'@'+hostname
         cripto_frag_name = frag_name+'.cpt'

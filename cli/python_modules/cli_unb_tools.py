@@ -137,7 +137,7 @@ def old_sae_extract_hist_list(target_folder=old_etd_folder, target_csv_lista_pro
 			total_itens -= 1
 
 
-def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=11639):
+def old_sae_extract_list(target_folder=old_etd_folder, target_csv_lista_processos=old_sae_processos_list, init_idx=13920):
 	processos = read_csv(target_csv_lista_processos, '\t')
 	total_itens = len(processos)-1
 	current_item = init_idx
@@ -939,9 +939,9 @@ def process_sae_etd(sae_etd_file_txt):
 			if linha.find("Como reside atualmente? ;") != -1:
 				com_quem_reside = linha.split("? ;")[1].split(";")[0].strip().replace(".",'')
 				obter_com_quem_reside = False
-			else:
-				com_quem_reside = "Outra situação: "+linha.split(";")[0].strip()
-				obter_com_quem_reside = False				
+			#else:
+				#com_quem_reside = "Outra situação: "+linha.split(";")[0].strip()
+				#obter_com_quem_reside = False				
 			
 		if obter_situacao_residencia_familia:
 			if linha.find("Como reside sua família? ;") != -1:
@@ -1231,7 +1231,10 @@ def process_sae_etd(sae_etd_file_txt):
 		output["email"] = email
 	except UnboundLocalError:
 		output["email"] = ""
-	output["com_quem_reside"] = com_quem_reside
+	try:
+		output["com_quem_reside"] = com_quem_reside
+	except UnboundLocalError:
+		output["com_quem_reside"] = ""
 	try:
 		output["situacao_residencia_familia"] = situacao_residencia_familia
 	except UnboundLocalError:
