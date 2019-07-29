@@ -30,9 +30,9 @@
 [x] Criar script de instalação.
 [x] Converter script de instalação para versao shell
     * criação arquivos de dados
-    * instalação de dependências
+    * instalação de dependências >> MODIFICADO para indicação de dependencias a serem instaladas...
     * criação de chave de segurança
-    * inclusão do PATH no .bashrc
+    * inclusão do PATH no .bashrc >> MODIFICADO para criação de links simbólicos à '/usr/bin'...
 [ ] Converter scripts de backup e restauração para shell
     * backup de arquivos de dados
     * backup de arquivos memoi    
@@ -42,3 +42,4 @@
 [ ] Incluir em 'cli-config' rclone-setconfig, rclone-getconfig e rclone-sendconfig
 [ ] Incluir em cli_tools.py conversor de intervalos 2-8 para 2,3,4,5,6,7,8...
 [ ] Incluir em cli-indexdb sets de agrupamento...
+[ ] Corrigir registro de atendimentos em lista qdo as opções aninhadas não demandam outros...

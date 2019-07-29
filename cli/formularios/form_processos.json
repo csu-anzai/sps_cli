@@ -4,18 +4,16 @@
     "questoes": [
         {
             "tipo": "text",
-            "id": "identificador",
-            "enunciado": "Matrícula"
+            "enunciado": "Matrícula",
+            "id": "identificador"
         },
         {
             "tipo": "text",
-            "id": "numero_sei",
-            "enunciado": "Número do processo no SEI"
+            "enunciado": "Número do processo no SEI",
+            "id": "numero_sei"
         },
         {
-            "enunciado": "Motivação",
             "tipo": "checkbox",
-            "id": "motivo",
             "alternativas": [
                 "Alega custos com saúde de familiares, não apresentou comprovantes",
                 "Alega dificuldade para arcar com os custos de alimentação",
@@ -53,10 +51,13 @@
                 "Solicita a conclusão do estudo com a retirada de membros do grupo familiar",
                 "Solicita avaliação de excepcionalidade do caso",
                 "Solicita inclusão no pleito da alimentação",
+                "Solicita suporte para arcar com gastos de saúde",
                 "Outro"
-            ]
+            ],
+            "enunciado": "Motivação",
+            "id": "motivo"
         }
     ],
-    "descricao": "Intrumental para registro de processos gerados no âmbito do SPS/FUP",
-    "arquivo_de_registro": "corrigidos.json"
+    "arquivo_de_registro": "corrigidos.json",
+    "descricao": "Intrumental para registro de processos gerados no âmbito do SPS/FUP"
 }
