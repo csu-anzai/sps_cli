@@ -25,6 +25,16 @@ only_root () {
     exit 
 }
 
+unlink2path () {
+    for FILE in $(ls "$PASTA_DE_COMANDOS");
+    do
+        if [ -f "$FILE" ] && [ -x "$FILE" ];
+        then
+            rm -i "/usr/bin/$FILE"
+        fi
+    done
+}
+
 
 if [ "$(whoami)" != "root" ];
 then
@@ -38,9 +48,10 @@ then
 fi
 
 
-rm -fR /etc/cli/ 
-nano /etc/skel/.bashrc 
-nano /root/.bashrc
-nano "$HOME/.bashrc"
+unlink2path
+#vi /etc/skel/.bashrc 
+#vi /root/.bashrc
+#vi "$HOME/.bashrc"
 rm -fR "$PASTA_DE_SEGURANCA" 
+rm -fR /etc/cli/ 
 groupdel cli

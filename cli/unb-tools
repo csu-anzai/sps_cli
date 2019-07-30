@@ -7,6 +7,19 @@ Realiza processamento de arquivos nos formatos CSV, JSON ou TXT.
 Algumas funções foram concebidas para processarem arquivos de relatórios dos sistemas SAE e SIGRA da UnB.
 
 Usage:
+    unb-tools unir lista-estudantes <pasta-alvo> <nome_arquivo_saida>
+    unb-tools (unir | intersectar) arquivos (csv | json) <arquivo1> <arquivo2> <nome_da_coluna>
+    unb-tools integrar-estudos-antigos
+    unb-tools lista-estudos-antigos
+    unb-tools lista-de-historicos-para-estudos-antigos
+    unb-tools processar-estudo-antigo <arquivo1>
+    unb-tools processar-estudos-antigos [<pasta-alvo>]
+    unb-tools processar-curriculo-sigra <arquivo1>
+    unb-tools processar-curriculos-sigra [<pasta-alvo>]
+    unb-tools processar-historico-gr <arquivo1>
+    unb-tools processar-historicos-gr [<pasta-alvo>]
+    unb-tools preecher-lacunas (csv | json) <arquivo1> <colunas-de-visualizacao>...
+    unb-tools selecionar-linhas (apagar | copiar | mover) <arquivo1> <nome_da_coluna> <valor-alvo>
     unb-tools ( join-alu-rel ) <target-folder> <output-txt-fname>
     unb-tools ( integrate_old_sae_etd )
     unb-tools ( create_curric_metainfo_index )

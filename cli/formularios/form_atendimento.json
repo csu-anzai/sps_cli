@@ -189,5 +189,6 @@
     ],
     "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
     "arquivo_de_registro": "atendimentos.json",
+    "sigla_de_comando": "atd",
     "titulo": "Registro de atendimento"
 }
