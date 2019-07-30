@@ -194,15 +194,20 @@ mkdir -p "$PASTA_DE_DADOS/indexados"
 mkdir -p "$PASTA_DE_SEGURANCA"
 mkdir -p "$PASTA_DE_MANIPULACAO_DE_DADOS"
 
-ARQUIVOS_DE_DADOS="atendimentos.json corrigidos.json processos.json profissionais.json usuarios.json estudos.json backup-info.json index_db.json emitidos.json recebidos.json"
+ARQUIVOS_DE_DADOS="atendimentos.json corrigidos.json processos.json profissionais.json usuarios.json estudos.json backup-info.json index_db.json emitidos.json recebidos.json sex_info.json"
 for ARQUIVO in $ARQUIVOS_DE_DADOS;
 do
-    if [ "$ARQUIVO" = "index_db.json" ];
+    if [ "$ARQUIVO" = "index_db.json" ] || [ "$ARQUIVO" = "sex_info.json" ];
     then
         touch "$PASTA_DE_DADOS/indexados/$ARQUIVO"
         if [ $(wc -l < "$PASTA_DE_DADOS/indexados/$ARQUIVO") -lt 2 ]; 
         then 
-            printf "[]" > "$PASTA_DE_DADOS/indexados/$ARQUIVO";
+            if [ "$ARQUIVO" = "sex_info.json" ];
+            then
+                printf "{}" > "$PASTA_DE_DADOS/indexados/$ARQUIVO";
+            else
+                printf "[]" > "$PASTA_DE_DADOS/indexados/$ARQUIVO";
+            fi
             printf "   - %s\n" "$ARQUIVO"
         fi
     elif [ "$ARQUIVO" = "emitidos.json" ] || [ "$ARQUIVO" = "recebidos.json" ];
