@@ -67,7 +67,7 @@ def read_csv(csv_file, delimiter='\t', lineterminator='\n'):
 
 
 
-def read_csv_head(csv_file, delimiter=',', lineterminator='\n'):
+def read_csv_head(csv_file, delimiter='\t', lineterminator='\n'):
 	f = open(csv_file)
 	f_csv_obj = csv.DictReader(f, delimiter=delimiter, lineterminator=lineterminator)
 	header = f_csv_obj.fieldnames
@@ -77,7 +77,7 @@ def read_csv_head(csv_file, delimiter=',', lineterminator='\n'):
 
 
 
-def read_csv_col(col, csv_file, delimiter=',', lineterminator='\n', sort_r=False):
+def read_csv_col(col, csv_file, delimiter='\t', lineterminator='\n', sort_r=False):
 	fd = read_csv(csv_file, delimiter=delimiter, lineterminator=lineterminator)
 	o = []
 	for i in fd:
@@ -138,7 +138,9 @@ def obter_frq_abs(csv_file, col=False):
 		query_list_entries = set(query_list)
 		itens_count = OrderedDict()
 		for itens in query_list_entries:
-			o[itens]=query_list.count(itens)
+			itens_count[itens]=query_list.count(itens)
+			#o[itens]=query_list.count(itens)
+		o[f] = itens_count
 	return o
 
 
@@ -149,8 +151,22 @@ def obter_frq_abs_e_rel(csv_file, col=False):
 	n = int(len(f.readlines())-1)
 	r = obter_frq_abs(csv_file, col)
 	o = OrderedDict()
+	o_str = ""
 	for cols in r.keys():
-		o[cols] = (r[cols], float((r[cols]/n)*100))
+		itens_count = {}
+		o_str += cols + '\n'
+		for iten in r[cols].keys():
+			itens_count[iten] = (r[cols][iten], float((r[cols][iten]/n)*100))
+			o_str += iten+ ' »» ' + str((r[cols][iten], float((r[cols][iten]/n)*100))) + '\n'
+		o_str += '\n'
+		o[cols] = itens_count
+
+	print("Dê o nome do arquivo de saída: ")
+	fname = input('$: ')
+
+	f = open(fname, 'w')
+	f.write(o_str)
+	f.close()
 	return o
 
 
@@ -358,7 +374,7 @@ def convert_csv_type(csv_file, old_delimiter, new_delimiter, old_lineterminator=
 
 
 
-def write_csv(novos_dados, path_to_file, header=None, delimiter=',', lineterminator='\n', pasta_temporaria=pasta_temporaria):
+def write_csv(novos_dados, path_to_file, header=None, delimiter='\t', lineterminator='\n', pasta_temporaria=pasta_temporaria):
 	'''
 	write_csv(csv_data_list, csv_file, header=None) -> escreve o conteudo de uma lista de dicionários em um arquivo CSV.
 	

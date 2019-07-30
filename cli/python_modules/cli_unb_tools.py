@@ -710,6 +710,7 @@ def process_sae_etd(sae_etd_file_txt):
 	obter_campus = True
 	obter_periodo_ingresso_unb = True
 	obter_forma_ingresso = True
+	obter_data_nascimento = True
 	obter_sexo = True
 	obter_cpf = True
 	obter_isencao_vestibular = True
@@ -820,6 +821,12 @@ def process_sae_etd(sae_etd_file_txt):
 			if linha.find("Forma de ingresso: ;") != -1:
 				forma_ingresso = linha.split(": ;")[1].split(";")[0].strip()
 				obter_forma_ingresso = False
+
+		if obter_data_nascimento:
+			if linha.find("Data/UF nascimento: ;") != -1:
+				data_nascimento = linha.split(": ;")[2].split(";")[0].strip().split('-')[0].strip()
+				pais_nascimento = linha.split(": ;")[2].split(";")[0].strip().split('-')[1].strip()
+				obter_data_nascimento = False
 
 		if obter_sexo:
 			if linha.find("Sexo:;") != -1:
@@ -1201,6 +1208,8 @@ def process_sae_etd(sae_etd_file_txt):
 	output["campus"] = campus
 	output["periodo_ingresso_unb"] = periodo_ingresso_unb
 	output["forma_ingresso"] = forma_ingresso
+	output["data_nascimento"] = data_nascimento
+	output["pais_nascimento"] = pais_nascimento
 	output["sexo"] = sexo
 	output["cpf"] = cpf
 	try:
