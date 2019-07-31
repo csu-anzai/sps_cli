@@ -25,6 +25,7 @@
 
 import os
 from string import whitespace, punctuation, digits
+from .cli_tools import select_ops
 from collections import OrderedDict
 from copy import copy
 from time import ctime, sleep
@@ -253,3 +254,152 @@ def strip_chars(s):
 	for i in "abcdefghijklmnopqrstuvxz":
 		r = r.replace(i,"")
 	return r
+
+def create_new_value_col_from_old(dict_array, old_col):
+	old_col_values = []
+	for line in dict_array:
+		if not line[old_col] in old_col_values:
+			old_col_values.append(line[old_col])
+	old_col_values.sort()
+	print("Selecione os valores que deverão ser checados para disparar o gatilho de registro:")
+	selected = select_ops(old_col_values, 2)
+	print("\nDefina o nome da nova coluna:")
+	print("Cuidado! Se o nome definido for igual a un nome anteriormente existente, as informações anteriores dessa coluna serão sobrescritas:\n")
+	new_col_name = input("$: ")
+	print("\nDefina o valor que deverá ser registrado na nova coluna quando os valores selecionados forem encontrados: \n")
+	new_value = input("$: ")
+	for line in dict_array:
+		if line.get(new_col_name) == None:
+			line[new_col_name] = ""
+		if line[old_col] in selected:
+			line[new_col_name] = new_value
+	return dict_array
+
+def create_new_value_col_from_cross_old(dict_array, list_of_old_cols):
+	num_of_cols = len(list_of_old_cols)
+	
+	if num_of_cols == 2:
+	
+		old_col1 = list_of_old_cols[0]
+		old_col2 = list_of_old_cols[1]
+		old_col1_values = []
+		old_col2_values = []
+	
+		for line in dict_array:
+			if not line[old_col1] in old_col1_values:
+				old_col1_values.append(line[old_col1])
+			if not line[old_col2] in old_col2_values:
+				old_col2_values.append(line[old_col2])
+	
+		old_col1_values.sort()
+		old_col2_values.sort()
+
+		print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(list_of_old_cols[0]))
+		selected_itens_col1 = select_ops(old_col1_values, 2)
+		print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(list_of_old_cols[1]))
+		selected_itens_col2 = select_ops(old_col2_values, 2)
+
+		print("\nDefina o nome da nova coluna:")
+		print("Cuidado! Se o nome definido for igual a un nome anteriormente existente, as informações anteriores dessa coluna serão sobrescritas:\n")
+		new_col_name = input("$: ")
+
+		print("\nDefina o valor que deverá ser registrado na nova coluna quando os valores selecionados forem encontrados: \n")
+		new_value = input("$: ")
+
+		for line in dict_array:
+			if line.get(new_col_name) == None:
+				line[new_col_name] = ""
+			if (line[old_col1] in selected_itens_col1) and (line[old_col2] in selected_itens_col2):
+				line[new_col_name] = new_value
+		return dict_array
+	
+	elif num_of_cols == 3:
+
+		old_col1 = list_of_old_cols[0]
+		old_col2 = list_of_old_cols[1]
+		old_col3 = list_of_old_cols[2]
+		old_col1_values = []
+		old_col2_values = []
+		old_col3_values = []
+
+		for line in dict_array:
+			if not line[old_col1] in old_col1_values:
+				old_col1_values.append(line[old_col1])
+			if not line[old_col2] in old_col2_values:
+				old_col2_values.append(line[old_col2])
+			if not line[old_col3] in old_col3_values:
+				old_col3_values.append(line[old_col3])				
+
+		old_col1_values.sort()
+		old_col2_values.sort()
+		old_col3_values.sort()
+
+		print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col1))
+		selected_itens_col1 = select_ops(old_col1_values, 2)
+		print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col2))
+		selected_itens_col2 = select_ops(old_col2_values, 2)
+		print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col3))
+		selected_itens_col3 = select_ops(old_col3_values, 2)
+
+		print("\nDefina o nome da nova coluna:")
+		print("Cuidado! Se o nome definido for igual a un nome anteriormente existente, as informações anteriores dessa coluna serão sobrescritas:\n")
+		new_col_name = input("$: ")
+
+		print("\nDefina o valor que deverá ser registrado na nova coluna quando os valores selecionados forem encontrados: \n")
+		new_value = input("$: ")
+
+		for line in dict_array:
+			if line.get(new_col_name) == None:
+				line[new_col_name] = ""
+			if (line[old_col1] in selected_itens_col1) and (line[old_col2] in selected_itens_col2) and (line[old_col3] in selected_itens_col3):
+				line[new_col_name] = new_value
+		return dict_array
+
+	elif num_of_cols == 4:
+
+		old_col1 = list_of_old_cols[0]
+		old_col2 = list_of_old_cols[1]
+		old_col3 = list_of_old_cols[2]
+		old_col4 = list_of_old_cols[4]
+		old_col1_values = []
+		old_col2_values = []
+		old_col3_values = []
+		old_col4_values = []
+
+		for line in dict_array:
+			if not line[old_col1] in old_col1_values:
+				old_col1_values.append(line[old_col1])
+			if not line[old_col2] in old_col2_values:
+				old_col2_values.append(line[old_col2])
+			if not line[old_col3] in old_col3_values:
+				old_col3_values.append(line[old_col3])
+			if not line[old_col4] in old_col4_values:
+				old_col4_values.append(line[old_col4])								
+
+		old_col1_values.sort()
+		old_col2_values.sort()
+		old_col3_values.sort()
+		old_col4_values.sort()
+
+		print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col1))
+		selected_itens_col1 = select_ops(old_col1_values, 2)
+		print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col2))
+		selected_itens_col2 = select_ops(old_col2_values, 2)
+		print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col3))
+		selected_itens_col3 = select_ops(old_col3_values, 2)
+		print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col4))
+		selected_itens_col4 = select_ops(old_col4_values, 2)		
+
+		print("\nDefina o nome da nova coluna:")
+		print("Cuidado! Se o nome definido for igual a un nome anteriormente existente, as informações anteriores dessa coluna serão sobrescritas:\n")
+		new_col_name = input("$: ")
+
+		print("\nDefina o valor que deverá ser registrado na nova coluna quando os valores selecionados forem encontrados: \n")
+		new_value = input("$: ")
+
+		for line in dict_array:
+			if line.get(new_col_name) == None:
+				line[new_col_name] = ""
+			if (line[old_col1] in selected_itens_col1) and (line[old_col2] in selected_itens_col2) and (line[old_col3] in selected_itens_col3) and (line[old_col4] in selected_itens_col4):
+				line[new_col_name] = new_value
+		return dict_array

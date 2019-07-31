@@ -38,6 +38,7 @@ Usage:
     unb-tools ( fill-gaps) ( csv | json ) <file> <ref-cols>
     unb-tools ( remove-lines ) <file1> <coluna> <valor-de-conferencia>
     unb-tools ( calculate ) (csv|json) <file1>
+    unb-tools ( create_new_value ) ( csv | json ) <file1> <col>...
 
 
 Options:
@@ -75,7 +76,7 @@ from python_modules.py_functions_csv import remove_lines, obter_frq_abs_e_rel
 
 from python_modules.cli_tools import select_op, select_ops
 from python_modules.py_functions_json import save_json, load_json
-from python_modules.py_functions_csv import make_complete_stat_from_csv, join_csv_intersection, join_csv_union
+from python_modules.py_functions_csv import make_complete_stat_from_csv, join_csv_intersection, join_csv_union, create_new_csv_value_col_from_old, create_new_csv_value_col_from_cross_old
 
 args = docopt(__doc__)
 
@@ -122,13 +123,13 @@ def main():
         if args['csv']:
             join_csv_union(args['<file1>'], args['<file2>'], args['<joint-col>'])
         elif args['json']:
-            pass
+            print("Não implementado...")
 
     elif args['join-intersection']:
         if args['csv']:
             join_csv_intersection(args['<file1>'], args['<file2>'], args['<joint-col>'])
         elif args['json']:
-            pass
+            print("Não implementado...")
     
     elif args['remove-lines']:
         remove_lines(args['<file1>'], args['<coluna>'], args['<valor-de-conferencia>'])
@@ -137,14 +138,25 @@ def main():
         if args['csv']:
             obter_frq_abs_e_rel(args['<file1>'])
         elif args['json']:
-            pass
+            print("Não implementado...")
 
     elif args['cross-values']:
         if args['csv']:
             cruzar_variaveis(args["<file>"])
         elif args['json']:
-            pass
+            print("Não implementado...")
  
+    elif args['create_new_value']:
+        if args['csv']:
+            if len(args['<col>']) == 1:
+                create_new_csv_value_col_from_old(args["<file1>"], args['<col>'][0])
+            else:
+                create_new_csv_value_col_from_cross_old(args["<file1>"], args['<col>'])
+        elif args['json']:
+            print("Não implementado...")
+
+
+
 
 
 if __name__ == '__main__':

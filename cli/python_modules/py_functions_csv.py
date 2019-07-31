@@ -28,7 +28,14 @@ import csv
 import re
 import time
 
-from .py_euristic_tools import merge_lists, join_dictArray_intersection, join_dictArray_union, show_each_dictArray_block
+from .py_euristic_tools import \
+	merge_lists,\
+	create_new_value_col_from_old,\
+	create_new_value_col_from_cross_old,\
+	join_dictArray_intersection,\
+	join_dictArray_union,\
+	show_each_dictArray_block
+
 from .cli_tools import limpar_tela, select_ops, create_lockfile, remove_lockfile, lockfile_name
 from .cli_machine_info import pasta_temporaria
 from collections import OrderedDict
@@ -445,6 +452,17 @@ def map_values_in_csv_col(csv_file):#map_values_in_csv_col(col, csv_file):
 	return output
 
 
+def create_new_csv_value_col_from_old(csv_file, old_col):
+	csv_data = read_csv(csv_file)
+	output = create_new_value_col_from_old(csv_data, old_col)
+	print("Escolha o nome do arquivo de saída:\n")
+	fname = input("$: ")
+	write_csv(output, fname)
 
-
-
+def create_new_csv_value_col_from_cross_old(csv_file, list_of_old_cols):
+	csv_data = read_csv(csv_file)
+	output = create_new_value_col_from_cross_old(csv_data, list_of_old_cols)
+	print("Escolha o nome do arquivo de saída:\n")
+	fname = input("$: ")
+	write_csv(output, fname)	
+	

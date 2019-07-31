@@ -285,7 +285,7 @@ def select_ops(lista_de_selecao, col_num, sort_list=False):
 		lista_de_selecao.sort()
 	op_list = gerar_console_menu(lista_de_selecao, col_num)
 	while True:
-		op = input(amarelo('$: ')).replace(' ','').split(',')
+		op = interval_select(input(amarelo('$: ')))
 		try:
 			selecao = []
 			for i in op:
@@ -295,3 +295,22 @@ def select_ops(lista_de_selecao, col_num, sort_list=False):
 			print('Opção inválida...')
 	return selecao
 
+
+def interval_select(selection_string):
+	selection_list = selection_string.replace(" ","").split(",")
+	output = []
+	for item in selection_list:
+		try:
+			if item.find('-') != -1:
+				first_interval_item = int(item.split('-')[0])
+				last_interval_item = int(item.split('-')[1])
+				for n in range(int(item.split('-')[0]), int(item.split('-')[1])+1):
+					output.append(n)
+			else:
+				output.append(int(item))
+		except AttributeError:
+			pass
+	output.sort()
+	print(output)
+	input()
+	return output
