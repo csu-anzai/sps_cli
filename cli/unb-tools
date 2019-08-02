@@ -39,6 +39,7 @@ Usage:
     unb-tools ( remove-lines ) <file1> <coluna> <valor-de-conferencia>
     unb-tools ( calculate ) (csv|json) <file1>
     unb-tools ( create_new_value ) ( csv | json ) <file1> <col>...
+    unb-tools ( create_new_value-from_script ) ( csv | json ) <script_file>
 
 
 Options:
@@ -72,7 +73,9 @@ from python_modules.cli_unb_tools import \
     cruzar_variaveis,\
     create_curric_metainfo_index
 
-from python_modules.py_functions_csv import remove_lines, obter_frq_abs_e_rel
+from python_modules.py_functions_csv import remove_lines, obter_frq_abs_e_rel, write_csv, read_csv
+
+from python_modules.py_euristic_tools import create_new_value_col_from_script
 
 from python_modules.cli_tools import select_op, select_ops
 from python_modules.py_functions_json import save_json, load_json
@@ -148,16 +151,32 @@ def main():
  
     elif args['create_new_value']:
         if args['csv']:
-            if len(args['<col>']) == 1:
-                create_new_csv_value_col_from_old(args["<file1>"], args['<col>'][0])
-            else:
-                create_new_csv_value_col_from_cross_old(args["<file1>"], args['<col>'])
+            create_new_csv_value_col_from_cross_old(args["<file1>"], args['<col>'])
         elif args['json']:
             print("Não implementado...")
 
+    elif args['create_new_value-from_script']:
+        script_instructions = load_json("./"+args["<script_file>"])
 
+        input_file = script_instructions['arquivo_alvo']
+        output_file = script_instructions['arquivo_saida']
+        input_filetype = input_file.split('.')[-1].lower()
+        output_filetype = output_file.split('.')[-1].lower()
 
+        if input_filetype == 'csv':
+            input_file_info = read_csv(input_file)
+            
+        elif input_filetype == 'json':
+            input_file_info = load_json(input_file)
+        
+        modified_info = create_new_value_col_from_script(script_instructions, input_file_info)
 
+        if output_filetype == 'csv':
+            write_csv(modified_info, output_file)
+            
+        elif output_filetype == 'json':
+            save_json(modified_info, output_file)
 
+        
 if __name__ == '__main__':
     main()
