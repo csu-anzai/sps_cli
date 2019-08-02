@@ -79,9 +79,223 @@ from python_modules.py_euristic_tools import create_new_value_col_from_script
 
 from python_modules.cli_tools import select_op, select_ops
 from python_modules.py_functions_json import save_json, load_json
-from python_modules.py_functions_csv import make_complete_stat_from_csv, join_csv_intersection, join_csv_union, create_new_csv_value_col_from_old, create_new_csv_value_col_from_cross_old
+from python_modules.py_functions_csv import make_complete_stat_from_csv, join_csv_intersection, join_csv_union, create_new_csv_value_col_from_old#, create_new_csv_value_col_from_cross_old
 
 args = docopt(__doc__)
+
+
+def create_new_value_col_from_cross_old(dict_array, list_of_old_cols, interactive=True, script_descriptor=None):
+    num_of_cols = len(list_of_old_cols)
+
+    if (interactive == False) and (script_descriptor == None):
+        if type(script_descriptor) != dict:
+            print("Descritor não apresentado ou em formato inadequado...")
+            exit()
+
+    if num_of_cols == 1:
+
+        old_col1 = list_of_old_cols[0]
+        old_col1_values = []
+        for line in dict_array:
+            if not line[old_col1] in old_col1_values:
+                old_col1_values.append(line[old_col1])
+        old_col1_values.sort()
+
+        if interactive == True:
+            print("Selecione os valores que deverão ser checados para disparar o gatilho de registro:")
+            selected = select_ops(old_col1_values, 2)
+            print("Defina o nome da nova coluna:")
+            print("Cuidado! Se o nome definido for igual a un nome anteriormente existente, as informações anteriores dessa coluna serão sobrescritas:\n")
+            new_col_name = input("$: ")
+            print("Defina o valor que deverá ser registrado na nova coluna quando os valores selecionados forem encontrados: \n")
+            new_value = input("$: ")
+        else:
+            selected = script_descriptor['valores_de_checagem'][list_of_old_cols[0]]
+            new_col_name = script_descriptor['nome_da_nova_coluna']
+            new_value = script_descriptor['valor_se_checagem_verdadeira']
+
+        for line in dict_array:
+            if line.get(new_col_name) == None:
+                line[new_col_name] = ""
+            if line[old_col1] in selected:
+                line[new_col_name] = new_value
+
+    elif num_of_cols == 2:
+
+        old_col1 = list_of_old_cols[0]
+        old_col2 = list_of_old_cols[1]
+        old_col1_values = []
+        old_col2_values = []
+
+        for line in dict_array:
+            if not line[old_col1] in old_col1_values:
+                old_col1_values.append(line[old_col1])
+            if not line[old_col2] in old_col2_values:
+                old_col2_values.append(line[old_col2])
+
+        old_col1_values.sort()
+        old_col2_values.sort()
+
+        if interactive == True:
+            print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(list_of_old_cols[0]))
+            selected_itens_col1 = select_ops(old_col1_values, 2)
+            print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(list_of_old_cols[1]))
+            selected_itens_col2 = select_ops(old_col2_values, 2)
+
+            print("Defina o nome da nova coluna:")
+            print("Cuidado! Se o nome definido for igual a un nome anteriormente existente, as informações anteriores dessa coluna serão sobrescritas:\n")
+            new_col_name = input("$: ")
+
+            print("Defina o valor que deverá ser registrado na nova coluna quando os valores selecionados forem encontrados: \n")
+            new_value = input("$: ")
+        else:
+            selected_itens_col1 = script_descriptor['valores_de_checagem'][list_of_old_cols[0]]
+            selected_itens_col2 = script_descriptor['valores_de_checagem'][list_of_old_cols[1]]
+            new_col_name = script_descriptor['nome_da_nova_coluna']
+            new_value = script_descriptor['valor_se_checagem_verdadeira']
+
+        for line in dict_array:
+            if line.get(new_col_name) == None:
+                line[new_col_name] = ""
+            if (line[old_col1] in selected_itens_col1) and (line[old_col2] in selected_itens_col2):
+                line[new_col_name] = new_value
+
+    elif num_of_cols == 3:
+        old_col1 = list_of_old_cols[0]
+        old_col2 = list_of_old_cols[1]
+        old_col3 = list_of_old_cols[2]
+        old_col1_values = []
+        old_col2_values = []
+        old_col3_values = []
+
+        if interactive == True:
+
+            for line in dict_array:
+                if not line[old_col1] in old_col1_values:
+                    old_col1_values.append(line[old_col1])
+                if not line[old_col2] in old_col2_values:
+                    old_col2_values.append(line[old_col2])
+                if not line[old_col3] in old_col3_values:
+                    old_col3_values.append(line[old_col3])				
+
+            old_col1_values.sort()
+            old_col2_values.sort()
+            old_col3_values.sort()
+
+            print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col1))
+            selected_itens_col1 = select_ops(old_col1_values, 2)
+            print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col2))
+            selected_itens_col2 = select_ops(old_col2_values, 2)
+            print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col3))
+            selected_itens_col3 = select_ops(old_col3_values, 2)
+
+            print("Defina o nome da nova coluna:")
+            print("Cuidado! Se o nome definido for igual a un nome anteriormente existente, as informações anteriores dessa coluna serão sobrescritas:\n")
+            new_col_name = input("$: ")
+
+            print("Defina o valor que deverá ser registrado na nova coluna quando os valores selecionados forem encontrados: \n")
+            new_value = input("$: ")
+        else:
+            selected_itens_col1 = script_descriptor['valores_de_checagem'][list_of_old_cols[0]]
+            selected_itens_col2 = script_descriptor['valores_de_checagem'][list_of_old_cols[1]]
+            selected_itens_col3 = script_descriptor['valores_de_checagem'][list_of_old_cols[2]]
+
+            new_col_name = script_descriptor['nome_da_nova_coluna']
+            new_value = script_descriptor['valor_se_checagem_verdadeira']
+
+        count = 0
+        work = ""
+        for line in dict_array:
+            count += 1
+
+            if line.get(new_col_name) == None:
+                line[new_col_name] = ""
+            #if (line[old_col1] == selected_itens_col1) and (line[old_col2] == selected_itens_col2) and (line[old_col3] == selected_itens_col3):
+            #if line[old_col1] in selected_itens_col1:
+                #if line[old_col2] in selected_itens_col2:
+                    #if line[old_col3] in selected_itens_col3:
+            if selected_itens_col1.find(line[old_col1]) != -1:
+                if selected_itens_col2.find(line[old_col2]) != -1:
+                    if selected_itens_col3.find(line[old_col3]) != -1:
+                        print("Encontrada correspondência na linha: {} » {} ".format(count, line["NOME_ESTUDANTE"]))
+                        print("  ·", old_col1, "»» {} in {}".format(line[old_col1], selected_itens_col1))
+                        print("  ·", old_col2, "»» {} in {}".format(line[old_col2], selected_itens_col2))
+                        print("  ·", old_col3, "»» {} in {}".format(line[old_col3], selected_itens_col3))	
+                        print("")
+                        if line["NOME_ESTUDANTE"] == "Rodrigo Ramos de Lima":
+                            input()
+
+                        line[new_col_name] = new_value
+            else:
+                work += "Sem correspondência na linha: {} » {}\n".format(count, line["NOME_ESTUDANTE"])
+                work += str("  · "+ old_col1+ " »» {} in {} ".format(line[old_col1], selected_itens_col1) + '\n')
+                work += str("  · "+ old_col2+ " »» {} in {} ".format(line[old_col2], selected_itens_col2) + '\n')
+                work += str("  · "+ old_col3+ " »» {} in {} ".format(line[old_col3], selected_itens_col3) + '\n\n')
+        
+        f=open('work','w')
+        f.write(work)
+        f.close()
+        write_csv(dict_array, "SAIDA.csv")
+
+        return dict_array
+
+    elif num_of_cols == 4:
+
+        old_col1 = list_of_old_cols[0]
+        old_col2 = list_of_old_cols[1]
+        old_col3 = list_of_old_cols[2]
+        old_col4 = list_of_old_cols[4]
+        old_col1_values = []
+        old_col2_values = []
+        old_col3_values = []
+        old_col4_values = []
+
+        for line in dict_array:
+            if not line[old_col1] in old_col1_values:
+                old_col1_values.append(line[old_col1])
+            if not line[old_col2] in old_col2_values:
+                old_col2_values.append(line[old_col2])
+            if not line[old_col3] in old_col3_values:
+                old_col3_values.append(line[old_col3])
+            if not line[old_col4] in old_col4_values:
+                old_col4_values.append(line[old_col4])								
+
+        old_col1_values.sort()
+        old_col2_values.sort()
+        old_col3_values.sort()
+        old_col4_values.sort()
+
+        if interactive == True:
+            print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col1))
+            selected_itens_col1 = select_ops(old_col1_values, 2)
+            print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col2))
+            selected_itens_col2 = select_ops(old_col2_values, 2)
+            print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col3))
+            selected_itens_col3 = select_ops(old_col3_values, 2)
+            print("Selecione os valores que deverão ser checados para disparar o gatilho de registro na coluna {}:".format(old_col4))
+            selected_itens_col4 = select_ops(old_col4_values, 2)		
+
+            print("Defina o nome da nova coluna:")
+            print("Cuidado! Se o nome definido for igual a un nome anteriormente existente, as informações anteriores dessa coluna serão sobrescritas:\n")
+            new_col_name = input("$: ")
+
+            print("Defina o valor que deverá ser registrado na nova coluna quando os valores selecionados forem encontrados: \n")
+            new_value = input("$: ")
+        else:
+            selected_itens_col1 = script_descriptor['valores_de_checagem'][list_of_old_cols[0]]
+            selected_itens_col2 = script_descriptor['valores_de_checagem'][list_of_old_cols[1]]
+            selected_itens_col3 = script_descriptor['valores_de_checagem'][list_of_old_cols[2]]
+            selected_itens_col4 = script_descriptor['valores_de_checagem'][list_of_old_cols[3]]			
+            new_col_name = script_descriptor['nome_da_nova_coluna']
+            new_value = script_descriptor['valor_se_checagem_verdadeira']
+
+        for line in dict_array:
+            if line.get(new_col_name) == None:
+                line[new_col_name] = ""
+            if (line[old_col1] in selected_itens_col1) and (line[old_col2] in selected_itens_col2) and (line[old_col3] in selected_itens_col3) and (line[old_col4] in selected_itens_col4):
+                line[new_col_name] = new_value
+    return dict_array
+
 
 def main():
     if args['join-alu-rel']:
@@ -151,7 +365,8 @@ def main():
  
     elif args['create_new_value']:
         if args['csv']:
-            create_new_csv_value_col_from_cross_old(args["<file1>"], args['<col>'])
+            pass
+            #create_new_csv_value_col_from_cross_old(args["<file1>"], args['<col>'])
         elif args['json']:
             print("Não implementado...")
 
@@ -162,13 +377,22 @@ def main():
         output_file = script_instructions['arquivo_saida']
         input_filetype = input_file.split('.')[-1].lower()
         output_filetype = output_file.split('.')[-1].lower()
+        tasks = script_instructions['analises']
 
         if input_filetype == 'csv':
             input_file_info = read_csv(input_file)
             
         elif input_filetype == 'json':
             input_file_info = load_json(input_file)
+
         
+        for task in tasks:
+            colunas_selecionadas = []
+            for c in task['valores_de_checagem'].keys():
+                colunas_selecionadas.append(c)
+
+        create_new_value_col_from_cross_old(input_file_info, colunas_selecionadas, interactive=False, script_descriptor=task)
+
         modified_info = create_new_value_col_from_script(script_instructions, input_file_info)
 
         if output_filetype == 'csv':

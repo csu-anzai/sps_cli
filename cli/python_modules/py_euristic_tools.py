@@ -378,6 +378,7 @@ def create_new_value_col_from_cross_old(dict_array, list_of_old_cols, interactiv
 			new_value = script_descriptor['valor_se_checagem_verdadeira']
 
 		count = 0
+		work = ""
 		for line in dict_array:
 			count += 1
 
@@ -387,6 +388,7 @@ def create_new_value_col_from_cross_old(dict_array, list_of_old_cols, interactiv
 #			if line[old_col1] in selected_itens_col1:
 #				if line[old_col2] in selected_itens_col2:
 #					if line[old_col3] in selected_itens_col3:
+
 			if selected_itens_col1.find(line[old_col1]) != -1:
 				if selected_itens_col2.find(line[old_col2]) != -1:
 					if selected_itens_col3.find(line[old_col3]) != -1:
@@ -400,6 +402,16 @@ def create_new_value_col_from_cross_old(dict_array, list_of_old_cols, interactiv
 							input()
 
 						line[new_col_name] = new_value
+			else:
+				work += "Sem correspondência na linha: {} » {}\n".format(count, line["NOME_ESTUDANTE"])
+				work += str("  · "+ old_col1+ " »» {} in {} ".format(line[old_col1], selected_itens_col1) + '\n')
+				work += str("  · "+ old_col2+ " »» {} in {} ".format(line[old_col2], selected_itens_col2) + '\n')
+				work += str("  · "+ old_col3+ " »» {} in {} ".format(line[old_col3], selected_itens_col3) + '\n\n')
+
+
+		f=open('work','w')
+		f.write(work)
+		f.close()
 
 		return dict_array
 
@@ -462,6 +474,7 @@ def create_new_value_col_from_cross_old(dict_array, list_of_old_cols, interactiv
 
 def create_new_value_col_from_script(script_instructions, input_file_info):
 
+	'''
 	output = input_file_info
 
 	for line in output:
@@ -469,6 +482,8 @@ def create_new_value_col_from_script(script_instructions, input_file_info):
 		if (line['P_EST'] == line['P_ING']) and (line['AES_GRUPO'] == 'Perfil'):
 			line['CALOURO_SELECIONADO'] = 1
 	
+	return output
+
 	'''
 	tasks = script_instructions['analises']
 
@@ -479,5 +494,5 @@ def create_new_value_col_from_script(script_instructions, input_file_info):
 		for c in task['valores_de_checagem'].keys():
 			colunas_selecionadas.append(c)
 			output = create_new_value_col_from_cross_old(output, colunas_selecionadas, interactive=False, script_descriptor=task)
-	'''
+	
 	return output
