@@ -3,7 +3,7 @@
 #
 #
 #  Copyright 2017 Daniel Cruz <bwb0de@bwb0dePC>
-#  bwb0de Functools Version 0.1
+#  CLI Decorators
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by

@@ -26,7 +26,7 @@ import os
 from docopt import docopt
 from subprocess import getoutput
 from python_modules.cli_db_loader import get_col_values, get_tags, col_wid
-from python_modules.py_functions_data_manager import listar_dicionario
+from python_modules.cli_tools import listar_dicionario
 from python_modules.cli_tools import mk_randnum_seq, verde, amarelo
 from python_modules.cli_decorators import check_config_existance
 

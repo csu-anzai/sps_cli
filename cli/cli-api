@@ -33,7 +33,7 @@ from python_modules.py_functions_json import save_json, load_json
 from python_modules.cli_tools import verde, vermelho
 from python_modules.cli_decorators import check_config_existance
 
-from python_modules.cli_sps_base import \
+from python_modules.cli_base import \
     numero_sei_mascara,\
     numero_identificador_mascara
 
@@ -49,7 +49,7 @@ from python_modules.cli_db_loader import \
 
 from python_modules.cli_tools import select_op
 
-from python_modules.cli_sps_base import show_nfo_frag, show_nfo_frag_by_nome, get_nfo
+from python_modules.cli_base import show_nfo_frag, show_nfo_frag_by_nome, get_nfo
 
 args = docopt(__doc__)
 

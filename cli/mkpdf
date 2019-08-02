@@ -19,7 +19,7 @@ import os
 from docopt import docopt
 from subprocess import getoutput
 from python_modules.templates import base_html_layout 
-from python_modules.cli_machine_info import pasta_temporaria
+from python_modules.cli_base import pasta_temporaria
 
 args = docopt(__doc__)
 initdir = getoutput('pwd')

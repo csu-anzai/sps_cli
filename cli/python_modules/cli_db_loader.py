@@ -30,9 +30,8 @@ import time
 from collections import OrderedDict
 from subprocess import getoutput
 
-from .cli_machine_info import username
-
-from .cli_global_paths import \
+from .cli_base import \
+    username,\
     pasta_raiz_do_aplicativo,\
     pasta_de_dados,\
     pasta_de_seguranca,\
@@ -79,23 +78,23 @@ def timestamp(mode=None):
     else:
         return time.strftime("%Y-%m-%d %H:%M:%S %a", time.localtime())
 
-def get_col_width(field_name, dict_array):
+def get_col_width(field_name, list_of_dicts):
     width = 0
-    for line in dict_array:
+    for line in list_of_dicts:
         if len(line[field_name]) > width:
             width = len(line[field_name])
     return (field_name, width+2)
 
-def get_itens(field_name, field_value,  dict_array):
+def get_itens(field_name, field_value,  list_of_dicts):
     r = []
-    for array_item in dict_array:
+    for array_item in list_of_dicts:
         if array_item[field_name] == field_value:
             r.append(array_item)
     return r
 
-def get_col_values(field_name, dict_array):
+def get_col_values(field_name, list_of_dicts):
     r = []
-    for array_item in dict_array:
+    for array_item in list_of_dicts:
         r.append(array_item[field_name])
     return r
 

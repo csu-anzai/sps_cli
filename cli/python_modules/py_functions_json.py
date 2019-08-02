@@ -27,13 +27,23 @@ import os
 import json
 import time
 
-from .py_euristic_tools import show_each_dictArray_block
-from .cli_machine_info import pasta_temporaria
-from .cli_tools import create_lockfile, remove_lockfile, lockfile_name 
+from tempfile import gettempdir
 
-def show_each_json_block(json_file, print_fields, index_pos):
-	info_file = load_json('./{}'.format(json_file))
-	show_each_dictArray_block(info_file, print_fields, index_pos)
+pasta_temporaria = gettempdir()
+
+def create_lockfile(lockf):
+	f = open(pasta_temporaria+os.sep+lockf,'w')
+	f.close()
+
+def remove_lockfile(lockf):
+	os.remove(pasta_temporaria+os.sep+lockf)
+
+def lockfile_name(path_to_file):
+	lkf_name = path_to_file.split(os.sep)[-1]
+	if lkf_name.find(".") != -1 or lkf_name.find(".") != 0:
+		lkf_name = lkf_name.split(".")[0]
+	file_name = '~lock_'+str(lkf_name)
+	return file_name
 
 
 def load_json(path_to_file):

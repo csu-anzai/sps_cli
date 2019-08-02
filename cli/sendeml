@@ -22,7 +22,7 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.cli_sps_base import *
+#from python_modules.cli_base import *
 from python_modules.cli_decorators import check_config_existance
 from python_modules.cli_tools import mk_randnum_seq, verde, amarelo
 from python_modules.cli_db_loader import dados_profissionais

@@ -20,7 +20,7 @@ import asyncio
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.cli_global_paths import \
+from python_modules.cli_base import \
     pasta_de_dados,\
     arquivo_usuarios,\
     arquivo_processos,\
