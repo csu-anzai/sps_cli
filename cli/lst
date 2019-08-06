@@ -10,7 +10,7 @@ Usage:
     lst [ -j ] ( atd | atendimentos )
     lst [ -j ] ( tag | marcadores ) 
     lst [ -j ] ( sei | processos ) 
-    lst [ -j ] ( pnd | processos )
+    lst [ -j ] ( pnd | processos-pendentes )
     lst [ -j ] ( est | estudos ) 
     lst [ -j ] ( pro | profissionais ) 
 
