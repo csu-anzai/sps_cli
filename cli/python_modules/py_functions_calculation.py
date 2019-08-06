@@ -3,7 +3,7 @@
 #
 #
 #  Copyright 2017 Daniel Cruz <bwb0de@bwb0dePC>
-#  bwb0de Functools Version 0.1
+#  Estatística Version 0.1
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -28,14 +28,14 @@ import re
 
 
 
-def mediaa(l):
+def media_aritmetica(l):
 	'''Calcula a média aritmética a partir de uma lista numérica de entrada.'''
 	return float(soma(l)/len(l))
 
 
 
 def desvios(l):
-	x = mediaa(l)
+	x = media_aritmetica(l)
 	d = []
 	for i in l:
 		d.append(i-x)
@@ -54,7 +54,7 @@ def variancia(l):
 
 
 
-def desvpadamost(l):
+def desvio_padrao(l):
 	return variancia(l)**0.5
 
 
@@ -62,7 +62,7 @@ def desvpadamost(l):
 def dispersao(l):
 	y = len(l) #n
 	d = desvios(l)
-	dvp = desvpadamost(l)
+	dvp = desvio_padrao(l)
 	r = {1: 0, 2: 0, 3: 0}
 	for i in d:
 		if i < 0: i = i * (-1)
@@ -114,7 +114,7 @@ def procura_segmentada(elemento, lista, idx=0): #Bisection procura_segmentada
 		return procura_segmentada(elemento, lista[slice_init:slice_end], slice_end)
 
 
-def freqabs(l): #rever método confore py_csv
+def frequencia_absoluta(l): #rever método confore py_csv
 	o = {}
 	for i in l:
 		o[i] = 0
@@ -125,8 +125,8 @@ def freqabs(l): #rever método confore py_csv
 
 
 
-def freqrel(l): #rever método confore py_csv
-	ab = freqabs(l)
+def frequencia_relativa(l): #rever método confore py_csv
+	ab = frequencia_absoluta(l)
 	n = len(l)
 	o = {}
 	for i in ab.keys():
@@ -137,8 +137,8 @@ def freqrel(l): #rever método confore py_csv
 
 def dispersao_i(v, l):
 	dis = dispersao(l)
-	dvp = desvpadamost(l)
-	c = v-mediaa(l)
+	dvp = desvio_padrao(l)
+	c = v-media_aritmetica(l)
 	if c < 0: c = c * (-1)
 	if c/dvp >= 1:
 		if c/dvp < 3: return dis[2]

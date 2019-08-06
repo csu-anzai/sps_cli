@@ -60,61 +60,13 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.cli_global_config import \
-    envio_automatico_email,\
-    periodo_corrente,\
-    hostname
 
+from python_modules.cli_base import *
 from python_modules.cli_decorators import check_config_existance
-
-from python_modules.cli_machine_info import pasta_raiz_do_aplicativo
-
-from python_modules.cli_global_config import \
-    envio_automatico_email,\
-    periodo_corrente,\
-    trabalhar_com_fragmentos
-
-from python_modules.cli_global_paths import \
-    arquivo_corrigidos,\
-    arquivo_index,\
-    arquivo_usuarios,\
-    arquivo_processos,\
-    arquivo_atendimentos,\
-    arquivo_estudos,\
-    arquivo_fragmentos_recebidos,\
-    pasta_de_dados,\
-    pasta_de_fragmentos,\
-    formulario_registro_de_correcao,\
-    formulario_atendimentos,\
-    formulario_novo_usuario,\
-    formulario_novo_processo,\
-    formulario_estudo_estudante,\
-    formulario_estudo_grupo_familiar,\
-    formulario_estudo_membros_grupo_familiar
-
-from python_modules.cli_db_loader import \
-    get_col_values,\
-    timestamp,\
-    dados_usuarios,\
-    dados_processos,\
-    dados_atendimentos,\
-    dados_corrigidos,\
-    dados_index,\
-    dados_estudos,\
-    calculate_col_width
-
-from python_modules.cli_sps_base import \
-    save_target_info,\
-    numero_sei_mascara,\
-    numero_identificador_mascara
-    
-from python_modules.py_functions_json import save_json, load_json
-from python_modules.cli_tools import select_op, select_ops, limpar_tela, verde
-from python_modules.py_functions_data_manager import render_form_get_values
+from python_modules.cli_tools import select_op, select_ops, limpar_tela, verde, input_op, render_form_get_values
+from python_modules.cli_tools import save_json, load_json
 
 args = docopt(__doc__)
-
-matriculas = get_col_values('identificador', dados_usuarios)
 
 def novo_usuario(identificador):
     nfo = render_form_get_values(formulario_novo_usuario, ['identificador'])
@@ -244,8 +196,8 @@ def novo_estudo_info_membros_familia(identificador, nfo):
     else:
         nfo['membros_grupo_familiar'] = {}
         nfo['membros_grupo_familiar'][nfo_tmp['nome']] = nfo_tmp
-    for col in nfo_tmp.keys():
-        nfo[col] = nfo_tmp[col]
+    #for col in nfo_tmp.keys():
+    #    nfo[col] = nfo_tmp[col]
     dados_estudos.append(nfo)
     save_json(dados_estudos, arquivo_estudos)
     return nfo

@@ -123,6 +123,11 @@
                 "Deficiência física",
                 "Outro"
             ]
+        },
+        {
+            "enunciado": "Observações específicas",
+            "id" : "observacoes_especificas",
+            "tipo": "text"
         }
     ]
 }
