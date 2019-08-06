@@ -287,7 +287,7 @@ else:
 #Custom configurations - SPS
 matriculas = get_col_values('identificador', dados_usuarios)
 
-periodo_corrente = "1º/2019"
+periodo_corrente = "2º/2019"
 formato_lista_fragmentos = "emitidos-{}@{}.json".format(username, hostname)
 
 etiquetas = {}

@@ -20,15 +20,14 @@ import asyncio
 
 from docopt import docopt
 from subprocess import getoutput
+
 from python_modules.cli_base import \
     pasta_de_dados,\
     arquivo_usuarios,\
     arquivo_processos,\
     arquivo_atendimentos,\
     arquivo_corrigidos,\
-    arquivo_sex_info
-
-from python_modules.cli_base import \
+    arquivo_sex_info,\
     dados_usuarios,\
     dados_processos,\
     dados_atendimentos,\
@@ -36,9 +35,8 @@ from python_modules.cli_base import \
     arquivo_index,\
     get_tags_idx
 
-from python_modules.cli_tools import save_json, load_json
+from python_modules.cli_tools import save_json, load_json, amarelo, verde, input_op
 
-from python_modules.cli_tools import amarelo, verde, input_op
 
 args = docopt(__doc__)
 

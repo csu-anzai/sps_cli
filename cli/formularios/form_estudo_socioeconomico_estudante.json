@@ -19,6 +19,32 @@
             ]
         },
         {
+            "enunciado": "Estudante cotista",
+            "id" : "cotista",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Não",
+                "Sim - Escola Pública Baixa Renda PPI",
+                "Sim - Escola Pública Baixa Renda nPPI",
+                "Sim - Escola Pública Alta Renda PPI",
+                "Sim - Escola Pública Alta Renda nPPI",
+                "Outro"
+            ]
+        },
+        {
+            "enunciado": "Turno do curso",
+            "id" : "turno_curso",
+            "tipo": "radio",
+            "alternativas": 
+            [
+                "Diurno",
+                "Noturno",
+                "Outro"
+            ]
+        },
+
+        {
             "enunciado": "Programas de interesse",
             "id" : "motivos_estudo",
             "tipo": "checkbox",
