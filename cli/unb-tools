@@ -87,7 +87,7 @@ from python_modules.cli_tools import extract_lines, save_csv, load_csv, load_csv
 from python_modules.cli_tools import save_json, load_json
 from python_modules.cli_base import hostname
 from python_modules.cli_tools import strip_simbols, get_indexes, strip_digits, strip_chars, create_new_value_col_from_script, select_op, select_ops, limpar_tela, join_list_of_dicts_union, join_list_of_dicts_intersection, cruzar_variaveis, obter_frq_abs_e_rel_from_list_of_dicts
-from python_modules.py_functions_calculation import mediaa
+from python_modules.py_functions_calculation import media_aritmetica
 
 if hostname == "oracleVM":
 	curric_folder = '/home/danielc/Documentos/SPS/Currículos/FUP'
@@ -485,25 +485,25 @@ def calculate_mediaa_of_new_on_sem(csv_file):
 			sem20182 += 1
 	
 	if not (sem20091 == 0 or sem20092 == 0):
-		mediaa([])
+		media_aritmetica([])
 	if not (sem20101 == 0 or sem20102 == 0):
-		mediaa([])
+		media_aritmetica([])
 	if not (sem20111 == 0 or sem20112 == 0):
-		mediaa([])
+		media_aritmetica([])
 	if not (sem20121 == 0 or sem20122 == 0):
-		mediaa([])
+		media_aritmetica([])
 	if not (sem20131 == 0 or sem20132 == 0):
-		mediaa([])
+		media_aritmetica([])
 	if not (sem20141 == 0 or sem20142 == 0):
-		mediaa([])
+		media_aritmetica([])
 	if not (sem20151 == 0 or sem20152 == 0):
-		mediaa([])
+		media_aritmetica([])
 	if not (sem20161 == 0 or sem20162 == 0):
-		mediaa([])
+		media_aritmetica([])
 	if not (sem20171 == 0 or sem20172 == 0):
-		mediaa([])
+		media_aritmetica([])
 	if not (sem20181 == 0 or sem20182 == 0):
-		mediaa([])
+		media_aritmetica([])
 	
 
 def join_alurel(folder, output_fname):
@@ -1387,11 +1387,11 @@ def process_sigra_hist(hist_file_txt):
 
 	for line in conteudo:
 		if obter_matricula == True:
-			if re.search(r"\s*\d\d/\d*", line) != None:
+			if re.search(r"^\s*\d\d/\d*", line) != None:
 				matricula = line.replace(' ',';')
 				while matricula.find(';;') != -1:
 					matricula = matricula.replace(';;',';')
-				matricula = matricula.split(';')[1]#.replace('/','')
+				matricula = matricula.split(';')[1]
 				obter_matricula = False
 				
 		
@@ -1408,19 +1408,19 @@ def process_sigra_hist(hist_file_txt):
 				
 
 		if obter_nome_pai == True:
-			if re.search(r"\s*Pai\:", line) != None:
+			if re.search(r"^\s*Pai\:", line) != None:
 				nome_pai = line.split(':')[1].strip()
 				obter_nome_pai = False
 				
 				
 		if obter_nome_mae == True:
-			if re.search(r"\s*Mãe\:", line) != None:
+			if re.search(r"^\s*Mãe\:", line) != None:
 				nome_mae = line.split(':')[1].strip()
 				obter_nome_mae = False
 				
 
 		if obter_dn == True:
-			if re.search(r"\s*Nascimento\:", line) != None:
+			if re.search(r"^\s*Nascimento\:", line) != None:
 				dn = line.replace('  ',':')
 				while dn.find('::') != -1:
 					dn = dn.replace('::',':')
@@ -1428,7 +1428,7 @@ def process_sigra_hist(hist_file_txt):
 				obter_dn = False
 				
 			
-		if re.search(r"\s*Período\:", line) != None:
+		if re.search(r"^\s*Período\:", line) != None:
 			if line.find('(Continuação)') != -1:
 				pass
 			elif re.search(r"\s*\d\d\d\d/0", line) != None:
@@ -1437,26 +1437,28 @@ def process_sigra_hist(hist_file_txt):
 				periodo += 1
 				calculo_ira[periodo] = []
 				
-		if re.search(r"\s*Aluno não registrou matrícula no Período", line) != None:
+		if re.search(r"^\s*Aluno não registrou matrícula no Período", line) != None:
 			calculo_ira[periodo] = "Aluno não registrou matrícula no Período"
 			nreg_mat += 1
 			
-		if re.search(r"\s*Trancamento Geral Justificado", line) != None:
+		if re.search(r"^\s*Trancamento Geral Justificado", line) != None:
 			calculo_ira[periodo] = "Trancamento Geral Justificado"
 			tgj_geral += 1
 
-		if re.search(r"\s*Trancamento Geral Justificado (Problema de Saúde)", line) != None:
+		if re.search(r"^\s*Trancamento Geral Justificado (Problema de Saúde)", line) != None:
 			calculo_ira[periodo] = "Trancamento Geral Justificado (Problema de Saúde)"
 			tgj_saude += 1
 		
-		if re.search(r"\s*Trancamento Geral de Matrícula", line) != None:
+		if re.search(r"^\s*Trancamento Geral de Matrícula", line) != None:
 			calculo_ira[periodo] = "Trancamento Geral de Matrícula"
 			tgm_geral += 1
 
-		if re.search(r"\s*Período em Realização", line) != None:
+		if re.search(r"^\s*Período em Realização", line) != None:
 			calculo_ira[periodo] = "Período em Realização"
+			periodo -= 1
+			output['Quantidade de semestres cursados'] = periodo
 		
-		if re.search(r"\s*\d\d\d\d\d\d", line) != None:
+		if re.search(r"^\s*\d\d\d\d\d\d", line) != None:
 			idx_target = 98
 			if line[idx_target:idx_target+5].strip() != "":
 				mensao = line[idx_target:idx_target+5].strip()
@@ -1481,7 +1483,7 @@ def process_sigra_hist(hist_file_txt):
 			if line[idx_target:idx_target+5].strip() != "":
 				calculo_ira[periodo].append('MLV--'+line[idx_target:idx_target+5].strip()+"-"+mensao)
 			
-		if re.search(r"\s*Curso.....", line) != None:
+		if re.search(r"^\s*Curso.....", line) != None:
 			idx_target = 55
 			if line[idx_target:idx_target+5].strip() != "":
 				total_cretitos_exigidos = int(line[idx_target:idx_target+5].strip())
@@ -1600,6 +1602,8 @@ def process_sigra_hist(hist_file_txt):
 				ira_denominador += denominador
 			
 			if not calculo_ira[periodo] == []:
+				
+				print(total_creditos_aprovados)
 				total_creditos_aprovados_por_semestre.append(total_creditos_aprovados)
 				try:
 					ira = (1.0 - (((0.6 * ira_tr_obr) + (0.4 * ira_tr_opt))/ira_total_creditos)) * (ira_numerador/ira_denominador)
@@ -1613,7 +1617,7 @@ def process_sigra_hist(hist_file_txt):
 		percentual_d_conclusao = "Impossível calcular"
 
 	try:
-		expectativa_de_semestres_adicionais = (float(total_cretitos_exigidos) - (total_creditos_obtidos)) / mediaa(total_creditos_aprovados_por_semestre)
+		expectativa_de_semestres_adicionais = (float(total_cretitos_exigidos) - (total_creditos_obtidos)) / media_aritmetica(total_creditos_aprovados_por_semestre)
 	except ZeroDivisionError:
 		expectativa_de_semestres_adicionais = "Impossível calcular"
 
@@ -1629,10 +1633,10 @@ def process_sigra_hist(hist_file_txt):
 	else:
 		output['Turno do curso'] = "Noturno"
 	try:
-		output['Média de créditos obtidos por semestre'] = mediaa(total_creditos_aprovados_por_semestre)
+		output['Média de créditos obtidos por semestre'] = float(total_creditos_obtidos/output['Quantidade de semestres cursados'])
 	except ZeroDivisionError:
 		output['Média de créditos obtidos por semestre'] = "Impossível calcular"
-	output['Quantidade de semestres cursados'] = periodo
+	
 	output['Quantidade de semestres de verão cursados'] = verao
 	output['Quantidade de semestres sem registro de matrícula'] = nreg_mat
 	output['TGJs'] = tgj_geral
@@ -1641,7 +1645,7 @@ def process_sigra_hist(hist_file_txt):
 	output['Expectativa de semestres à cursar até a conclusão'] = expectativa_de_semestres_adicionais
 	output['Variação no IRA'] = ira_por_semestre
 	try:
-		output['IRA médio'] = mediaa(ira_por_semestre)
+		output['IRA médio'] = media_aritmetica(ira_por_semestre)
 	except ZeroDivisionError:
 		output['IRA médio'] = "Impossível calcular"
 	output['Total créditos OBR obtidos'] = total_creditos_obr_aprovados
@@ -1651,7 +1655,7 @@ def process_sigra_hist(hist_file_txt):
 	output['Total créditos exigidos'] = total_cretitos_exigidos
 	output['Créditos a obter'] = total_creditos_pendentes
 	output['Percentual de conclusão do curso'] = str(percentual_d_conclusao)+"%"
-
+	print(output)
 	return output
 
 				
