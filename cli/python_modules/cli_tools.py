@@ -27,6 +27,7 @@ import os
 import io
 import pickle
 import json
+import csv
 import tempfile
 import time
 
@@ -40,6 +41,252 @@ from copy import copy
 time.strptime('02/01/1986','%d/%m/%Y')
 
 pasta_temporaria = tempfile.gettempdir()
+
+def create_lockfile(lockf):
+	f = open(pasta_temporaria+os.sep+lockf,'w')
+	f.close()
+
+def remove_lockfile(lockf):
+	os.remove(pasta_temporaria+os.sep+lockf)
+
+def lockfile_name(path_to_file):
+	lkf_name = path_to_file.split(os.sep)[-1]
+	if lkf_name.find(".") != -1 or lkf_name.find(".") != 0:
+		lkf_name = lkf_name.split(".")[0]
+	file_name = '~lock_'+str(lkf_name)
+	return file_name
+
+
+def load_json(path_to_file):
+    initfolder = os.getcwd()
+    nfo = path_to_file.split('/')
+    fname = nfo[-1]
+    path = path_to_file.replace(fname, '')
+    os.chdir(path.replace('/', os.sep))
+    f = open(fname)
+    data = f.read()
+    f.close()
+    os.chdir(initfolder)
+    return json.loads(data)
+
+
+def save_json(novos_dados, path_to_file, pasta_temporaria=pasta_temporaria):
+	lockf = lockfile_name(path_to_file)
+	initfolder = os.getcwd()
+	nfo = path_to_file.split('/')
+	fname = nfo[-1]
+	path = path_to_file.replace(fname, '')
+
+	while True:
+		if os.path.isfile(pasta_temporaria+os.sep+lockf):
+			time.sleep(0.1)
+		else:
+			create_lockfile(lockf)
+			break
+
+	os.chdir(path.replace('/', os.sep))
+	with open(path_to_file, 'w') as f:
+		f.write(json.dumps(novos_dados, ensure_ascii=False, indent=4))		
+
+	os.chdir(initfolder)
+	remove_lockfile(lockf)
+
+
+def load_csv(csv_file, delimiter='\t', lineterminator='\n'):
+	'''
+	Acessa o conteúdo do arquivo CSV e o armazena na memória como um list_of_dicts.
+	'''
+	o = []
+	fields = load_csv_head(csv_file, delimiter=delimiter, lineterminator=lineterminator)
+	try:
+		with open(os.path.join(os.getcwd(), csv_file), encoding="utf8") as csv_fileobj:
+			rd = csv.DictReader(csv_fileobj, delimiter=delimiter, lineterminator=lineterminator)
+			for row in rd:
+				ordered_row = OrderedDict()
+				for col in fields:
+					ordered_row[col] = row[col]
+				o.append(ordered_row)
+	except:
+		with open(os.path.join(os.getcwd(), csv_file), encoding="cp1252") as csv_fileobj:
+			rd = csv.DictReader(csv_fileobj, delimiter=delimiter, lineterminator=lineterminator)
+			for row in rd:
+				ordered_row = OrderedDict()
+				for col in fields:
+					ordered_row[col] = row[col]
+				o.append(ordered_row)
+	return o
+
+
+
+
+def load_csv_head(csv_file, delimiter='\t', lineterminator='\n'):
+	f = open(csv_file)
+	f_csv_obj = csv.DictReader(f, delimiter=delimiter, lineterminator=lineterminator)
+	header = f_csv_obj.fieldnames
+	f.close()
+	return header
+
+
+
+
+def load_csv_col(col, csv_file, delimiter='\t', lineterminator='\n', sort_r=False):
+	fd = load_csv(csv_file, delimiter=delimiter, lineterminator=lineterminator)
+	o = []
+	for i in fd:
+		o.append(i[col])
+	if sort_r == True:
+		o.sort()
+	return o
+
+
+
+
+def fill_gaps(csv_file,refcol=[],targetcol=[],targetcolops=[]):
+	conteudo = load_csv(csv_file)
+	cols = load_csv_head(csv_file)
+	
+	print_refcol = True
+	keep_working = True
+	
+	for l in conteudo:
+		if keep_working == False:
+			break
+		white_cels = 0
+		if targetcol == []:
+			for c in l:
+				if l[c] == '':
+					if print_refcol == True:
+						print_refcol = False
+						for r in refcol:
+							print(l[r])
+					l[c] = input(c+': ')
+				else:
+					white_cels += 1
+		else:
+			for c in l:
+				for selected in targetcol:
+					print(c)
+					print(selected)
+					if l[selected] == '':
+						if print_refcol == True:
+							print_refcol = False
+							for r in refcol:
+								print(l[r])
+					else:
+						white_cels += 1			
+		
+		if white_cels < len(cols)-1:
+			while True:
+				op = input("Gravar alterações e continuar? s/n : ")
+				if (op == 's') or (op == 'S'):
+					save_csv(conteudo,csv_file)
+					break
+				elif (op == 'n') or (op == 'N'):
+					keep_working = False
+					break
+				else:
+					print('Responda [s] para sim ou [n] para não...')
+			
+		print_refcol = True
+	
+	return conteudo
+
+
+
+
+def extract_lines(csv_file, csv_col, test_value, delimiter='\t', backup_2_trash=True):
+	conteudo = load_csv(csv_file, delimiter=delimiter)
+	keep_this = []
+	remove_that = []
+	for line in conteudo:
+		if line[csv_col] == test_value:
+			remove_that.append(line)
+		else:
+			keep_this.append(line)
+	op = input("Deseja remover as {} linhas encontradas na tabela? (s/n)".format(len(remove_that)))
+	if op == "s" or op == "S":
+		save_csv(keep_this, csv_file)
+		if backup_2_trash == True:
+			new_csv_file = time.ctime().replace(' ','_') + "_rmLines_from_" + csv_file
+			save_csv(remove_that, new_csv_file)
+
+
+
+
+def copy_col(csv_file, source_col, destination_col):
+	"Copia o conteúdo de uma coluna alvo para uma coluna de destino se a célula do destino ainda não estiver preechida"
+	conteudo = load_csv(csv_file)
+	cols = load_csv_head(csv_file)
+	change_info = False
+	if destination_col in cols:
+		for line in conteudo:
+			if line[source_col] != '' and line[destination_col] == '':
+				change_info = True
+				line[destination_col] = line[source_col]
+	else:
+		for line in conteudo:
+			line[destination_col] = ''
+			if line[source_col] != '' and line[destination_col] == '':
+				change_info = True
+				line[destination_col] = line[source_col]		
+	
+	if change_info == True:
+		print("Cópia efetuada...")
+		save_csv(conteudo, csv_file)
+	else:
+		print("Não há o que alterar...")
+
+
+
+
+def add_line(csv_file, refcols=[]):
+	conteudo = load_csv(csv_file)
+	cols = load_csv_head(csv_file)
+	nova_linha = OrderedDict()
+	for c in cols:
+		v = input(c+": ")
+		nova_linha[c] = v
+		
+	conteudo.append(nova_linha)
+	save_csv(conteudo, csv_file)
+	v = input("Adicionar outro? (s/n) ")
+	if v == "s" or v == "S":
+		add_line(csv_file)
+
+
+
+def convert_csv_type(csv_file, old_delimiter, new_delimiter, old_lineterminator=os.linesep, new_lineterminator=os.linesep):
+	conteudo = load_csv(csv_file, delimiter=old_delimiter, lineterminator=old_lineterminator)
+	save_csv(conteudo, csv_file, delimiter=new_delimiter, lineterminator=new_lineterminator)
+
+
+
+def save_csv(list_of_dicts, path_to_file, header=None, delimiter='\t', lineterminator='\n', pasta_temporaria=pasta_temporaria):
+	'''
+	Escreve o conteudo de uma lista de dicionários em um arquivo CSV.
+	Esta função gera um arquivo de trava até que o processo seja concluído impossibilitanto a realização de cópias simultâneas.
+	A ordem do cabeçalho pode ser definido arbitrariamente mediante a inclusão de uma lista com o come das colunas na argumento "header".
+	'''
+
+	fields = list_of_dicts[0].keys()
+	lockf = lockfile_name(path_to_file)
+	initfolder = os.getcwd()
+
+	while True:
+		if os.path.isfile(pasta_temporaria+os.sep+lockf):
+			time.sleep(0.1)
+		else:
+			create_lockfile(lockf)
+			break
+
+	with open(path_to_file, 'w') as f:
+		w = csv.DictWriter(f, fields, delimiter=delimiter, lineterminator=lineterminator)
+		w.writeheader()
+		w.writerows(list_of_dicts)
+
+	os.chdir(initfolder)
+	remove_lockfile(lockf)
+
 
 
 def listagem_cli(linhas_selecionadas, cols):
@@ -962,3 +1209,149 @@ def interval_select(selection_string):
 			pass
 	output.sort()
 	return output
+
+
+def render_form_get_values(form_file, skip_q=[]):
+    '''
+    Renderiza as questões de um formulário JSON conforme a estrutura abaixo.
+    Retorna um dicionário com as respostas.
+    As chaves são definidas conforme o atributo 'id'.
+    Os valores são resultado do input dos usuários.
+
+    {
+        "titulo": "Registro de atendimento",
+        "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
+        "questoes":
+        [
+            {
+                "enunciado": "Matrícula",
+                "id": "identificador",
+                "tipo": "text",
+            },
+            {
+                "enunciado": "Tipo de atendimento",
+                "id": "atd_t",
+                "tipo": "radio",
+                "alternativas" :
+                [
+                    "Informação presencial",
+                    "Informação via telefone",
+                    ...
+                ]            
+            }
+        ]
+    }	
+    '''
+
+    def objective_question_handler(q):
+        rewrite_form = False
+        grupos_de_opcao = []
+        grupos_de_alternativas = []
+        print(verde(q['enunciado']))
+
+        if q['tipo'] == 'radio':
+            if type(q['alternativas']) == list:
+                nfo[q['id']] = select_op(q['alternativas'], 1)
+            else:
+                print("Campos do tipo 'radio' devem ter suas alternativas organizadas em lista...")
+                print("Favor corrigir o arquivo de formulário...")
+                exit()
+
+        elif q['tipo'] == 'checkbox':
+            if type(q['alternativas']) == list:
+                nfo[q['id']] = "; ".join(select_ops(q['alternativas'], 1))
+            
+            elif type(q['alternativas']) == dict:
+                for a in q['alternativas'].keys():
+                    grupos_de_alternativas.append(a)
+                grupos_de_alternativas.sort()
+                gopt = select_ops(grupos_de_alternativas, 1)
+                alternativas_efetivas = []
+                for grp_op_key in gopt:
+                    grupos_de_opcao.append(grp_op_key)
+                    for op in q['alternativas'][grp_op_key]:
+                        if not op in alternativas_efetivas:
+                            alternativas_efetivas.append(op)
+                alternativas_efetivas.sort()
+                alternativas_efetivas.append("Outro")
+                nfo[q['id']] = select_ops(alternativas_efetivas, 1)
+
+        if type(q['alternativas']) == list:
+            if nfo[q['id']].find('Outro') != -1:
+                outros_recem_listados = []
+                while True:
+                    outro_detalhes = input('Especifique: ')
+                    outros_recem_listados.append(outro_detalhes)
+                    q['alternativas'].remove('Outro')
+                    q['alternativas'].append(outro_detalhes)
+                    q['alternativas'].sort()
+                    q['alternativas'].append('Outro')
+                    print("")
+                    print(verde("Adicionar outra opção? [s|n]"))
+                    op = input_op(['s','n'])
+                    if op == 'n':
+                        break
+                
+                if len(nfo[q['id']]) > 1:
+                    nfo[q['id']] = '; '.join(nfo[q['id']])
+                else:
+                    nfo[q['id']] = nfo[q['id']][0]
+
+                if len(outros_recem_listados) > 1:
+                    outros_recem_listados = "; ".join(outros_recem_listados)
+                else:
+                    outros_recem_listados = outros_recem_listados[0]
+                
+                nfo[q['id']] = nfo[q['id']].replace('Outro', outros_recem_listados)
+                rewrite_form = True
+            print("")
+            return (nfo[q['id']], rewrite_form)
+        
+        elif type(q['alternativas']) == dict:
+            nfo_q_id = "; ".join(nfo[q['id']])
+            if nfo_q_id.find('Outro') != -1:
+                outros_recem_listados = []
+                while True:
+                    print(verde('À qual grupo a obção divergente pertence: '))
+                    grp_op_key_field = select_op(grupos_de_alternativas, 1)
+                    outro_detalhes = input(verde('\nEspecifique a opção divergente: '))
+                    outros_recem_listados.append(outro_detalhes)
+                    q['alternativas'][grp_op_key_field].append(outro_detalhes)
+                    q['alternativas'][grp_op_key_field].sort()
+                    print("")
+                    print(verde("Adicionar outra opção? [s|n]"))
+                    op = input_op(['s','n'])
+                    if op == 'n':
+                        break
+                
+                if len(outros_recem_listados) > 1:
+                    outros_recem_listados = "; ".join(outros_recem_listados)
+                else:
+                    outros_recem_listados = outros_recem_listados[0]
+
+                nfo[q['id']] = nfo_q_id.replace('Outro', outros_recem_listados)
+                rewrite_form = True
+        
+        if rewrite_form == True:
+            save_json(form, form_file)
+
+        print("")
+        return (nfo[q['id']], rewrite_form)
+
+
+    form = load_json(form_file)
+    nfo = {}
+    for q in form['questoes']:
+        if q['id'] in skip_q:
+            pass
+
+        elif q['tipo'] == 'text':
+            nfo[q['id']] = input("{}: ".format(verde(q['enunciado'])))
+            print("")
+
+        elif q['tipo'] == 'radio' or q['tipo'] == 'checkbox':
+            q_response = objective_question_handler(q)
+            nfo[q['id']] = q_response[0]
+
+    return nfo
+

@@ -21,83 +21,114 @@
 #  MA 02110-1301, USA.
 #
 
-import time
 import os
+import asyncio
+import time
 
 from tempfile import gettempdir
 from string import punctuation
+from collections import OrderedDict
 from subprocess import getoutput
 
 from .cli_tools import verde, vermelho, select_op
-from .cli_db_loader import get_col_values, dados_usuarios
-from .py_functions_json import save_json
+from .cli_tools import load_json, save_json
 
-#Machine and system user info
-hostname = getoutput("hostname")
-username = getoutput("whoami")
+def timestamp(mode=None):
+    if mode == "mkid":
+        from subprocess import getoutput
+        return time.strftime("{}%Y%m%d%H%M%S".format(username[0:3].upper()), time.localtime())
+    elif mode == "long":
+        mes_corrente = time.strftime("%m", time.localtime())
 
-#Read info from /etc/cli/cli_tools.conf
-pasta_do_usuario = getoutput("echo $HOME")
-pasta_temporaria = gettempdir()
-pasta_raiz_do_aplicativo = getoutput("cli-config read RAIZ")
-pasta_de_seguranca = getoutput("cli-config read PASTA_DE_SEGURANCA")
-pasta_de_dados = getoutput("cli-config read PASTA_DE_DADOS")
-device = getoutput("cli-config read DEVICE_TYPE")
-envio_automatico_email = bool(getoutput("cli-config read ENVIO_AUTOMATICO_EMAIL"))
-trabalhar_com_fragmentos = bool(getoutput("cli-config read ENVIO_DE_FRAGMENTOS"))
+        mes = {}
+        mes['01'] = 'janeiro'
+        mes['02'] = 'fevereiro'
+        mes['03'] = 'março'
+        mes['04'] = 'abril'
+        mes['05'] = 'maio'
+        mes['06'] = 'junho'
+        mes['07'] = 'julho'
+        mes['08'] = 'agosto'
+        mes['09'] = 'setembro'
+        mes['10'] = 'outubro'
+        mes['11'] = 'novembro'
+        mes['12'] = 'dezembro'
 
-if device == "Termux":
-    pasta_temporaria = getoutput("echo $TMPDIR")
+        nome_mes = mes[mes_corrente]
+        
+        return time.strftime("%d de "+nome_mes+" de %Y", time.localtime())
+    else:
+        return time.strftime("%Y-%m-%d %H:%M:%S %a", time.localtime())
 
-#Setting global paths to cli base folders and files
-pasta_de_fragmentos = os.sep.join([pasta_de_dados, "fragmentos"])
-pasta_de_indice = os.sep.join([pasta_de_dados, "indexados"])
-pasta_de_formularios = os.sep.join([pasta_raiz_do_aplicativo, "cli/formularios"])
+def get_col_width(field_name, list_of_dicts):
+    width = 0
+    for line in list_of_dicts:
+        if len(line[field_name]) > width:
+            width = len(line[field_name])
+    return (field_name, width+2)
 
-arquivo_fragmentos_emitidos = os.sep.join([pasta_de_fragmentos, "emitidos.json"])
-arquivo_fragmentos_recebidos = os.sep.join([pasta_de_fragmentos, "recebidos.json"])
-arquivo_atendimentos = os.sep.join([pasta_de_dados, "atendimentos.json"])
-arquivo_usuarios = os.sep.join([pasta_de_dados, "usuarios.json"])
-arquivo_profissionais = os.sep.join([pasta_de_dados, "profissionais.json"])
-arquivo_processos = os.sep.join([pasta_de_dados, "processos.json"])
-arquivo_corrigidos = os.sep.join([pasta_de_dados, "corrigidos.json"])
-arquivo_index = os.sep.join([pasta_de_indice, "index_db.json"])
-arquivo_col_wid = os.sep.join([pasta_de_indice, "col_wid.json"])
-arquivo_sex_info = os.sep.join([pasta_de_indice, "sex_info.json"])
-arquivo_estudos = os.sep.join([pasta_de_dados, "estudos.json"])
-arquivo_usuario_alvo = os.sep.join([pasta_do_usuario, '.current_target'])
-arquivo_modelo_ppaes = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/ppaes.odt"])
-arquivo_modelo_ppaes_detalhado = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/ppaes_det.odt"])
-arquivo_modelo_ccc = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/criacao-cc.odt"])
+def get_itens(field_name, field_value,  list_of_dicts):
+    r = []
+    for array_item in list_of_dicts:
+        if array_item[field_name] == field_value:
+            r.append(array_item)
+    return r
 
-formulario_atendimentos = os.sep.join([pasta_de_formularios, "form_atendimento.json"])
-formulario_novo_usuario = os.sep.join([pasta_de_formularios, "form_novo_usuario.json"])
-formulario_novo_processo = os.sep.join([pasta_de_formularios, "form_processos.json"])
-formulario_registro_de_correcao = os.sep.join([pasta_de_formularios, "form_corrigidos.json"])
-formulario_estudo_estudante = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_estudante.json"])
-formulario_estudo_grupo_familiar = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_grupo-familiar-info.json"])
-formulario_estudo_membros_grupo_familiar = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_membros-grupo-familiar.json"])
+def get_col_values(field_name, list_of_dicts):
+    r = []
+    for array_item in list_of_dicts:
+        r.append(array_item[field_name])
+    return r
 
+def get_tags(dados_usuarios):
+    marcadores = []
+    for estudante in dados_usuarios:
+        if estudante.get("marcador"):
+            for m in estudante['marcador']:
+                if m not in marcadores:
+                    marcadores.append(m)
+    marcadores.sort()
+    return marcadores
 
-#Custom configurations - SPS
-matriculas = get_col_values('identificador', dados_usuarios)
+def get_tags_idx(dados_usuarios):
+    marcadores_idx = {}
+    for estudante in dados_usuarios:
+        if estudante.get("marcador"):
+            for m in estudante['marcador']:
+                if marcadores_idx.get(m) == None:
+                    marcadores_idx[m] = [dados_usuarios.index(estudante)]
+                else:
+                    marcadores_idx[m].append(dados_usuarios.index(estudante))
+    return marcadores_idx
 
-periodo_corrente = "1º/2019"
-formato_lista_fragmentos = "emitidos-{}@{}.json".format(username, hostname)
+def calculate_col_width():
+    loop2 = asyncio.get_event_loop()
+    col_width = loop2.run_until_complete(asyncio.gather(
+        get_col_width_nfo('identificador', dados_usuarios),
+        get_col_width_nfo('nome', dados_usuarios),
+        get_col_width_nfo('eml', dados_usuarios),
+        get_col_width_nfo('uid', dados_profissionais),
+        get_col_width_nfo('prof_nome', dados_profissionais),
+        get_col_width_nfo('prof_eml', dados_profissionais),
+        get_col_width_nfo('numero_sei', dados_processos),
+        get_col_width_nfo('assunto', dados_processos),
+        get_col_width_nfo('motivo', dados_processos),
+    ))
 
-etiquetas = {}
-etiquetas['identificador'] = "Identificador"
-etiquetas['nome_usuario'] = "Nome"
-etiquetas['eml_usuario'] = "e-Mail"
-etiquetas['uid'] = "ID de Login"
-etiquetas['nome_profissional'] = "Nome do Profissional"
-etiquetas['eml_profissional'] = "e-Mail"
-etiquetas['numero_sei'] = "Número do processo"
-etiquetas['assunto'] = "Assunto"
-etiquetas['motivo'] = "Motivo"
-etiquetas['timestamp'] = "Data e hora"
+    #Larguras das colunas nas listas. Rodar método async aqui...
+    col_wid = OrderedDict()
+    col_wid['identificador'] = col_width[0]
+    col_wid['nome_usuario'] = col_width[1]
+    col_wid['eml_usuario'] = col_width[2]
+    col_wid['uid'] = col_width[3]
+    col_wid['nome_profissional'] = col_width[4]
+    col_wid['eml_profissional'] = col_width[5]
+    col_wid['numero_sei'] = col_width[6]
+    col_wid['assunto'] = col_width[7]
+    col_wid['motivo'] = col_width[8]
+    col_wid['timestamp'] = ('timestamp', len(timestamp()) + 2)
 
-
+    save_json(col_wid, arquivo_col_wid)    
 
 
 def get_nfo(identificador, set_de_dados, index_de_dados):
@@ -159,3 +190,117 @@ def numero_identificador_mascara(num):
     for char in punctuation:
         m_num = m_num.replace(char,'')
     return str(m_num[0:2]+'/'+m_num[2:])
+
+
+async def load_json_file(arquivo):
+    return load_json(arquivo)
+
+async def get_col_width_nfo(field_name, data_set):
+    return get_col_width(field_name, data_set)
+
+async def get_col_label(formulario):
+    id_and_label = {}
+    for i in formulario['questoes']:
+        id_and_label[i['id']] = i['enunciado']
+    return id_and_label
+
+
+#Machine and system user info
+hostname = getoutput("hostname")
+username = getoutput("whoami")
+
+#Read info from /etc/cli/cli_tools.conf
+pasta_do_usuario = getoutput("echo $HOME")
+pasta_temporaria = gettempdir()
+pasta_raiz_do_aplicativo = getoutput("cli-config read RAIZ")
+pasta_de_seguranca = getoutput("cli-config read PASTA_DE_SEGURANCA")
+pasta_de_dados = getoutput("cli-config read PASTA_DE_DADOS")
+device = getoutput("cli-config read DEVICE_TYPE")
+envio_automatico_email = bool(getoutput("cli-config read ENVIO_AUTOMATICO_EMAIL"))
+trabalhar_com_fragmentos = bool(getoutput("cli-config read ENVIO_DE_FRAGMENTOS"))
+rclone_drive=getoutput("cli-config read RCLONE")
+
+if device == "Termux":
+    pasta_temporaria = getoutput("echo $TMPDIR")
+
+#Setting global paths to cli base folders and files
+pasta_de_fragmentos = os.sep.join([pasta_de_dados, "fragmentos"])
+pasta_de_indice = os.sep.join([pasta_de_dados, "indexados"])
+pasta_de_formularios = os.sep.join([pasta_raiz_do_aplicativo, "cli/formularios"])
+
+arquivo_fragmentos_emitidos = os.sep.join([pasta_de_fragmentos, "emitidos.json"])
+arquivo_fragmentos_recebidos = os.sep.join([pasta_de_fragmentos, "recebidos.json"])
+arquivo_atendimentos = os.sep.join([pasta_de_dados, "atendimentos.json"])
+arquivo_usuarios = os.sep.join([pasta_de_dados, "usuarios.json"])
+arquivo_profissionais = os.sep.join([pasta_de_dados, "profissionais.json"])
+arquivo_processos = os.sep.join([pasta_de_dados, "processos.json"])
+arquivo_corrigidos = os.sep.join([pasta_de_dados, "corrigidos.json"])
+arquivo_index = os.sep.join([pasta_de_indice, "index_db.json"])
+arquivo_col_wid = os.sep.join([pasta_de_indice, "col_wid.json"])
+arquivo_sex_info = os.sep.join([pasta_de_indice, "sex_info.json"])
+arquivo_estudos = os.sep.join([pasta_de_dados, "estudos.json"])
+arquivo_usuario_alvo = os.sep.join([pasta_do_usuario, '.current_target'])
+arquivo_modelo_ppaes = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/ppaes.odt"])
+arquivo_modelo_ppaes_detalhado = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/ppaes_det.odt"])
+arquivo_modelo_ccc = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/criacao-cc.odt"])
+
+formulario_atendimentos = os.sep.join([pasta_de_formularios, "form_atendimento.json"])
+formulario_novo_usuario = os.sep.join([pasta_de_formularios, "form_novo_usuario.json"])
+formulario_novo_processo = os.sep.join([pasta_de_formularios, "form_processos.json"])
+formulario_registro_de_correcao = os.sep.join([pasta_de_formularios, "form_corrigidos.json"])
+formulario_estudo_estudante = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_estudante.json"])
+formulario_estudo_grupo_familiar = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_grupo-familiar-info.json"])
+formulario_estudo_membros_grupo_familiar = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_membros-grupo-familiar.json"])
+
+#Carregando arquivos de dados
+
+
+loop = asyncio.get_event_loop()
+dados = loop.run_until_complete(asyncio.gather(
+    load_json_file(arquivo_atendimentos),
+    load_json_file(arquivo_usuarios),
+    load_json_file(arquivo_profissionais),
+    load_json_file(arquivo_processos),
+    load_json_file(arquivo_corrigidos),
+    load_json_file(arquivo_index),
+    load_json_file(arquivo_estudos)
+))
+
+dados_atendimentos = dados[0]
+dados_usuarios = dados[1]
+dados_profissionais = dados[2]
+dados_processos = dados[3]
+dados_processos_pend = get_itens('resultado', '', dados_processos)
+dados_corrigidos = dados[4]
+dados_index = dados[5]
+dados_estudos = dados[6]
+
+col_wid_test = int(getoutput("if [ -f {} ]; then echo 1; else echo 0; fi".format(arquivo_col_wid)))
+
+if col_wid_test == 1:
+    col_wid = load_json(arquivo_col_wid)
+else:
+    calculate_col_width()
+
+
+
+#Custom configurations - SPS
+matriculas = get_col_values('identificador', dados_usuarios)
+
+periodo_corrente = "1º/2019"
+formato_lista_fragmentos = "emitidos-{}@{}.json".format(username, hostname)
+
+etiquetas = {}
+etiquetas['identificador'] = "Identificador"
+etiquetas['nome_usuario'] = "Nome"
+etiquetas['eml_usuario'] = "e-Mail"
+etiquetas['uid'] = "ID de Login"
+etiquetas['nome_profissional'] = "Nome do Profissional"
+etiquetas['eml_profissional'] = "e-Mail"
+etiquetas['numero_sei'] = "Número do processo"
+etiquetas['assunto'] = "Assunto"
+etiquetas['motivo'] = "Motivo"
+etiquetas['timestamp'] = "Data e hora"
+
+
+

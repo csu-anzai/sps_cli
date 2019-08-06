@@ -25,7 +25,7 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.cli_db_loader import get_col_values, get_tags, col_wid
+from python_modules.cli_base import get_col_values, get_tags, col_wid
 from python_modules.cli_tools import listar_dicionario
 from python_modules.cli_tools import mk_randnum_seq, verde, amarelo
 from python_modules.cli_decorators import check_config_existance
@@ -35,7 +35,7 @@ args = docopt(__doc__)
 @check_config_existance
 def main():
     if args['usr'] or args['estudantes']:
-        from python_modules.cli_db_loader import dados_usuarios
+        from python_modules.cli_base import dados_usuarios
         if args['<marcador>']:
             if args['<marcador>'] == 'id':
                 if args['--json-output']:
@@ -56,14 +56,14 @@ def main():
                 print(listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']]))
 
     elif args['atd'] or args['atendimentos']:
-        from python_modules.cli_db_loader import dados_atendimentos
+        from python_modules.cli_base import dados_atendimentos
         if args['--json-output']:
             print(listar_dicionario(dados_atendimentos, [col_wid['timestamp'], col_wid['identificador'], ('atd_t', 0)], tipo_output='json'))
         else:
             print(listar_dicionario(dados_atendimentos, [col_wid['timestamp'], col_wid['identificador'], ('atd_t', 0)]))
 
     elif args['tag'] or args['marcadores']:
-        from python_modules.cli_db_loader import dados_usuarios, dados_index
+        from python_modules.cli_base import dados_usuarios, dados_index
         marcadores = {}
         for s in dados_index:
             if s['set_de_dados'] == 'tag':
@@ -78,14 +78,14 @@ def main():
         
 
     elif args['sei'] or args['processos']:
-        from python_modules.cli_db_loader import dados_processos
+        from python_modules.cli_base import dados_processos
         if args['--json-output']:
             print(listar_dicionario(dados_processos, [col_wid['identificador'], col_wid['numero_sei'], col_wid['motivo'], col_wid['assunto']], tipo_output='json'))
         else:
             print(listar_dicionario(dados_processos, [col_wid['identificador'], col_wid['numero_sei'], col_wid['motivo'], col_wid['assunto']]))
 
     elif args['pnd'] or args['processos-pendentes']:
-        from python_modules.cli_db_loader import dados_processos_pend
+        from python_modules.cli_base import dados_processos_pend
         if args['--json-output']:
             print(listar_dicionario(dados_processos_pend, [col_wid['identificador'], col_wid['numero_sei'], col_wid['assunto']], tipo_output='json'))
         else:
@@ -95,7 +95,7 @@ def main():
         pass
 
     elif args['pro'] or args['profissionais']:
-        from python_modules.cli_db_loader import dados_profissionais
+        from python_modules.cli_base import dados_profissionais
         if args['--json-output']:
             print(listar_dicionario(dados_profissionais, [col_wid['uid'], col_wid['nome_profissional'], col_wid['eml_profissional']], tipo_output='json'))
         else:

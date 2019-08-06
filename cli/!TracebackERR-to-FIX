@@ -28,7 +28,7 @@ Traceback (most recent call last):
     q_response = objective_question_handler(q)
   File "/opt/sps_cli/cli/python_modules/cli_tools.py", line 171, in objective_question_handler
     save_json(form, form_file)
-  File "/opt/sps_cli/cli/python_modules/py_functions_json.py", line 67, in save_json
+  File "/opt/sps_cli/cli/python_modules/cli_tools.py", line 67, in save_json
     with open(path_to_file, 'w') as f:
 PermissionError: [Errno 13] Permission denied: '/opt/sps_cli/cli/formularios/form_atendimento.json'
 

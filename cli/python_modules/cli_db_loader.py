@@ -30,25 +30,7 @@ import time
 from collections import OrderedDict
 from subprocess import getoutput
 
-from .cli_base import \
-    username,\
-    pasta_raiz_do_aplicativo,\
-    pasta_de_dados,\
-    pasta_de_seguranca,\
-    pasta_de_fragmentos,\
-    pasta_de_indice,\
-    pasta_de_formularios,\
-    pasta_do_usuario,\
-    arquivo_atendimentos,\
-    arquivo_usuarios,\
-    arquivo_profissionais,\
-    arquivo_processos,\
-    arquivo_corrigidos,\
-    arquivo_index,\
-    arquivo_estudos,\
-    arquivo_col_wid
-    
-from .py_functions_json import load_json, save_json
+from .cli_tools import load_json, save_json
 
 
 def timestamp(mode=None):

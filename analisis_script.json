@@ -1,0 +1,385 @@
+{
+    "arquivo_alvo": "old_sae_FULL_REGIAO.csv",
+    "arquivo_saida": "saida_d_dados.csv",
+    "analises": 
+    [
+        {
+            "valores_de_checagem": {
+                "P_ING": "1/2017", 
+                "P_EST": "1/2017", 
+                "AES_GRUPO": "Perfil"
+            },
+            "nome_da_nova_coluna": "CALOURO_SELECIONADO",
+            "valor_se_checagem_verdadeira": 1,
+            "valor_se_checagem_falsa": 0
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "2/2007"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "2/2007"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "1/2008"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "1/2008"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "2/2008"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "2/2008"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "1/2009"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "1/2009"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "2/2009"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "2/2009"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "1/2010"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "1/2010"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "2/2010"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "2/2010"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "1/2011"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "1/2011"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "2/2011"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "2/2011"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "1/2012"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "1/2012"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "2/2012"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "2/2012"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "1/2013"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "1/2013"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "2/2013"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "2/2013"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "1/2014"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "1/2014"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "2/2014"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "2/2014"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "1/2015"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "1/2015"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "2/2015"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "2/2015"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "1/2016"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "1/2016"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "2/2016"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "2/2016"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "1/2017"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "1/2017"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "2/2017"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "2/2017"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "1/2018"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "1/2018"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        },
+        {
+            "valores_de_checagem": {
+                "PERIODO_INGRESSO_UNB": [
+                    "2/2018"
+                ], 
+                "PERIODO_ESTUDO": [
+                    "2/2018"
+                ], 
+                "AES_GRUPO": [
+                    "Perfil"
+                ]
+            },
+            "nome_da_nova_coluna": "SELECIONADO_NO_SEMESTRE_DE_INGRESSO",
+            "valor_se_checagem_verdadeira": "Sim",
+            "valor_se_checagem_falsa": ""
+        }        
+    ]
+}

@@ -29,7 +29,7 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.py_functions_json import save_json, load_json
+from python_modules.cli_tools import save_json, load_json
 from python_modules.cli_tools import verde, vermelho
 from python_modules.cli_decorators import check_config_existance
 
@@ -37,7 +37,7 @@ from python_modules.cli_base import \
     numero_sei_mascara,\
     numero_identificador_mascara
 
-from python_modules.cli_db_loader import \
+from python_modules.cli_base import \
     timestamp,\
     pasta_de_dados,\
     get_col_values,\

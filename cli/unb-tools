@@ -83,8 +83,8 @@ from subprocess import getoutput
 from string import whitespace, punctuation, digits
 from math import fsum
 
-from python_modules.py_functions_csv import extract_lines, save_csv, load_csv, load_csv_col
-from python_modules.py_functions_json import save_json, load_json
+from python_modules.cli_tools import extract_lines, save_csv, load_csv, load_csv_col
+from python_modules.cli_tools import save_json, load_json
 from python_modules.cli_base import hostname
 from python_modules.cli_tools import strip_simbols, get_indexes, strip_digits, strip_chars, create_new_value_col_from_script, select_op, select_ops, limpar_tela, join_list_of_dicts_union, join_list_of_dicts_intersection, cruzar_variaveis, obter_frq_abs_e_rel_from_list_of_dicts
 from python_modules.py_functions_calculation import mediaa

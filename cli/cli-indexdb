@@ -28,7 +28,7 @@ from python_modules.cli_base import \
     arquivo_corrigidos,\
     arquivo_sex_info
 
-from python_modules.cli_db_loader import \
+from python_modules.cli_base import \
     dados_usuarios,\
     dados_processos,\
     dados_atendimentos,\
@@ -36,7 +36,7 @@ from python_modules.cli_db_loader import \
     arquivo_index,\
     get_tags_idx
 
-from python_modules.py_functions_json import save_json, load_json
+from python_modules.cli_tools import save_json, load_json
 
 from python_modules.cli_tools import amarelo, verde, input_op
 
