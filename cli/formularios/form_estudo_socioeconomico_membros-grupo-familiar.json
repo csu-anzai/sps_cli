@@ -1,69 +1,60 @@
 {
-    "titulo": "Questões para avaliação socioeconômica",
-    "descricao": "Intrumental destinado à coleta de informações para avaliação de vulnerabilidade socioeconômica.",
-    "arquivo_de_registro": "estudos.json",
-    "campos_de_listagem": "identificador, motivos_estudo, campus",    
-    "questoes":
-    [
+    "questoes": [
         {
+            "tipo": "text",
             "enunciado": "Nome do/a membro do grupo familiar",
-            "id": "nome",
-            "tipo": "text"
+            "id": "nome"
         },
         {
+            "tipo": "text",
             "enunciado": "Data de nascimento",
-            "id": "dn",
-            "tipo": "text"
+            "id": "dn"
         },
         {
+            "tipo": "text",
             "enunciado": "CPF",
-            "id": "cpf",
-            "tipo": "text"
+            "id": "cpf"
         },
         {
+            "tipo": "radio",
             "enunciado": "Sexo",
             "id": "sexo",
-            "tipo": "radio",
-            "alternativas": 
-            [
+            "alternativas": [
                 "Masculino",
                 "Feminino"
             ]
-
         },
         {
-            "enunciado": "Relação do membro em questão com o estudante",
-            "id" : "relacao_com_estudante",
             "tipo": "radio",
-            "alternativas": 
-            [
+            "enunciado": "Relação do membro em questão com o estudante",
+            "id": "relacao_com_estudante",
+            "alternativas": [
                 "Avó",
                 "Avô",
                 "Pai",
                 "Mãe",
                 "Padrasto",
                 "Madrasta",
-                "Irmã", 
-                "Irmão", 
-                "Meio-irmã", 
-                "Meio-irmão", 
-                "Filha", 
-                "Filho", 
+                "Irmã",
+                "Irmão",
+                "Meio-irmã",
+                "Meio-irmão",
+                "Filha",
+                "Filho",
                 "Enteada",
-                "Enteado", 
-                "Prima", 
-                "Primo", 
-                "Tia", 
+                "Enteado",
+                "Prima",
+                "Primo",
+                "Tia",
                 "Tio",
                 "Outro"
             ]
-        },                
+        },
         {
-            "enunciado": "Escolaridade",
-            "id" : "escolaridade",
             "tipo": "radio",
-            "alternativas": 
-            [
+            "enunciado": "Escolaridade",
+            "id": "escolaridade",
+            "alternativas": [
                 "Não alfabetizado",
                 "Fundamental incompleto",
                 "Fundamental completo",
@@ -76,11 +67,10 @@
             ]
         },
         {
-            "enunciado": "Natureza da fonte de renda",
-            "id" : "situacao_renda",
             "tipo": "checkbox",
-            "alternativas": 
-            [
+            "enunciado": "Natureza da fonte de renda",
+            "id": "situacao_renda",
+            "alternativas": [
                 "Sem renda",
                 "Recebe auxílio do grupo familiar",
                 "Trabalho formal, setor privado",
@@ -106,28 +96,32 @@
             ]
         },
         {
+            "tipo": "text",
             "enunciado": "Valor da renda pessoal do membro em questão",
-            "id" : "valor_renda",
-            "tipo": "text"
+            "id": "valor_renda"
         },
         {
-            "enunciado": "Situação de saúde",
-            "id" : "situacao_saude",
             "tipo": "checkbox",
-            "alternativas": 
-            [
-                "Sem agravos de saúde",
-                "Doença crônica",
-                "Doença grave",
+            "enunciado": "Situação de saúde",
+            "id": "situacao_saude",
+            "alternativas": [
                 "Agravo de saúde mental",
                 "Deficiência física",
+                "Dependência química",
+                "Doença crônica",
+                "Doença grave",
+                "Sem agravos de saúde",
                 "Outro"
             ]
         },
         {
+            "tipo": "text",
             "enunciado": "Observações específicas",
-            "id" : "observacoes_especificas",
-            "tipo": "text"
+            "id": "observacoes_especificas"
         }
-    ]
+    ],
+    "descricao": "Intrumental destinado à coleta de informações para avaliação de vulnerabilidade socioeconômica.",
+    "titulo": "Questões para avaliação socioeconômica",
+    "campos_de_listagem": "identificador, motivos_estudo, campus",
+    "arquivo_de_registro": "estudos.json"
 }

@@ -1,17 +1,17 @@
 {
-    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
-    "campos_de_listagem": "identificador, nome, curso, eml",
     "titulo": "Formulário para cadastro de estudante",
+    "arquivo_de_registro": "usuarios.json",
+    "campos_de_listagem": "identificador, nome, curso, eml",
     "questoes": [
         {
-            "tipo": "text",
             "id": "identificador",
-            "enunciado": "Identificador"
+            "enunciado": "Identificador",
+            "tipo": "text"
         },
         {
-            "tipo": "text",
             "id": "nome",
-            "enunciado": "Nome"
+            "enunciado": "Nome",
+            "tipo": "text"
         },
         {
             "alternativas": [
@@ -20,9 +20,9 @@
                 "Servidor",
                 "Outro"
             ],
-            "tipo": "radio",
             "id": "publico_tipo",
-            "enunciado": "Grupo de pertencimento do usuário"
+            "enunciado": "Grupo de pertencimento do usuário",
+            "tipo": "radio"
         },
         {
             "alternativas": [
@@ -30,26 +30,31 @@
                 "Ciências Contábeis",
                 "Ciências Naturais",
                 "Ciências Sociais",
+                "Direito",
                 "Educação Física",
+                "Enfermagem",
                 "Engenharia Mecânica",
                 "Espanhol",
                 "Farmácia",
                 "Física",
                 "Gestão Ambiental",
                 "Gestão do Agronegócio",
+                "História",
                 "Licenciatura em Educação do Campo",
+                "Lingua Francesa e Respectiva Literatura",
+                "Lingua Portuguesa e Respectiva Literatura",
                 "Meio Ambiente e Desenvolvimento Rural - Mestrado",
                 "Outro"
             ],
-            "tipo": "radio",
             "id": "curso",
-            "enunciado": "Curso/Setor"
+            "enunciado": "Curso/Setor",
+            "tipo": "radio"
         },
         {
-            "tipo": "text",
             "id": "eml",
-            "enunciado": "Contato (e-Mail, Zap...)"
+            "enunciado": "Contato (e-Mail, Zap...)",
+            "tipo": "text"
         }
     ],
-    "arquivo_de_registro": "usuarios.json"
+    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP"
 }
