@@ -1,8 +1,3 @@
-Traceback (most recent call last):
-  File "/usr/bin/fragment", line 19, in <module>
-    from python_modules.cli_base import pasta_de_seguranca, pasta_de_fragmentos, arquivo_usuarios, rclone_drive
-ImportError: cannot import name 'rclone_drive'
-
 
 
 Traceback (most recent call last):

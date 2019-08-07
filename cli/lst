@@ -92,7 +92,8 @@ def main():
             print(listar_dicionario(dados_processos_pend, [col_wid['identificador'], col_wid['numero_sei'], col_wid['assunto']]))
 
     elif args['est'] or args['estudos']:
-        pass
+        from python_modules.cli_base import dados_estudos
+        print(listar_dicionario(dados_estudos, [col_wid['identificador'], col_wid['cotista'], col_wid['turno_curso'], col_wid['motivos_estudo'], col_wid['campus']]))
 
     elif args['pro'] or args['profissionais']:
         from python_modules.cli_base import dados_profissionais

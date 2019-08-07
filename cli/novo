@@ -164,7 +164,8 @@ def novo_estudo_info_estudante(identificador):
     idt = numero_identificador_mascara(identificador)
     nfo['semestre'] = periodo_corrente
     nfo['identificador'] = idt
-    nfo['estudo_id'] = timestamp('mkid')
+    nfo['estudo_id'] = "{}@{}".format(idt,periodo_corrente)
+    nfo['controle_pendencias'] = []
     if not idt in matriculas:
         novo_usuario(idt)
         matriculas.append(idt)
@@ -196,8 +197,6 @@ def novo_estudo_info_membros_familia(identificador, nfo):
     else:
         nfo['membros_grupo_familiar'] = {}
         nfo['membros_grupo_familiar'][nfo_tmp['nome']] = nfo_tmp
-    #for col in nfo_tmp.keys():
-    #    nfo[col] = nfo_tmp[col]
     dados_estudos.append(nfo)
     save_json(dados_estudos, arquivo_estudos)
     return nfo

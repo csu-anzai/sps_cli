@@ -137,6 +137,12 @@ def get_nfo(identificador, set_de_dados, index_de_dados):
             return s['dados'].get(identificador)
 
 
+def get_info_doc(arquivo_de_dados, coluna, valor_de_checagem):
+    for doc in arquivo_de_dados:
+        if doc[coluna] == valor_de_checagem:
+            return doc
+
+
 def show_nfo_frag(identificador, set_de_dados, arquivo_de_dados, index_de_dados, print_info=True):
     ret_nfo = get_nfo(identificador, set_de_dados, index_de_dados)
     if ret_nfo:
