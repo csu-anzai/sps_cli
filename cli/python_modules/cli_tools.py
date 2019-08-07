@@ -1304,8 +1304,8 @@ def render_form_get_values(form_file, skip_q=[]):
                 
                 nfo[q['id']] = nfo[q['id']].replace('Outro', outros_recem_listados)
                 rewrite_form = True
-            print("")
-            return (nfo[q['id']], rewrite_form)
+            #print("")
+            #return (nfo[q['id']], rewrite_form)
         
         elif type(q['alternativas']) == dict:
             nfo_q_id = "; ".join(nfo[q['id']])
