@@ -176,9 +176,6 @@ def main():
     curso = getoutput("target get curso")
     cotista = estudo_info['cotista']
 
-    if cotista == "Não":
-        cotista = 'não cotista'
-
     idade = calcular_idade(estudo_info['dn'])
     tipo_EM = estudo_info['tipo_EM'].lower()
     ano_EM = estudo_info['ano_EM']
