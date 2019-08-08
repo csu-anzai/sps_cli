@@ -1243,104 +1243,95 @@ def render_form_get_values(form_file, skip_q=[]):
 	}	
 	'''
 
-	def objective_question_handler(q, form_triggers_info):
+	def objective_question_handler(q):
 		rewrite_form = False
-		skip_this = False
 		grupos_de_opcao = []
 		grupos_de_alternativas = []
 
-		if form_triggers_info.get(q['id']):
-			if form_triggers_info[q['id']].get('trigger_skip'):
-				for t in form_triggers_info[q['id']]['trigger_skip'].keys():
-					if nfo[t] in form_triggers_info[q['id']]['trigger_skip'][t]:
-						skip_this = True
-						break
-
-		if not skip_this:
-			print(verde(q['enunciado']))
-			if q['tipo'] == 'radio':
-				if type(q['alternativas']) == list:
-					nfo[q['id']] = select_op(q['alternativas'], 1)
-				else:
-					print("Campos do tipo 'radio' devem ter suas alternativas organizadas em lista...")
-					print("Favor corrigir o arquivo de formulário...")
-					exit()
-
-			elif q['tipo'] == 'checkbox':
-				if type(q['alternativas']) == list:
-					nfo[q['id']] = "; ".join(select_ops(q['alternativas'], 1))
-				
-				elif type(q['alternativas']) == dict:
-					for a in q['alternativas'].keys():
-						grupos_de_alternativas.append(a)
-					grupos_de_alternativas.sort()
-					gopt = select_ops(grupos_de_alternativas, 1)
-					alternativas_efetivas = []
-					for grp_op_key in gopt:
-						grupos_de_opcao.append(grp_op_key)
-						for op in q['alternativas'][grp_op_key]:
-							if not op in alternativas_efetivas:
-								alternativas_efetivas.append(op)
-					alternativas_efetivas.sort()
-					alternativas_efetivas.append("Outro")
-					nfo[q['id']] = select_ops(alternativas_efetivas, 1)
-
+		print(verde(q['enunciado']))
+		if q['tipo'] == 'radio':
 			if type(q['alternativas']) == list:
-				if nfo[q['id']].find('Outro') != -1:
-					nfo[q['id']] = nfo[q['id']].split('; ')
-					nfo[q['id']].remove('Outro')
-					outros_recem_listados = []
-					while True:
-						outro_detalhes = input('Especifique: ')
-						outros_recem_listados.append(outro_detalhes)
-						q['alternativas'].remove('Outro')
-						q['alternativas'].append(outro_detalhes)
-						q['alternativas'].sort()
-						q['alternativas'].append('Outro')
-						print("")
-						print(verde("Adicionar outra opção? [s|n]"))
-						op = input_op(['s','n'])
-						if op == 'n':
-							break
-					
-					nfo[q['id']] = merge_lists(nfo[q['id']], outros_recem_listados)
-					if len(nfo[q['id']]) > 1:
-						nfo[q['id']] = '; '.join(nfo[q['id']])
-					else:
-						nfo[q['id']] = nfo[q['id']][0]
+				nfo[q['id']] = select_op(q['alternativas'], 1)
+			else:
+				print("Campos do tipo 'radio' devem ter suas alternativas organizadas em lista...")
+				print("Favor corrigir o arquivo de formulário...")
+				exit()
 
-					rewrite_form = True
+		elif q['tipo'] == 'checkbox':
+			if type(q['alternativas']) == list:
+				nfo[q['id']] = "; ".join(select_ops(q['alternativas'], 1))
 			
 			elif type(q['alternativas']) == dict:
-				nfo_q_id = "; ".join(nfo[q['id']])
-				if nfo_q_id.find('Outro') != -1:
-					outros_recem_listados = []
-					while True:
-						print(verde('À qual grupo a obção divergente pertence: '))
-						grp_op_key_field = select_op(grupos_de_alternativas, 1)
-						outro_detalhes = input(verde('\nEspecifique a opção divergente: '))
-						outros_recem_listados.append(outro_detalhes)
-						q['alternativas'][grp_op_key_field].append(outro_detalhes)
-						q['alternativas'][grp_op_key_field].sort()
-						print("")
-						print(verde("Adicionar outra opção? [s|n]"))
-						op = input_op(['s','n'])
-						if op == 'n':
-							break
-					
-					if len(outros_recem_listados) > 1:
-						outros_recem_listados = "; ".join(outros_recem_listados)
-					else:
-						outros_recem_listados = outros_recem_listados[0]
+				for a in q['alternativas'].keys():
+					grupos_de_alternativas.append(a)
+				grupos_de_alternativas.sort()
+				gopt = select_ops(grupos_de_alternativas, 1)
+				alternativas_efetivas = []
+				for grp_op_key in gopt:
+					grupos_de_opcao.append(grp_op_key)
+					for op in q['alternativas'][grp_op_key]:
+						if not op in alternativas_efetivas:
+							alternativas_efetivas.append(op)
+				alternativas_efetivas.sort()
+				alternativas_efetivas.append("Outro")
+				nfo[q['id']] = select_ops(alternativas_efetivas, 1)
 
-					nfo[q['id']] = nfo_q_id.replace('Outro', outros_recem_listados)
-					rewrite_form = True
-			
-			if rewrite_form == True:
-				save_json(form, form_file)
+		if type(q['alternativas']) == list:
+			if nfo[q['id']].find('Outro') != -1:
+				nfo[q['id']] = nfo[q['id']].split('; ')
+				nfo[q['id']].remove('Outro')
+				outros_recem_listados = []
+				while True:
+					outro_detalhes = input('Especifique: ')
+					outros_recem_listados.append(outro_detalhes)
+					q['alternativas'].remove('Outro')
+					q['alternativas'].append(outro_detalhes)
+					q['alternativas'].sort()
+					q['alternativas'].append('Outro')
+					print("")
+					print(verde("Adicionar outra opção? [s|n]"))
+					op = input_op(['s','n'])
+					if op == 'n':
+						break
+				
+				nfo[q['id']] = merge_lists(nfo[q['id']], outros_recem_listados)
+				if len(nfo[q['id']]) > 1:
+					nfo[q['id']] = '; '.join(nfo[q['id']])
+				else:
+					nfo[q['id']] = nfo[q['id']][0]
 
-			print("")
-			return (nfo[q['id']], rewrite_form)
+				rewrite_form = True
+		
+		elif type(q['alternativas']) == dict:
+			nfo_q_id = "; ".join(nfo[q['id']])
+			if nfo_q_id.find('Outro') != -1:
+				outros_recem_listados = []
+				while True:
+					print(verde('À qual grupo a obção divergente pertence: '))
+					grp_op_key_field = select_op(grupos_de_alternativas, 1)
+					outro_detalhes = input(verde('\nEspecifique a opção divergente: '))
+					outros_recem_listados.append(outro_detalhes)
+					q['alternativas'][grp_op_key_field].append(outro_detalhes)
+					q['alternativas'][grp_op_key_field].sort()
+					print("")
+					print(verde("Adicionar outra opção? [s|n]"))
+					op = input_op(['s','n'])
+					if op == 'n':
+						break
+				
+				if len(outros_recem_listados) > 1:
+					outros_recem_listados = "; ".join(outros_recem_listados)
+				else:
+					outros_recem_listados = outros_recem_listados[0]
+
+				nfo[q['id']] = nfo_q_id.replace('Outro', outros_recem_listados)
+				rewrite_form = True
+		
+		if rewrite_form == True:
+			save_json(form, form_file)
+
+		print("")
+		return (nfo[q['id']], rewrite_form)
 
 	def create_trigger_file(form_trigger_file):
 		form_triggers_info = {}
@@ -1394,19 +1385,28 @@ def render_form_get_values(form_file, skip_q=[]):
 
 	nfo = {}
 	for q in form['questoes']:
-		if q['id'] in skip_q:
-			pass
+		skip_this = False
+		if form_triggers_info.get(q['id']):
+			if form_triggers_info[q['id']].get('trigger_skip'):
+				for t in form_triggers_info[q['id']]['trigger_skip'].keys():
+					if nfo[t] in form_triggers_info[q['id']]['trigger_skip'][t]:
+						skip_this = True
+						break
 
-		elif q['tipo'] == 'text':
-			nfo[q['id']] = input("{}: ".format(verde(q['enunciado'])))
-			print("")
-
-		elif q['tipo'] == 'radio' or q['tipo'] == 'checkbox':
-			try:
-				q_response = objective_question_handler(q, form_triggers_info)
-				nfo[q['id']] = q_response[0]
-			except TypeError:
+		if not skip_this:
+			if q['id'] in skip_q:
 				pass
+
+			elif q['tipo'] == 'text':
+				nfo[q['id']] = input("{}: ".format(verde(q['enunciado'])))
+				print("")
+
+			elif q['tipo'] == 'radio' or q['tipo'] == 'checkbox':
+				try:
+					q_response = objective_question_handler(q)
+					nfo[q['id']] = q_response[0]
+				except TypeError:
+					pass
 
 	return nfo
 

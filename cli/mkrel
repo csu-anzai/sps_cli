@@ -150,14 +150,22 @@ def analisar_cota(valor_campo_cota):
     elif valor_campo_cota == "Sim - Escola Pública Alta Renda nPPI":
         return 'cotista alta renda não PPI'        
 
+def analisar_renda_estudante(estudo, nome):
+    estudante = {}
+    if estudo['situacao_renda_estudante'] != "Sem renda":
+        estudante['situacao_renda'] = estudo['situacao_renda_estudante']
+        return "{} possui renda própria proveniente {}".format(nome, analisar_renda_mantenedores(estudante))
+            
+
 
 
 def main():
 
     output = """
     Estudante de #IDADE# anos de idade, #COTISTA#,
-    proveniente de escola #TIPO_EM#,
+    proveniente de escola #TIPO_EM# com ensino médio concluso em #ANO_EM#,
     vinculad#@# ao curso de #CURSO# (#TURNO#).
+    #RENDA_ESTUDANTE#. 
     Reside #SITUACAO_RESIDENCIA# em moradia #MORADIA_CONDICAO# 
     na cidade de #MORADIA_CIDADE#, zona #MORADIA_REGIAO# do #MORADIA_LOCALIDADE#.
     O grupo familiar é constituído por mais #NUM_PESSOAS# integrantes, 
@@ -229,8 +237,10 @@ def main():
     output = output.replace("#IDADE#", str(idade))
     output = output.replace("#COTISTA#", analisar_cota(cotista))
     output = output.replace("#TIPO_EM#", tipo_EM)
+    output = output.replace("#ANO_EM#", ano_EM)
     output = output.replace("#CURSO#", curso)
     output = output.replace("#TURNO#", turno_curso)
+    output = output.replace("#RENDA_ESTUDANTE#", analisar_renda_estudante(estudo_info, nome))
     output = output.replace("#NUM_PESSOAS#", str(num_pessoas))
     output = output.replace("#INTEGRANTES#", informacao_basica_pessoas)
     output = output.replace("#SITUACAO_RESIDENCIA#", situacao_residencia)

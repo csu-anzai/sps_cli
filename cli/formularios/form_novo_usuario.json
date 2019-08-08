@@ -1,33 +1,34 @@
 {
-    "titulo": "Formulário para cadastro de estudante",
     "arquivo_de_registro": "usuarios.json",
+    "titulo": "Formulário para cadastro de estudante",
     "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
     "questoes": [
         {
-            "id": "identificador",
             "tipo": "text",
-            "enunciado": "Identificador"
+            "enunciado": "Identificador",
+            "id": "identificador"
         },
         {
-            "id": "nome",
             "tipo": "text",
-            "enunciado": "Nome"
+            "enunciado": "Nome",
+            "id": "nome"
         },
         {
-            "id": "publico_tipo",
             "tipo": "radio",
+            "enunciado": "Grupo de pertencimento do usuário",
+            "id": "publico_tipo",
             "alternativas": [
                 "Comunidade externa",
                 "Estudante",
                 "Servidor",
                 "Outro"
-            ],
-            "enunciado": "Grupo de pertencimento do usuário"
+            ]
         },
         {
-            "id": "curso",
             "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor",
             "tipo": "radio",
+            "enunciado": "Curso/Setor",
+            "id": "curso",
             "alternativas": [
                 "Administração",
                 "Biofísica",
@@ -48,15 +49,16 @@
                 "Licenciatura em Educação do Campo",
                 "Lingua Francesa e Respectiva Literatura",
                 "Lingua Portuguesa e Respectiva Literatura",
+                "Maringa de santos",
                 "Meio Ambiente e Desenvolvimento Rural - Mestrado",
                 "Outro"
-            ],
-            "enunciado": "Curso/Setor"
+            ]
         },
         {
-            "id": "eml",
+            "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor",
             "tipo": "text",
-            "enunciado": "Contato (e-Mail, Zap...)"
+            "enunciado": "Contato (e-Mail, Zap...)",
+            "id": "eml"
         }
     ],
     "campos_de_listagem": "identificador, nome, curso, eml"
