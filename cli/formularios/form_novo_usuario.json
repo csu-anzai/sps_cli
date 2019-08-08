@@ -1,32 +1,37 @@
 {
     "titulo": "Formulário para cadastro de estudante",
     "arquivo_de_registro": "usuarios.json",
-    "campos_de_listagem": "identificador, nome, curso, eml",
+    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
     "questoes": [
         {
             "id": "identificador",
-            "enunciado": "Identificador",
-            "tipo": "text"
+            "tipo": "text",
+            "enunciado": "Identificador"
         },
         {
             "id": "nome",
-            "enunciado": "Nome",
-            "tipo": "text"
+            "tipo": "text",
+            "enunciado": "Nome"
         },
         {
+            "id": "publico_tipo",
+            "tipo": "radio",
             "alternativas": [
                 "Comunidade externa",
                 "Estudante",
                 "Servidor",
                 "Outro"
             ],
-            "id": "publico_tipo",
-            "enunciado": "Grupo de pertencimento do usuário",
-            "tipo": "radio"
+            "enunciado": "Grupo de pertencimento do usuário"
         },
         {
+            "id": "curso",
+            "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor",
+            "tipo": "radio",
             "alternativas": [
                 "Administração",
+                "Biofísica",
+                "Bioritmo",
                 "Ciências Contábeis",
                 "Ciências Naturais",
                 "Ciências Sociais",
@@ -46,15 +51,13 @@
                 "Meio Ambiente e Desenvolvimento Rural - Mestrado",
                 "Outro"
             ],
-            "id": "curso",
-            "enunciado": "Curso/Setor",
-            "tipo": "radio"
+            "enunciado": "Curso/Setor"
         },
         {
             "id": "eml",
-            "enunciado": "Contato (e-Mail, Zap...)",
-            "tipo": "text"
+            "tipo": "text",
+            "enunciado": "Contato (e-Mail, Zap...)"
         }
     ],
-    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP"
+    "campos_de_listagem": "identificador, nome, curso, eml"
 }

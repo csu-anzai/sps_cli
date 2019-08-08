@@ -1212,146 +1212,201 @@ def interval_select(selection_string):
 
 
 def render_form_get_values(form_file, skip_q=[]):
-    '''
-    Renderiza as questões de um formulário JSON conforme a estrutura abaixo.
-    Retorna um dicionário com as respostas.
-    As chaves são definidas conforme o atributo 'id'.
-    Os valores são resultado do input dos usuários.
+	'''
+	Renderiza as questões de um formulário JSON conforme a estrutura abaixo.
+	Retorna um dicionário com as respostas.
+	As chaves são definidas conforme o atributo 'id'.
+	Os valores são resultado do input dos usuários.
 
-    {
-        "titulo": "Registro de atendimento",
-        "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
-        "questoes":
-        [
-            {
-                "enunciado": "Matrícula",
-                "id": "identificador",
-                "tipo": "text",
-            },
-            {
-                "enunciado": "Tipo de atendimento",
-                "id": "atd_t",
-                "tipo": "radio",
-                "alternativas" :
-                [
-                    "Informação presencial",
-                    "Informação via telefone",
-                    ...
-                ]            
-            }
-        ]
-    }	
-    '''
+	{
+		"titulo": "Registro de atendimento",
+		"descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
+		"questoes":
+		[
+			{
+				"enunciado": "Matrícula",
+				"id": "identificador",
+				"tipo": "text",
+			},
+			{
+				"enunciado": "Tipo de atendimento",
+				"id": "atd_t",
+				"tipo": "radio",
+				"alternativas" :
+				[
+					"Informação presencial",
+					"Informação via telefone",
+					...
+				]            
+			}
+		]
+	}	
+	'''
 
-    def objective_question_handler(q):
-        rewrite_form = False
-        grupos_de_opcao = []
-        grupos_de_alternativas = []
-        print(verde(q['enunciado']))
+	def objective_question_handler(q, form_triggers_info):
+		rewrite_form = False
+		skip_this = False
+		grupos_de_opcao = []
+		grupos_de_alternativas = []
 
-        if q['tipo'] == 'radio':
-            if type(q['alternativas']) == list:
-                nfo[q['id']] = select_op(q['alternativas'], 1)
-            else:
-                print("Campos do tipo 'radio' devem ter suas alternativas organizadas em lista...")
-                print("Favor corrigir o arquivo de formulário...")
-                exit()
+		if form_triggers_info.get(q['id']):
+			if form_triggers_info[q['id']].get('trigger_skip'):
+				for t in form_triggers_info[q['id']]['trigger_skip'].keys():
+					if nfo[t] in form_triggers_info[q['id']]['trigger_skip'][t]:
+						skip_this = True
+						break
 
-        elif q['tipo'] == 'checkbox':
-            if type(q['alternativas']) == list:
-                nfo[q['id']] = "; ".join(select_ops(q['alternativas'], 1))
-            
-            elif type(q['alternativas']) == dict:
-                for a in q['alternativas'].keys():
-                    grupos_de_alternativas.append(a)
-                grupos_de_alternativas.sort()
-                gopt = select_ops(grupos_de_alternativas, 1)
-                alternativas_efetivas = []
-                for grp_op_key in gopt:
-                    grupos_de_opcao.append(grp_op_key)
-                    for op in q['alternativas'][grp_op_key]:
-                        if not op in alternativas_efetivas:
-                            alternativas_efetivas.append(op)
-                alternativas_efetivas.sort()
-                alternativas_efetivas.append("Outro")
-                nfo[q['id']] = select_ops(alternativas_efetivas, 1)
+		if not skip_this:
+			print(verde(q['enunciado']))
+			if q['tipo'] == 'radio':
+				if type(q['alternativas']) == list:
+					nfo[q['id']] = select_op(q['alternativas'], 1)
+				else:
+					print("Campos do tipo 'radio' devem ter suas alternativas organizadas em lista...")
+					print("Favor corrigir o arquivo de formulário...")
+					exit()
 
-        if type(q['alternativas']) == list:
-            if nfo[q['id']].find('Outro') != -1:
-                outros_recem_listados = []
-                while True:
-                    outro_detalhes = input('Especifique: ')
-                    outros_recem_listados.append(outro_detalhes)
-                    q['alternativas'].remove('Outro')
-                    q['alternativas'].append(outro_detalhes)
-                    q['alternativas'].sort()
-                    q['alternativas'].append('Outro')
-                    print("")
-                    print(verde("Adicionar outra opção? [s|n]"))
-                    op = input_op(['s','n'])
-                    if op == 'n':
-                        break
-                
-                if len(nfo[q['id']]) > 1:
-                    nfo[q['id']] = '; '.join(nfo[q['id']])
-                else:
-                    nfo[q['id']] = nfo[q['id']][0]
+			elif q['tipo'] == 'checkbox':
+				if type(q['alternativas']) == list:
+					nfo[q['id']] = "; ".join(select_ops(q['alternativas'], 1))
+				
+				elif type(q['alternativas']) == dict:
+					for a in q['alternativas'].keys():
+						grupos_de_alternativas.append(a)
+					grupos_de_alternativas.sort()
+					gopt = select_ops(grupos_de_alternativas, 1)
+					alternativas_efetivas = []
+					for grp_op_key in gopt:
+						grupos_de_opcao.append(grp_op_key)
+						for op in q['alternativas'][grp_op_key]:
+							if not op in alternativas_efetivas:
+								alternativas_efetivas.append(op)
+					alternativas_efetivas.sort()
+					alternativas_efetivas.append("Outro")
+					nfo[q['id']] = select_ops(alternativas_efetivas, 1)
 
-                if len(outros_recem_listados) > 1:
-                    outros_recem_listados = "; ".join(outros_recem_listados)
-                else:
-                    outros_recem_listados = outros_recem_listados[0]
-                
-                nfo[q['id']] = nfo[q['id']].replace('Outro', outros_recem_listados)
-                rewrite_form = True
-            #print("")
-            #return (nfo[q['id']], rewrite_form)
-        
-        elif type(q['alternativas']) == dict:
-            nfo_q_id = "; ".join(nfo[q['id']])
-            if nfo_q_id.find('Outro') != -1:
-                outros_recem_listados = []
-                while True:
-                    print(verde('À qual grupo a obção divergente pertence: '))
-                    grp_op_key_field = select_op(grupos_de_alternativas, 1)
-                    outro_detalhes = input(verde('\nEspecifique a opção divergente: '))
-                    outros_recem_listados.append(outro_detalhes)
-                    q['alternativas'][grp_op_key_field].append(outro_detalhes)
-                    q['alternativas'][grp_op_key_field].sort()
-                    print("")
-                    print(verde("Adicionar outra opção? [s|n]"))
-                    op = input_op(['s','n'])
-                    if op == 'n':
-                        break
-                
-                if len(outros_recem_listados) > 1:
-                    outros_recem_listados = "; ".join(outros_recem_listados)
-                else:
-                    outros_recem_listados = outros_recem_listados[0]
+			if type(q['alternativas']) == list:
+				if nfo[q['id']].find('Outro') != -1:
+					nfo[q['id']] = nfo[q['id']].split('; ')
+					nfo[q['id']].remove('Outro')
+					outros_recem_listados = []
+					while True:
+						outro_detalhes = input('Especifique: ')
+						outros_recem_listados.append(outro_detalhes)
+						q['alternativas'].remove('Outro')
+						q['alternativas'].append(outro_detalhes)
+						q['alternativas'].sort()
+						q['alternativas'].append('Outro')
+						print("")
+						print(verde("Adicionar outra opção? [s|n]"))
+						op = input_op(['s','n'])
+						if op == 'n':
+							break
+					
+					nfo[q['id']] = merge_lists(nfo[q['id']], outros_recem_listados)
+					if len(nfo[q['id']]) > 1:
+						nfo[q['id']] = '; '.join(nfo[q['id']])
+					else:
+						nfo[q['id']] = nfo[q['id']][0]
 
-                nfo[q['id']] = nfo_q_id.replace('Outro', outros_recem_listados)
-                rewrite_form = True
-        
-        if rewrite_form == True:
-            save_json(form, form_file)
+					rewrite_form = True
+			
+			elif type(q['alternativas']) == dict:
+				nfo_q_id = "; ".join(nfo[q['id']])
+				if nfo_q_id.find('Outro') != -1:
+					outros_recem_listados = []
+					while True:
+						print(verde('À qual grupo a obção divergente pertence: '))
+						grp_op_key_field = select_op(grupos_de_alternativas, 1)
+						outro_detalhes = input(verde('\nEspecifique a opção divergente: '))
+						outros_recem_listados.append(outro_detalhes)
+						q['alternativas'][grp_op_key_field].append(outro_detalhes)
+						q['alternativas'][grp_op_key_field].sort()
+						print("")
+						print(verde("Adicionar outra opção? [s|n]"))
+						op = input_op(['s','n'])
+						if op == 'n':
+							break
+					
+					if len(outros_recem_listados) > 1:
+						outros_recem_listados = "; ".join(outros_recem_listados)
+					else:
+						outros_recem_listados = outros_recem_listados[0]
 
-        print("")
-        return (nfo[q['id']], rewrite_form)
+					nfo[q['id']] = nfo_q_id.replace('Outro', outros_recem_listados)
+					rewrite_form = True
+			
+			if rewrite_form == True:
+				save_json(form, form_file)
+
+			print("")
+			return (nfo[q['id']], rewrite_form)
+
+	def create_trigger_file(form_trigger_file):
+		form_triggers_info = {}
+		form_triggers_info['arquivo_de_registro'] = form['arquivo_de_registro']
+		for q in form['questoes']:
+			if q.get('trigger_skip'):
+				form_triggers_info[q['id']] = {}
+				form_triggers_info[q['id']]['trigger_skip'] = {}
+				condicoes_in_form = q['trigger_skip'].split('; ')
+				condicoes_in_trigger_file = {}
+				for c in condicoes_in_form:
+					csplit = c.split('::')
+					if condicoes_in_trigger_file.get(csplit[0]):
+						condicoes_in_trigger_file[csplit[0]].append(csplit[1])
+					else:
+						condicoes_in_trigger_file[csplit[0]] = [csplit[1]]
+				form_triggers_info[q['id']]['trigger_skip'] = condicoes_in_trigger_file
+		save_json(form_triggers_info, form_triggers_file)
+		return form_triggers_info
 
 
-    form = load_json(form_file)
-    nfo = {}
-    for q in form['questoes']:
-        if q['id'] in skip_q:
-            pass
+	def append_trigger_to_trigger_dict(form_triggers_info, questoes):
+		for q in questoes:
+			if q.get('trigger_skip'):
+				form_triggers_info[q['id']] = {}
+				form_triggers_info[q['id']]['trigger_skip'] = {}
+				condicoes_in_form = q['trigger_skip'].split('; ')
+				condicoes_in_trigger_file = {}
+				for c in condicoes_in_form:
+					csplit = c.split('::')
+					if condicoes_in_trigger_file.get(csplit[0]):
+						condicoes_in_trigger_file[csplit[0]].append(csplit[1])
+					else:
+						condicoes_in_trigger_file[csplit[0]] = [csplit[1]]
+				form_triggers_info[q['id']]['trigger_skip'] = condicoes_in_trigger_file
+		return form_triggers_info
 
-        elif q['tipo'] == 'text':
-            nfo[q['id']] = input("{}: ".format(verde(q['enunciado'])))
-            print("")
 
-        elif q['tipo'] == 'radio' or q['tipo'] == 'checkbox':
-            q_response = objective_question_handler(q)
-            nfo[q['id']] = q_response[0]
+	form = load_json(form_file)
 
-    return nfo
+	form_triggers_file = getoutput('echo $HOME')+'/.form_triggers'
+	try: #substituir para checagem de existencia do arquivo
+		form_triggers_info = load_json(form_triggers_file)
+		if form_triggers_info['arquivo_de_registro'] != form['arquivo_de_registro']:
+			form_triggers_info = create_trigger_file(form_triggers_file)
+		else:
+			form_triggers_info = append_trigger_to_trigger_dict(form_triggers_info, form['questoes'])
+	except:
+		form_triggers_info = create_trigger_file(form_triggers_file)
+
+
+	nfo = {}
+	for q in form['questoes']:
+		if q['id'] in skip_q:
+			pass
+
+		elif q['tipo'] == 'text':
+			nfo[q['id']] = input("{}: ".format(verde(q['enunciado'])))
+			print("")
+
+		elif q['tipo'] == 'radio' or q['tipo'] == 'checkbox':
+			try:
+				q_response = objective_question_handler(q, form_triggers_info)
+				nfo[q['id']] = q_response[0]
+			except TypeError:
+				pass
+
+	return nfo
 
