@@ -1,19 +1,22 @@
 {
+    "titulo": "Questões para avaliação socioeconômica",
+    "campos_de_listagem": "identificador, motivos_estudo, campus",
     "questoes": [
         {
-            "id": "relacao_aes",
+            "enunciado": "Relação com a Assistencia Estudantil",
             "alternativas": [
-                "Não possui vínculo com a assistencia, primeiro estudo socioeconômico",
-                "Já possui estudo socioeconômico válido",
-                "Está em processo de reintegração à assistencia",
                 "Está atualizando ou pleiteando acesso a outros programas",
+                "Está em processo de reintegração à assistencia",
+                "Já possui estudo socioeconômico válido",
+                "Não possui vínculo com a assistencia, primeiro estudo socioeconômico",
+                "Não possui vínculo com a assistência, foi desclassificada em processos anteriores",
                 "Outro"
             ],
             "tipo": "radio",
-            "enunciado": "Relação com a Assistencia Estudantil"
+            "id": "relacao_aes"
         },
         {
-            "id": "cotista",
+            "enunciado": "Estudante cotista",
             "alternativas": [
                 "Não",
                 "Sim - Escola Pública Baixa Renda PPI",
@@ -23,20 +26,20 @@
                 "Outro"
             ],
             "tipo": "radio",
-            "enunciado": "Estudante cotista"
+            "id": "cotista"
         },
         {
-            "id": "turno_curso",
+            "enunciado": "Turno do curso",
             "alternativas": [
                 "Diurno",
                 "Noturno",
                 "Outro"
             ],
             "tipo": "radio",
-            "enunciado": "Turno do curso"
+            "id": "turno_curso"
         },
         {
-            "id": "motivos_estudo",
+            "enunciado": "Programas de interesse",
             "alternativas": [
                 "Alimentação",
                 "Moradia estudantil",
@@ -46,10 +49,10 @@
                 "Outro"
             ],
             "tipo": "checkbox",
-            "enunciado": "Programas de interesse"
+            "id": "motivos_estudo"
         },
         {
-            "id": "campus",
+            "enunciado": "Campus de origem",
             "alternativas": [
                 "Darcy Ribeiro",
                 "FCE",
@@ -57,15 +60,15 @@
                 "FUP"
             ],
             "tipo": "radio",
-            "enunciado": "Campus de origem"
+            "id": "campus"
         },
         {
-            "id": "dn",
             "enunciado": "Data de nascimento do estudante",
-            "tipo": "text"
+            "tipo": "text",
+            "id": "dn"
         },
         {
-            "id": "registro_genitores",
+            "enunciado": "Registrado por âmbos genitores",
             "alternativas": [
                 "Sim",
                 "Apenas mãe",
@@ -73,10 +76,10 @@
                 "Não"
             ],
             "tipo": "radio",
-            "enunciado": "Registrado por âmbos genitores"
+            "id": "registro_genitores"
         },
         {
-            "id": "pais_falecidos",
+            "enunciado": "Responsáveis legais são falecidos",
             "alternativas": [
                 "Não",
                 "Apenas mãe",
@@ -84,10 +87,10 @@
                 "Sim"
             ],
             "tipo": "radio",
-            "enunciado": "Responsáveis legais são falecidos"
+            "id": "pais_falecidos"
         },
         {
-            "id": "pais_separados",
+            "enunciado": "Responsáveis legais são separados",
             "alternativas": [
                 "Não",
                 "Sim, foram formalmente casados e estão separados",
@@ -96,10 +99,10 @@
                 "Não se aplica"
             ],
             "tipo": "radio",
-            "enunciado": "Responsáveis legais são separados"
+            "id": "pais_separados"
         },
         {
-            "id": "estudante_nivel",
+            "enunciado": "Nível do curso do estudante",
             "alternativas": [
                 "Graduação",
                 "Especialização",
@@ -108,34 +111,34 @@
                 "Outro"
             ],
             "tipo": "radio",
-            "enunciado": "Nível do curso do estudante"
+            "id": "estudante_nivel"
         },
         {
-            "id": "localidade_EM",
+            "enunciado": "Localidade onde cursou Ensino Médio",
             "alternativas": [
                 "DF",
                 "RIDE",
                 "Outra UF"
             ],
             "tipo": "radio",
-            "enunciado": "Localidade onde cursou Ensino Médio"
+            "id": "localidade_EM"
         },
         {
-            "id": "ano_EM",
             "enunciado": "Ano de conclusão do Ensino Médio",
-            "tipo": "text"
+            "tipo": "text",
+            "id": "ano_EM"
         },
         {
-            "id": "tipo_EM",
+            "enunciado": "Tipo escola/instituição do Ensino Médio",
             "alternativas": [
                 "Pública",
                 "Privada"
             ],
             "tipo": "radio",
-            "enunciado": "Tipo escola/instituição do Ensino Médio"
+            "id": "tipo_EM"
         },
         {
-            "id": "situacao_residencia",
+            "enunciado": "Situação de residência do estudante",
             "alternativas": [
                 "Casa do Estudante Universitário (CEU)",
                 "Com grupo familiar",
@@ -146,10 +149,10 @@
                 "Outro"
             ],
             "tipo": "radio",
-            "enunciado": "Situação de residência do estudante"
+            "id": "situacao_residencia"
         },
         {
-            "id": "moradia_localidade",
+            "enunciado": "Localidade de residência do/a estudante",
             "alternativas": [
                 "DF",
                 "RIDE",
@@ -157,17 +160,20 @@
                 "Sem residência"
             ],
             "tipo": "radio",
-            "enunciado": "Localidade de residência do/a estudante"
+            "id": "moradia_localidade"
         },
         {
-            "id": "moradia_cidade",
+            "enunciado": "Cidade de residência do estudante",
             "alternativas": [
                 "Aguas Claras",
                 "Aguas Lindas-GO",
+                "Arapoanga",
                 "Brasília",
                 "Brazlândia",
                 "Candangolândia",
                 "Ceilândia",
+                "Ceilândia (Pôr do Sol)",
+                "Ceilândia II",
                 "Cidade do Automóvel",
                 "Cruzeiro",
                 "Estrutural",
@@ -178,45 +184,45 @@
                 "Guará II",
                 "Itapoã",
                 "Jardim Botânico",
+                "Jardins Mangueiral",
                 "Luziânia-GO",
+                "Núcleo Bandeirante",
+                "Paranoá",
                 "Park Way",
                 "Planaltina",
                 "Planaltina-GO",
                 "Recanto das Emas",
                 "Riacho Fundo",
                 "Riacho Fundo II",
-                "Samambaia",
-                "Santa Maria",
-                "São Sebastião",
                 "SCIA",
                 "SIA",
+                "Samambaia",
+                "Santa Maria",
                 "Sobradinho",
                 "Sobradinho II",
                 "Sudoeste",
+                "São Sebastião",
                 "Taguatinga",
-                "Varjão",
                 "Valparaíso-GO",
-                "Núcleo Bandeirante",
-                "Vila Telebrasília",
+                "Varjão",
                 "Vicente Pires",
-                "Jardins Mangueiral",
-                "Paranoá",
+                "Vila Telebrasília",
                 "Outro"
             ],
             "tipo": "radio",
-            "enunciado": "Cidade de residência do estudante"
+            "id": "moradia_cidade"
         },
         {
-            "id": "moradia_regiao",
+            "enunciado": "Região onde localiza-se a residencia do estudante",
             "alternativas": [
                 "Cidade",
                 "Campo"
             ],
             "tipo": "radio",
-            "enunciado": "Região onde localiza-se a residencia do estudante"
+            "id": "moradia_regiao"
         },
         {
-            "id": "moradia_condicao",
+            "enunciado": "Condição da moradia do estudante",
             "alternativas": [
                 "Alugada",
                 "Casa do Estudante Universitário (CEU)",
@@ -226,22 +232,23 @@
                 "Financiada",
                 "Imóvel funcional",
                 "Própria ou da familia",
+                "Termo de direito de posse",
                 "Outro"
             ],
             "tipo": "radio",
-            "enunciado": "Condição da moradia do estudante"
+            "id": "moradia_condicao"
         },
         {
-            "id": "contribui_renda",
+            "enunciado": "Estudante contribui para a renda familiar?",
             "alternativas": [
                 "Não",
                 "Sim"
             ],
             "tipo": "radio",
-            "enunciado": "Estudante contribui para a renda familiar?"
+            "id": "contribui_renda"
         },
         {
-            "id": "situacao_renda_estudante",
+            "enunciado": "Situação de renda do estudante",
             "alternativas": [
                 "Benefício Assistência Social (BPC, Bolsa Família, Renda cidadã…)",
                 "Bolsa Acadêmica (PIBIC, PIBID, PIBEX, Mestrado, Doutorado...)",
@@ -268,15 +275,15 @@
                 "Outro"
             ],
             "tipo": "checkbox",
-            "enunciado": "Situação de renda do estudante"
+            "id": "situacao_renda_estudante"
         },
         {
-            "id": "valor_renda",
             "enunciado": "Valor da renda pessoal do estudante",
-            "tipo": "text"
+            "tipo": "text",
+            "id": "valor_renda"
         },
         {
-            "id": "situacao_saude",
+            "enunciado": "Situação de saúde",
             "alternativas": [
                 "Sem agravos de saúde",
                 "Doença crônica",
@@ -286,11 +293,9 @@
                 "Outro"
             ],
             "tipo": "checkbox",
-            "enunciado": "Situação de saúde"
+            "id": "situacao_saude"
         }
     ],
-    "arquivo_de_registro": "estudos.json",
-    "titulo": "Questões para avaliação socioeconômica",
-    "campos_de_listagem": "identificador, motivos_estudo, campus",
-    "descricao": "Intrumental destinado à coleta de informações para avaliação de vulnerabilidade socioeconômica."
+    "descricao": "Intrumental destinado à coleta de informações para avaliação de vulnerabilidade socioeconômica.",
+    "arquivo_de_registro": "estudos.json"
 }

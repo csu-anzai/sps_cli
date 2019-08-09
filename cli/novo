@@ -57,6 +57,7 @@ Observações:
 
 
 import os
+import time
 
 from docopt import docopt
 from subprocess import getoutput
@@ -67,6 +68,8 @@ from python_modules.cli_tools import select_op, select_ops, limpar_tela, verde, 
 from python_modules.cli_tools import save_json, load_json
 
 args = docopt(__doc__)
+idt = ""
+
 
 def novo_usuario(identificador):
     nfo = render_form_get_values(formulario_novo_usuario, ['identificador'])
@@ -251,7 +254,7 @@ def main():
 
         elif atd_t == "Emissão de declaração PPAES":
             os.system('mkdoc dec-ppaes "{}"'.format(identificador))
-        
+ 
         elif atd_t == "Emissão de declaração para criação de Conta Corrente":
             os.system('mkdoc dec-cc "{}"'.format(identificador))
 
@@ -268,6 +271,8 @@ def main():
 
     elif args['est'] or args['estudo']:
         identificador = numero_identificador_mascara(args['<identificador>'])
+        global idt
+        idt = identificador
         nfo = novo_estudo_info_estudante(identificador)
         nfo = novo_estudo_info_familia(identificador, nfo)
         print("")
@@ -277,7 +282,11 @@ def main():
             print("")
             nfo = novo_estudo_info_membros_familia(identificador, nfo)
             print(verde("Registrar outra pessoa?"))
-            resposta = select_op(["Sim", "Não"], 1)            
+            resposta = select_op(["Sim", "Não"], 1)
+        os.system("target select {}".format(identificador))
+        os.system('cli-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(identificador, "Avaliação de estudo socioeconômico", "Demanda interna", ""))
+        #time.sleep(1.5)
+        
 
 
     elif args['dbc'] or args['campo-db']:
@@ -292,3 +301,5 @@ if __name__ == '__main__':
     if newpid == 0:
         calculate_col_width()
         os.system("cli-indexdb construir")
+        if args['est']:
+            os.system("clear; mkrel {}".format(idt))

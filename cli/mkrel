@@ -148,14 +148,14 @@ def analisar_cota(valor_campo_cota):
         return 'cotista alta renda PPI'
 
     elif valor_campo_cota == "Sim - Escola Pública Alta Renda nPPI":
-        return 'cotista alta renda não PPI'        
+        return 'cotista alta renda não PPI'
 
 def analisar_renda_estudante(estudo, nome):
     estudante = {}
     if estudo['situacao_renda_estudante'] != "Sem renda":
         estudante['situacao_renda'] = estudo['situacao_renda_estudante']
         return "{} possui renda própria proveniente {}".format(nome, analisar_renda_mantenedores(estudante))
-            
+    return ""
 
 
 
@@ -165,12 +165,13 @@ def main():
     Estudante de #IDADE# anos de idade, #COTISTA#,
     proveniente de escola #TIPO_EM# com ensino médio concluso em #ANO_EM#,
     vinculad#@# ao curso de #CURSO# (#TURNO#).
-    #RENDA_ESTUDANTE#. 
-    Reside #SITUACAO_RESIDENCIA# em moradia #MORADIA_CONDICAO# 
+    #RENDA_ESTUDANTE#.
+    Reside #SITUACAO_RESIDENCIA# em moradia #MORADIA_CONDICAO#
     na cidade de #MORADIA_CIDADE#, zona #MORADIA_REGIAO# do #MORADIA_LOCALIDADE#.
     O grupo familiar é constituído por mais #NUM_PESSOAS# integrantes, 
     #INTEGRANTES# Destes #RENDA_AVAL#.
     Ainda, conforme as informações prestadas, #FAMILIAR# possui doença crônica...
+    Conforme informações e documentos apresentados, está apta a participar do processo seletivo para os programas escolhidos.
     """
 
     idt = args['<identificador>'].replace('/','')
@@ -198,7 +199,6 @@ def main():
     contador = 0
     for pessoa in estudo_info['membros_grupo_familiar'].keys():
         p = estudo_info['membros_grupo_familiar'][pessoa]
-        print(pessoa)
         contador += 1
         if p['sexo'] == 'Masculino':
             if p['relacao_com_estudante'] == 'Pai' or p['relacao_com_estudante'] == 'Padrasto':
@@ -266,7 +266,7 @@ def main():
             output = output.replace('#@#', 'x')
     
     while output.find("  ") != -1:
-        output = output.replace('\n', ' ').replace('  ', ' ')
+        output = output.replace('\n', ' ').replace('  ', ' ').replace('. .','.')
         if output.find("  ") == -1:
             output = output[1:]
         continue
