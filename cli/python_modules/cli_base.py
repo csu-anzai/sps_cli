@@ -215,6 +215,7 @@ async def get_col_label(formulario):
 hostname = getoutput("hostname")
 username = getoutput("whoami")
 
+
 #Read info from /etc/cli/cli_tools.conf
 pasta_do_usuario = getoutput("echo $HOME")
 pasta_temporaria = gettempdir()
@@ -228,6 +229,7 @@ rclone_drive=getoutput("cli-config read RCLONE")
 
 if device == "Termux":
     pasta_temporaria = getoutput("echo $TMPDIR")
+
 
 #Setting global paths to cli base folders and files
 pasta_de_fragmentos = os.sep.join([pasta_de_dados, "fragmentos"])
@@ -254,13 +256,10 @@ formulario_atendimentos = os.sep.join([pasta_de_formularios, "form_atendimento.j
 formulario_novo_usuario = os.sep.join([pasta_de_formularios, "form_novo_usuario.json"])
 formulario_novo_processo = os.sep.join([pasta_de_formularios, "form_processos.json"])
 formulario_registro_de_correcao = os.sep.join([pasta_de_formularios, "form_corrigidos.json"])
-formulario_estudo_estudante = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_estudante.json"])
-formulario_estudo_grupo_familiar = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_grupo-familiar-info.json"])
-formulario_estudo_membros_grupo_familiar = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_membros-grupo-familiar.json"])
+formulario_estudo_estudante = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico.json"])
+
 
 #Carregando arquivos de dados
-
-
 loop = asyncio.get_event_loop()
 dados = loop.run_until_complete(asyncio.gather(
     load_json_file(arquivo_atendimentos),

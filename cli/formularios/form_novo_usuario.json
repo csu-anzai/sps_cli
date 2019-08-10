@@ -1,45 +1,46 @@
 {
     "arquivo_de_registro": "usuarios.json",
-    "titulo": "Formulário para cadastro de estudante",
-    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
     "questoes": [
         {
             "tipo": "text",
-            "enunciado": "Identificador",
-            "id": "identificador"
+            "id": "identificador",
+            "enunciado": "Identificador"
         },
         {
             "tipo": "text",
-            "enunciado": "Nome",
-            "id": "nome"
+            "id": "nome",
+            "enunciado": "Nome"
         },
         {
-            "tipo": "radio",
-            "enunciado": "Grupo de pertencimento do usuário",
-            "id": "publico_tipo",
             "alternativas": [
                 "Comunidade externa",
                 "Estudante",
                 "Servidor",
                 "Outro"
-            ]
+            ],
+            "id": "publico_tipo",
+            "tipo": "radio",
+            "enunciado": "Grupo de pertencimento do usuário"
         },
         {
-            "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor",
-            "tipo": "radio",
-            "enunciado": "Curso/Setor",
-            "id": "curso",
             "alternativas": [
                 "Administração",
-                "Biofísica",
-                "Bioritmo",
+                "Agronomia",
+                "Biblioteconomia",
+                "Ciência Política",
+                "Ciências Ambientais",
+                "Ciências Biológicas",
                 "Ciências Contábeis",
                 "Ciências Naturais",
                 "Ciências Sociais",
+                "Computação",
                 "Direito",
                 "Educação Física",
                 "Enfermagem",
+                "Engenharia Civil",
+                "Engenharia Elétrica",
                 "Engenharia Mecânica",
+                "Engenharia de Computação",
                 "Espanhol",
                 "Farmácia",
                 "Física",
@@ -51,15 +52,22 @@
                 "Lingua Portuguesa e Respectiva Literatura",
                 "Maringa de santos",
                 "Meio Ambiente e Desenvolvimento Rural - Mestrado",
+                "Relações Internacionais",
                 "Outro"
-            ]
+            ],
+            "id": "curso",
+            "tipo": "radio",
+            "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor",
+            "enunciado": "Curso/Setor"
         },
         {
-            "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor",
             "tipo": "text",
-            "enunciado": "Contato (e-Mail, Zap...)",
-            "id": "eml"
+            "id": "eml",
+            "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor",
+            "enunciado": "Contato (e-Mail, Zap...)"
         }
     ],
+    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
+    "titulo": "Formulário para cadastro de estudante",
     "campos_de_listagem": "identificador, nome, curso, eml"
 }

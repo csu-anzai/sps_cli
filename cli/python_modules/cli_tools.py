@@ -1336,7 +1336,10 @@ def render_form_get_values(form_file, skip_q=[]):
 	def create_trigger_file(form_trigger_file):
 		form_triggers_info = {}
 		form_triggers_info['arquivo_de_registro'] = form['arquivo_de_registro']
+		form_triggers_info['q_groups'] = {}
+		form_triggers_info['index_list'] = []
 		for q in form['questoes']:
+			form_triggers_info['index_list'].append(q['id'])
 			if q.get('trigger_skip'):
 				form_triggers_info[q['id']] = {}
 				form_triggers_info[q['id']]['trigger_skip'] = {}
@@ -1349,51 +1352,35 @@ def render_form_get_values(form_file, skip_q=[]):
 					else:
 						condicoes_in_trigger_file[csplit[0]] = [csplit[1]]
 				form_triggers_info[q['id']]['trigger_skip'] = condicoes_in_trigger_file
+			
+			if q.get('q_group'):
+				if form_triggers_info['q_groups'].get(q['q_group']):
+					form_triggers_info['q_groups'][q['q_group']].append(q['id'])
+				else:
+					form_triggers_info['q_groups'][q['q_group']] = [q['id']]
+			else:
+				if form_triggers_info['q_groups'].get('undefined_q_group'):
+					form_triggers_info['q_groups']['undefined_q_group'].append(q['id'])
+				else:
+					form_triggers_info['q_groups']['undefined_q_group'] = [q['id']]
+
+
 		save_json(form_triggers_info, form_triggers_file)
 		return form_triggers_info
 
-
-	def append_trigger_to_trigger_dict(form_triggers_info, questoes):
-		for q in questoes:
-			if q.get('trigger_skip'):
-				form_triggers_info[q['id']] = {}
-				form_triggers_info[q['id']]['trigger_skip'] = {}
-				condicoes_in_form = q['trigger_skip'].split('; ')
-				condicoes_in_trigger_file = {}
-				for c in condicoes_in_form:
-					csplit = c.split('::')
-					if condicoes_in_trigger_file.get(csplit[0]):
-						condicoes_in_trigger_file[csplit[0]].append(csplit[1])
-					else:
-						condicoes_in_trigger_file[csplit[0]] = [csplit[1]]
-				form_triggers_info[q['id']]['trigger_skip'] = condicoes_in_trigger_file
-		return form_triggers_info
-
-
-	form = load_json(form_file)
-
-	form_triggers_file = getoutput('echo $HOME')+'/.form_triggers'
-	try: #substituir para checagem de existencia do arquivo
-		form_triggers_info = load_json(form_triggers_file)
-		if form_triggers_info['arquivo_de_registro'] != form['arquivo_de_registro']:
-			form_triggers_info = create_trigger_file(form_triggers_file)
-		else:
-			form_triggers_info = append_trigger_to_trigger_dict(form_triggers_info, form['questoes'])
-	except:
-		form_triggers_info = create_trigger_file(form_triggers_file)
-
-
-	nfo = {}
-	for q in form['questoes']:
+	
+	def prompt_questions(nfo, q):
 		skip_this = False
-		print(q['id'])
+		#print(q['id'])
 		if form_triggers_info.get(q['id']):
 			if form_triggers_info[q['id']].get('trigger_skip'):
 				for t in form_triggers_info[q['id']]['trigger_skip'].keys():
-					print("» "+t)
-					if nfo[t] in form_triggers_info[q['id']]['trigger_skip'][t]:
-						skip_this = True
-						break
+					#print("» "+t)
+					#if nfo[t] in form_triggers_info[q['id']]['trigger_skip'].get(t):
+					skip_this = True
+					if q.get('autofill'):
+						nfo[q['id']] = q['autofill']
+					break
 
 		if not skip_this:
 			if q['id'] in skip_q:
@@ -1409,6 +1396,42 @@ def render_form_get_values(form_file, skip_q=[]):
 					nfo[q['id']] = q_response[0]
 				except TypeError:
 					pass
+		return nfo
+
+
+
+	form = load_json(form_file)
+
+	form_triggers_file = getoutput('echo $HOME')+'/.form_triggers'
+	
+	try:
+		form_triggers_info = load_json(form_triggers_file)
+		if form_triggers_info['arquivo_de_registro'] != form['arquivo_de_registro']:
+			form_triggers_info = create_trigger_file(form_triggers_file)
+	except FileNotFoundError:
+		form_triggers_info = create_trigger_file(form_triggers_file)
+
+	
+	nfo = {}
+	max_idx = len(form['questoes'])-1
+	idx = 0
+
+	while idx <= max_idx:
+		q = form['questoes'][idx]
+		first_idx = -1
+		last_idx = -1
+		if q.get('q_group'):
+			first = form_triggers_info['q_groups'][q['q_group']][0]
+			last = form_triggers_info['q_groups'][q['q_group']][-1]
+			first_idx = form_triggers_info['index_list'].index(first)
+			last_idx = form_triggers_info['index_list'].index(last)
+		nfo = prompt_questions(nfo, q)
+		if idx == last_idx:
+			print(amarelo(q['q_group']))
+			resposta = select_op(["Sim", "Não"], 1)
+			if resposta == 'Sim':
+				idx = first_idx-1
+		idx += 1
 
 	return nfo
 
