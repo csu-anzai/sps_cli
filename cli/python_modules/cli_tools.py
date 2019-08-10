@@ -1386,9 +1386,11 @@ def render_form_get_values(form_file, skip_q=[]):
 	nfo = {}
 	for q in form['questoes']:
 		skip_this = False
+		print(q['id'])
 		if form_triggers_info.get(q['id']):
 			if form_triggers_info[q['id']].get('trigger_skip'):
 				for t in form_triggers_info[q['id']]['trigger_skip'].keys():
+					print("» "+t)
 					if nfo[t] in form_triggers_info[q['id']]['trigger_skip'][t]:
 						skip_this = True
 						break
