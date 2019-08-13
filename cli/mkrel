@@ -20,7 +20,7 @@ from docopt import docopt
 from subprocess import getoutput
 from datetime import datetime
 from python_modules.templates import base_html_layout 
-from python_modules.cli_base import pasta_temporaria, arquivo_sex_info, load_json, get_info_doc, dados_estudos, periodo_corrente
+from python_modules.cli_base import pasta_temporaria, arquivo_sex_info, load_json, get_info_doc, dados_estudos, periodo_corrente, dados_lista_creche, dados_lista_moradia, dados_lista_pase, dados_lista_transporte
 from python_modules.cli_tools import input_op, verde
 
 args = docopt(__doc__)
@@ -96,6 +96,77 @@ def analisar_renda_mantenedores(pessoa):
         contador -= 1
     return str_output
 
+def analisar_vinculo_com_programas(cpf, lista_creche=dados_lista_creche, lista_moradia=dados_lista_moradia, lista_pase=dados_lista_pase, lista_transporte=dados_lista_transporte, ret_mode="String"):
+    output = "Em relação à Assistencia Estudantil, não constam nas folhas de pagamento indicativos de que #@# estudante esteja vinculad#@# a quaisquer um deles."
+    output_strs = []
+    output_info = False
+    if cpf in lista_creche:
+        output_info = True
+        output_strs.append("ao Auxílio Creche")
+    if cpf in lista_moradia:
+        output_info = True
+        output_strs.append("à Moradia Pecúnia")
+    if cpf in lista_pase:
+        output_info = True
+        output_strs.append("ao Auxílio Socioeconômico")
+    if cpf in lista_transporte:
+        output_info = True
+        output_strs.append("ao Auxílio Transporte")
+    
+    o = "Em relação aos programas da Assistência Estudantil, está vinculad#@# "
+    if len(output_strs) == 1:
+        o += output_strs[0]
+    elif len(output_strs) == 2:
+        o += output_strs[0] + ' e ' + output_strs[1]
+    elif len(output_strs) == 3:
+        o += output_strs[0] + ', ' + output_strs[1] + ' e ' + output_strs[2]
+    elif len(output_strs) == 4:
+        o += output_strs[0] + ', ' + output_strs[1] + ', ' + output_strs[2] + ' e ' + output_strs[3]
+        
+
+    if ret_mode == "String":
+        if output_info == True:
+            return o
+        else:
+            return output
+    
+    elif ret_mode == "Values":
+        if (len(output_strs), output_strs) == (0, []):
+            return ()
+        else:
+            return (len(output_strs), output_strs)
+
+    
+
+
+def analisar_vinculo_com_programas_familiar(pessoa, lista_creche=dados_lista_creche, lista_moradia=dados_lista_moradia, lista_pase=dados_lista_pase, lista_transporte=dados_lista_transporte):
+    output = ""
+    if pessoa.get('cpf'):
+        if pessoa['cpf'] != "":
+            output = analisar_vinculo_com_programas(pessoa['cpf'], ret_mode="Values")
+            if len(output) > 0:
+                print("Achou! Vinculo em {}".format(pessoa['vinculo']))
+            else:
+                print("Sem vínculo com AEs!")
+
+    return output
+
+
+def analisar_vinculo_com_programas_familiares(estudo):
+    o = []
+    o_str = ""    
+    for pessoa in estudo['membros_grupo_familiar'].keys():
+        o.append(analisar_vinculo_com_programas_familiar(estudo['membros_grupo_familiar'][pessoa]))
+    
+    for l in o:
+        if l != "":
+            print(l)
+            o_str += str(l)
+    return o_str
+
+
+def analiser_agravos_saude():
+    o = "Conforme informações e documentos apresentados, há integrantes com doenças crônicas"
 
 def analisar_mantenedores(estudo):
     o = []
@@ -149,6 +220,8 @@ def analisar_cota(valor_campo_cota):
 
     elif valor_campo_cota == "Sim - Escola Pública Alta Renda nPPI":
         return 'cotista alta renda não PPI'
+    return 'não cotista'
+
 
 def analisar_renda_estudante(estudo, nome):
     estudante = {}
@@ -166,6 +239,7 @@ def main():
     proveniente de escola #TIPO_EM# com ensino médio concluso em #ANO_EM#,
     vinculad#@# ao curso de #CURSO# (#TURNO#).
     #RENDA_ESTUDANTE#.
+    #ESTUDANTE_PROGRAMAS#.
     Reside #SITUACAO_RESIDENCIA# em moradia #MORADIA_CONDICAO#
     na cidade de #MORADIA_CIDADE#, zona #MORADIA_REGIAO# do #MORADIA_LOCALIDADE#.
     O grupo familiar é constituído por mais #NUM_PESSOAS# integrantes, 
@@ -184,8 +258,9 @@ def main():
     identificador = getoutput("target get identificador")
     curso = getoutput("target get curso")
     cotista = estudo_info['cotista']
+    cpf = estudo_info['cpf_estudante']
 
-    idade = calcular_idade(estudo_info['dn'])
+    idade = calcular_idade(estudo_info['dn_estudante'])
     tipo_EM = estudo_info['tipo_EM'].lower()
     ano_EM = estudo_info['ano_EM']
     situacao_residencia = estudo_info['situacao_residencia'].lower()
@@ -195,6 +270,7 @@ def main():
     informacao_basica_pessoas = ''
     
     renda_pessoas = analisar_mantenedores(estudo_info)
+    print(analisar_vinculo_com_programas_familiares(estudo_info))
 
     contador = 0
     for pessoa in estudo_info['membros_grupo_familiar'].keys():
@@ -233,7 +309,6 @@ def main():
     
     moradia_condicao = estudo_info['moradia_condicao'].lower()
 
-
     output = output.replace("#IDADE#", str(idade))
     output = output.replace("#COTISTA#", analisar_cota(cotista))
     output = output.replace("#TIPO_EM#", tipo_EM)
@@ -241,6 +316,7 @@ def main():
     output = output.replace("#CURSO#", curso)
     output = output.replace("#TURNO#", turno_curso)
     output = output.replace("#RENDA_ESTUDANTE#", analisar_renda_estudante(estudo_info, nome))
+    output = output.replace("#ESTUDANTE_PROGRAMAS#", analisar_vinculo_com_programas(cpf))
     output = output.replace("#NUM_PESSOAS#", str(num_pessoas))
     output = output.replace("#INTEGRANTES#", informacao_basica_pessoas)
     output = output.replace("#SITUACAO_RESIDENCIA#", situacao_residencia)
@@ -250,7 +326,7 @@ def main():
     output = output.replace("#MORADIA_LOCALIDADE#", moradia_localidade)
     output = output.replace("#RENDA_AVAL#", renda_pessoas)
 
-
+    print(nome)
     if sex_info[nome.split(" ")[0]] == "m":
         output = output.replace('#@#', 'o')
     elif sex_info[nome.split(" ")[0]] == "f":

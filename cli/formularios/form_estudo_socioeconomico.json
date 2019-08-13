@@ -14,8 +14,8 @@
                 "Baixa Renda",
                 "Alta Renda"
             ],
+            "enunciado": "Alta ou Baixa renda, conforme o SIGRA",
             "trigger_skip": "cotista::Não",
-            "enunciado": "Cotista pertencente ao grupo",
             "tipo": "radio",
             "id": "cotista_renda"
         },
@@ -24,8 +24,8 @@
                 "PPI",
                 "Não PPI"
             ],
+            "enunciado": "PPI ou Não PPI, conforme o SIGRA",
             "trigger_skip": "cotista::Não",
-            "enunciado": "Cotista pertencente ao grupo",
             "tipo": "radio",
             "id": "cotista_tipo"
         },
@@ -112,7 +112,12 @@
         {
             "enunciado": "Data de nascimento do estudante",
             "tipo": "text",
-            "id": "dn"
+            "id": "dn_estudante"
+        },
+        {
+            "enunciado": "CPF do estudante",
+            "tipo": "text",
+            "id": "cpf_estudante"
         },
         {
             "alternativas": [
@@ -312,7 +317,7 @@
             "defaults": "Sem renda; Estágio remunerado ou menor/jovem aprendiz; Trabalho autônomo ou informal"
         },
         {
-            "trigger_skip": "registro_genitores::Sem renda",
+            "trigger_skip": "situacao_renda_estudante::Sem renda",
             "enunciado": "Valor da renda pessoal do estudante",
             "tipo": "text",
             "id": "valor_renda"
@@ -488,41 +493,43 @@
         {
             "alternativas": [
                 "Não",
-                "Sim, residem com o próprio estudante",
-                "Sim, residem com o/a ex-companheiro",
-                "Sim, residem com outros familiares",
-                "Outro"
+                "Sim"
             ],
-            "enunciado": "Estudante possui filhos? Com quem residem?",
+            "enunciado": "Estudante possui filhos?",
             "tipo": "radio",
             "id": "possui_filhos"
         },
         {
             "alternativas": [
-                "Sim",
-                "Não"
+                "Com o próprio estudante",
+                "Com o/a ex-companheiro",
+                "Com outros familiares",
+                "Outro"
             ],
-            "enunciado": "Mais pessoais integram o grupo familiar do estudante?",
-            "tipo": "test",
-            "id": "adicionar_pessoas"
+            "enunciado": "Com quem residem?",
+            "trigger_skip": "possui_filhos::Não",
+            "tipo": "radio",
+            "id": "filhos_residem"
         },
         {
-            "trigger_skip": "adicionar_pessoas::Não",
-            "q_group": "Adicionar outro integrante ao grupo familiar?",
+            "tipo": "text",
+            "enunciado": "Observações específicas sobre o estudante",
+            "id": "observacoes_especificas_estudante"
+        },
+        {
+            "q_group": "membros_grupo_familiar",
             "tipo": "text",
             "enunciado": "Nome do/a membro do grupo familiar",
-            "id": "nome"
+            "id": "grp_f_nome"
         },
         {
-            "trigger_skip": "adicionar_pessoas::Não",
-            "q_group": "Adicionar outro integrante ao grupo familiar?",
+            "q_group": "membros_grupo_familiar",
             "tipo": "text",
             "enunciado": "Data de nascimento",
             "id": "dn"
         },
         {
-            "trigger_skip": "adicionar_pessoas::Não",
-            "q_group": "Adicionar outro integrante ao grupo familiar?",
+            "q_group": "membros_grupo_familiar",
             "tipo": "text",
             "enunciado": "CPF",
             "id": "cpf"
@@ -532,9 +539,8 @@
                 "Masculino",
                 "Feminino"
             ],
-            "q_group": "Adicionar outro integrante ao grupo familiar?",
+            "q_group": "membros_grupo_familiar",
             "tipo": "radio",
-            "trigger_skip": "adicionar_pessoas::Não",
             "enunciado": "Sexo",
             "id": "sexo"
         },
@@ -563,8 +569,7 @@
             "enunciado": "Relação do membro em questão com o estudante",
             "tipo": "radio",
             "defaults": "Mãe; Pai; Irmã; Irmão",
-            "trigger_skip": "adicionar_pessoas::Não",
-            "q_group": "Adicionar outro integrante ao grupo familiar?",
+            "q_group": "membros_grupo_familiar",
             "id": "relacao_com_estudante"
         },
         {
@@ -579,9 +584,8 @@
                 "Pós-graduação incompleta",
                 "Pós-graduação completa"
             ],
-            "q_group": "Adicionar outro integrante ao grupo familiar?",
+            "q_group": "membros_grupo_familiar",
             "tipo": "radio",
-            "trigger_skip": "adicionar_pessoas::Não",
             "enunciado": "Escolaridade",
             "id": "escolaridade"
         },
@@ -610,16 +614,15 @@
                 "Poupança/Economias pessoais",
                 "Outro"
             ],
-            "q_group": "Adicionar outro integrante ao grupo familiar?",
+            "q_group": "membros_grupo_familiar",
             "tipo": "checkbox",
             "defaults": "Sem renda",
-            "trigger_skip": "adicionar_pessoas::Não",
             "enunciado": "Natureza da fonte de renda",
             "id": "situacao_renda"
         },
         {
-            "trigger_skip": "situacao_renda::Sem renda; adicionar_pessoas::Não",
-            "q_group": "Adicionar outro integrante ao grupo familiar?",
+            "trigger_skip": "situacao_renda::Sem renda",
+            "q_group": "membros_grupo_familiar",
             "tipo": "text",
             "enunciado": "Valor da renda pessoal do membro em questão",
             "id": "valor_renda"
@@ -637,14 +640,13 @@
             "autofill": "Sem agravos de saúde",
             "tipo": "checkbox",
             "defaults": "Sem agravos de saúde",
-            "trigger_skip": "familia_saude::Não; adicionar_pessoas::Não",
+            "trigger_skip": "familia_saude::Não",
             "enunciado": "Situação de saúde",
-            "q_group": "Adicionar outro integrante ao grupo familiar?",
+            "q_group": "membros_grupo_familiar",
             "id": "situacao_saude"
         },
         {
-            "trigger_skip": "adicionar_pessoas::Não",
-            "q_group": "Adicionar outro integrante ao grupo familiar?",
+            "q_group": "membros_grupo_familiar",
             "tipo": "text",
             "enunciado": "Observações específicas",
             "id": "observacoes_especificas"
