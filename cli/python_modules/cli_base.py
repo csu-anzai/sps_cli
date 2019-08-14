@@ -63,8 +63,9 @@ def timestamp(mode=None):
 def get_col_width(field_name, list_of_dicts):
     width = 0
     for line in list_of_dicts:
-        if len(line[field_name]) > width:
-            width = len(line[field_name])
+        if line.get(field_name):
+            if len(line[field_name]) > width:
+                width = len(line[field_name])
     return (field_name, width+2)
 
 def get_itens(field_name, field_value,  list_of_dicts):
@@ -215,6 +216,7 @@ async def get_col_label(formulario):
 hostname = getoutput("hostname")
 username = getoutput("whoami")
 
+
 #Read info from /etc/cli/cli_tools.conf
 pasta_do_usuario = getoutput("echo $HOME")
 pasta_temporaria = gettempdir()
@@ -228,6 +230,7 @@ rclone_drive=getoutput("cli-config read RCLONE")
 
 if device == "Termux":
     pasta_temporaria = getoutput("echo $TMPDIR")
+
 
 #Setting global paths to cli base folders and files
 pasta_de_fragmentos = os.sep.join([pasta_de_dados, "fragmentos"])
@@ -250,17 +253,19 @@ arquivo_modelo_ppaes = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/ppaes
 arquivo_modelo_ppaes_detalhado = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/ppaes_det.odt"])
 arquivo_modelo_ccc = os.sep.join([pasta_raiz_do_aplicativo, "cli/modelos/criacao-cc.odt"])
 
+lista_pase = os.sep.join([pasta_de_dados, "lista_pase.json"])
+lista_moradia = os.sep.join([pasta_de_dados, "lista_moradia.json"])
+lista_creche = os.sep.join([pasta_de_dados, "lista_creche.json"])
+lista_transporte = os.sep.join([pasta_de_dados, "lista_transporte.json"])
+
 formulario_atendimentos = os.sep.join([pasta_de_formularios, "form_atendimento.json"])
 formulario_novo_usuario = os.sep.join([pasta_de_formularios, "form_novo_usuario.json"])
 formulario_novo_processo = os.sep.join([pasta_de_formularios, "form_processos.json"])
 formulario_registro_de_correcao = os.sep.join([pasta_de_formularios, "form_corrigidos.json"])
-formulario_estudo_estudante = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_estudante.json"])
-formulario_estudo_grupo_familiar = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_grupo-familiar-info.json"])
-formulario_estudo_membros_grupo_familiar = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico_membros-grupo-familiar.json"])
+formulario_estudo_estudante = os.sep.join([pasta_de_formularios, "form_estudo_socioeconomico.json"])
+
 
 #Carregando arquivos de dados
-
-
 loop = asyncio.get_event_loop()
 dados = loop.run_until_complete(asyncio.gather(
     load_json_file(arquivo_atendimentos),
@@ -269,7 +274,11 @@ dados = loop.run_until_complete(asyncio.gather(
     load_json_file(arquivo_processos),
     load_json_file(arquivo_corrigidos),
     load_json_file(arquivo_index),
-    load_json_file(arquivo_estudos)
+    load_json_file(arquivo_estudos),
+    load_json_file(lista_pase),
+    load_json_file(lista_moradia),
+    load_json_file(lista_transporte),
+    load_json_file(lista_creche)                
 ))
 
 dados_atendimentos = dados[0]
@@ -280,6 +289,10 @@ dados_processos_pend = get_itens('resultado', '', dados_processos)
 dados_corrigidos = dados[4]
 dados_index = dados[5]
 dados_estudos = dados[6]
+dados_lista_pase = dados[7]
+dados_lista_moradia = dados[8]
+dados_lista_transporte = dados[9]
+dados_lista_creche = dados[10]
 
 col_wid_test = int(getoutput("if [ -f {} ]; then echo 1; else echo 0; fi".format(arquivo_col_wid)))
 

@@ -68,7 +68,17 @@ from python_modules.cli_tools import select_op, select_ops, limpar_tela, verde, 
 from python_modules.cli_tools import save_json, load_json
 
 args = docopt(__doc__)
-idt = ""
+
+def is_user_registred(function):
+    def wrapper(*a):
+        identificador = numero_identificador_mascara(args['<identificador>'])
+        if not identificador in matriculas:
+            print("Usuário não cadastrado...")
+            novo_usuario(identificador)
+            matriculas.append(identificador)
+            save_target_info(identificador, dados_usuarios)
+        return function(*a)
+    return wrapper
 
 
 def novo_usuario(identificador):
@@ -88,7 +98,7 @@ def novo_usuario(identificador):
     #    os.system('fragment send "{}"'.format(fragmento))
 
 
-
+@is_user_registred
 def novo_processo(identificador, assunto):
     nfo = render_form_get_values(formulario_novo_processo, ['identificador'])
     nfo['timestamp'] = timestamp() 
@@ -108,25 +118,28 @@ def novo_resultado_processo(processo_num):
                 proc['justificativa'] = input("Justificativa: ")
             save_json(dados_processos, arquivo_processos)
             return [proc['identificador'], proc['resultado']]
-    
+
+
+@is_user_registred
 def novo_atendimento(identificador):
-    save_target_action = False
-    idt = numero_identificador_mascara(identificador)
-    if not idt in matriculas:
-        novo_usuario(idt)
-        matriculas.append(idt)
-        save_target_action = True
+    #save_target_action = False
+    #idt = numero_identificador_mascara(identificador)
+    #if not idt in matriculas:
+    #    novo_usuario(idt)
+    #    matriculas.append(idt)
+    #    save_target_action = True
     nfo = render_form_get_values(formulario_atendimentos, ['identificador'])
     nfo['timestamp'] = timestamp() 
     nfo['identificador'] = idt
     nfo['prof_atd'] = getoutput("whoami")+'@'+getoutput("hostname")
     dados_atendimentos.append(nfo)
-    if save_target_action == True:
-        save_target_info(idt, dados_usuarios)
+    #if save_target_action == True:
+        
     save_json(dados_atendimentos, arquivo_atendimentos)
     return nfo['atd_t']
 
 
+@is_user_registred
 def nova_correcao(identificador):
     nfo = render_form_get_values(formulario_registro_de_correcao, ['identificador'])
     idt = numero_identificador_mascara(identificador)
@@ -137,6 +150,8 @@ def nova_correcao(identificador):
         matriculas.append(idt)    
     dados_corrigidos.append(nfo)
     save_json(dados_corrigidos, arquivo_corrigidos)
+
+
 
 def nova_coluna(nome_col, json_file, options=None):
     db_file = load_json(os.sep.join([pasta_de_dados, json_file]))
@@ -162,44 +177,19 @@ def nova_coluna(nome_col, json_file, options=None):
                 i[nome_col] = opz
         save_json(db_file, os.sep.join([pasta_de_dados, json_file]))
 
-def novo_estudo_info_estudante(identificador):
+
+@is_user_registred
+def novo_estudo(identificador):
     nfo = {}
     idt = numero_identificador_mascara(identificador)
     nfo['semestre'] = periodo_corrente
     nfo['identificador'] = idt
     nfo['estudo_id'] = "{}@{}".format(idt,periodo_corrente)
     nfo['controle_pendencias'] = []
-    if not idt in matriculas:
-        novo_usuario(idt)
-        matriculas.append(idt)
     nfo_tmp = render_form_get_values(formulario_estudo_estudante, ['identificador'])
     for col in nfo_tmp.keys():
         nfo[col] = nfo_tmp[col]
     del(nfo_tmp)
-    dados_estudos.append(nfo)
-    save_json(dados_estudos, arquivo_estudos)
-    return nfo
-
-
-def novo_estudo_info_familia(identificador, nfo):
-    nfo_tmp = render_form_get_values(formulario_estudo_grupo_familiar, ['identificador'])
-    dados_estudos.remove(nfo)
-    for col in nfo_tmp.keys():
-        nfo[col] = nfo_tmp[col]
-    dados_estudos.append(nfo)
-    save_json(dados_estudos, arquivo_estudos)
-    return nfo
-
-
-
-def novo_estudo_info_membros_familia(identificador, nfo):
-    nfo_tmp = render_form_get_values(formulario_estudo_membros_grupo_familiar, ['identificador'])
-    dados_estudos.remove(nfo)
-    if nfo.get('membros_grupo_familiar'):
-        nfo['membros_grupo_familiar'][nfo_tmp['nome']] = nfo_tmp
-    else:
-        nfo['membros_grupo_familiar'] = {}
-        nfo['membros_grupo_familiar'][nfo_tmp['nome']] = nfo_tmp
     dados_estudos.append(nfo)
     save_json(dados_estudos, arquivo_estudos)
     return nfo
@@ -271,18 +261,10 @@ def main():
 
     elif args['est'] or args['estudo']:
         identificador = numero_identificador_mascara(args['<identificador>'])
+
         global idt
         idt = identificador
-        nfo = novo_estudo_info_estudante(identificador)
-        nfo = novo_estudo_info_familia(identificador, nfo)
-        print("")
-        print(verde("Outras pessoas constituem o seu grupo familiar além de você?"))
-        resposta = select_op(["Sim", "Não"], 1)
-        while resposta == "Sim":
-            print("")
-            nfo = novo_estudo_info_membros_familia(identificador, nfo)
-            print(verde("Registrar outra pessoa?"))
-            resposta = select_op(["Sim", "Não"], 1)
+        nfo = novo_estudo(identificador)
         os.system("target select {}".format(identificador))
         os.system('cli-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(identificador, "Avaliação de estudo socioeconômico", "Demanda interna", ""))
         #time.sleep(1.5)

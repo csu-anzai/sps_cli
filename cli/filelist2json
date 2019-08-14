@@ -1,0 +1,60 @@
+#!/bin/sh
+
+#
+# Processo responsável por verificar a existência de novos dados e incluí-los nos respectivos arquivos
+#
+
+warning () {
+    printf "Usage:\n"
+    printf "    filelist2json ( alvo )\n" 
+}
+
+full_info () {
+    printf "\n"
+    printf "Comando para criação rápida de listas json.\n"
+    printf "\n"
+    warning
+    printf "\n"
+    printf "Options:\n"
+    printf "    -h, --help\n"
+    printf "\n"
+}
+
+create_json_list () {
+    cd /tmp
+    N_ENTRIES=$(wc -l < "$1")
+    COUNTER=0
+    printf "%s\n" "[" > "$2.json"
+    for LINE in $(cat "$1");
+    do 
+        COUNTER=$(expr $COUNTER + 1)
+        if [ $COUNTER -eq $N_ENTRIES ];
+        then
+        { 
+            printf '%s' '    "'
+            printf '%s' "$LINE"
+            printf '%s\n' '"'
+        } >> "$2.json"
+        else
+        { 
+            printf '%s' '    "'
+            printf '%s' "$LINE"
+            printf '%s\n' '",'
+        } >> "$2.json"
+        fi
+    done
+    printf "%s\n" "]" >> "$2.json"
+}
+
+
+if [ $# -eq 0 ]
+then
+    warning
+    exit
+fi
+
+
+INIT_DIR=$(pwd)
+sort < "$1" > /tmp/output
+create_json_list /tmp/output "$1"
+cp /tmp/"$1.json" "$INIT_DIR"
