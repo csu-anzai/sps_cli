@@ -1,8 +1,7 @@
 {
-    "titulo": "Questões para avaliação socioeconômica",
-    "campos_de_listagem": "identificador, motivos_estudo, campus",
     "questoes": [
         {
+            "tipo": "radio",
             "enunciado": "Condição da moradia do grupo familiar",
             "alternativas": [
                 "Alugada",
@@ -15,10 +14,10 @@
                 "Termo de direito de posse",
                 "Outro"
             ],
-            "tipo": "radio",
             "id": "moradia_condicao_familia"
         },
         {
+            "tipo": "radio",
             "enunciado": "Localidade de residência do grupo familiar",
             "alternativas": [
                 "DF",
@@ -26,10 +25,10 @@
                 "Outra UF",
                 "Sem residência"
             ],
-            "tipo": "radio",
             "id": "moradia_localidade_familia"
         },
         {
+            "tipo": "radio",
             "enunciado": "Cidade de residência do grupo familiar",
             "alternativas": [
                 "Aguas Claras",
@@ -76,19 +75,19 @@
                 "Vila Telebrasília",
                 "Outro"
             ],
-            "tipo": "radio",
             "id": "moradia_cidade_familia"
         },
         {
+            "tipo": "radio",
             "enunciado": "Região onde localiza-se a residencia",
             "alternativas": [
                 "Cidade",
                 "Campo"
             ],
-            "tipo": "radio",
             "id": "moradia_regiao_familia"
         },
         {
+            "tipo": "checkbox",
             "enunciado": "Grau de parentesco do estudante com os mantenedores",
             "alternativas": [
                 "Não se aplica (estudante é o próprio mantenedor)",
@@ -103,13 +102,14 @@
                 "Sem grau de parentesco",
                 "Outro"
             ],
-            "tipo": "checkbox",
             "id": "mantenedores"
         },
         {
+            "tipo": "checkbox",
             "enunciado": "Relação geral do estudante com os mantenedores",
             "alternativas": [
                 "Alega não receber suporte dos pais",
+                "Alega que os pais são separados e não recebe suporte daquele que reside fora do grupo familiar",
                 "Conflituosa",
                 "Harmoniosa, satisfatória",
                 "Indiferente, fria",
@@ -117,29 +117,29 @@
                 "Violenta",
                 "Outro"
             ],
-            "tipo": "checkbox",
             "id": "mantenedores_relacao"
         },
         {
+            "tipo": "radio",
             "enunciado": "Há indicativo/relato de rompimento de vínculos?",
             "alternativas": [
                 "Não",
                 "Sim"
             ],
-            "tipo": "radio",
             "id": "rompimento_vinculos"
         },
         {
+            "tipo": "radio",
             "enunciado": "Há integrantes do grupo familiar com problemas de saúde?",
             "alternativas": [
                 "Não",
                 "Sim, mas com autonomia e sem necessidade de cuidador",
                 "Sim, mas sem autonomia e com necessidade de cuidador"
             ],
-            "tipo": "radio",
             "id": "familia_saude"
         },
         {
+            "tipo": "radio",
             "enunciado": "Estudante possui filhos? Com quem residem?",
             "alternativas": [
                 "Não",
@@ -148,10 +148,11 @@
                 "Sim, residem com outros familiares",
                 "Outro"
             ],
-            "tipo": "radio",
             "id": "possui_filhos"
         }
     ],
     "descricao": "Intrumental destinado à coleta de informações para avaliação de vulnerabilidade socioeconômica.",
+    "titulo": "Questões para avaliação socioeconômica",
+    "campos_de_listagem": "identificador, motivos_estudo, campus",
     "arquivo_de_registro": "estudos.json"
 }
