@@ -122,19 +122,12 @@ def novo_resultado_processo(processo_num):
 
 @is_user_registred
 def novo_atendimento(identificador):
-    #save_target_action = False
-    #idt = numero_identificador_mascara(identificador)
-    #if not idt in matriculas:
-    #    novo_usuario(idt)
-    #    matriculas.append(idt)
-    #    save_target_action = True
+    idt = numero_identificador_mascara(identificador)
     nfo = render_form_get_values(formulario_atendimentos, ['identificador'])
     nfo['timestamp'] = timestamp() 
     nfo['identificador'] = idt
     nfo['prof_atd'] = getoutput("whoami")+'@'+getoutput("hostname")
     dados_atendimentos.append(nfo)
-    #if save_target_action == True:
-        
     save_json(dados_atendimentos, arquivo_atendimentos)
     return nfo['atd_t']
 
