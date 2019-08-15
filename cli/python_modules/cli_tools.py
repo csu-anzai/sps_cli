@@ -1502,3 +1502,15 @@ def render_form_get_values(form_file, skip_q=[]):
 	os.remove(form_triggers_file)
 	return output
 
+	
+def lexical_list_join(lista):
+    output = ""
+    for item in lista:
+        output += item
+        if item == lista[-1]:
+            pass
+        elif item == lista[-2]:
+            output += ' e '
+        else:
+            output += ', '
+    return output

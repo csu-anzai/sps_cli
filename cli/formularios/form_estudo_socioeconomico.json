@@ -33,17 +33,6 @@
         },
         {
             "alternativas": [
-                "Diurno",
-                "Noturno",
-                "Outro"
-            ],
-            "enunciado": "Turno do curso",
-            "tipo": "radio",
-            "id": "turno_curso",
-            "defaults": "Diurno"
-        },
-        {
-            "alternativas": [
                 "Darcy Ribeiro",
                 "FCE",
                 "FGA",
@@ -68,6 +57,22 @@
         },
         {
             "alternativas": [
+                "Diurno",
+                "Noturno",
+                "Outro"
+            ],
+            "enunciado": "Turno do curso",
+            "tipo": "radio",
+            "id": "turno_curso",
+            "defaults": "Diurno"
+        },
+        {
+            "enunciado": "Ano de conclusão do Ensino Médio",
+            "tipo": "text",
+            "id": "ano_EM"
+        },
+        {
+            "alternativas": [
                 "DF",
                 "RIDE",
                 "Outra UF",
@@ -79,31 +84,23 @@
             "defaults": "DF"
         },
         {
-            "enunciado": "Ano de conclusão do Ensino Médio",
-            "tipo": "text",
-            "id": "ano_EM"
-        },
-        {
             "alternativas": [
-                "Estudo novo, estudante ainda não vinculado à política de assistência",
-                "Está atualizando ou pleiteando acesso a outros programas",
-                "Está em processo de reintegração à assistencia",
-                "Já possui estudo socioeconômico válido",
-                "Não possui vínculo com a assistencia, primeiro estudo socioeconômico",
+                "Não possui vínculo com a assistência, primeiro estudo socioeconômico",
                 "Não possui vínculo com assistência, desclassificada em pleitos anteriores",
+                "Está atualizando o estudo con vista ao acesso a outros programas",
+                "Está em processo de reintegração à assistencia",
                 "Outro"
             ],
             "enunciado": "Relação com a Assistencia Estudantil",
             "tipo": "radio",
             "id": "relacao_aes",
-            "defaults": "Não possui vínculo com a assistencia, primeiro estudo socioeconômico"
+            "defaults": "Não possui vínculo com a assistência, primeiro estudo socioeconômico"
         },
         {
             "alternativas": [
                 "Alimentação",
-                "Auxilio Bagaça",
-                "Auxílio creche",
                 "Auxílio socioeconômico",
+                "Auxílio creche",
                 "Auxílio transporte",
                 "Moradia estudantil",
                 "Outro"

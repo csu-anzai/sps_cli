@@ -119,6 +119,7 @@ def main():
             if not primeiro_nome in sex_info.keys():
                 print(amarelo(primeiro_nome)+" "+verde("é um nome masculino ou feminino? [m|f|?]"))
                 op = input_op(["m", "f", "?"])
+                print("")
                 sex_info[primeiro_nome] = op
                 save_json(sex_info, arquivo_sex_info)
     
