@@ -53,7 +53,9 @@ def main():
             if args['--json-output']:
                 print(listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']], tipo_output='json'))
             else:
-                print(listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']]))
+		for linha in listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']]):
+                	#print(listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']]))
+			print(linha)
 
     elif args['atd'] or args['atendimentos']:
         from python_modules.cli_base import dados_atendimentos
