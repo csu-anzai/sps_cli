@@ -30,7 +30,7 @@ from string import punctuation
 from collections import OrderedDict
 from subprocess import getoutput
 
-from .cli_tools import verde, vermelho, select_op
+from .cli_tools import verde, vermelho, select_op, return_obj_from_dict
 from .cli_tools import load_json, save_json
 
 def timestamp(mode=None):
@@ -298,6 +298,8 @@ col_wid_test = int(getoutput("if [ -f {} ]; then echo 1; else echo 0; fi".format
 
 if col_wid_test == 1:
     col_wid = load_json(arquivo_col_wid)
+    col = return_obj_from_dict(col_wid)
+    del(col_wid)
 else:
     calculate_col_width()
 

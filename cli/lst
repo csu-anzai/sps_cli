@@ -25,12 +25,12 @@ import os
 
 from docopt import docopt
 from subprocess import getoutput
-from python_modules.cli_base import get_col_values, get_tags, col_wid
-from python_modules.cli_tools import listar_dicionario
-from python_modules.cli_tools import mk_randnum_seq, verde, amarelo
+from python_modules.cli_base import get_col_values, get_tags, col
+from python_modules.cli_tools import mk_randnum_seq, verde, amarelo, listar_dicionario
 from python_modules.cli_decorators import check_config_existance
 
 args = docopt(__doc__)
+
 
 @check_config_existance
 def main():
@@ -39,30 +39,30 @@ def main():
         if args['<marcador>']:
             if args['<marcador>'] == 'id':
                 if args['--json-output']:
-                    print(listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']], [], 'json'))
+                    print(listar_dicionario(dados_usuarios, [col.identificador, col.nome_usuario, col.eml_usuario], [], 'json'))
                 else:
-                    print(listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']], [], 'cli'))
+                    print(listar_dicionario(dados_usuarios, [col.identificador, col.nome_usuario, col.eml_usuario], [], 'cli'))
 
             else:
                 if args['--json-output']:
-                    print(listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']], [args['<marcador>']], 'json'))
+                    print(listar_dicionario(dados_usuarios, [col.identificador, col.nome_usuario, col.eml_usuario], [args['<marcador>']], 'json'))
                 else:
-                    print(listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']], [args['<marcador>']]))
+                    print(listar_dicionario(dados_usuarios, [col.identificador, col.nome_usuario, col.eml_usuario], [args['<marcador>']]))
 
         else:
             if args['--json-output']:
-                print(listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']], tipo_output='json'))
+                print(listar_dicionario(dados_usuarios, [col.identificador, col.nome_usuario, col.eml_usuario], tipo_output='json'))
             else:
-		for linha in listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']]):
-                	#print(listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']]))
-			print(linha)
+                for linha in listar_dicionario(dados_usuarios, [col.identificador, col.nome_usuario, col.eml_usuario]):
+                    print(linha)
 
     elif args['atd'] or args['atendimentos']:
         from python_modules.cli_base import dados_atendimentos
         if args['--json-output']:
-            print(listar_dicionario(dados_atendimentos, [col_wid['timestamp'], col_wid['identificador'], ('atd_t', 0)], tipo_output='json'))
+            print(listar_dicionario(dados_atendimentos, [col.timestamp, col.identificador, ('atd_t', 0)], tipo_output='json'))
         else:
-            print(listar_dicionario(dados_atendimentos, [col_wid['timestamp'], col_wid['identificador'], ('atd_t', 0)]))
+            for linha in listar_dicionario(dados_atendimentos, [col.timestamp, col.identificador, ('atd_t', 0)]):
+                print(linha)            
 
     elif args['tag'] or args['marcadores']:
         from python_modules.cli_base import dados_usuarios, dados_index
@@ -74,7 +74,7 @@ def main():
         for m in marcadores.keys():
             print(verde(m))
             for idx in marcadores[m]:
-                print(dados_usuarios[idx]['identificador'].ljust(col_wid['identificador'][1]), dados_usuarios[idx]['nome'].ljust(col_wid['nome_usuario'][1]), dados_usuarios[idx]['eml'])
+                print(dados_usuarios[idx]['identificador'].ljust(col.identificador[1]), dados_usuarios[idx]['nome'].ljust(col.nome_usuario[1]), dados_usuarios[idx]['eml'])
             print(amarelo("Total: {}".format(len(marcadores[m]))))
             print(' ')
         
@@ -82,27 +82,27 @@ def main():
     elif args['sei'] or args['processos']:
         from python_modules.cli_base import dados_processos
         if args['--json-output']:
-            print(listar_dicionario(dados_processos, [col_wid['identificador'], col_wid['numero_sei'], col_wid['motivo'], col_wid['assunto']], tipo_output='json'))
+            print(listar_dicionario(dados_processos, [col.identificador, col.numero_sei, col.motivo, col.assunto], tipo_output='json'))
         else:
-            print(listar_dicionario(dados_processos, [col_wid['identificador'], col_wid['numero_sei'], col_wid['motivo'], col_wid['assunto']]))
+            print(listar_dicionario(dados_processos, [col.identificador, col.numero_sei, col.motivo, col.assunto]))
 
     elif args['pnd'] or args['processos-pendentes']:
         from python_modules.cli_base import dados_processos_pend
         if args['--json-output']:
-            print(listar_dicionario(dados_processos_pend, [col_wid['identificador'], col_wid['numero_sei'], col_wid['assunto']], tipo_output='json'))
+            print(listar_dicionario(dados_processos_pend, [col.identificador, col.numero_sei, col.assunto], tipo_output='json'))
         else:
-            print(listar_dicionario(dados_processos_pend, [col_wid['identificador'], col_wid['numero_sei'], col_wid['assunto']]))
+            print(listar_dicionario(dados_processos_pend, [col.identificador, col.numero_sei, col.assunto]))
 
     elif args['est'] or args['estudos']:
         from python_modules.cli_base import dados_estudos
-        print(listar_dicionario(dados_estudos, [col_wid['identificador'], col_wid['cotista'], col_wid['turno_curso'], col_wid['motivos_estudo'], col_wid['campus']]))
+        print(listar_dicionario(dados_estudos, [col.identificador, col.cotista, col.turno_curso, col.motivos_estudo, col.campus]))
 
     elif args['pro'] or args['profissionais']:
         from python_modules.cli_base import dados_profissionais
         if args['--json-output']:
-            print(listar_dicionario(dados_profissionais, [col_wid['uid'], col_wid['nome_profissional'], col_wid['eml_profissional']], tipo_output='json'))
+            print(listar_dicionario(dados_profissionais, [col.uid, col.nome_profissional, col.eml_profissional], tipo_output='json'))
         else:
-            print(listar_dicionario(dados_profissionais, [col_wid['uid'], col_wid['nome_profissional'], col_wid['eml_profissional']]))
+            print(listar_dicionario(dados_profissionais, [col.uid, col.nome_profissional, col.eml_profissional]))
 
 
 

@@ -290,40 +290,38 @@ def save_csv(list_of_dicts, path_to_file, header=None, delimiter='\t', linetermi
 
 
 def listagem_cli(linhas_selecionadas, cols):
-	visual_nfo = ""
 	visual_count = len(linhas_selecionadas)
 	for linha in linhas_selecionadas:
+		visual_nfo = ""
 		w = 0
-		#li = ""
+		li = ""
 		linha_sem_quebra = True
 		for col in cols:
 			if linha.get(col[0]):
-				#li += linha[col[0]].ljust(col[1])
+				li += linha[col[0]].ljust(col[1])
 				if linha[col[0]].find(';') == -1:
 					w += col[1]
 				else:
 					linha_sem_quebra = False
-					#lii = li.split(';')
+					lii = li.split(';')
 					if len(lii) > 1:
 						pri = True
 						for i in lii:
 							if pri == True:
-								#visual_nfo += i + os.linesep
+								visual_nfo += i + os.linesep
 								pri = False
 							else:
-								#visual_nfo += "".ljust(w-1) + i + os.linesep
-								yield "".ljust(w-1) + i + os.linesep
+								visual_nfo += "".ljust(w-1) + i + os.linesep
+								yield visual_nfo
 			else:
 				li += "".ljust(col[1])
 
 		
 		if linha_sem_quebra == True:
-			#visual_nfo += li + os.linesep
-			yield li + os.linesep
-		
+			visual_nfo += li 
+			yield visual_nfo
 	
-	#visual_nfo += "Total: {}".format(visual_count)
-	#return visual_nfo
+	yield "Total: {}".format(visual_count)
 
 
 def listagem_json(linhas_selecionadas, cols):
@@ -1517,3 +1515,14 @@ def lexical_list_join(lista):
         else:
             output += ', '
     return output
+
+
+def return_obj_from_dict(dictionary):
+    class Obj:
+        pass
+    obj = Obj()
+
+    for k, v in dictionary.items():
+        setattr(obj, k, v)
+    
+    return obj

@@ -11,6 +11,11 @@
             "tipo": "text"
         },
         {
+            "enunciado": "Contato (e-Mail, Zap...)",
+            "id": "eml",
+            "tipo": "text"
+        },
+        {
             "alternativas": [
                 "Comunidade externa",
                 "Estudante",
@@ -63,12 +68,6 @@
             "enunciado": "Curso/Setor",
             "id": "curso",
             "tipo": "radio"
-        },
-        {
-            "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor",
-            "enunciado": "Contato (e-Mail, Zap...)",
-            "id": "eml",
-            "tipo": "text"
         }
     ],
     "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
