@@ -81,6 +81,17 @@ def is_user_registred(function):
     return wrapper
 
 
+def pass_if_registred(function):
+    def wrapper(*a):
+        identificador = numero_identificador_mascara(args['<identificador>'])
+        if not identificador in matriculas:
+            print("Usuário não cadastrado...")
+            return function(*a)
+        print("Usuário cadastrado!")
+    return wrapper
+
+
+@pass_if_registred
 def novo_usuario(identificador):
     nfo = render_form_get_values(formulario_novo_usuario, ['identificador'])
     nfo['identificador'] = numero_identificador_mascara(identificador)

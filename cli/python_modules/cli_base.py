@@ -144,6 +144,12 @@ def get_info_doc(arquivo_de_dados, coluna, valor_de_checagem):
             return doc
 
 
+def get_info_doc2(arquivo_de_dados, coluna, valor_de_checagem):
+    for doc in arquivo_de_dados:
+        if doc[coluna] == valor_de_checagem:
+            return return_obj_from_dict(doc)
+
+
 def show_nfo_frag(identificador, set_de_dados, arquivo_de_dados, index_de_dados, print_info=True):
     ret_nfo = get_nfo(identificador, set_de_dados, index_de_dados)
     if ret_nfo:
