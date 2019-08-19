@@ -1,27 +1,29 @@
 {
     "questoes": [
         {
+            "tipo": "text",
             "enunciado": "Identificador",
-            "id": "identificador",
-            "tipo": "text"
+            "id": "identificador"
         },
         {
+            "tipo": "text",
             "enunciado": "Nome",
-            "id": "nome",
-            "tipo": "text"
+            "id": "nome"
         },
         {
+            "tipo": "radio",
+            "enunciado": "Grupo de pertencimento do usuário",
             "alternativas": [
                 "Comunidade externa",
                 "Estudante",
                 "Servidor",
                 "Outro"
             ],
-            "enunciado": "Grupo de pertencimento do usuário",
-            "id": "publico_tipo",
-            "tipo": "radio"
+            "id": "publico_tipo"
         },
         {
+            "tipo": "radio",
+            "enunciado": "Curso/Setor",
             "alternativas": [
                 "Administração",
                 "Agronomia",
@@ -40,39 +42,43 @@
                 "Engenharia Elétrica",
                 "Engenharia Mecânica",
                 "Engenharia de Computação",
+                "Engenharia de Redes de Comunicação",
                 "Espanhol",
                 "Estatística",
                 "Farmácia",
+                "Filosofia",
                 "Física",
                 "Gestão Ambiental",
                 "Gestão de Agronegócios",
                 "Gestão do Agronegócio",
                 "História",
+                "Inglês",
                 "Licenciatura em Educação do Campo",
                 "Lingua Francesa e Respectiva Literatura",
                 "Lingua Portuguesa e Respectiva Literatura",
+                "Língua Espanhola e Literatura Espanhola e Hispano-Americana",
+                "Línguas Estrangeiras Aplicadas - MSI",
                 "Maringa de santos",
                 "Medicina veterinária",
                 "Meio Ambiente e Desenvolvimento Rural - Mestrado",
                 "Nutrição",
                 "Odontologia",
                 "Relações Internacionais",
+                "Serviço Social",
                 "Outro"
             ],
-            "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor",
-            "enunciado": "Curso/Setor",
             "id": "curso",
-            "tipo": "radio"
+            "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor"
         },
         {
-            "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor",
+            "tipo": "text",
             "enunciado": "Contato (e-Mail, Zap...)",
             "id": "eml",
-            "tipo": "text"
+            "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor"
         }
     ],
-    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
     "campos_de_listagem": "identificador, nome, curso, eml",
-    "arquivo_de_registro": "usuarios.json",
-    "titulo": "Formulário para cadastro de estudante"
+    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
+    "titulo": "Formulário para cadastro de estudante",
+    "arquivo_de_registro": "usuarios.json"
 }
