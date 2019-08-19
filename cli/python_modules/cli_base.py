@@ -31,7 +31,7 @@ from collections import OrderedDict
 from subprocess import getoutput
 
 from .cli_tools import verde, vermelho, select_op, return_obj_from_dict
-from .cli_tools import load_json, save_json
+from .cli_tools import load_json, save_json, point_to_json
 
 def timestamp(mode=None):
     if mode == "mkid":
@@ -205,7 +205,7 @@ def numero_identificador_mascara(num):
     return str(m_num[0:2]+'/'+m_num[2:])
 
 
-async def load_json_file(arquivo):
+async def point_to_json_file(arquivo):
     return load_json(arquivo)
 
 async def get_col_width_nfo(field_name, data_set):
@@ -274,17 +274,17 @@ formulario_estudo_estudante = os.sep.join([pasta_de_formularios, "form_estudo_so
 #Carregando arquivos de dados
 loop = asyncio.get_event_loop()
 dados = loop.run_until_complete(asyncio.gather(
-    load_json_file(arquivo_atendimentos),
-    load_json_file(arquivo_usuarios),
-    load_json_file(arquivo_profissionais),
-    load_json_file(arquivo_processos),
-    load_json_file(arquivo_corrigidos),
-    load_json_file(arquivo_index),
-    load_json_file(arquivo_estudos),
-    load_json_file(lista_pase),
-    load_json_file(lista_moradia),
-    load_json_file(lista_transporte),
-    load_json_file(lista_creche)                
+    point_to_json_file(arquivo_atendimentos),
+    point_to_json_file(arquivo_usuarios),
+    point_to_json_file(arquivo_profissionais),
+    point_to_json_file(arquivo_processos),
+    point_to_json_file(arquivo_corrigidos),
+    point_to_json_file(arquivo_index),
+    point_to_json_file(arquivo_estudos),
+    point_to_json_file(lista_pase),
+    point_to_json_file(lista_moradia),
+    point_to_json_file(lista_transporte),
+    point_to_json_file(lista_creche)                
 ))
 
 dados_atendimentos = dados[0]
@@ -304,8 +304,6 @@ col_wid_test = int(getoutput("if [ -f {} ]; then echo 1; else echo 0; fi".format
 
 if col_wid_test == 1:
     col_wid = load_json(arquivo_col_wid)
-    col = return_obj_from_dict(col_wid)
-    del(col_wid)
 else:
     calculate_col_width()
 

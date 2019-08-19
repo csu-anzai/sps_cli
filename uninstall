@@ -26,7 +26,8 @@ only_root () {
 }
 
 unlink2path () {
-    for FILE in $(ls "$PASTA_DE_COMANDOS");
+    COMANDOS=$(ls "$PASTA_DE_COMANDOS")
+    for FILE in $COMANDOS;
     do
         if [ -f "$FILE" ] && [ -x "$FILE" ];
         then

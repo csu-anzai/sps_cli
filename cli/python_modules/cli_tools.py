@@ -57,17 +57,53 @@ def lockfile_name(path_to_file):
 	return file_name
 
 
+def point_to_json(path_to_file):
+	print('Generating {}'.format(path_to_file))
+	with open(path_to_file) as f:
+		for line in f.readlines():
+			yield line
+
+
+
+def load_text_db_line(text_db_file_generator):
+	for line in text_db_file_generator:
+		yield line.split(':')
+
+
+
+def load_text_db_file(path_to_file):
+	with open(path_to_file) as f:
+		for line in f.readlines():
+			yield line
+
+
+def save_text_db_file(novos_dados, path_to_file, pasta_temporaria=pasta_temporaria):
+	lockf = lockfile_name(path_to_file)
+	initfolder = os.getcwd()
+	nfo = path_to_file.split('/')
+	fname = nfo[-1]
+	path = path_to_file.replace(fname, '')
+
+	while True:
+		if os.path.isfile(pasta_temporaria+os.sep+lockf):
+			time.sleep(0.1)
+		else:
+			create_lockfile(lockf)
+			break
+
+	os.chdir(path.replace('/', os.sep))
+	with open(path_to_file, 'w') as f:
+		f.write(novos_dados)
+
+	os.chdir(initfolder)
+	remove_lockfile(lockf)
+
+
+
 def load_json(path_to_file):
-    initfolder = os.getcwd()
-    nfo = path_to_file.split('/')
-    fname = nfo[-1]
-    path = path_to_file.replace(fname, '')
-    os.chdir(path.replace('/', os.sep))
-    f = open(fname)
-    data = f.read()
-    f.close()
-    os.chdir(initfolder)
-    return json.loads(data)
+	with open(path_to_file) as f:
+		data = f.read()
+		return json.loads(data)
 
 
 def save_json(novos_dados, path_to_file, pasta_temporaria=pasta_temporaria):
