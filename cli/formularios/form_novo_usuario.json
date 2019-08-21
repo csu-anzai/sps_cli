@@ -11,8 +11,11 @@
             "id": "nome"
         },
         {
-            "tipo": "radio",
-            "enunciado": "Grupo de pertencimento do usuário",
+            "enunciado": "Contato (e-Mail, Zap...)",
+            "id": "eml",
+            "tipo": "text"
+        },
+        {
             "alternativas": [
                 "Comunidade externa",
                 "Estudante",
@@ -67,14 +70,7 @@
                 "Serviço Social",
                 "Outro"
             ],
-            "id": "curso",
-            "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor"
-        },
-        {
-            "tipo": "text",
-            "enunciado": "Contato (e-Mail, Zap...)",
-            "id": "eml",
-            "trigger_skip": "publico_tipo::Comunidade externa; publico_tipo::Servidor"
+            "id": "curso"
         }
     ],
     "campos_de_listagem": "identificador, nome, curso, eml",

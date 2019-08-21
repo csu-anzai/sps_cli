@@ -57,17 +57,53 @@ def lockfile_name(path_to_file):
 	return file_name
 
 
+def point_to_json(path_to_file):
+	print('Generating {}'.format(path_to_file))
+	with open(path_to_file) as f:
+		for line in f.readlines():
+			yield line
+
+
+
+def load_text_db_line(text_db_file_generator):
+	for line in text_db_file_generator:
+		yield line.split(':')
+
+
+
+def load_text_db_file(path_to_file):
+	with open(path_to_file) as f:
+		for line in f.readlines():
+			yield line
+
+
+def save_text_db_file(novos_dados, path_to_file, pasta_temporaria=pasta_temporaria):
+	lockf = lockfile_name(path_to_file)
+	initfolder = os.getcwd()
+	nfo = path_to_file.split('/')
+	fname = nfo[-1]
+	path = path_to_file.replace(fname, '')
+
+	while True:
+		if os.path.isfile(pasta_temporaria+os.sep+lockf):
+			time.sleep(0.1)
+		else:
+			create_lockfile(lockf)
+			break
+
+	os.chdir(path.replace('/', os.sep))
+	with open(path_to_file, 'w') as f:
+		f.write(novos_dados)
+
+	os.chdir(initfolder)
+	remove_lockfile(lockf)
+
+
+
 def load_json(path_to_file):
-    initfolder = os.getcwd()
-    nfo = path_to_file.split('/')
-    fname = nfo[-1]
-    path = path_to_file.replace(fname, '')
-    os.chdir(path.replace('/', os.sep))
-    f = open(fname)
-    data = f.read()
-    f.close()
-    os.chdir(initfolder)
-    return json.loads(data)
+	with open(path_to_file) as f:
+		data = f.read()
+		return json.loads(data)
 
 
 def save_json(novos_dados, path_to_file, pasta_temporaria=pasta_temporaria):
@@ -290,9 +326,9 @@ def save_csv(list_of_dicts, path_to_file, header=None, delimiter='\t', linetermi
 
 
 def listagem_cli(linhas_selecionadas, cols):
-	visual_nfo = ""
 	visual_count = len(linhas_selecionadas)
 	for linha in linhas_selecionadas:
+		visual_nfo = ""
 		w = 0
 		li = ""
 		linha_sem_quebra = True
@@ -312,15 +348,16 @@ def listagem_cli(linhas_selecionadas, cols):
 								pri = False
 							else:
 								visual_nfo += "".ljust(w-1) + i + os.linesep
+								yield visual_nfo
 			else:
 				li += "".ljust(col[1])
 
 		
 		if linha_sem_quebra == True:
-			visual_nfo += li + os.linesep
+			visual_nfo += li 
+			yield visual_nfo
 	
-	visual_nfo += "Total: {}".format(visual_count)
-	return visual_nfo
+	yield "Total: {}".format(visual_count)
 
 
 def listagem_json(linhas_selecionadas, cols):
@@ -1515,3 +1552,14 @@ def lexical_list_join(lista):
         else:
             output += ', '
     return output
+
+
+def return_obj_from_dict(dictionary):
+    class Obj:
+        pass
+    obj = Obj()
+
+    for k, v in dictionary.items():
+        setattr(obj, k, v)
+    
+    return obj

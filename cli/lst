@@ -13,6 +13,7 @@ Usage:
     lst [ -j ] ( pnd | processos-pendentes )
     lst [ -j ] ( est | estudos ) 
     lst [ -j ] ( pro | profissionais ) 
+    lst text <alvo> <fields>...
 
 Options:
     -v, --version
@@ -26,11 +27,11 @@ import os
 from docopt import docopt
 from subprocess import getoutput
 from python_modules.cli_base import get_col_values, get_tags, col_wid
-from python_modules.cli_tools import listar_dicionario
-from python_modules.cli_tools import mk_randnum_seq, verde, amarelo
+from python_modules.cli_tools import mk_randnum_seq, verde, amarelo, listar_dicionario, load_text_db_file, load_text_db_line, get_indexes
 from python_modules.cli_decorators import check_config_existance
 
 args = docopt(__doc__)
+
 
 @check_config_existance
 def main():
@@ -53,14 +54,50 @@ def main():
             if args['--json-output']:
                 print(listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']], tipo_output='json'))
             else:
-                print(listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']]))
+                #Iterando em gerador 'generator'
+                for linha in listar_dicionario(dados_usuarios, [col_wid['identificador'], col_wid['nome_usuario'], col_wid['eml_usuario']]):
+                    print(linha)
 
+    elif args['text']:
+        # Metodo para ser implementado em substituição ao modelo utilizado com JSON ou CSV
+        #
+        #  O motivo disso é a possibilidade de carregar-se linha à linha via gerador
+        #
+        generator_t = load_text_db_line(load_text_db_file(args['<alvo>']))
+        head = False
+        for h in generator_t: 
+            head = h
+            break
+        
+        fields_selected = []
+
+        for field in args['<fields>']:
+            idx = get_indexes(field, head)
+            if not idx == []:
+                fields_selected.append(idx[0])
+        
+        output = ""
+        for col in fields_selected:
+            output += head[col].ljust(32)
+        output += '\n'
+
+        for line in generator_t:
+            for col in fields_selected:
+                if col == fields_selected[-1]:
+                    output += line[col].ljust(32) + '\n'
+                else:
+                    output += line[col].ljust(32)
+        
+        print(output)
+
+    
     elif args['atd'] or args['atendimentos']:
         from python_modules.cli_base import dados_atendimentos
         if args['--json-output']:
             print(listar_dicionario(dados_atendimentos, [col_wid['timestamp'], col_wid['identificador'], ('atd_t', 0)], tipo_output='json'))
         else:
-            print(listar_dicionario(dados_atendimentos, [col_wid['timestamp'], col_wid['identificador'], ('atd_t', 0)]))
+            for linha in listar_dicionario(dados_atendimentos, [col_wid['timestamp'], col_wid['identificador'], ('atd_t', 0)]):
+                print(linha)            
 
     elif args['tag'] or args['marcadores']:
         from python_modules.cli_base import dados_usuarios, dados_index

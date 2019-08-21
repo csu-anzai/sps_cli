@@ -11,6 +11,7 @@ Usage:
     target ( get ) <campo>
     target [ -s|-e ] ( show )
     target ( select ) <identificador>
+    target test <identificador>
 
 Options:
     -s, --info-simples
@@ -26,7 +27,7 @@ from python_modules.cli_base import pasta_do_usuario
 from python_modules.cli_base import arquivo_usuario_alvo
 from python_modules.cli_base import dados_usuarios, dados_index, get_col_values
 from python_modules.cli_tools import verde, amarelo, vermelho
-from python_modules.cli_base import show_nfo_frag, show_nfo_frag_by_nome, get_nfo
+from python_modules.cli_base import show_nfo_frag, show_nfo_frag_by_nome, get_nfo, get_info_doc2
 
 matriculas = get_col_values('identificador', dados_usuarios)
 
@@ -37,6 +38,10 @@ def main():
         ct = load_json(os.sep.join([pasta_do_usuario, '.current_target']))
         ct[args['<campo>']] = args['<valor>']
         save_json(ct, os.sep.join([pasta_do_usuario, '.current_target']))
+
+    elif args['test']:
+        est = get_info_doc2(dados_usuarios, 'identificador', args['<identificador>'])
+        print(est.nome)
 
     elif args['get']:
         ct = load_json(os.sep.join([pasta_do_usuario, '.current_target']))
