@@ -12,7 +12,7 @@ PASTA_DE_DADOS=""
 PASTA_DE_SEGURANCA=""
 PASTA_DE_COMANDOS=""
 PASTA_TEMPORARIA=""
-PASTA_DE_MANIPULACAO_DE_DADOS=""
+PASTA_DE_TRABALHO=""
 RCLONE_DRIVE=""
 ENVIO_AUTOMATICO_EMAIL=1
 ENVIO_DE_FRAGMENTOS=1
@@ -113,7 +113,7 @@ then
 
         printf "\n» Indique o caminho para a pasta de trabalho.\n"
         printf "$: "
-        read -r PASTA_DE_MANIPULACAO_DE_DADOS
+        read -r PASTA_DE_TRABALHO
 
         FIRST_LOOP=1
         while true;
@@ -180,7 +180,7 @@ then
             printf "PASTA_DE_COMANDOS=%s\n" "$PASTA_DE_COMANDOS";
             printf "PASTA_DE_SEGURANCA=%s\n" "$PASTA_DE_SEGURANCA";
             printf "PASTA_TEMPORARIA=%s\n" "$PASTA_TEMPORARIA";
-            printf "PASTA_DE_MANIPULACAO_DE_DADOS=%s\n" "$PASTA_DE_MANIPULACAO_DE_DADOS";
+            printf "PASTA_DE_TRABALHO=%s\n" "$PASTA_DE_TRABALHO";
             printf "ENVIO_AUTOMATICO_EMAIL=%s\n" "$ENVIO_AUTOMATICO_EMAIL";
             printf "ENVIO_DE_FRAGMENTOS=%s\n" "$ENVIO_DE_FRAGMENTOS";        
             printf "RCLONE_DRIVE=%s\n" "$RCLONE_DRIVE";
@@ -209,7 +209,7 @@ then
     mkdir -p "$PASTA_DE_DADOS/fragmentos"
     mkdir -p "$PASTA_DE_DADOS/indexados"
     mkdir -p "$PASTA_DE_SEGURANCA"
-    mkdir -p "$PASTA_DE_MANIPULACAO_DE_DADOS"
+    mkdir -p "$PASTA_DE_TRABALHO"
 
     ARQUIVOS_DE_DADOS="atendimentos.json corrigidos.json processos.json profissionais.json usuarios.json estudos.json backup-info.json index_db.json emitidos.json recebidos.json sex_info.json"
     for ARQUIVO in $ARQUIVOS_DE_DADOS;
@@ -251,9 +251,9 @@ then
     chmod g+rw "$PASTA_DE_DADOS" -R 
     chmod o-rwx "$PASTA_DE_DADOS" -R
 
-    chown root:cli "$PASTA_DE_MANIPULACAO_DE_DADOS" -R
-    chmod g+rw "$PASTA_DE_MANIPULACAO_DE_DADOS" -R 
-    chmod o-rwx "$PASTA_DE_MANIPULACAO_DE_DADOS" -R
+    chown root:cli "$PASTA_DE_TRABALHO" -R
+    chmod g+rw "$PASTA_DE_TRABALHO" -R 
+    chmod o-rwx "$PASTA_DE_TRABALHO" -R
 
     OP=false
     FIRST_LOOP=true

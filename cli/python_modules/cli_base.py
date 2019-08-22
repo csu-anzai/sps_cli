@@ -229,9 +229,11 @@ pasta_temporaria = gettempdir()
 pasta_raiz_do_aplicativo = getoutput("cli-config read RAIZ")
 pasta_de_seguranca = getoutput("cli-config read PASTA_DE_SEGURANCA")
 pasta_de_dados = getoutput("cli-config read PASTA_DE_DADOS")
+pasta_de_trabalho = getoutput("cli-config read PASTA_DE_TRABALHO")
 device = getoutput("cli-config read DEVICE_TYPE")
 envio_automatico_email = bool(getoutput("cli-config read ENVIO_AUTOMATICO_EMAIL"))
 trabalhar_com_fragmentos = bool(getoutput("cli-config read ENVIO_DE_FRAGMENTOS"))
+
 rclone_drive=getoutput("cli-config read RCLONE")
 
 if device == "Termux":
