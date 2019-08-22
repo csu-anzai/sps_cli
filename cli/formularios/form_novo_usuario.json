@@ -1,18 +1,18 @@
 {
     "questoes": [
         {
-            "tipo": "text",
+            "id": "identificador",
             "enunciado": "Identificador",
-            "id": "identificador"
+            "tipo": "text"
         },
         {
-            "tipo": "text",
+            "id": "nome",
             "enunciado": "Nome",
-            "id": "nome"
+            "tipo": "text"
         },
         {
-            "enunciado": "Contato (e-Mail, Zap...)",
             "id": "eml",
+            "enunciado": "Contato (e-Mail, Zap...)",
             "tipo": "text"
         },
         {
@@ -22,15 +22,16 @@
                 "Servidor",
                 "Outro"
             ],
-            "id": "publico_tipo"
+            "id": "publico_tipo",
+            "enunciado": "Perfil",
+            "tipo": "radio"
         },
         {
-            "tipo": "radio",
-            "enunciado": "Curso/Setor",
             "alternativas": [
                 "Administração",
                 "Agronomia",
                 "Biblioteconomia",
+                "Ciêncas da Computação",
                 "Ciência Política",
                 "Ciências Ambientais",
                 "Ciências Biológicas",
@@ -70,11 +71,13 @@
                 "Serviço Social",
                 "Outro"
             ],
-            "id": "curso"
+            "id": "curso",
+            "enunciado": "Curso/Setor",
+            "tipo": "radio"
         }
     ],
-    "campos_de_listagem": "identificador, nome, curso, eml",
     "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
-    "titulo": "Formulário para cadastro de estudante",
-    "arquivo_de_registro": "usuarios.json"
+    "arquivo_de_registro": "usuarios.json",
+    "campos_de_listagem": "identificador, nome, curso, eml",
+    "titulo": "Formulário para cadastro de estudante"
 }

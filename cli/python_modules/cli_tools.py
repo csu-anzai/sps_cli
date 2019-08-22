@@ -128,6 +128,25 @@ def save_json(novos_dados, path_to_file, pasta_temporaria=pasta_temporaria):
 	remove_lockfile(lockf)
 
 
+def load_big_csv(csv_file, delimiter='\t', lineterminator='\n'):
+	'''
+	Acessa o conteúdo do arquivo CSV e o armazena na memória como um list_of_dicts.
+	'''
+	#o = []
+	#fields = load_csv_head(csv_file, delimiter=delimiter, lineterminator=lineterminator)
+	try:
+		with open(os.path.join(os.getcwd(), csv_file), encoding="utf8") as csv_fileobj:
+			rd = csv.DictReader(csv_fileobj, delimiter=delimiter, lineterminator=lineterminator)
+			for row in rd:
+				yield row
+	except:
+		with open(os.path.join(os.getcwd(), csv_file), encoding="cp1252") as csv_fileobj:
+			rd = csv.DictReader(csv_fileobj, delimiter=delimiter, lineterminator=lineterminator)
+			for row in rd:
+				yield row
+
+
+
 def load_csv(csv_file, delimiter='\t', lineterminator='\n'):
 	'''
 	Acessa o conteúdo do arquivo CSV e o armazena na memória como um list_of_dicts.
