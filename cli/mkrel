@@ -9,7 +9,7 @@ Usage:
     mkrel <identificador>
 
 Options:
-    -v, --version           
+    -v, --version
 
 """
 
@@ -137,7 +137,8 @@ def analisar_vinculo_com_programas_familiares(estudo):
     o = []
     o_str = ""    
     for pessoa in estudo['membros_grupo_familiar'].keys():
-        o.append(analisar_vinculo_com_programas_familiar(estudo['membros_grupo_familiar'][pessoa]))
+        pinfo = (pessoa, analisar_vinculo_com_programas_familiar(estudo['membros_grupo_familiar'][pessoa]))
+        o.append(pinfo)
     
     for l in o:
         if l != "":

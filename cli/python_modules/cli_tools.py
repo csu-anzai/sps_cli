@@ -1532,7 +1532,8 @@ def render_form_get_values(form_file, skip_q=[]):
 			for k in sorted(nfo.keys()):
 				output[k] = nfo[k]
 			for k in set(clean_up_keys):
-				del(output[k])
+				if output.get(k):
+					del(output[k])
 			break
 		
 
