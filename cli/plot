@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+
+Adiniona novos registros nos arquivos de dados.
+
+Usage:
+    plot ( usr | usuarios ) 
+    plot ( atd | atendimentos ) 
+    plot ( sei | processos )  
+    plot ( est | estudos ) 
+
+Options:
+    --version
+
+Observações:
+    A opção <lista-ops> pode ser separada por ';' para criar um campo de múltipla escolha.
+    O comando 'dbi' insere as respostas de um formulário¹ em um arquivo de dados JSON já criado.
+"""
+
+from docopt import docopt
+from subprocess import getoutput
+from matplotlib import pyplot as plt
+import numpy as np
+from collections import Counter
+from python_modules.cli_base import dados_atendimentos
+from python_modules.cli_tools import obter_frq_abs_from_list_of_dicts
+
+plt.style.use('fivethirtyeight')
+largura_barras = 0.40
+
+args = docopt(__doc__)
+
+def main():
+    if args['atd'] or args['atendimentos']:
+        total_nfo = []
+        for block in dados_atendimentos:
+            total_nfo.append(block)
+
+        print(obter_frq_abs_from_list_of_dicts(total_nfo))
+        
+        exit()
+        dani_n_atd = []
+        bw_n_atd = []
+
+        dias = []
+
+        for t in sorted(timestamp.keys(), reverse=True):
+
+            tt = t.split('@')[0]
+            td = t.split('@')[1]
+            if tt not in dias: dias.append(tt)
+            if t.find('bwb0de'):
+                bw_n_atd.append(timestamp[t])
+            elif t.find('danielc'):
+                dani_n_atd.append(timestamp[t])
+
+
+        print(dias)
+        print(bw_n_atd)
+        print(dani_n_atd)
+        exit()
+        x_indexes = np.arange(len(dias))
+        plt.yticks(x_indexes, dias)
+        plt.barh(x_indexes+largura_barras, dani_n_atd, height=largura_barras)
+        plt.barh(x_indexes, bw_n_atd, height=largura_barras)
+
+        #plt.plot(x_indexes, procedimentos_count, label="Procedimentos")
+        
+        plt.title("Atendimentos realizados")
+        #plt.xlabel("Quantidade de procedimentos por tipo")
+        
+
+        #plt.ylabel("Descritor dos procedimentos")
+        
+
+        plt.tight_layout()
+        plt.grid(True)
+        #plt.savefig('plot_atd.svg')
+
+        plt.show()
+
+
+
+if __name__ == '__main__':
+    main()
+

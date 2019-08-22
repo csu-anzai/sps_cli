@@ -1142,6 +1142,7 @@ def gerar_console_menu(lista, cols=1):
 	'''
 	o = ''
 	n = 0
+	print(type(lista))
 
 	if type(lista) == list:
 		o = ''
@@ -1221,7 +1222,7 @@ def select_ops(lista_de_selecao, col_num, sort_list=False):
 	'''
 	if sort_list == True:
 		lista_de_selecao.sort()
-	op_list = gerar_console_menu(lista_de_selecao, col_num)
+	op_list = gerar_console_menu(list(lista_de_selecao), col_num)
 	while True:
 		op = interval_select(input(amarelo('$: ')))
 		try:
