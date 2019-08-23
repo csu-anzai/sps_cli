@@ -61,6 +61,7 @@ Usage:
     unb-tools ( calculate ) (csv|json) <file1>
     unb-tools ( create_new_value ) ( csv | json ) <file1> <col>...
     unb-tools ( create_new_value-from_script ) ( csv | json ) <script_file>
+	unb-tools ( checar-dado ) <dados_de_entrada>
 
 
 Options:
@@ -85,7 +86,7 @@ from math import fsum
 
 from python_modules.cli_tools import extract_lines, save_csv, load_csv, load_csv_col
 from python_modules.cli_tools import save_json, load_json
-from python_modules.cli_base import hostname
+from python_modules.cli_base import hostname, pasta_de_trabalho
 from python_modules.cli_tools import strip_simbols, get_indexes, strip_digits, strip_chars, create_new_value_col_from_script, select_op, select_ops, limpar_tela, join_list_of_dicts_union, join_list_of_dicts_intersection, cruzar_variaveis, obter_frq_abs_e_rel_from_list_of_dicts
 from python_modules.py_functions_calculation import media_aritmetica
 
@@ -110,7 +111,7 @@ def create_curric_metainfo_index(list_of_dicts):
 	save_json(output, arquivo_metadados_cursos_json)
 
 
-def old_sae_etd_rename_files(target_folder=old_etd_folder):
+def old_sae_etd_rename_files(target_folder=""):
 	files = os.listdir(target_folder)
 	init_folder = os.getcwd()
 	os.chdir(target_folder)
@@ -127,7 +128,7 @@ def old_sae_etd_rename_files(target_folder=old_etd_folder):
 					break
 	os.chdir(init_folder)
 
-def old_sae_etd_strip_chars(target_folder=old_etd_folder):
+def old_sae_etd_strip_chars(target_folder=""):
 	subfolders = os.listdir(target_folder)
 	init_folder = os.getcwd()
 	os.chdir(target_folder)
@@ -141,7 +142,7 @@ def old_sae_etd_strip_chars(target_folder=old_etd_folder):
 	os.chdir(init_folder)
 
 
-def old_sae_etd_movefiles_to_folder(target_folder=old_etd_folder):
+def old_sae_etd_movefiles_to_folder(target_folder=""):
 	files = os.listdir(target_folder)
 	os.chdir(target_folder)
 	new_folders = []
@@ -183,7 +184,7 @@ def old_sae_extract_hist_list(csv_file_info, init_idx=0):
 			total_itens -= 1
 
 
-def old_sae_extract_list(csv_file_info, target_folder=old_etd_folder, init_idx=13920):
+def old_sae_extract_list(csv_file_info, target_folder="", init_idx=13920):
 	total_itens = len(csv_file_info)-1
 	current_item = init_idx
 	total_itens -= init_idx
@@ -1909,6 +1910,10 @@ def main():
 	if args['join-alu-rel']:
 		join_alurel(args['<target-folder>'], args['<output-txt-fname>'])
 
+	elif args['checar-dado']:
+		print(pasta_de_trabalho)
+		print(getoutput('INFO="{}"; cd "{}"; for FILE in $(ls *.csv); do RES=$(grep "$INFO" < "$FILE"); if [ $(echo "$RES" | wc -c) -gt 5 ]; then echo "$FILE"; echo "$RES"; fi ; done'.format(args['<dados_de_entrada>'],pasta_de_trabalho)))
+	
 	elif args['integrate_old_sae_etd']:
 		old_sae_etd_rename_files()
 		old_sae_etd_movefiles_to_folder()

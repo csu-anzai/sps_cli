@@ -1,49 +1,52 @@
 {
+    "arquivo_de_registro": "estudos.json",
+    "titulo": "Questões para avaliação socioeconômica",
+    "campos_de_listagem": "identificador, motivos_estudo, campus",
     "questoes": [
         {
+            "tipo": "radio",
             "alternativas": [
                 "Sim",
                 "Não"
             ],
-            "id": "cotista",
             "enunciado": "Estudante cotista",
-            "tipo": "radio"
+            "id": "cotista"
         },
         {
+            "tipo": "radio",
             "alternativas": [
                 "Baixa Renda",
                 "Alta Renda",
                 "Negro",
                 "Indígena"
             ],
-            "id": "cotista_renda",
-            "tipo": "radio",
+            "trigger_skip": "cotista::Não",
             "enunciado": "Alta ou Baixa renda, conforme o SIGRA",
-            "trigger_skip": "cotista::Não"
+            "id": "cotista_renda"
         },
         {
+            "tipo": "radio",
             "alternativas": [
                 "PPI",
                 "Não PPI"
             ],
-            "id": "cotista_tipo",
-            "tipo": "radio",
+            "trigger_skip": "cotista::Não; cotista_renda::Negro; cotista_renda::Indígena",
             "enunciado": "PPI ou Não PPI, conforme o SIGRA",
-            "trigger_skip": "cotista::Não; cotista_renda::Negro; cotista_renda::Indígena"
+            "id": "cotista_tipo"
         },
         {
+            "tipo": "radio",
             "alternativas": [
                 "Darcy Ribeiro",
                 "FCE",
                 "FGA",
                 "FUP"
             ],
-            "id": "campus",
             "enunciado": "Campus de origem",
-            "tipo": "radio"
+            "id": "campus"
         },
         {
-            "id": "estudante_nivel",
+            "tipo": "radio",
             "alternativas": [
                 "Graduação",
                 "Especialização",
@@ -51,28 +54,28 @@
                 "Doutorado",
                 "Outro"
             ],
-            "defaults": "Graduação",
             "enunciado": "Nível do curso do estudante",
-            "tipo": "radio"
+            "defaults": "Graduação",
+            "id": "estudante_nivel"
         },
         {
-            "id": "ano_EM",
+            "tipo": "text",
             "enunciado": "Ano de conclusão do Ensino Médio",
-            "tipo": "text"
+            "id": "ano_EM"
         },
         {
-            "id": "turno_curso",
+            "tipo": "radio",
             "alternativas": [
                 "Diurno",
                 "Noturno",
                 "Outro"
             ],
-            "defaults": "Diurno",
             "enunciado": "Turno do curso",
-            "tipo": "radio"
+            "defaults": "Diurno",
+            "id": "turno_curso"
         },
         {
-            "id": "tipo_EM",
+            "tipo": "radio",
             "alternativas": [
                 "Pública regular",
                 "Pública EJA",
@@ -81,24 +84,24 @@
                 "Privada Supletivo (EJA)",
                 "Privada técnico"
             ],
-            "defaults": "Pública regular",
             "enunciado": "Tipo escola/instituição do Ensino Médio",
-            "tipo": "radio"
+            "defaults": "Pública regular",
+            "id": "tipo_EM"
         },
         {
-            "id": "localidade_EM",
+            "tipo": "radio",
             "alternativas": [
                 "DF",
                 "RIDE",
                 "Outra UF",
                 "Impossível inferir"
             ],
-            "defaults": "DF",
             "enunciado": "Localidade onde cursou Ensino Médio",
-            "tipo": "radio"
+            "defaults": "DF",
+            "id": "localidade_EM"
         },
         {
-            "id": "relacao_aes",
+            "tipo": "radio",
             "alternativas": [
                 "Está atualizando o estudo con vista ao acesso a outros programas",
                 "Está em processo de reintegração à assistencia",
@@ -107,12 +110,12 @@
                 "Não possui vínculo com assistência, desclassificada em pleitos anteriores",
                 "Outro"
             ],
-            "defaults": "Não possui vínculo com a assistência, primeiro estudo socioeconômico",
             "enunciado": "Relação com a Assistencia Estudantil",
-            "tipo": "radio"
+            "defaults": "Não possui vínculo com a assistência, primeiro estudo socioeconômico",
+            "id": "relacao_aes"
         },
         {
-            "id": "motivos_estudo",
+            "tipo": "checkbox",
             "alternativas": [
                 "Alimentação",
                 "Auxílio socioeconômico",
@@ -121,22 +124,22 @@
                 "Moradia estudantil",
                 "Outro"
             ],
-            "defaults": "Alimentação; Auxílio socioeconômico",
             "enunciado": "Programas de interesse",
-            "tipo": "checkbox"
+            "defaults": "Alimentação; Auxílio socioeconômico",
+            "id": "motivos_estudo"
         },
         {
-            "id": "dn_estudante",
+            "tipo": "text",
             "enunciado": "Data de nascimento do estudante",
-            "tipo": "text"
+            "id": "dn_estudante"
         },
         {
-            "id": "cpf_estudante",
+            "tipo": "text",
             "enunciado": "CPF do estudante",
-            "tipo": "text"
+            "id": "cpf_estudante"
         },
         {
-            "id": "situacao_saude_estudante",
+            "tipo": "checkbox",
             "alternativas": [
                 "Sem agravos de saúde",
                 "Doença crônica",
@@ -145,12 +148,12 @@
                 "Deficiência física",
                 "Outro"
             ],
-            "defaults": "Sem agravos de saúde",
             "enunciado": "Situação de saúde",
-            "tipo": "checkbox"
+            "defaults": "Sem agravos de saúde",
+            "id": "situacao_saude_estudante"
         },
         {
-            "id": "situacao_renda_estudante",
+            "tipo": "checkbox",
             "alternativas": [
                 "Benefício Assistência Social (BPC, Bolsa Família, Renda cidadã…)",
                 "Bolsa Acadêmica (PIBIC, PIBID, PIBEX, Mestrado, Doutorado...)",
@@ -177,22 +180,22 @@
                 "Trabalho formal, setor privado",
                 "Outro"
             ],
-            "defaults": "Sem renda; Estágio remunerado ou menor/jovem aprendiz; Trabalho autônomo ou informal",
             "enunciado": "Situação de renda do estudante",
-            "tipo": "checkbox"
+            "defaults": "Sem renda; Estágio remunerado ou menor/jovem aprendiz; Trabalho autônomo ou informal",
+            "id": "situacao_renda_estudante"
         },
         {
+            "tipo": "radio",
             "alternativas": [
                 "Não",
                 "Sim"
             ],
-            "id": "contribui_renda",
-            "tipo": "radio",
+            "trigger_skip": "situacao_renda_estudante::Sem renda",
             "enunciado": "Estudante contribui para a renda familiar?",
-            "trigger_skip": "situacao_renda_estudante::Sem renda"
+            "id": "contribui_renda"
         },
         {
-            "id": "registro_genitores",
+            "tipo": "radio",
             "alternativas": [
                 "Sim",
                 "Apenas mãe",
@@ -200,11 +203,13 @@
                 "Não",
                 "Outro"
             ],
-            "defaults": "Sim",
             "enunciado": "Registrado por âmbos genitores",
-            "tipo": "radio"
+            "defaults": "Sim",
+            "id": "registro_genitores"
         },
         {
+            "tipo": "radio",
+            "id": "pais_falecidos",
             "alternativas": [
                 "Não",
                 "Apenas mãe",
@@ -212,42 +217,40 @@
                 "Sim",
                 "Outro"
             ],
-            "id": "pais_falecidos",
             "autofill": "Não se aplica",
-            "tipo": "radio",
-            "defaults": "Não",
             "trigger_skip": "registro_genitores::Não",
-            "enunciado": "Responsáveis legais são falecidos"
+            "enunciado": "Responsáveis legais são falecidos",
+            "defaults": "Não"
         },
         {
+            "tipo": "radio",
+            "id": "pais_separados",
             "alternativas": [
                 "Não",
                 "Sim",
                 "Outro"
             ],
-            "id": "pais_separados",
             "autofill": "Não se aplica",
-            "tipo": "radio",
-            "defaults": "Não",
             "trigger_skip": "registro_genitores::Não; pais_falecidos::Apenas mãe; pais_falecidos::Apenas pai; pais_falecidos::Sim",
-            "enunciado": "Responsáveis legais são separados"
+            "enunciado": "Responsáveis legais são separados",
+            "defaults": "Não"
         },
         {
+            "tipo": "radio",
+            "id": "pais_separados_info",
             "alternativas": [
                 "Foram formalmente casados e estão separados",
                 "Foram formalmente casados e estão informalmente separados",
                 "Funca foram casados formalmente",
                 "Outro"
             ],
-            "id": "pais_separados_info",
             "autofill": "Não se aplica",
-            "tipo": "radio",
-            "defaults": "Não",
             "trigger_skip": "pais_separados::Não; registro_genitores::Não; pais_falecidos::Apenas mãe; pais_falecidos::Apenas pai; pais_falecidos::Sim",
-            "enunciado": "Do vínculo entre os responsáveis legais"
+            "enunciado": "Do vínculo entre os responsáveis legais",
+            "defaults": "Não"
         },
         {
-            "id": "situacao_residencia",
+            "tipo": "radio",
             "alternativas": [
                 "Casa do Estudante Universitário (CEU)",
                 "Com grupo familiar",
@@ -258,12 +261,12 @@
                 "Sozinho",
                 "Outro"
             ],
-            "defaults": "Com grupo familiar",
             "enunciado": "Situação de residência do estudante",
-            "tipo": "radio"
+            "defaults": "Com grupo familiar",
+            "id": "situacao_residencia"
         },
         {
-            "id": "moradia_localidade",
+            "tipo": "radio",
             "alternativas": [
                 "DF",
                 "RIDE",
@@ -271,11 +274,12 @@
                 "Sem residência",
                 "Dúvida"
             ],
-            "defaults": "DF",
             "enunciado": "Localidade de residência do/a estudante",
-            "tipo": "radio"
+            "defaults": "DF",
+            "id": "moradia_localidade"
         },
         {
+            "tipo": "radio",
             "alternativas": [
                 "Aguas Claras",
                 "Aguas Lindas-GO",
@@ -302,6 +306,7 @@
                 "Jardim Botânico",
                 "Jardins Mangueiral",
                 "Luziânia-GO",
+                "Novo Gama-GO",
                 "Núcleo Bandeirante",
                 "Padre Bernardo-GO",
                 "Paranoá",
@@ -326,23 +331,24 @@
                 "Vila Telebrasília",
                 "Outro"
             ],
-            "id": "moradia_cidade",
-            "tipo": "radio",
+            "trigger_skip": "moradia_localidade::Dúvida",
             "enunciado": "Cidade de residência do estudante",
-            "trigger_skip": "moradia_localidade::Dúvida"
+            "id": "moradia_cidade"
         },
         {
+            "tipo": "radio",
+            "id": "moradia_regiao",
             "alternativas": [
                 "Cidade",
                 "Campo"
             ],
-            "id": "moradia_regiao",
-            "tipo": "radio",
-            "defaults": "Cidade",
             "trigger_skip": "moradia_localidade::Dúvida",
-            "enunciado": "Região onde localiza-se a residencia do estudante"
+            "enunciado": "Região onde localiza-se a residencia do estudante",
+            "defaults": "Cidade"
         },
         {
+            "tipo": "radio",
+            "id": "moradia_condicao",
             "alternativas": [
                 "Alugada",
                 "Casa do Estudante Universitário (CEU)",
@@ -356,19 +362,19 @@
                 "Própria ou da família",
                 "Outro"
             ],
-            "id": "moradia_condicao",
-            "tipo": "radio",
-            "defaults": "Própria ou da família; Alugada; Cedida por familiares",
             "trigger_skip": "moradia_localidade::Dúvida",
-            "enunciado": "Condição da moradia do estudante"
+            "enunciado": "Condição da moradia do estudante",
+            "defaults": "Própria ou da família; Alugada; Cedida por familiares"
         },
         {
-            "id": "valor_renda",
             "tipo": "text",
+            "trigger_skip": "situacao_renda_estudante::Sem renda",
             "enunciado": "Valor da renda pessoal do estudante",
-            "trigger_skip": "situacao_renda_estudante::Sem renda"
+            "id": "valor_renda"
         },
         {
+            "tipo": "radio",
+            "id": "moradia_condicao_familia",
             "alternativas": [
                 "Própria ou de família",
                 "Alugada",
@@ -379,26 +385,25 @@
                 "De favor (terceiros não considerados no estudo, compartilham moradia com estudante)",
                 "Outro"
             ],
-            "id": "moradia_condicao_familia",
-            "tipo": "radio",
-            "defaults": "Própria ou de família",
             "trigger_skip": "situacao_residencia::Com grupo familiar",
-            "enunciado": "Condição da moradia do grupo familiar"
+            "enunciado": "Condição da moradia do grupo familiar",
+            "defaults": "Própria ou de família"
         },
         {
+            "tipo": "radio",
+            "id": "moradia_localidade_familia",
             "alternativas": [
                 "DF",
                 "RIDE",
                 "Outra UF",
                 "Sem residência"
             ],
-            "id": "moradia_localidade_familia",
-            "tipo": "radio",
-            "defaults": "DF",
             "trigger_skip": "situacao_residencia::Com grupo familiar",
-            "enunciado": "Localidade de residência do grupo familiar"
+            "enunciado": "Localidade de residência do grupo familiar",
+            "defaults": "DF"
         },
         {
+            "tipo": "radio",
             "alternativas": [
                 "Aguas Claras",
                 "Aguas Lindas-GO",
@@ -445,24 +450,23 @@
                 "Vila Telebrasília",
                 "Outro"
             ],
-            "id": "moradia_cidade_familia",
-            "tipo": "radio",
+            "trigger_skip": "situacao_residencia::Com grupo familiar",
             "enunciado": "Cidade de residência do grupo familiar",
-            "trigger_skip": "situacao_residencia::Com grupo familiar"
+            "id": "moradia_cidade_familia"
         },
         {
+            "tipo": "radio",
+            "id": "moradia_regiao_familia",
             "alternativas": [
                 "Cidade",
                 "Campo"
             ],
-            "id": "moradia_regiao_familia",
-            "tipo": "radio",
-            "defaults": "Cidade",
             "trigger_skip": "situacao_residencia::Com grupo familiar",
-            "enunciado": "Região onde localiza-se a residencia"
+            "enunciado": "Região onde localiza-se a residencia",
+            "defaults": "Cidade"
         },
         {
-            "id": "mantenedores",
+            "tipo": "checkbox",
             "alternativas": [
                 "Avôs/ós",
                 "Companheiro/conjuge",
@@ -477,12 +481,12 @@
                 "Tios/as",
                 "Outro"
             ],
-            "defaults": "Genitores",
             "enunciado": "Grau de parentesco do estudante com os mantenedores",
-            "tipo": "checkbox"
+            "defaults": "Genitores",
+            "id": "mantenedores"
         },
         {
-            "id": "mantenedores_relacao",
+            "tipo": "checkbox",
             "alternativas": [
                 "Sem informação",
                 "Alega não receber suporte dos pais",
@@ -493,97 +497,100 @@
                 "Violenta",
                 "Outro"
             ],
-            "defaults": "Sem informação",
             "enunciado": "Relação geral do estudante com os mantenedores",
-            "tipo": "checkbox"
+            "defaults": "Sem informação",
+            "id": "mantenedores_relacao"
         },
         {
-            "alternativas": [
-                "Não",
-                "Sim"
-            ],
+            "tipo": "radio",
             "id": "rompimento_vinculos",
-            "tipo": "radio",
-            "defaults": "Não",
+            "alternativas": [
+                "Não",
+                "Sim"
+            ],
             "trigger_skip": "mantenedores_relacao::Sem informação",
-            "enunciado": "Há indicativo/relato de rompimento de vínculos?"
+            "enunciado": "Há indicativo/relato de rompimento de vínculos?",
+            "defaults": "Não"
         },
         {
-            "id": "familia_saude",
-            "alternativas": [
-                "Não",
-                "Sim"
-            ],
-            "defaults": "Não",
-            "enunciado": "Há integrantes do grupo familiar com problemas de saúde?",
-            "tipo": "radio"
-        },
-        {
-            "alternativas": [
-                "Não",
-                "Sim"
-            ],
-            "id": "familia_saude_cuidador",
             "tipo": "radio",
-            "defaults": "Não",
-            "trigger_skip": "familia_saude::Não",
-            "enunciado": "As pessoas com problemas de saúde demandam cuidadores?"
-        },
-        {
             "alternativas": [
                 "Não",
                 "Sim"
             ],
-            "id": "possui_filhos",
-            "enunciado": "Estudante possui filhos?",
-            "tipo": "radio"
+            "enunciado": "Há integrantes do grupo familiar com problemas de saúde?",
+            "defaults": "Não",
+            "id": "familia_saude"
         },
         {
+            "tipo": "radio",
+            "id": "familia_saude_cuidador",
+            "alternativas": [
+                "Não",
+                "Sim"
+            ],
+            "trigger_skip": "familia_saude::Não",
+            "enunciado": "As pessoas com problemas de saúde demandam cuidadores?",
+            "defaults": "Não"
+        },
+        {
+            "tipo": "radio",
+            "alternativas": [
+                "Não",
+                "Sim"
+            ],
+            "enunciado": "Estudante possui filhos?",
+            "id": "possui_filhos"
+        },
+        {
+            "tipo": "radio",
             "alternativas": [
                 "Com o próprio estudante",
                 "Com o/a ex-companheiro",
                 "Com outros familiares",
                 "Outro"
             ],
-            "id": "filhos_residem",
-            "tipo": "radio",
+            "trigger_skip": "possui_filhos::Não",
             "enunciado": "Com quem residem?",
-            "trigger_skip": "possui_filhos::Não"
+            "id": "filhos_residem"
         },
         {
-            "id": "observacoes_especificas_estudante",
+            "tipo": "text",
             "enunciado": "Observações específicas sobre o estudante",
-            "tipo": "text"
+            "id": "observacoes_especificas_estudante"
         },
         {
-            "id": "grp_f_nome",
             "q_group": "membros_grupo_familiar",
             "enunciado": "Nome do/a membro do grupo familiar",
-            "tipo": "text"
+            "tipo": "text",
+            "id": "grp_f_nome"
         },
         {
-            "id": "dn",
             "q_group": "membros_grupo_familiar",
             "enunciado": "Data de nascimento",
-            "tipo": "text"
+            "tipo": "text",
+            "id": "dn"
         },
         {
-            "id": "cpf",
             "q_group": "membros_grupo_familiar",
             "enunciado": "CPF",
-            "tipo": "text"
+            "tipo": "text",
+            "id": "cpf"
         },
         {
+            "q_group": "membros_grupo_familiar",
             "alternativas": [
                 "Masculino",
                 "Feminino"
             ],
-            "id": "sexo",
-            "q_group": "membros_grupo_familiar",
             "enunciado": "Sexo",
-            "tipo": "radio"
+            "tipo": "radio",
+            "id": "sexo"
         },
         {
+            "tipo": "radio",
+            "id": "relacao_com_estudante",
+            "q_group": "membros_grupo_familiar",
             "alternativas": [
                 "Avó",
                 "Avô",
@@ -608,13 +615,11 @@
                 "Tio",
                 "Outro"
             ],
-            "id": "relacao_com_estudante",
-            "q_group": "membros_grupo_familiar",
-            "tipo": "radio",
-            "defaults": "Mãe; Pai; Irmã; Irmão",
-            "enunciado": "Relação do membro em questão com o estudante"
+            "enunciado": "Relação do membro em questão com o estudante",
+            "defaults": "Mãe; Pai; Irmã; Irmão"
         },
         {
+            "q_group": "membros_grupo_familiar",
             "alternativas": [
                 "Não alfabetizado",
                 "Fundamental incompleto",
@@ -626,12 +631,14 @@
                 "Pós-graduação incompleta",
                 "Pós-graduação completa"
             ],
-            "id": "escolaridade",
-            "q_group": "membros_grupo_familiar",
             "enunciado": "Escolaridade",
-            "tipo": "radio"
+            "tipo": "radio",
+            "id": "escolaridade"
         },
         {
+            "tipo": "checkbox",
+            "id": "situacao_renda",
+            "q_group": "membros_grupo_familiar",
             "alternativas": [
                 "Benefício Assistência Social (BPC, Bolsa Família, Renda cidadã…)",
                 "Bolsa Acadêmica (PIBIC, PIBID, PIBEX, Mestrado, Doutorado...)",
@@ -658,20 +665,20 @@
                 "Trabalho formal, setor privado",
                 "Outro"
             ],
-            "id": "situacao_renda",
-            "q_group": "membros_grupo_familiar",
-            "tipo": "checkbox",
-            "defaults": "Sem renda",
-            "enunciado": "Natureza da fonte de renda"
+            "enunciado": "Natureza da fonte de renda",
+            "defaults": "Sem renda"
         },
         {
-            "id": "valor_renda",
+            "trigger_skip": "situacao_renda::Sem renda",
             "tipo": "text",
             "q_group": "membros_grupo_familiar",
             "enunciado": "Valor da renda pessoal do membro em questão",
-            "trigger_skip": "situacao_renda::Sem renda"
+            "id": "valor_renda"
         },
         {
+            "tipo": "checkbox",
+            "id": "situacao_saude",
+            "q_group": "membros_grupo_familiar",
             "alternativas": [
                 "Agravo de saúde mental",
                 "Complicações em virtude de parto prematuro",
@@ -683,23 +690,17 @@
                 "Sem agravos de saúde",
                 "Outro"
             ],
-            "id": "situacao_saude",
-            "q_group": "membros_grupo_familiar",
             "autofill": "Sem agravos de saúde",
             "trigger_skip": "familia_saude::Não",
-            "defaults": "Sem agravos de saúde",
-            "tipo": "checkbox",
-            "enunciado": "Situação de saúde"
+            "enunciado": "Situação de saúde",
+            "defaults": "Sem agravos de saúde"
         },
         {
-            "id": "observacoes_especificas",
             "q_group": "membros_grupo_familiar",
             "enunciado": "Observações específicas",
-            "tipo": "text"
+            "tipo": "text",
+            "id": "observacoes_especificas"
         }
     ],
-    "descricao": "Intrumental destinado à coleta de informações para avaliação de vulnerabilidade socioeconômica.",
-    "arquivo_de_registro": "estudos.json",
-    "titulo": "Questões para avaliação socioeconômica",
-    "campos_de_listagem": "identificador, motivos_estudo, campus"
+    "descricao": "Intrumental destinado à coleta de informações para avaliação de vulnerabilidade socioeconômica."
 }

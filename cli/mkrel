@@ -20,7 +20,7 @@ from docopt import docopt
 from subprocess import getoutput
 from datetime import datetime
 from python_modules.templates import base_html_layout 
-from python_modules.cli_base import pasta_temporaria, arquivo_sex_info, load_json, get_info_doc, dados_estudos, periodo_corrente, dados_lista_creche, dados_lista_moradia, dados_lista_pase, dados_lista_transporte
+from python_modules.cli_base import pasta_temporaria, arquivo_sex_info, load_json, get_info_doc, dados_estudos, periodo_corrente, dados_lista_creche, dados_lista_moradia, dados_lista_pase, dados_lista_transporte, pasta_de_trabalho
 from python_modules.cli_tools import input_op, verde, strip_simbols, lexical_list_join
 
 args = docopt(__doc__)
@@ -90,6 +90,12 @@ def analisar_renda_mantenedores(pessoa):
     
     return lexical_list_join(str_grp)
 
+def analisar_vinculos_portal_transparencia(nome, cpf):
+    cpf_only_n = strip_simbols(cpf)
+    n_cpf = "***."+cpf_only_n[3:6]+'.'+cpf_only_n[6:9]+'-**'
+    print(n_cpf, nome)
+    print(getoutput('cd "{pt}"; for FILE in $(ls *.csv); do RES=$(grep "{n}" < "$FILE" | grep "{cpf}"); if [ $(echo "$RES" | wc -c) -gt 5 ]; then echo "$FILE"; echo "$RES"; else RES=$(grep "{n}" < "$FILE"); if [ $(echo "$RES" | wc -c) -gt 5 ]; then echo "$FILE"; echo "$RES"; fi; fi ; done'.format(pt=pasta_de_trabalho, n=nome, cpf=n_cpf)))
+
 def analisar_vinculo_com_programas(cpf, lista_creche=dados_lista_creche, lista_moradia=dados_lista_moradia, lista_pase=dados_lista_pase, lista_transporte=dados_lista_transporte, ret_mode="String"):
     output = "Em relação à Assistencia Estudantil, não constam nas folhas de pagamento indicativos de que #@# estudante esteja vinculad#@# a quaisquer um deles."
     output_strs = []
@@ -137,6 +143,7 @@ def analisar_vinculo_com_programas_familiares(estudo):
     o = []
     o_str = ""    
     for pessoa in estudo['membros_grupo_familiar'].keys():
+        analisar_vinculos_portal_transparencia(pessoa.upper(), estudo['membros_grupo_familiar'][pessoa]['cpf'])
         pinfo = (pessoa, analisar_vinculo_com_programas_familiar(estudo['membros_grupo_familiar'][pessoa]))
         o.append(pinfo)
     

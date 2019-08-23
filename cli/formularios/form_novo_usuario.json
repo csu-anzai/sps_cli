@@ -1,4 +1,5 @@
 {
+    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
     "questoes": [
         {
             "id": "identificador",
@@ -57,10 +58,12 @@
                 "Gestão do Agronegócio",
                 "História",
                 "Inglês",
+                "Interpretação Teatral",
                 "Licenciatura em Educação do Campo",
                 "Lingua Francesa e Respectiva Literatura",
                 "Lingua Portuguesa e Respectiva Literatura",
                 "Língua Espanhola e Literatura Espanhola e Hispano-Americana",
+                "Língua e Literatura Japonesa",
                 "Línguas Estrangeiras Aplicadas - MSI",
                 "Maringa de santos",
                 "Medicina veterinária",
@@ -76,8 +79,7 @@
             "tipo": "radio"
         }
     ],
-    "descricao": "Intrumental destinado à coleta de informações centrais para identificação e comunicação com estudantes atendidos pelo SPS/FUP",
     "arquivo_de_registro": "usuarios.json",
-    "campos_de_listagem": "identificador, nome, curso, eml",
-    "titulo": "Formulário para cadastro de estudante"
+    "titulo": "Formulário para cadastro de estudante",
+    "campos_de_listagem": "identificador, nome, curso, eml"
 }
