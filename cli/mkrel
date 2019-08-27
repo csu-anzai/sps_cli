@@ -91,10 +91,8 @@ def analisar_renda_mantenedores(pessoa):
     return lexical_list_join(str_grp)
 
 def analisar_vinculos_portal_transparencia(nome, cpf):
-    cpf_only_n = strip_simbols(cpf)
-    n_cpf = "***."+cpf_only_n[3:6]+'.'+cpf_only_n[6:9]+'-**'
-    print(n_cpf, nome)
-    print(getoutput('cd "{pt}"; for FILE in $(ls *.csv); do RES=$(grep "{n}" < "$FILE" | grep "{cpf}"); if [ $(echo "$RES" | wc -c) -gt 5 ]; then echo "$FILE"; echo "$RES"; else RES=$(grep "{n}" < "$FILE"); if [ $(echo "$RES" | wc -c) -gt 5 ]; then echo "$FILE"; echo "$RES"; fi; fi ; done'.format(pt=pasta_de_trabalho, n=nome, cpf=n_cpf)))
+    print(cpf, nome)
+    getoutput("unb-tools checar-vinculos '{n}' '{cpf}'".format(pt=pasta_de_trabalho, n=nome, cpf=cpf))
 
 def analisar_vinculo_com_programas(cpf, lista_creche=dados_lista_creche, lista_moradia=dados_lista_moradia, lista_pase=dados_lista_pase, lista_transporte=dados_lista_transporte, ret_mode="String"):
     output = "Em relação à Assistencia Estudantil, não constam nas folhas de pagamento indicativos de que #@# estudante esteja vinculad#@# a quaisquer um deles."

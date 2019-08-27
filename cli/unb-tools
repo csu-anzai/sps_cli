@@ -61,7 +61,7 @@ Usage:
     unb-tools ( calculate ) (csv|json) <file1>
     unb-tools ( create_new_value ) ( csv | json ) <file1> <col>...
     unb-tools ( create_new_value-from_script ) ( csv | json ) <script_file>
-	unb-tools ( checar-dado ) <dados_de_entrada>
+	unb-tools ( checar-vinculos ) <nome> <cpf>
 
 
 Options:
@@ -77,18 +77,23 @@ import os
 import zipfile
 import shutil
 import re
-
 from collections import OrderedDict
-from docopt import docopt
 from subprocess import getoutput
 from string import whitespace, punctuation, digits
 from math import fsum
+
+
+from docopt import docopt
+
+import python_modules.cli_tools as tools
 
 from python_modules.cli_tools import extract_lines, save_csv, load_csv, load_csv_col
 from python_modules.cli_tools import save_json, load_json
 from python_modules.cli_base import hostname, pasta_de_trabalho
 from python_modules.cli_tools import strip_simbols, get_indexes, strip_digits, strip_chars, create_new_value_col_from_script, select_op, select_ops, limpar_tela, join_list_of_dicts_union, join_list_of_dicts_intersection, cruzar_variaveis, obter_frq_abs_e_rel_from_list_of_dicts
 from python_modules.py_functions_calculation import media_aritmetica
+
+
 
 if hostname == "oracleVM":
 	curric_folder = '/home/danielc/Documentos/SPS/Currículos/FUP'
@@ -1910,9 +1915,63 @@ def main():
 	if args['join-alu-rel']:
 		join_alurel(args['<target-folder>'], args['<output-txt-fname>'])
 
-	elif args['checar-dado']:
-		print(pasta_de_trabalho)
-		print(getoutput('INFO="{}"; cd "{}"; for FILE in $(ls *.csv); do RES=$(grep "$INFO" < "$FILE"); if [ $(echo "$RES" | wc -c) -gt 5 ]; then echo "$FILE"; echo "$RES"; fi ; done'.format(args['<dados_de_entrada>'],pasta_de_trabalho)))
+	elif args['checar-vinculos']:
+		cpf_only_n = strip_simbols(args['<cpf>'])
+		print(cpf_only_n)
+		n_cpf = "***."+cpf_only_n[3:6]+'.'+cpf_only_n[6:9]+'-**'
+		print(getoutput('''
+
+		printf "» %s ---> %s\n" "{n}" "{cpf}"
+
+		cd "{pt}";
+
+		printf "Portal da Transparência:\n"
+
+		PRINT_INFO=1
+		for FILE in $(ls *.csv); 
+		do
+			RES=$(grep "{n}" < "$FILE" | grep "{n_cpf}");
+			if [ $(printf "%s\n" "$RES" | wc -c) -gt 5 ];
+			then
+				PRINT_INFO=0
+				printf "%s\n" "$FILE"; 
+				printf "%s\n" "$RES"; 
+			else 
+				RES=$(grep "{n}" < "$FILE"); 
+				if [ $(printf "%s\n" "$RES" | wc -c) -gt 5 ]; 
+				then
+					PRINT_INFO=0 
+					printf "%s\n" "$FILE"; 
+					printf "%s\n" "$RES"; 
+				fi; 
+			fi; 
+		done;
+
+		if [ $PRINT_INFO -eq 1 ];
+		then
+			printf "Nenhuma informação encontrada...\n"
+		fi
+
+		printf '\nProgramas de Assistência Estudantil:\n'
+		
+		for AES_FILE in $(ls *.txt);
+		do
+			RES=$(grep "{cpf}" < "$AES_FILE");
+			if [ $(printf "%s" "$RES" | wc -c) -gt 5 ];
+			then
+				printf "%s\n" "$AES_FILE"
+			fi;
+		done
+
+		RES=$(grep "{n}" < "old_sae.tsv" | tr '\t' ':' |  cut -d : -f 3);
+		if [ $(printf "%s\n" "$RES" | wc -c) -gt 5 ];
+		then 
+			printf "\nEstudos Antigos:\n%s\n" "$RES"; 
+		fi;
+
+		printf '\n'
+			
+		'''.format(pt=pasta_de_trabalho, n=args['<nome>'], n_cpf=n_cpf, cpf=cpf_only_n)))
 	
 	elif args['integrate_old_sae_etd']:
 		old_sae_etd_rename_files()
