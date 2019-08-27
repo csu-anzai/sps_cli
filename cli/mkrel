@@ -355,7 +355,10 @@ def main():
     else:
         moradia_regiao = 'urbana'
     
-    moradia_condicao = estudo_info['moradia_condicao'].lower()
+    try: #Eliminar este hook posteriormente e criar uma função para cada campo...
+        moradia_condicao = estudo_info.get('moradia_condicao').lower()
+    except:
+        moradia_condicao = "casa do estudante universitário (CEU)"
 
     output = output.replace("#IDADE#", str(idade))
     output = output.replace("#COTISTA#", analisar_cota(cotista, tipo_cota1, tipo_cota2))
