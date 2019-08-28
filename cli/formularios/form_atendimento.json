@@ -28,20 +28,21 @@
             "tipo": "checkbox",
             "enunciado": "Demanda do atendimento",
             "alternativas": {
-                "Dados bancários ou problemas de recebimento de recursos": [
+                "Dados bancários": [
                     "Recebimento de ficha para alteração de informações bancárias",
-                    "Encaminhamento de ficha de alteração das informações bancárias",
+                    "Encaminhamento de ficha de alteração das informações bancárias"
+                ],
+                "Problemas no recebimento de recursos": [
                     "Contacto telefônico com a tesouraria para verificação de pagamento de auxílio"
                 ],
-                "Monitoramento acadêmico e informações de pagamento": [
-                    "Encaminhamento de pedido de prorrogação de prazo de permanencia nos programas",
-                    "Estudante compareceu ao setor com dúvidas quanto a possibilidade de outra pessoa, além da coordenadora, assinar o processo",
-                    "Orientação para buscar contacto com a técnica de assuntos educacionais",
+                "Registros de presença do estudante": [
+                    "Estudante compareceu ao setor com dúvidas quanto a possibilidade de outra pessoa, além da coordenadora, assinar o processo"
+                ],
+                "Monitoramento acadêmico": [
                     "Orientação para o contacto direto com a técnica em assuntos educacionais",
-                    "Orientações sobre a declaração de provável formando, emitida pela coordenação",
                     "Recebimento de declaração de provável formando",
-                    "Recebimento de listagem de período para anexação em processo existente",
-                    "Recebimento de pedido de prorrogação de prazo de permanencia nos programas"
+                    "Recebimento de pedido de prorrogação de prazo de permanencia nos programas",
+                    "Encaminhamento de pedido de prorrogação de prazo de permanencia nos programas"                    
                 ],
                 "Assinatura de termos": [
                     "Preenchimento/assinatura de termo PACreche",
@@ -69,14 +70,12 @@
                     "Recebimento de solicitação de reintegração ao PME-G",
                     "Recebimento de solicitação de reintegração ao PME-G e PASeUnB"
                 ],
-                "Dificuldades no recebimento de recursos": [
-                    "Contacto telefônico com a tesouraria para verificação de pagamento de auxílio"
-                ],
-                "Articulação e/ou encaminhamento de damandas para outros setores": [
+                "Articulação intersetorial": [
                     "Articulação de demandas com a Coordenaçãoo da Educação do Campo.",
                     "Articulação de demandas com a Direção da FUP",
                     "Articulação de demandas com o SOU",
                     "Articulação de demandas da DDS",
+                    "Comunicado de erro no SAEWeb ao CPD",
                     "Encaminhamento à Casa do Ceará",
                     "Encaminhamento à DIV/UnB",
                     "Encaminhamento ao CRAS",
@@ -84,16 +83,23 @@
                     "Encaminhamento ao CAPS",
                     "Encaminhamento ao CAEP/UnB"
                 ],
-                "Processo de Avaliação Socioeconômica": [
+                "Avaliação Socioeconômica": [
                     "Auxílio no preenchimento do estudo",
                     "Consulta ao resultado de estudo socioeconômico anterior",
                     "Consulta ao resultado do estudo socioeconômico",
                     "Digitalização de documentos",
                     "Impressão de declaração constante no anexo do edital",
                     "Informe sobre erro na anexação de documentos por parte da equipe técnica",
-                    "Orientação por telefone e email",
-                    "Orientação presencial em relação a estudo socioeconômico",
-                    "Orientação sobre a necessidade de manter o estudo atualizado"
+                    "Orientação em relação a estudo socioeconômico"
+                ],
+                "Auxílio emergencial": [
+                    "Avaliação de fundamentos em relação ao pedido de emergencial",
+                    "Entrevista com fins à auxílio emergencial",
+                    "Orientação sobre Auxílio Emergencial",
+                    "Orientação sobre a impossibilidade de pedido de auxílio emergencial de forma não presencial (Art. 3º (caput))",
+                    "Recebimento de solicitação de auxílio emergencial",
+                    "Encaminhamento de pedido de auxílio emergencial",
+                    "Solicitação de documentação adicional para fundamentação de pedido de emergencial"
                 ],
                 "Consultas a processos, listas de programas, resultados": [
                     "Consulta ao andamento de emergencial",
@@ -101,12 +107,12 @@
                     "Consulta ao resultado de estudo socioeconômico anterior",
                     "Consulta ao resultado do estudo socioeconômico",
                     "Consulta sobre data de depósito de auxílio",
-                    "Consulta sobre forma de pagamento de auxílio: CPF ou depósito em conta?",
-                    "Consulta sobre situação da Bolsa Permanência ME",
+                    "Consulta sobre forma de pagamento de auxílio (CPF ou conta)",
+                    "Consulta sobre situação do estudante frente o Programa Bolsa Permanência",
                     "Consulta sobre situação do Bolsa Alimentação",
-                    "Consulta sobre situação frente ao PACreche (auxílio não depositado)",
-                    "Consulta sobre situação frente ao PASeUnB (auxílio não depositado)",
-                    "Consulta sobre situação frente ao PASeUnB (comunicado de desligamento)",
+                    "Consulta sobre situação frente ao PACreche",
+                    "Consulta sobre situação frente ao PASeUnB",
+                    "Consulta sobre situação frente ao PASeUnB",
                     "Encaminhamento de pedido de auxílio emergencial",
                     "Encaminhamento de pedido de pagamento retroativo de auxilio indevidamente suspenso",
                     "Solicitação de verificação de vínculo com a assistência estudantil"
@@ -144,7 +150,7 @@
                 "Comunicação e email": [
                     "Comunicado de deferimento/indeferimento de emergencial",
                     "Comunicação por email de conclusõa de processo",
-                    "Explicação sobre dúvida do esstudante",
+                    "Esclarescimento de dúvida do/a estudante",
                     "Solicitação para que o estudante tente novamente inserir suas informações no SaeWEB"
                 ],
                 "Informações, orientações ou esclarescimento de dúvidas": [
@@ -153,43 +159,29 @@
                     "Encaminhamento de dúvidas/problemas no sistema SaeWEB",
                     "Explicação sobre o procedimento de lista de espera",
                     "Informação do número da tesouraria para averiguação de motivos para não depósito de recursos",
-                    "Informação em geral",
                     "Informação sobre Bolsa Permanência ME",
                     "Informação sobre a perda de acesso ao RU pela não conclusão da avaliação socieconômica",
-                    "Informação sobre acesso ao RU",
+                    "Informação sobre acesso preliminar ao RU",
                     "Informação sobre andamento/situação da avaliação socioeconômica",
-                    "Informação sobre como proceder para justificar permanência nos programas para além do tempo previsto de cobertura",
-                    "Orientação ao estudante para iniciar processo de pagamento retroativo",
-                    "Orientação para execução de nova tentativa de envio de dados no SaeWEB",
+                    "Informação sobre como solicitar permanência nos programas para além do tempo previsto",
+                    "Orientação spbre como iniciar processo de pagamento retroativo",
                     "Orientação sobre Auxílio Emergencial",
                     "Orientação sobre a necessidade de manter o estudo atualizado",
                     "Orientação sobre como contactar a ouvidoria da UnB",
                     "Orientação sobre encaminhamento coletivo de demandas à DDS",
                     "Orientação sobre mudança de modalidade do PME-G.",
                     "Orientação sobre procedimentos para pedido de reintegração aos programas",
-                    "Orientações para participação no processo seletivo aos programas",
-                    "Verificação se o estudante foi selecionado em segunda ou terceira chamada"
+                    "Orientações para participação no processo seletivo aos programas"
                 ],
-                "Educação do Campo": [
-                    "Articulação de demandas com a Coordenaçãoo da Educação do Campo.",
-                    "Auxílio na comunicação com o MEC",
-                    "Auxílio para Recuperação da senha BPME",
+                "Programa Bolsa Permanência (Ministério da Educação)": [
+                    "Auxílio na comunicação com o Ministério",
+                    "Auxílio para recuperação da senha SISBP",
+                    "Consulta, junto à DDS, da situação do discente frente ao programa",
                     "Dificuldade no recebimento do cartão referente ao Bolsa Permanência ME",
-                    "Orientação presencial no cadastro junto à plataforma \"Fale Conosco\" do Ministério da Educação.",
-                    "Identificação de problemas na plataforma SISBP",
-                    "Participação na reunião de organicidade da Educação do Campo",
-                    "Solicitação de modelo de termo para o Programa Bolsa Permanência",
-                    "Orientação sobre a impossibilidade de assinatura do termo PME-G (estudante LEdoC)"
-                ],
-                "Bolsa Permanência - MEC": [
-                    "Auxílio na comunicação com o MEC",
-                    "Auxílio para Recuperação da senha BPME",
-                    "Consulta em relação à situação de pagamento do discente",
-                    "Dificuldade no recebimento do cartão referente ao Bolsa Permanência ME",
-                    "Explicação sobre não pagamento PBP em virtude do curso de alternância",
+                    "Explicação sobre alterações nas regras de pagamento PBP em virtude da alternância",
                     "Identificação de problemas na plataforma SISBP",
                     "Orientação presencial no cadastro junto à plataforma \"Fale Conosco\" do Ministério da Educação.",
-                    "Solicitação de modelo de termo para o Programa Bolsa Permanência"
+                    "Envio de modelo de termo para o Programa Bolsa Permanência"
                 ]
             }
         },
@@ -198,12 +190,23 @@
             "tipo": "radio",
             "enunciado": "Resultado do atendimento",
             "alternativas": [
-                "Aguardando resposta",
-                "Demanda atendida",
-                "Demanda atendida, mas sem resultado sarisfatório",
-                "Demanda não atendida",
+                "Procedimento concluído",
+                "Procedimento parcialmente concluído",
+                "Procedimento não concluído",
                 "Outro"
             ]
+        },
+        {
+            "id": "detalhamento",
+            "trigger_skip": "resultado::Procedimento concluído; resultado::Procedimento não concluído",
+            "tipo": "text",
+            "enunciado": "Quais ações ainda estão pendentes?"
+        },
+        {
+            "id": "detalhamento_duno",
+            "trigger_skip": "resultado::Procedimento concluído; resultado::Procedimento parcialmente concluído",
+            "tipo": "text",
+            "enunciado": "O que impediu o atendimento da demanda?"
         }
     ],
     "titulo": "Registro de atendimento",

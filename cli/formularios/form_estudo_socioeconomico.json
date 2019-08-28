@@ -263,6 +263,7 @@
                 "Dúvida",
                 "Em república estudantil",
                 "Sozinho",
+                "Sem residência",                
                 "Outro"
             ],
             "defaults": "Com grupo familiar"
@@ -278,19 +279,16 @@
                 "DF",
                 "RIDE",
                 "Outra UF",
-                "Sem residência",
                 "Dúvida"
             ]
         },
         {
             "tipo": "radio",
             "enunciado": "Cidade de residência do estudante",
-            "trigger_skip": "moradia_localidade::Dúvida; situacao_residencia::Casa do Estudante Universitário (CEU)",
+            "trigger_skip": "moradia_localidade::Dúvida; moradia_localidade::Outra UF; moradia_localidade::RIDE; situacao_residencia::Casa do Estudante Universitário (CEU)",
             "id": "moradia_cidade",
-            "autofill": "Brasília",
             "alternativas": [
                 "Aguas Claras",
-                "Aguas Lindas-GO",
                 "Arapoanga",
                 "Arniqueira",
                 "Brasília",
@@ -306,21 +304,16 @@
                 "Dúvida",
                 "Estrutural",
                 "Fercal (Sobradinho)",
-                "Formosa-GO",
                 "Gama",
                 "Guará",
                 "Guará II",
                 "Itapoã",
                 "Jardim Botânico",
                 "Jardins Mangueiral",
-                "Luziânia-GO",
-                "Novo Gama-GO",
                 "Núcleo Bandeirante",
-                "Padre Bernardo-GO",
                 "Paranoá",
                 "Park Way",
                 "Planaltina",
-                "Planaltina-GO",
                 "Recanto das Emas",
                 "Riacho Fundo",
                 "Riacho Fundo II",
@@ -333,10 +326,25 @@
                 "Sudoeste",
                 "São Sebastião",
                 "Taguatinga",
-                "Valparaíso-GO",
                 "Varjão",
                 "Vicente Pires",
                 "Vila Telebrasília",
+                "Outro"
+            ]
+        },
+        {
+            "tipo": "radio",
+            "enunciado": "Cidade de residência do estudante",
+            "trigger_skip": "moradia_localidade::Dúvida; moradia_localidade::Outra UF; moradia_localidade::DF; situacao_residencia::Casa do Estudante Universitário (CEU)",
+            "id": "moradia_cidade",
+            "alternativas": [
+                "Aguas Lindas",
+                "Formosa",
+                "Luziânia",
+                "Novo Gama",
+                "Padre Bernardo",
+                "Planaltina",
+                "Valparaíso",
                 "Outro"
             ]
         },
@@ -392,6 +400,7 @@
                 "Cedido por terceiros",
                 "Imóvel funcional",
                 "De favor (terceiros não considerados no estudo, compartilham moradia com estudante)",
+                "Sem residência",
                 "Outro"
             ]
         },
@@ -405,20 +414,17 @@
                 "DF",
                 "RIDE",
                 "Outra UF",
-                "Sem residência"
+                "Outro"
             ]
         },
         {
             "tipo": "radio",
             "enunciado": "Cidade de residência do grupo familiar",
-            "trigger_skip": "situacao_residencia::Com grupo familiar",
+            "trigger_skip": "situacao_residencia::Com grupo familiar; situacao_residencia::RIDE",
             "id": "moradia_cidade_familia",
             "alternativas": [
                 "Aguas Claras",
-                "Aguas Lindas-GO",
-                "Aldeia Peitudo, município de Inajá",
                 "Arapoanga",
-                "Barra do Corda-MA",
                 "Brasília",
                 "Brazlândia",
                 "Candangolândia",
@@ -429,19 +435,16 @@
                 "Cruzeiro",
                 "Estrutural",
                 "Fercal (Sobradinho)",
-                "Formosa-GO",
                 "Gama",
                 "Guará",
                 "Guará II",
                 "Itapoã",
                 "Jardim Botânico",
                 "Jardins Mangueiral",
-                "Luziânia-GO",
                 "Núcleo Bandeirante",
                 "Paranoá",
                 "Park Way",
                 "Planaltina",
-                "Planaltina-GO",
                 "Recanto das Emas",
                 "Riacho Fundo",
                 "Riacho Fundo II",
@@ -454,10 +457,25 @@
                 "Sudoeste",
                 "São Sebastião",
                 "Taguatinga",
-                "Valparaíso-GO",
                 "Varjão",
                 "Vicente Pires",
                 "Vila Telebrasília",
+                "Outro"
+            ]
+        },
+        {
+            "tipo": "radio",
+            "enunciado": "Cidade de residência do grupo familiar",
+            "trigger_skip": "situacao_residencia::Com grupo familiar; situacao_residencia::DF",
+            "id": "moradia_cidade_familia",
+            "alternativas": [
+                "Aguas Lindas",
+                "Formosa",
+                "Luziânia",
+                "Novo Gama",
+                "Padre Bernardo",
+                "Planaltina",
+                "Valparaíso",
                 "Outro"
             ]
         },
@@ -477,17 +495,17 @@
             "enunciado": "Grau de parentesco do estudante com os mantenedores",
             "id": "mantenedores",
             "alternativas": [
+                "Genitores",
+                "Padrasto/Madrasta",
                 "Avôs/ós",
                 "Companheiro/conjuge",
-                "Dúvida",
                 "Filhos/as",
-                "Genitores",
                 "Irmãos/ãs",
                 "Não se aplica (estudante é o próprio mantenedor)",
-                "Padrasto/Madrasta",
                 "Primos/as",
                 "Sem grau de parentesco",
                 "Tios/as",
+                "Dúvida",
                 "Outro"
             ],
             "defaults": "Genitores"
@@ -599,7 +617,6 @@
             "q_group": "membros_grupo_familiar",
             "defaults": "Mãe; Pai; Irmã; Irmão",
             "enunciado": "Relação do membro em questão com o estudante",
-            "trigger_skip": "sexo::Feminino",
             "id": "relacao_com_estudante",
             "alternativas": [
                 "Avó",
@@ -653,7 +670,6 @@
                 "Benefício Assistência Social (BPC, Bolsa Família, Renda cidadã…)",
                 "Bolsa Acadêmica (PIBIC, PIBID, PIBEX, Mestrado, Doutorado...)",
                 "Bolsa da Assistência Estudantil (Auxílio Moradia, Auxílio Socioeconômico…)",
-                "Dúvida",
                 "Educador Social Voluntário",
                 "Estágio remunerado ou menor/jovem aprendiz",
                 "INSS - Aposentadoria",
@@ -670,9 +686,10 @@
                 "Sem renda",
                 "Servidor público efetivo",
                 "Servidor público temporário",
-                "Serviço público, cargo comissionado",
+                "Servidor público, cargo comissionado",
                 "Trabalho autônomo ou informal",
                 "Trabalho formal, setor privado",
+                "Dúvida",
                 "Outro"
             ]
         },
