@@ -1335,7 +1335,8 @@ def render_form_get_values(form_file, skip_q=[]):
 							alternativas_efetivas.append(op)
 				alternativas_efetivas.sort()
 				alternativas_efetivas.append("Outro")
-				nfo[q['id']] = select_ops(alternativas_efetivas, 1)
+				nfo[q['id']] = '; '.join(select_ops(alternativas_efetivas, 1))
+				
 
 		if type(q['alternativas']) == list:
 			if nfo[q['id']].find('Outro') != -1:
@@ -1364,7 +1365,7 @@ def render_form_get_values(form_file, skip_q=[]):
 				rewrite_form = True
 		
 		elif type(q['alternativas']) == dict:
-			nfo_q_id = "; ".join(nfo[q['id']])
+			nfo_q_id = '; '.join(nfo[q['id']])
 			if nfo_q_id.find('Outro') != -1:
 				outros_recem_listados = []
 				while True:
@@ -1390,6 +1391,9 @@ def render_form_get_values(form_file, skip_q=[]):
 		
 		if rewrite_form == True:
 			save_json(form, form_file)
+
+		if nfo[q['id']] == list:
+			nfo[q['id']] = '; '.join(nfo[q['id']])
 
 		print("")
 		return (nfo[q['id']], rewrite_form)
