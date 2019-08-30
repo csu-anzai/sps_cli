@@ -1229,7 +1229,7 @@ def select_op(lista_de_selecao, col_num, sort_list=False):
 			op = int(input(amarelo('$: ')))
 		except:
 			print(vermelho('Resultado precisa ser numérico...'))
-	return op_list[op]
+	return [op_list[op]]
 
 
 
@@ -1306,6 +1306,7 @@ def render_form_get_values(form_file, skip_q=[]):
 
 	def objective_question_handler(q):
 		rewrite_form = False
+		rebuild_form = False
 		grupos_de_opcao = []
 		grupos_de_alternativas = []
 
@@ -1313,6 +1314,8 @@ def render_form_get_values(form_file, skip_q=[]):
 		if q['tipo'] == 'radio':
 			if type(q['alternativas']) == list:
 				nfo[q['id']] = select_op(q['alternativas'], 1)
+				if "Outro" in nfo[q['id']]:
+					rebuild_form = True
 			else:
 				print("Campos do tipo 'radio' devem ter suas alternativas organizadas em lista...")
 				print("Favor corrigir o arquivo de formulário...")
@@ -1320,7 +1323,9 @@ def render_form_get_values(form_file, skip_q=[]):
 
 		elif q['tipo'] == 'checkbox':
 			if type(q['alternativas']) == list:
-				nfo[q['id']] = "; ".join(select_ops(q['alternativas'], 1))
+				nfo[q['id']] = select_ops(q['alternativas'], 1) #Mod1
+				if "Outro" in nfo[q['id']]:
+					rebuild_form = True
 			
 			elif type(q['alternativas']) == dict:
 				for a in q['alternativas'].keys():
@@ -1335,12 +1340,14 @@ def render_form_get_values(form_file, skip_q=[]):
 							alternativas_efetivas.append(op)
 				alternativas_efetivas.sort()
 				alternativas_efetivas.append("Outro")
-				nfo[q['id']] = '; '.join(select_ops(alternativas_efetivas, 1))
+				nfo[q['id']] = select_ops(alternativas_efetivas, 1) #Mod2
+				if "Outro" in nfo[q['id']]:
+					rebuild_form = True
 				
 
 		if type(q['alternativas']) == list:
-			if nfo[q['id']].find('Outro') != -1:
-				nfo[q['id']] = nfo[q['id']].split('; ')
+			if rebuild_form:
+				#nfo_q_id = '; '.join(nfo[q['id']])
 				nfo[q['id']].remove('Outro')
 				outros_recem_listados = []
 				while True:
@@ -1356,44 +1363,46 @@ def render_form_get_values(form_file, skip_q=[]):
 					if op == 'n':
 						break
 				
-				nfo[q['id']] = merge_lists(nfo[q['id']], outros_recem_listados)
-				if len(nfo[q['id']]) > 1:
-					nfo[q['id']] = '; '.join(nfo[q['id']])
-				else:
-					nfo[q['id']] = nfo[q['id']][0]
-
+				nfo[q['id']] = "; ".join(merge_lists(nfo[q['id']], outros_recem_listados))
 				rewrite_form = True
 		
 		elif type(q['alternativas']) == dict:
-			nfo_q_id = '; '.join(nfo[q['id']])
-			if nfo_q_id.find('Outro') != -1:
+			if rebuild_form:
+				print(amarelo("Entrou na bagaça"))
+				nfo[q['id']].remove('Outro')
 				outros_recem_listados = []
+				print(nfo[q['id']])
 				while True:
 					print(verde('À qual grupo a obção divergente pertence: '))
 					grp_op_key_field = select_op(grupos_de_alternativas, 1)
 					outro_detalhes = input(verde('\nEspecifique a opção divergente: '))
 					outros_recem_listados.append(outro_detalhes)
+					print(outros_recem_listados)
 					q['alternativas'][grp_op_key_field].append(outro_detalhes)
 					q['alternativas'][grp_op_key_field].sort()
 					print("")
 					print(verde("Adicionar outra opção? [s|n]"))
 					op = input_op(['s','n'])
+					print(op)
 					if op == 'n':
+						print(nfo[q['id']])
 						break
-				
-				if len(outros_recem_listados) > 1:
-					outros_recem_listados = "; ".join(outros_recem_listados)
-				else:
-					outros_recem_listados = outros_recem_listados[0]
 
-				nfo[q['id']] = nfo_q_id.replace('Outro', outros_recem_listados)
+				nfo[q['id']] = "; ".join(merge_lists(nfo[q['id']], outros_recem_listados))
+				print(nfo[q['id']])
 				rewrite_form = True
+
 		
 		if rewrite_form == True:
 			save_json(form, form_file)
 
-		if nfo[q['id']] == list:
-			nfo[q['id']] = '; '.join(nfo[q['id']])
+		#print(nfo[q['id']])
+
+		#if type(nfo[q['id']]) == list:
+		#	if len(nfo[q['id']]) > 1:
+		#		nfo[q['id']] = '; '.join(nfo[q['id']])
+		#	else:
+		#		nfo[q['id']] = nfo[q['id']][0]
 
 		print("")
 		return (nfo[q['id']], rewrite_form)
@@ -1511,7 +1520,7 @@ def render_form_get_values(form_file, skip_q=[]):
 				print(verde("Inserir registro para ")+amarelo(q['q_group'])+verde("?"))
 				resposta = select_op(["Sim", "Não"], 1)
 				print("")
-				if resposta == 'Não':
+				if resposta == ['Não']:
 					idx = last_idx+1
 					try:
 						q = form['questoes'][idx]
@@ -1540,7 +1549,8 @@ def render_form_get_values(form_file, skip_q=[]):
 		if (idx == last_idx) and (inside_q_group == True):
 			print(verde("Inserir registro adicional para ")+amarelo(q['q_group'])+verde("?"))
 			resposta = select_op(["Sim", "Não"], 1)
-			if resposta == 'Sim':
+			print("")
+			if resposta == ['Sim']:
 				idx = first_idx-1
 				grp_prompt_pass = True
 			else:

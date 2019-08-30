@@ -287,7 +287,7 @@ def main():
     O grupo familiar é constituído por mais #NUM_PESSOAS# integrantes, 
     #INTEGRANTES# Destes #RENDA_AVAL#.
     Ainda, conforme as informações prestadas, #FAMILIAR# possui doença crônica...
-    Conforme informações e documentos apresentados, está apta a participar do processo seletivo para os programas escolhidos.
+    Conforme informações e documentos apresentados, está apt#@#a a participar do processo seletivo para os programas escolhidos.
     """
 
     idt = strip_simbols(args['<identificador>'])
