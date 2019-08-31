@@ -296,7 +296,10 @@ def main():
 
     estudo_info = get_info_doc(dados_estudos, 'estudo_id', "{}@{}".format(args['<identificador>'], periodo_corrente))
 
-    analisar_agravos_saude(estudo_info)
+    try:
+        analisar_agravos_saude(estudo_info)
+    except:
+        print("Estudante independente...")
 
     nome = getoutput("target get nome")
     identificador = getoutput("target get identificador")

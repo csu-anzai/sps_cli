@@ -1303,35 +1303,119 @@ def render_form_get_values(form_file, skip_q=[]):
 		]
 	}	
 	'''
+	
+	def priorizar_defaults(alternativas, defaults):
+		contador = len(defaults)
+		defaults_itens = []
+		for i in defaults:
+			defaults_itens.append(alternativas[i])
+		idx = -1
+		while contador != 0:
+			item = defaults_itens[idx]
+			alternativas.insert(0, alternativas.pop(alternativas.index(item)))
+			contador -= 1
+			idx -= 1
+		return alternativas
+
+
+	def ler_categorias(q_categorias):
+		categorias_de_alternativas = []
+		for a in q['alternativas'].keys():
+			categorias_de_alternativas.append(a)
+		categorias_de_alternativas.sort()
+		categorias_de_alternativas.append("Criar outra(s) categoria(s)...")	
+		return categorias_de_alternativas
+
+
+	def ler_alternativas(q_alternativas, q_defaults):
+		q_alternativas = priorizar_defaults(q_alternativas, q_defaults)
+		return q_alternativas
+
+
+
+	def adicionar_categorias_de_op_ao_form(q_categorias):
+		while True:
+			categoria = input(verde("\nIndique o nome da nova categoria: "))
+			print("\nIndique as opções a serem inseridas...")
+			ops = adicionar_op_ao_form([], None)
+			q_categorias[categoria] = ops
+			print("")
+			print(verde("Adicionar outra categoria? [s|n]"))
+			op = input_op(['s','n'])
+			if op == 'n':
+				break
+		return q_categorias
+
+
+	def adicionar_op_ao_form(q_spot, grupo_de_alternativas):
+		outros_recem_listados = []
+		if type(q_spot) != list:
+			print(verde('À qual grupo a opção divergente pertence: '))
+			selected_op = select_op(grupo_de_alternativas, 1)[0]
+			if type(q_spot[selected_op]) == dict:
+				grupo_de_alternativas = list(q_spot[selected_op].keys())
+			else:
+				grupo_de_alternativas = q_spot[selected_op]
+			o = adicionar_op_ao_form(q_spot[selected_op], grupo_de_alternativas)
+			for i in o:
+				outros_recem_listados.append(i)
+		else:
+			while True:
+				print("")
+				outro_detalhes = input(verde('Especifique: '))
+				outros_recem_listados.append(outro_detalhes)
+				q_spot.append(outro_detalhes)
+				q_spot.sort()
+				print("")
+				print(verde("Adicionar outra opção? [s|n]"))
+				op = input_op(['s','n'])
+				if op == 'n':
+					break
+		return outros_recem_listados
+
 
 	def objective_question_handler(q):
 		rewrite_form = False
 		rebuild_form = False
+		reescolher = False
 		grupos_de_opcao = []
 		grupos_de_alternativas = []
 
 		print(verde(q['enunciado']))
+
 		if q['tipo'] == 'radio':
 			if type(q['alternativas']) == list:
+				if q.get('defaults'):
+					print(priorizar_defaults(q['alternativas'], q['defaults']))
+					
 				nfo[q['id']] = select_op(q['alternativas'], 1)
 				if "Outro" in nfo[q['id']]:
 					rebuild_form = True
-			else:
-				print("Campos do tipo 'radio' devem ter suas alternativas organizadas em lista...")
-				print("Favor corrigir o arquivo de formulário...")
-				exit()
 
 		elif q['tipo'] == 'checkbox':
 			if type(q['alternativas']) == list:
-				nfo[q['id']] = select_ops(q['alternativas'], 1) #Mod1
+				if q.get('defaults'):
+					print(priorizar_defaults(q['alternativas'], q['defaults']))
+
+				nfo[q['id']] = select_ops(q['alternativas'], 1)
 				if "Outro" in nfo[q['id']]:
 					rebuild_form = True
 			
 			elif type(q['alternativas']) == dict:
-				for a in q['alternativas'].keys():
-					grupos_de_alternativas.append(a)
-				grupos_de_alternativas.sort()
+				grupos_de_alternativas = ler_categorias(q['alternativas'])
 				gopt = select_ops(grupos_de_alternativas, 1)
+
+				if "Criar outra(s) categoria(s)..." in gopt:
+					q['alternativas'] = adicionar_categorias_de_op_ao_form(q['alternativas'])
+					print(q['alternativas'])
+					reescolher = True
+
+				if reescolher:
+					print("")
+					print("Agora selecione a opção desejada para que o registro seja efetuado...")
+					grupos_de_alternativas = ler_categorias(q['alternativas'])
+					gopt = select_ops(grupos_de_alternativas, 1)
+
 				alternativas_efetivas = []
 				for grp_op_key in gopt:
 					grupos_de_opcao.append(grp_op_key)
@@ -1344,65 +1428,22 @@ def render_form_get_values(form_file, skip_q=[]):
 				if "Outro" in nfo[q['id']]:
 					rebuild_form = True
 				
-
-		if type(q['alternativas']) == list:
-			if rebuild_form:
-				#nfo_q_id = '; '.join(nfo[q['id']])
-				nfo[q['id']].remove('Outro')
-				outros_recem_listados = []
-				while True:
-					outro_detalhes = input('Especifique: ')
-					outros_recem_listados.append(outro_detalhes)
-					q['alternativas'].remove('Outro')
-					q['alternativas'].append(outro_detalhes)
-					q['alternativas'].sort()
-					q['alternativas'].append('Outro')
-					print("")
-					print(verde("Adicionar outra opção? [s|n]"))
-					op = input_op(['s','n'])
-					if op == 'n':
-						break
-				
-				nfo[q['id']] = "; ".join(merge_lists(nfo[q['id']], outros_recem_listados))
-				rewrite_form = True
-		
-		elif type(q['alternativas']) == dict:
-			if rebuild_form:
-				print(amarelo("Entrou na bagaça"))
-				nfo[q['id']].remove('Outro')
-				outros_recem_listados = []
-				print(nfo[q['id']])
-				while True:
-					print(verde('À qual grupo a obção divergente pertence: '))
-					grp_op_key_field = select_op(grupos_de_alternativas, 1)
-					outro_detalhes = input(verde('\nEspecifique a opção divergente: '))
-					outros_recem_listados.append(outro_detalhes)
-					print(outros_recem_listados)
-					q['alternativas'][grp_op_key_field].append(outro_detalhes)
-					q['alternativas'][grp_op_key_field].sort()
-					print("")
-					print(verde("Adicionar outra opção? [s|n]"))
-					op = input_op(['s','n'])
-					print(op)
-					if op == 'n':
-						print(nfo[q['id']])
-						break
-
-				nfo[q['id']] = "; ".join(merge_lists(nfo[q['id']], outros_recem_listados))
-				print(nfo[q['id']])
-				rewrite_form = True
-
+		if rebuild_form:
+			op_adicional = adicionar_op_ao_form(q['alternativas'], grupos_de_alternativas)
+			nfo[q['id']].remove("Outro")
+			nfo[q['id']] = merge_lists(nfo[q['id']], op_adicional)
+			rewrite_form = True
 		
 		if rewrite_form == True:
 			save_json(form, form_file)
 
-		#print(nfo[q['id']])
+		print(nfo[q['id']])
 
-		#if type(nfo[q['id']]) == list:
-		#	if len(nfo[q['id']]) > 1:
-		#		nfo[q['id']] = '; '.join(nfo[q['id']])
-		#	else:
-		#		nfo[q['id']] = nfo[q['id']][0]
+		if type(nfo[q['id']]) == list:
+			if len(nfo[q['id']]) > 1:
+				nfo[q['id']] = '; '.join(nfo[q['id']])
+			else:
+				nfo[q['id']] = nfo[q['id']][0]
 
 		print("")
 		return (nfo[q['id']], rewrite_form)
@@ -1572,7 +1613,11 @@ def render_form_get_values(form_file, skip_q=[]):
 
 	
 	os.remove(form_triggers_file)
-	return output
+
+	try:
+		return output
+	except UnboundLocalError:
+		return nfo
 
 	
 def lexical_list_join(lista):

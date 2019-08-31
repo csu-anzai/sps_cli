@@ -54,7 +54,7 @@
                 "Doutorado",
                 "Outro"
             ],
-            "defaults": "Graduação"
+            "defaults": [0]
         },
         {
             "id": "ano_EM",
@@ -70,7 +70,7 @@
                 "Noturno",
                 "Outro"
             ],
-            "defaults": "Diurno"
+            "defaults": [0]
         },
         {
             "id": "tipo_EM",
@@ -86,7 +86,7 @@
                 "Privada técnico",
                 "Privada com nível médio validado por ENEM"
             ],
-            "defaults": "Pública regular"
+            "defaults": [0,4]
         },
         {
             "id": "localidade_EM",
@@ -96,23 +96,23 @@
                 "DF",
                 "RIDE",
                 "Outra UF",
-                "Impossível inferir"
+                "???"
             ],
-            "defaults": "DF"
+            "defaults": [0,1]
         },
         {
             "id": "relacao_aes",
             "enunciado": "Relação com a Assistencia Estudantil",
             "tipo": "radio",
             "alternativas": [
-                "Está atualizando o estudo con vista ao acesso a outros programas",
+                "Está atualizando o estudo com vista ao acesso a outros programas",
                 "Está em processo de reintegração à assistencia",
                 "Não possui vínculo com a assistência, não concluíu a inscrição em semestres anteriores",
                 "Não possui vínculo com a assistência, primeiro estudo socioeconômico",
-                "Não possui vínculo com assistência, desclassificada em pleitos anteriores",
+                "Não possui vínculo com a assistência, desclassificada em pleitos anteriores",
                 "Outro"
             ],
-            "defaults": "Não possui vínculo com a assistência, primeiro estudo socioeconômico"
+            "defaults": [2,3,4]
         },
         {
             "id": "motivos_estudo",
@@ -126,7 +126,7 @@
                 "Moradia estudantil",
                 "Outro"
             ],
-            "defaults": "Alimentação; Auxílio socioeconômico"
+            "defaults": [0,1]
         },
         {
             "id": "dn_estudante",
@@ -150,20 +150,19 @@
                 "Deficiência física",
                 "Outro"
             ],
-            "defaults": "Sem agravos de saúde"
+            "defaults": [0]
         },
         {
             "id": "situacao_renda_estudante",
             "enunciado": "Situação de renda do estudante",
             "tipo": "checkbox",
             "alternativas": [
-                "Benefício Assistência Social (BPC, Bolsa Família, Renda cidadã…)",
+                "Benefício Assistência Social (BPC, Bolsa Família, Renda cidadã...)",
                 "Bolsa Acadêmica (PIBIC, PIBID, PIBEX, Mestrado, Doutorado...)",
-                "Bolsa da Assistência Estudantil (Auxílio Moradia, Auxílio Socioeconômico…)",
-                "Dúvida",
+                "Bolsa da Assistência Estudantil (Auxílio Moradia, Auxílio Socioeconômico...)",
                 "Estágio remunerado ou menor/jovem aprendiz",
                 "INSS - Aposentadoria",
-                "INSS - Auxílio-doença, Auxílio-reclusão…",
+                "INSS - Auxílio-doença, Auxílio-reclusão...",
                 "INSS - Pensão por morte, proveniente de cônjuge",
                 "INSS - Pensão por morte, proveniente de pai/mãe",
                 "INSS - Seguro-desemprego",
@@ -180,9 +179,10 @@
                 "Serviço público, cargo comissionado",
                 "Trabalho autônomo ou informal",
                 "Trabalho formal, setor privado",
+                "???",
                 "Outro"
             ],
-            "defaults": "Sem renda; Estágio remunerado ou menor/jovem aprendiz; Trabalho autônomo ou informal"
+            "defaults": [16, 20, 21, 0, 2, 3]
         },
         {
             "id": "contribui_renda",
@@ -205,7 +205,7 @@
                 "Não",
                 "Outro"
             ],
-            "defaults": "Sim"
+            "defaults": [0]
         },
         {
             "id": "pais_falecidos",
@@ -220,7 +220,7 @@
             ],
             "enunciado": "Responsáveis legais são falecidos",
             "tipo": "radio",
-            "defaults": "Não"
+            "defaults": [0]
         },
         {
             "id": "pais_separados",
@@ -233,7 +233,7 @@
             ],
             "enunciado": "Responsáveis legais são separados",
             "tipo": "radio",
-            "defaults": "Não"
+            "defaults": [0]
         },
         {
             "id": "pais_separados_info",
@@ -246,8 +246,7 @@
                 "Outro"
             ],
             "enunciado": "Do vínculo entre os responsáveis legais",
-            "tipo": "radio",
-            "defaults": "Não"
+            "tipo": "radio"
         },
         {
             "id": "situacao_residencia",
@@ -258,13 +257,13 @@
                 "Com grupo familiar",
                 "Com outros parentes",
                 "Com terceiros, sem vínculos cosanguíneos/familiares",
-                "Dúvida",
                 "Em república estudantil",
                 "Sozinho",
                 "Sem residência",
+                "???",                
                 "Outro"
             ],
-            "defaults": "Com grupo familiar"
+            "defaults": [1]
         },
         {
             "id": "moradia_localidade",
@@ -274,7 +273,7 @@
                 "DF",
                 "RIDE",
                 "Outra UF",
-                "Dúvida"
+                "???"
             ],
             "enunciado": "Localidade de residência do/a estudante",
             "tipo": "radio",
@@ -333,6 +332,7 @@
                 "Padre Bernardo-GO",
                 "Planaltina-GO",
                 "Valparaíso-GO",
+                "???",
                 "Outro"
             ]
         },
@@ -345,8 +345,7 @@
                 "Campo"
             ],
             "enunciado": "Região onde localiza-se a residencia do estudante",
-            "tipo": "radio",
-            "defaults": "Cidade"
+            "tipo": "radio"
         },
         {
             "id": "moradia_condicao",
@@ -366,7 +365,7 @@
             ],
             "enunciado": "Condição da moradia do estudante",
             "tipo": "radio",
-            "defaults": "Própria ou da família; Alugada; Cedida por familiares"
+            "defaults": [8, 0, 1]
         },
         {
             "id": "valor_renda",
@@ -391,21 +390,20 @@
             ],
             "enunciado": "Condição da moradia do grupo familiar",
             "tipo": "radio",
-            "defaults": "Própria ou de família"
+            "defaults": [8, 0, 1]
         },
         {
             "id": "moradia_localidade_familia",
             "trigger_skip": "situacao_residencia::Com grupo familiar",
             "alternativas": [
                 "DF",
-                "Dúvida",
                 "Outra UF",
                 "RIDE",
+                "???",
                 "Outro"
             ],
             "enunciado": "Localidade de residência do grupo familiar",
-            "tipo": "radio",
-            "defaults": "DF"
+            "tipo": "radio"
         },
         {
             "id": "moradia_cidade_familia",
@@ -461,6 +459,7 @@
                 "Padre Bernardo-GO",
                 "Planaltina-GO",
                 "Valparaíso-GO",
+                "???",
                 "Outro"
             ]
         },
@@ -472,8 +471,7 @@
                 "Campo"
             ],
             "enunciado": "Região onde localiza-se a residencia",
-            "tipo": "radio",
-            "defaults": "Cidade"
+            "tipo": "radio"
         },
         {
             "id": "mantenedores",
@@ -490,10 +488,9 @@
                 "Primos/as",
                 "Sem grau de parentesco",
                 "Tios/as",
-                "Dúvida",
+                "???",
                 "Outro"
-            ],
-            "defaults": "Genitores"
+            ]
         },
         {
             "id": "mantenedores_relacao",
@@ -501,15 +498,13 @@
             "tipo": "checkbox",
             "alternativas": [
                 "Sem informação",
-                "Alega não receber suporte dos pais",
-                "Alega que os pais são separados e não recebe pensão alimentícia",
+                "Alega rezidir com os pais, mas não receber suporte financeiro",
                 "Conflituosa",
                 "Harmoniosa, satisfatória",
                 "Indiferente, fria",
                 "Violenta",
                 "Outro"
-            ],
-            "defaults": "Sem informação"
+            ]
         },
         {
             "id": "rompimento_vinculos",
@@ -519,8 +514,7 @@
                 "Sim"
             ],
             "enunciado": "Há indicativo/relato de rompimento de vínculos?",
-            "tipo": "radio",
-            "defaults": "Não"
+            "tipo": "radio"
         },
         {
             "id": "familia_saude",
@@ -529,8 +523,7 @@
             "alternativas": [
                 "Não",
                 "Sim"
-            ],
-            "defaults": "Não"
+            ]
         },
         {
             "id": "familia_saude_cuidador",
@@ -540,8 +533,7 @@
                 "Sim"
             ],
             "enunciado": "As pessoas com problemas de saúde demandam cuidadores?",
-            "tipo": "radio",
-            "defaults": "Não"
+            "tipo": "radio"
         },
         {
             "id": "possui_filhos",
@@ -626,7 +618,7 @@
             ],
             "enunciado": "Relação do membro em questão com o estudante",
             "tipo": "radio",
-            "defaults": "Mãe; Pai; Irmã; Irmão"
+            "defaults": [7, 17, 4, 14]
         },
         {
             "id": "escolaridade",
@@ -649,16 +641,18 @@
             "id": "situacao_renda",
             "q_group": "membros_grupo_familiar",
             "alternativas": [
-                "Ajuda de terceiros",
-                "Benefício Assistência Social (BPC, Bolsa Família, Renda cidadã…)",
-                "Bolsa Acadêmica (PIBIC, PIBID, PIBEX, Mestrado, Doutorado...)",
-                "Bolsa Permanência do Ministério da Educação",
-                "Bolsa da Assistência Estudantil (Auxílio Moradia, Auxílio Socioeconômico…)",
-                "Dúvida",
+                "Sem renda",
+                "Trabalho autônomo ou informal",
+                "Trabalho formal, setor privado",
                 "Educador Social Voluntário",
                 "Estágio remunerado ou menor/jovem aprendiz",
+                "Benefício Assistência Social (BPC, Bolsa Família, Renda cidadã...)",
+                "Bolsa Acadêmica (PIBIC, PIBID, PIBEX, Mestrado, Doutorado...)",
+                "Bolsa Permanência do Ministério da Educação",
+                "Bolsa da Assistência Estudantil (Auxílio Moradia, Auxílio Socioeconômico...)",
+                "Ajuda de terceiros",                
                 "INSS - Aposentadoria",
-                "INSS - Auxílio-doença, Auxílio-reclusão…",
+                "INSS - Auxílio-doença, Auxílio-reclusão...",
                 "INSS - Pensão por morte, proveniente de cônjuge",
                 "INSS - Pensão por morte, proveniente de pai/mãe",
                 "INSS - Seguro-desemprego",
@@ -668,17 +662,14 @@
                 "Poupança/Economias pessoais",
                 "Recebe auxílio do grupo familiar",
                 "Rendimentos: aluguel, participação em lucros",
-                "Sem renda",
                 "Servidor público efetivo",
                 "Servidor público temporário",
                 "Servidor público, cargo comissionado",
-                "Trabalho autônomo ou informal",
-                "Trabalho formal, setor privado",
+                "???",
                 "Outro"
             ],
             "enunciado": "Natureza da fonte de renda",
-            "tipo": "checkbox",
-            "defaults": "Sem renda"
+            "tipo": "checkbox"
         },
         {
             "id": "valor_renda",
@@ -706,7 +697,7 @@
             ],
             "enunciado": "Situação de saúde",
             "tipo": "checkbox",
-            "defaults": "Sem agravos de saúde"
+            "defaults": [8]
         },
         {
             "id": "observacoes_especificas",

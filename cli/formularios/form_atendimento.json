@@ -1,14 +1,17 @@
 {
+    "sigla_de_comando": "atd",
+    "arquivo_de_registro": "atendimentos.json",
+    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP",
     "questoes": [
         {
-            "tipo": "text",
             "enunciado": "Matrícula",
-            "id": "identificador"
+            "id": "identificador",
+            "tipo": "text"
         },
         {
-            "tipo": "checkbox",
             "enunciado": "Forma de atividade",
             "id": "procedimento",
+            "tipo": "checkbox",
             "alternativas": [
                 "Articulação",
                 "Atendimento presencial",
@@ -16,54 +19,15 @@
                 "Atendimento via WhatsUp",
                 "Atendimento via e-mail",
                 "Elaboração de relatório ou documento",
-                "Enrolation",
                 "Processamento de demanda anterior",
                 "Outro"
             ]
         },
         {
-            "tipo": "checkbox",
             "enunciado": "Demanda do atendimento",
             "id": "atd_t",
+            "tipo": "checkbox",
             "alternativas": {
-                "Monitoramento acadêmico": [
-                    "Orientação para o contacto direto com a técnica em assuntos educacionais",
-                    "Recebimento de declaração de provável formando",
-                    "Recebimento de pedido de prorrogação de prazo de permanencia nos programas",
-                    "Encaminhamento de pedido de prorrogação de prazo de permanencia nos programas"
-                ],
-                "Auxílio emergencial": [
-                    "Avaliação de fundamentos em relação ao pedido de emergencial",
-                    "Entrevista com fins à auxílio emergencial",
-                    "Orientação sobre Auxílio Emergencial",
-                    "Orientação sobre a impossibilidade de pedido de auxílio emergencial de forma não presencial (Art. 3º (caput))",
-                    "Recebimento de solicitação de auxílio emergencial",
-                    "Encaminhamento de pedido de auxílio emergencial",
-                    "Solicitação de documentação adicional para fundamentação de pedido de emergencial"
-                ],
-                "Registros de presença do estudante": [
-                    "Dúvida",
-                    "Estudante compareceu ao setor com dúvidas quanto a possibilidade de outra pessoa, além da coordenadora, assinar o processo"
-                ],
-                "Problemas no recebimento de recursos": [
-                    "Contacto telefônico com a tesouraria para verificação de pagamento de auxílio"
-                ],
-                "Consultas a processos, listas de programas, resultados": [
-                    "Consulta ao andamento de emergencial",
-                    "Consulta ao andamento de processo/encaminhamento remetido à DDS",
-                    "Consulta ao resultado de estudo socioeconômico anterior",
-                    "Consulta ao resultado do estudo socioeconômico",
-                    "Consulta sobre data de depósito de auxílio",
-                    "Consulta sobre forma de pagamento de auxílio (CPF ou conta)",
-                    "Consulta sobre situação do estudante frente o Programa Bolsa Permanência",
-                    "Consulta sobre situação do Bolsa Alimentação",
-                    "Consulta sobre situação frente ao PACreche",
-                    "Consulta sobre situação frente ao PASeUnB",
-                    "Consulta sobre situação frente ao PASeUnB",
-                    "Encaminhamento de pedido de auxílio emergencial",
-                    "Encaminhamento de pedido de pagamento retroativo de auxilio indevidamente suspenso",
-                    "Solicitação de verificação de vínculo com a assistência estudantil"
-                ],
                 "Assinatura de termos": [
                     "Preenchimento/assinatura de termo PACreche",
                     "Preenchimento/assinatura de termo PASeUnB",
@@ -71,30 +35,6 @@
                     "Preenchimento/assinatura de termo PME-G (Transporte)",
                     "Orientação sobre a impossibilidade de assinatura do termo PME-G (estudante LEdoC)",
                     "Verificação se o estudante foi selecionado em segunda ou terceira chamada"
-                ],
-                "Emissão de declarações, relatórios ou cópia de documentos": [
-                    "Elaboração de relatório com parecer",
-                    "Elaboração de relatório de atendimento emergencial",
-                    "Emissão de declaração PPAES",
-                    "Emissão de declaração para criação de Conta Corrente",
-                    "Fotocópia de documento",
-                    "Fotocópia de termo do Programa Bolsa Alimentação",
-                    "Impressão de declaração constante no anexo do edital",
-                    "Impressão de documentos para apresentação junto à direção da FUP",
-                    "Impressão integral ou parcial de processo"
-                ],
-                "Acolhimento e atenção ao usuário": [
-                    "Contacto telefônico com a tesouraria para verificação de pagamento de auxílio",
-                    "Encaminhamento de reclamação à DDS com solicitação de resposta.",
-                    "Entrega de receita médico-psiquiátrica",
-                    "Escuta",
-                    "Identificação de demanda pendente (pagamento retroativo)",
-                    "Identificação de pontos de referências para visita domiciliar",
-                    "Impressão de documentos para apresentação junto à direção da FUP",
-                    "Inclusão de despacho em processo remetido à DDS e comunicação ao responsável pelo processo",
-                    "Notificação de recebimento de ameaças",
-                    "Orientação sobre como contactar a ouvidoria da UnB",
-                    "Recebimento de pedido de auxílio emergencial"
                 ],
                 "Comunicação e email": [
                     "Comunicado de deferimento/indeferimento de emergencial",
@@ -104,50 +44,14 @@
                     "Orientação por escrito via e-mail",
                     "Solicitação para que o estudante tente novamente inserir suas informações no SaeWEB"
                 ],
-                "Solicitações e recursos": [
-                    "Encaminhamento de recurso ao resultado da avaliação socioeconômica",
-                    "Encaminhamento de solicitação de acesso extraordinário ao RU",
-                    "Encaminhamento de solicitação de desligamento do Programa de Moradia Estudantil",
-                    "Encaminhamento de solicitação de informações/relatórios do SPS",
-                    "Encaminhamento de solicitação de pagamento retroativo",
-                    "Encaminhamento de solicitação de reintegração ao PASeUnB",
-                    "Encaminhamento de solicitação de reintegração ao PME-G",
-                    "Encaminhamento de solicitação de reintegração ao PME-G e PASeUnB",
-                    "Recebimento de recurso ao resultado da avaliação socioeconômica",
-                    "Recebimento de solicitação de acesso extraordinário ao RU",
-                    "Recebimento de solicitação de desligamento do Programa de Moradia Estudantil",
-                    "Recebimento de solicitação de informações/relatórios do SPS",
-                    "Recebimento de solicitação de pagamento retroativo",
-                    "Recebimento de solicitação de reintegração ao PASeUnB",
-                    "Recebimento de solicitação de reintegração ao PME-G",
-                    "Recebimento de solicitação de reintegração ao PME-G e PASeUnB"
+                "Entrevistas": [
+                    "Agendamento entrevista",
+                    "Entrevista com fins à auxílio emergencial",
+                    "Entrevista com fins à coleta de informações sobre fragilização/rompimento de vínculos",
+                    "Entrevista para avaliação da ampliação do tempo de permanência no PME-G|PASeUnB"
                 ],
-                "Articulação intersetorial": [
-                    "Articulação de demandas com a Coordenaçãoo da Educação do Campo.",
-                    "Articulação de demandas com a Direção da FUP",
-                    "Articulação de demandas com o SOU",
-                    "Articulação de demandas da DDS",
-                    "Comunicado de erro na página da DDS",
-                    "Comunicado de erro no SAEWeb ao CPD",
-                    "Encaminhamento ao CAEP/UnB",
-                    "Encaminhamento ao CAPS",
-                    "Encaminhamento ao CRAS",
-                    "Encaminhamento ao CREAS",
-                    "Encaminhamento à Casa do Ceará",
-                    "Encaminhamento à DIV/UnB"
-                ],
-                "Avaliação Socioeconômica": [
-                    "Auxílio no preenchimento do estudo",
-                    "Consulta ao resultado de estudo socioeconômico anterior",
-                    "Consulta ao resultado do estudo socioeconômico",
-                    "Digitalização de documentos",
-                    "Impressão de declaração constante no anexo do edital",
-                    "Informe sobre erro na anexação de documentos por parte da equipe técnica",
-                    "Orientação em relação a estudo socioeconômico"
-                ],
-                "Dados bancários": [
-                    "Recebimento de ficha para alteração de informações bancárias",
-                    "Encaminhamento de ficha de alteração das informações bancárias"
+                "Problemas no recebimento de recursos": [
+                    "Contacto telefônico com a tesouraria para verificação de pagamento de auxílio"
                 ],
                 "Informações, orientações ou esclarescimento de dúvidas": [
                     "Comunicado ao CPD referente à erros no SAEWeb",
@@ -170,11 +74,103 @@
                     "Orientação spbre como iniciar processo de pagamento retroativo",
                     "Orientações para participação no processo seletivo aos programas"
                 ],
-                "Entrevistas": [
-                    "Agendamento entrevista",
-                    "Entrevista para avaliação da ampliação do tempo de permanência no PME-G|PASeUnB",
-                    "Entrevista com fins à auxílio emergencial",
-                    "Entrevista com fins à coleta de informações sobre fragilização/rompimento de vínculos"
+                "Dados bancários": [
+                    "Recebimento de ficha para alteração de informações bancárias",
+                    "Encaminhamento de ficha de alteração das informações bancárias"
+                ],
+                "Emissão de declarações, relatórios ou cópia de documentos": [
+                    "Elaboração de relatório com parecer",
+                    "Elaboração de relatório de atendimento emergencial",
+                    "Emissão de declaração PPAES",
+                    "Emissão de declaração para criação de Conta Corrente",
+                    "Fotocópia de documento",
+                    "Fotocópia de termo do Programa Bolsa Alimentação",
+                    "Impressão de declaração constante no anexo do edital",
+                    "Impressão de documentos para apresentação junto à direção da FUP",
+                    "Impressão integral ou parcial de processo"
+                ],
+                "Articulação intersetorial": [
+                    "Encaminhamento ao CAEP/UnB",
+                    "Encaminhamento ao CAPS",
+                    "Encaminhamento ao CRAS",
+                    "Encaminhamento ao CREAS",
+                    "Encaminhamento à Casa do Ceará",
+                    "Encaminhamento à DIV/UnB",
+                    "Articulação de demandas com a Coordenaçãoo da Educação do Campo.",
+                    "Articulação de demandas com a Direção da FUP",
+                    "Articulação de demandas com o SOU",
+                    "Articulação de demandas da DDS",
+                    "Comunicado de erro na página da DDS",
+                    "Comunicado de erro no SAEWeb ao CPD"
+                ],
+                "Consultas a processos, listas de programas, resultados": [
+                    "Consulta ao andamento de emergencial",
+                    "Consulta ao andamento de processo/encaminhamento remetido à DDS",
+                    "Consulta ao resultado de estudo socioeconômico anterior",
+                    "Consulta ao resultado do estudo socioeconômico",
+                    "Consulta sobre data de depósito de auxílio",
+                    "Consulta sobre forma de pagamento de auxílio (CPF ou conta)",
+                    "Consulta sobre situação do estudante frente o Programa Bolsa Permanência",
+                    "Consulta sobre situação do Bolsa Alimentação",
+                    "Consulta sobre situação frente ao PACreche",
+                    "Consulta sobre situação frente ao PASeUnB",
+                    "Consulta sobre situação frente ao PASeUnB",
+                    "Encaminhamento de pedido de auxílio emergencial",
+                    "Encaminhamento de pedido de pagamento retroativo de auxilio indevidamente suspenso",
+                    "Solicitação de verificação de vínculo com a assistência estudantil"
+                ],
+                "Solicitações e recursos": [
+                    "Encaminhamento de recurso ao resultado da avaliação socioeconômica",
+                    "Encaminhamento de solicitação de acesso extraordinário ao RU",
+                    "Encaminhamento de solicitação de desligamento do Programa de Moradia Estudantil",
+                    "Encaminhamento de solicitação de informações/relatórios do SPS",
+                    "Encaminhamento de solicitação de pagamento retroativo",
+                    "Encaminhamento de solicitação de reintegração ao PASeUnB",
+                    "Encaminhamento de solicitação de reintegração ao PME-G",
+                    "Encaminhamento de solicitação de reintegração ao PME-G e PASeUnB",
+                    "Recebimento de recurso ao resultado da avaliação socioeconômica",
+                    "Recebimento de solicitação de acesso extraordinário ao RU",
+                    "Recebimento de solicitação de desligamento do Programa de Moradia Estudantil",
+                    "Recebimento de solicitação de informações/relatórios do SPS",
+                    "Recebimento de solicitação de pagamento retroativo",
+                    "Recebimento de solicitação de reintegração ao PASeUnB",
+                    "Recebimento de solicitação de reintegração ao PME-G",
+                    "Recebimento de solicitação de reintegração ao PME-G e PASeUnB"
+                ],
+                "Registros de presença do estudante": [
+                    "Dúvida",
+                    "Estudante compareceu ao setor com dúvidas quanto a possibilidade de outra pessoa, além da coordenadora, assinar o processo"
+                ],
+                "Acolhimento e atenção ao usuário": [
+                    "Contacto telefônico com a tesouraria para verificação de pagamento de auxílio",
+                    "Encaminhamento de reclamação à DDS com solicitação de resposta.",
+                    "Entrega de receita médico-psiquiátrica",
+                    "Escuta ou diálogo de aconselhamento",
+                    "Identificação de demanda pendente (pagamento retroativo)",
+                    "Identificação de pontos de referências para visita domiciliar",
+                    "Impressão de documentos para apresentação junto à direção da FUP",
+                    "Inclusão de despacho em processo remetido à DDS e comunicação ao responsável pelo processo",
+                    "Notificação de recebimento de ameaças",
+                    "Orientação sobre como contactar a ouvidoria da UnB",
+                    "Recebimento de pedido de auxílio emergencial"
+                ],
+                "Monitoramento acadêmico": [
+                    "Orientação para o contacto direto com a técnica em assuntos educacionais",
+                    "Recebimento de declaração de provável formando",
+                    "Recebimento de pedido de prorrogação de prazo de permanencia nos programas",
+                    "Encaminhamento de pedido de prorrogação de prazo de permanencia nos programas"
+                ],
+                "Avaliação Socioeconômica": [
+                    "Auxílio no preenchimento do estudo",
+                    "Comunicação de pendências",
+                    "Consulta ao resultado de estudo socioeconômico anterior",
+                    "Consulta ao resultado do estudo socioeconômico",
+                    "Correção de estudo",
+                    "Digitalização de documentos",
+                    "Envio de dados",
+                    "Impressão de declaração constante no anexo do edital",
+                    "Informe sobre erro na anexação de documentos por parte da equipe técnica",
+                    "Orientação em relação a estudo socioeconômico"
                 ],
                 "Programa Bolsa Permanência (Ministério da Educação)": [
                     "Auxílio na comunicação com o Ministério",
@@ -185,37 +181,42 @@
                     "Identificação de problemas na plataforma SISBP",
                     "Orientação presencial no cadastro junto à plataforma \"Fale Conosco\" do Ministério da Educação.",
                     "Envio de modelo de termo para o Programa Bolsa Permanência"
+                ],
+                "Auxílio emergencial": [
+                    "Avaliação de fundamentos em relação ao pedido de emergencial",
+                    "Entrevista com fins à auxílio emergencial",
+                    "Orientação sobre Auxílio Emergencial",
+                    "Orientação sobre a impossibilidade de pedido de auxílio emergencial de forma não presencial (Art. 3º (caput))",
+                    "Recebimento de solicitação de auxílio emergencial",
+                    "Encaminhamento de pedido de auxílio emergencial",
+                    "Solicitação de documentação adicional para fundamentação de pedido de emergencial"
                 ]
             }
         },
         {
-            "tipo": "radio",
             "enunciado": "Resultado do atendimento",
             "id": "resultado",
+            "tipo": "radio",
             "alternativas": [
                 "Procedimento concluído",
-                "Procedimento interrompido",
                 "Procedimento não concluído",
                 "Procedimento parcialmente concluído",
                 "Outro"
             ]
         },
         {
-            "trigger_skip": "resultado::Procedimento concluído; resultado::Procedimento não concluído",
-            "tipo": "text",
             "enunciado": "Quais ações ainda estão pendentes?",
-            "id": "detalhamento"
+            "id": "detalhamento",
+            "trigger_skip": "resultado::Procedimento concluído; resultado::Procedimento não concluído",
+            "tipo": "text"
         },
         {
-            "trigger_skip": "resultado::Procedimento concluído; resultado::Procedimento parcialmente concluído",
-            "tipo": "text",
             "enunciado": "O que impediu o atendimento da demanda?",
-            "id": "detalhamento_duno"
+            "id": "detalhamento_duno",
+            "trigger_skip": "resultado::Procedimento concluído; resultado::Procedimento parcialmente concluído",
+            "tipo": "text"
         }
     ],
-    "campos_de_listagem": "timestamp, identificador, atd_t",
     "titulo": "Registro de atendimento",
-    "sigla_de_comando": "atd",
-    "arquivo_de_registro": "atendimentos.json",
-    "descricao": "Intrumental para registro de atendimentos no âmbito do SPS/FUP"
+    "campos_de_listagem": "timestamp, identificador, atd_t"
 }

@@ -259,9 +259,8 @@ def main():
         idt = identificador
         nfo = novo_estudo(identificador)
         os.system("target select {}".format(identificador))
-        os.system('cli-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(identificador, "Avaliação de estudo socioeconômico", "Demanda interna", ""))
-        #time.sleep(1.5)
-        
+        os.system('cli-api insert -tp atendimentos.json "identificador::{}" "procedimento::{}" "atd_t::{}" "resultado::{}"'.format(identificador, "Processamento de demanda anterior", "Análise inicial de estudo socioeconômico", ""))
+       
 
 
     elif args['dbc'] or args['campo-db']:
