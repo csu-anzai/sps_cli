@@ -14,7 +14,7 @@ Prioridade:
     * criação de chave de segurança
     * inclusão do PATH no .bashrc >> MODIFICADO para criação de links simbólicos à '/usr/bin'...
     ~ atualização dos arquivos de dados a serem criados
-
+[ ] Agrupar procedimentos de 'mkrel' de forma a lidar com possibilidade de aluno independente...
 
 Implementos interessantes:
 [ ] Construir em 'unb-tools' função de eliminação de duplicata no arquivo CSV dos NovoSAE_etd
