@@ -6,7 +6,8 @@
 Cria relatório estatístico a partir das informações dos arquivos de dados.
 
 Usage:
-    mkstat atd
+    mkstat atd [ reset ]
+    mkstat fix
 
 Options:
     -v, --version
@@ -15,21 +16,53 @@ Options:
 
 import os
 
-from collections import Counter
+from collections import Counter, OrderedDict
 
 from docopt import docopt
 
-from python_modules.cli_tools import load_json, save_json, input_op
-from python_modules.cli_base import arquivo_atendimentos, pasta_de_trabalho
+from python_modules.cli_tools import load_json, save_json, select_op, verde, amarelo
+from python_modules.cli_base import arquivo_atendimentos, dados_atendimentos, pasta_de_trabalho, formulario_atendimentos
 
 args = docopt(__doc__)
 
-tecnicas_contagem = ("t", "Média", "Tabulação de identificador")
+tecnicas_contagem = ["Tabulação", "Média", "Tabulação de identificador", "Tabulação de email"]
+arquivo_tecnicas = os.sep.join([pasta_de_trabalho, 'config_contagem.json'])
+
+
+def identificar_tecnica_de_contagem(tecnica):
+    if tecnica == "Tabulação" or tecnica == "Tabulação de identificador" or tecnica == "Tabulação de email":
+        container = Counter()
+
+    elif tecnica == "Média":
+        container = []
+
+    return container
+
+    
+
+
+def aplicar_tecnica_contagem(tecnica, bloco, coluna, container):
+    if tecnica == "Tabulação":
+        container.update(bloco[coluna].split(";"))
+
+    elif tecnica == "Média":
+        container.append(bloco[coluna])
+
+    elif tecnica == "Tabulação de identificador":
+        container.update([bloco[coluna][0:5]])        
+
+    elif tecnica == "Tabulação de email":
+        container.update([bloco[coluna].split('@')[1]])
+    
+    return container
+
+
 
 def print_all(generator, *cols):
     while True:
         try: print(next(generator))
         except StopIteration: break
+
 
 def exec_all(generator, *cols):
     while True:
@@ -38,27 +71,72 @@ def exec_all(generator, *cols):
 
 
 def atribuir_tecnica_contagem(campo):
-    print("Qual técnica de contagem você pretende atribuir à coluna {campo}?".format(campo=campo))
-    op = input_op(tecnicas_contagem)
+    print(verde("Qual técnica de contagem você pretende atribuir à coluna {campo}?").format(campo=amarelo(campo)))
+    op = select_op(tecnicas_contagem, 1)
     return op
 
-
-def identificar_tecnica_de_contagem(arquivo_de_dados):
-    dados = load_json(arquivo_de_dados)
-    cols = tuple(sorted(dados[0]))
-    dicionario_tecnicas = {}
+def registrar_configuracao(dicionario_tecnicas, cols):
     dicionario_tecnicas[str(cols)] = {}
     for col in cols:
         dicionario_tecnicas[str(cols)][col] = atribuir_tecnica_contagem(col)
-    save_json(dicionario_tecnicas, os.sep.join([pasta_de_trabalho, 'config_contagem.json']))
+    save_json(dicionario_tecnicas, arquivo_tecnicas)
 
 
-    
-    
+def registrar_tecnica_de_contagem(formulario, reset=False):
+    dados = load_json(formulario)
+
+    cols = []
+    for q in dados['questoes']:
+        cols.append(q['id'])
+
+    try:
+        arquivo_tecnicas_dados = load_json(arquivo_tecnicas)
+        dicionario_tecnicas = arquivo_tecnicas_dados
+    except:
+        print("Arquivo de configuração de contagem inexistente...")
+        dicionario_tecnicas = {}
+
+    if str(cols) in dicionario_tecnicas:
+        if reset:
+            registrar_configuracao(dicionario_tecnicas, cols)
+    else:
+        registrar_configuracao(dicionario_tecnicas, cols)
+
+    return dicionario_tecnicas[str(cols)]
+
+
+
 
 def main():
     if args['atd']:
-        identificar_tecnica_de_contagem(arquivo_atendimentos)
+        dicionario_tecnicas = registrar_tecnica_de_contagem(formulario_atendimentos, args['reset'])
+        
+        print(dicionario_tecnicas)
+
+        output = OrderedDict()
+        
+        for col in sorted(dicionario_tecnicas.keys()):
+            output[col] = identificar_tecnica_de_contagem(dicionario_tecnicas[col][0])
+            #except KeyError: pass
+
+        for bloco in dados_atendimentos:
+            for col in bloco.keys():
+                try: aplicar_tecnica_contagem(dicionario_tecnicas[col][0], bloco, col, output[col])
+                except KeyError: pass
+        
+        print(output['prof_atd'])
+
+    elif args['fix']:
+        for bloco in dados_atendimentos:
+            if not bloco.get("prof_atd"):
+                bloco["prof_atd"] = "danielc@sps_fup"
+            if not bloco.get("resultado"):
+                bloco["resultado"] = ""
+        working_atd = os.sep.join([pasta_de_trabalho, 'atendimentos.json'])
+        save_json(dados_atendimentos, working_atd)
+
+
+
 
 if __name__ == "__main__":
     main()

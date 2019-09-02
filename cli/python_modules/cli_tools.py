@@ -1437,7 +1437,7 @@ def render_form_get_values(form_file, skip_q=[]):
 		if rewrite_form == True:
 			save_json(form, form_file)
 
-		print(nfo[q['id']])
+		#print(nfo[q['id']])
 
 		if type(nfo[q['id']]) == list:
 			if len(nfo[q['id']]) > 1:
@@ -1490,7 +1490,7 @@ def render_form_get_values(form_file, skip_q=[]):
 		if form_triggers_info.get(q['id']):
 			if form_triggers_info[q['id']].get('trigger_skip'):
 				for t in form_triggers_info[q['id']]['trigger_skip'].keys():
-					print("» "+t)
+					#print("» "+t)
 					try:
 						if nfo[t] in form_triggers_info[q['id']]['trigger_skip'].get(t):
 							skip_this = True
