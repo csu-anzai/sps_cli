@@ -1528,7 +1528,7 @@ def render_form_get_values(form_file, skip_q=[]):
 
 
 	form = load_json(form_file)
-	form_triggers_file = getoutput('echo $HOME')+'/.form_triggers'
+	form_triggers_file = getoutput('echo $HOME')+'/.form_triggers-'+form_file.split(os.sep)[-1].split('.')[0]
 	form_triggers_info = create_trigger_file(form_triggers_file)
 
 	
